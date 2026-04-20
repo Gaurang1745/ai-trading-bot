@@ -99,7 +99,7 @@ class TelegramNotifier:
             f"Losses: {summary.get('losses', 0)}\n"
             f"Portfolio: {summary.get('portfolio_value', 0):,.0f}\n"
             f"Cash: {summary.get('cash_remaining', 0):,.0f}\n"
-            f"LLM Cost: {summary.get('llm_cost_inr', 0):.2f}"
+            f"LLM Cost: ${summary.get('llm_cost_usd', 0):.4f}"
         )
         return self.send_message(msg)
 
@@ -146,20 +146,23 @@ class DummyNotifier:
         logger.info(f"[DummyNotifier] {text[:300]}")
         return True
 
-    def send_trade_alert(self, trade: dict) -> bool:
+    def send_trade_alert(self, trade: dict = None, **kwargs) -> bool:
+        payload = trade if isinstance(trade, dict) else kwargs
         return self.send_message(
-            f"Trade: {trade.get('transaction_type')} {trade.get('symbol')}"
+            f"Trade: {payload.get('action', payload.get('transaction_type', ''))} "
+            f"{payload.get('symbol', '')} x{payload.get('quantity', '')} "
+            f"@ {payload.get('price', '')}"
         )
 
-    def send_guardrail_alert(self, symbol: str, action: str,
-                              errors: list) -> bool:
-        return self.send_message(f"Guardrail blocked: {action} {symbol}")
+    def send_guardrail_alert(self, *args, **kwargs) -> bool:
+        return self.send_message("Guardrail alert")
 
-    def send_daily_summary(self, summary: dict) -> bool:
-        return self.send_message(f"Daily P&L: {summary.get('daily_pnl', 0)}")
+    def send_daily_summary(self, *args, **kwargs) -> bool:
+        return self.send_message("Daily summary")
 
-    def send_error_alert(self, error_type: str, details: str) -> bool:
-        return self.send_message(f"Error: {error_type} - {details[:100]}")
+    def send_error_alert(self, *args, **kwargs) -> bool:
+        msg = " ".join(str(a) for a in args)
+        return self.send_message(f"Error: {msg[:200]}")
 
     def send_loss_limit_alert(self, current_loss: float,
                                limit: float) -> bool:
@@ -168,9 +171,9 @@ class DummyNotifier:
     def send_safe_mode_alert(self, reason: str) -> bool:
         return self.send_message(f"Safe mode: {reason}")
 
-    def send_mis_exit_alert(self, stage: int, symbol: str,
-                             details: str) -> bool:
-        return self.send_message(f"MIS exit stage {stage}: {symbol}")
+    def send_mis_exit_alert(self, *args, **kwargs) -> bool:
+        msg = " ".join(str(a) for a in args)
+        return self.send_message(f"MIS exit: {msg[:200]}")
 
 
 def create_notifier(config: dict) -> TelegramNotifier | DummyNotifier:

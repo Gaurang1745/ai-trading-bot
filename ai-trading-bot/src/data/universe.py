@@ -37,38 +37,39 @@ class UniverseFilter:
     def refresh(self) -> list[str]:
         """
         Run the full universe filter pipeline.
-        Returns list of eligible symbols.
+        Starts from the curated sector-mapping list (~150-250 major NSE stocks).
+        Without ASM/GSM data, using all 18K equity symbols produces far too
+        many illiquid names — the curated list gives us tradeable quality by
+        default. Still intersected with the instrument list so unknown
+        symbols get dropped.
         """
         logger.info("Running universe filter...")
 
-        # Step 1: Get all equity instruments
         all_eq = self.instrument_manager.get_valid_symbols()
-        logger.info(f"Total equity symbols: {len(all_eq)}")
+        logger.info(f"Total equity symbols known to broker: {len(all_eq)}")
 
-        # Step 2: Load ASM/GSM list
+        # Build candidate pool from the curated sector-mapping file
+        candidate_pool = self._load_sector_universe()
+        if candidate_pool:
+            logger.info(f"Curated sector universe: {len(candidate_pool)} stocks")
+            all_eq = all_eq & candidate_pool if all_eq else candidate_pool
+
         self._load_asm_gsm_list()
-
-        # Step 3: Load T2T list
         self._load_t2t_list()
 
-        # Step 4: Filter
         eligible = []
         filtered_reasons = {"asm_gsm": 0, "t2t": 0, "low_price": 0, "low_volume": 0}
 
         for symbol in sorted(all_eq):
-            # Skip ASM/GSM stocks
             if symbol in self._asm_gsm_list:
                 filtered_reasons["asm_gsm"] += 1
                 continue
-
-            # Skip T2T stocks
             if symbol in self._t2t_list:
                 filtered_reasons["t2t"] += 1
                 continue
-
             eligible.append(symbol)
 
-        # Add approved ETFs (they may not be in EQ list)
+        # Add approved ETFs (they may not be in the curated sector list)
         for etf in self.approved_etfs:
             if etf not in eligible:
                 eligible.append(etf)
@@ -80,6 +81,47 @@ class UniverseFilter:
         )
 
         return eligible
+
+    def _load_sector_universe(self) -> set[str]:
+        """
+        Load the candidate stock pool. Prefers Nifty 500 CSV at
+        config/nifty500.csv (broad market coverage, ~500 liquid stocks).
+        Falls back to the curated sector_mapping.yaml if the CSV is
+        missing.
+        """
+        # Primary: Nifty 500 CSV
+        import os
+        import csv
+        csv_path = "config/nifty500.csv"
+        if os.path.exists(csv_path):
+            try:
+                symbols: set[str] = set()
+                with open(csv_path, encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        sym = (row.get("Symbol") or "").strip()
+                        series = (row.get("Series") or "EQ").strip()
+                        if sym and series == "EQ":
+                            symbols.add(sym)
+                if symbols:
+                    logger.info(f"Loaded Nifty 500 universe: {len(symbols)} symbols")
+                    return symbols
+            except Exception as e:
+                logger.warning(f"Failed to load nifty500.csv: {e}")
+
+        # Fallback: sector mapping
+        try:
+            import yaml
+            with open("config/sector_mapping.yaml") as f:
+                data = yaml.safe_load(f) or {}
+            symbols: set[str] = set()
+            for sector_info in (data.get("sectors") or {}).values():
+                for sym in (sector_info or {}).get("stocks", []) or []:
+                    symbols.add(sym)
+            return symbols
+        except Exception as e:
+            logger.warning(f"Failed to load sector universe: {e}")
+            return set()
 
     def filter_by_price_and_volume(self, quotes: dict) -> list[str]:
         """

@@ -1,11 +1,14 @@
 """
 Market data fetcher.
 Fetches historical candles, live quotes, and 52-week ranges.
+Daily candles are disk-cached (per-symbol parquet files) to avoid re-fetching
+static historical data on every boot.
 """
 
 import logging
+import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from typing import Optional
 
 import pandas as pd
@@ -14,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 # Cache TTL for recent candle data (seconds)
 _CANDLE_CACHE_TTL = 300  # 5 minutes
+_DAILY_CACHE_DIR = "data/candle_cache"
 
 
 class MarketDataFetcher:
@@ -25,14 +29,66 @@ class MarketDataFetcher:
         self.config = config or {}
         # Cache: {symbol_interval: (timestamp, candle_dict)}
         self._candle_cache: dict[str, tuple[float, dict]] = {}
+        os.makedirs(_DAILY_CACHE_DIR, exist_ok=True)
+
+    def _daily_cache_path(self, symbol: str, exchange: str) -> str:
+        return os.path.join(_DAILY_CACHE_DIR, f"{exchange}_{symbol}_daily.parquet")
+
+    def _read_daily_cache(
+        self, symbol: str, exchange: str, days: int
+    ) -> Optional[pd.DataFrame]:
+        """
+        Return cached daily candles if fresh (last row's date within ~3 days).
+        If the cache has fewer rows than requested we still return what we
+        have — the caller decides whether to augment with a fresh fetch.
+        This avoids thrashing the API when different call sites ask for
+        different history lengths.
+        """
+        path = self._daily_cache_path(symbol, exchange)
+        if not os.path.exists(path):
+            return None
+        try:
+            df = pd.read_parquet(path)
+            if df.empty:
+                return None
+            last_date = pd.to_datetime(df["date"].iloc[-1]).date()
+            # Fresh if last candle is from today or within ~3 days (weekends/holidays ok)
+            age_days = (date.today() - last_date).days
+            if age_days > 3:
+                return None  # Too stale — caller will re-fetch
+            return df.tail(days).reset_index(drop=True) if len(df) > days else df
+        except Exception as e:
+            logger.warning(f"Failed to read daily cache for {symbol}: {e}")
+            return None
+
+    def _write_daily_cache(
+        self, symbol: str, exchange: str, df: pd.DataFrame
+    ) -> None:
+        try:
+            path = self._daily_cache_path(symbol, exchange)
+            df.to_parquet(path, index=False)
+        except Exception as e:
+            logger.warning(f"Failed to write daily cache for {symbol}: {e}")
 
     def fetch_daily_candles(
-        self, symbol: str, exchange: str = "NSE", days: int = 30
+        self, symbol: str, exchange: str = "NSE", days: int = 30,
+        use_cache: bool = True, cache_only: bool = False,
     ) -> Optional[pd.DataFrame]:
         """
         Fetch daily OHLCV candles for a symbol.
+        Uses per-symbol parquet disk cache — refreshes only if cache is stale
+        (last row older than ~3 days) or insufficient history.
         Returns DataFrame with columns: date, open, high, low, close, volume
         """
+        if use_cache:
+            cached = self._read_daily_cache(symbol, exchange, days)
+            if cached is not None:
+                return cached
+
+        if cache_only:
+            # Caller doesn't want us to hit the API — return None on cache miss
+            return None
+
         token = self.instrument_manager.get_token(exchange, symbol)
         if token is None:
             logger.warning(f"No instrument token found for {exchange}:{symbol}")
@@ -46,6 +102,10 @@ class MarketDataFetcher:
             df = pd.DataFrame(candles)
             df["date"] = pd.to_datetime(df["date"])
             df = df.sort_values("date").reset_index(drop=True)
+
+            if use_cache:
+                self._write_daily_cache(symbol, exchange, df)
+
             return df
         except Exception as e:
             logger.error(f"Failed to fetch daily candles for {symbol}: {e}")

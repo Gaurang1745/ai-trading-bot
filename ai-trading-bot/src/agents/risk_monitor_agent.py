@@ -53,7 +53,7 @@ class RiskMonitorAgent:
         return self.runner.run_agent(
             agent_name="risk_monitor",
             prompt=prompt,
-            model="opus[1M]",
+            model="claude-opus-4-7[1M]",
             output_file=output_path,
             timeout_seconds=300,
             max_turns=20,

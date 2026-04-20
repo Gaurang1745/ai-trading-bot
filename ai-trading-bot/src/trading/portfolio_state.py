@@ -42,7 +42,7 @@ class PortfolioStateManager:
                 pnl_pct = ((ltp - avg) / avg * 100) if avg > 0 and ltp else 0
                 holdings.append({
                     "symbol": symbol,
-                    "exchange": row.get("exchange", "NSE") if hasattr(row, "__getitem__") else "NSE",
+                    "exchange": (row["exchange"] if "exchange" in row.keys() else "NSE"),
                     "quantity": qty,
                     "avg_price": avg,
                     "last_price": ltp,
@@ -86,8 +86,8 @@ class PortfolioStateManager:
                     "ltp": ltp,
                     "pnl": round(pnl, 2),
                     "pnl_pct": round(pnl_pct, 2),
-                    "stop_loss": row.get("stop_loss", 0) if hasattr(row, "__getitem__") else 0,
-                    "target": row.get("target", 0) if hasattr(row, "__getitem__") else 0,
+                    "stop_loss": (row["stop_loss"] if "stop_loss" in row.keys() else 0) or 0,
+                    "target": (row["target"] if "target" in row.keys() else 0) or 0,
                 })
             return positions
         except Exception as e:

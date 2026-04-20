@@ -82,44 +82,95 @@ class DataWarehouse:
         self, universe: list[str], sector_map: dict[str, str] = None
     ) -> None:
         """
-        Boot sequence: fetch daily candles and compute indicators for
-        the entire universe. Called at 8:33 AM.
+        Fast boot: register lightweight packs for the full universe with just
+        symbol + sector. Live quotes populate on first refresh_quotes().
+        Candles + indicators are lazy-loaded on demand (deep-dive) or
+        warmed in the background via warm_universe().
         """
-        logger.info(f"DataWarehouse boot: loading data for {len(universe)} stocks...")
+        logger.info(f"DataWarehouse boot: registering {len(universe)} stocks...")
         start = time.time()
 
         if sector_map:
             self._sector_map = sector_map
 
-        total = len(universe)
-        success = 0
-        failed = 0
-
-        for i, symbol in enumerate(universe):
-            try:
-                pack = self._load_stock(symbol)
-                if pack and pack.daily_df is not None:
-                    self._data[symbol] = pack
-                    success += 1
-                else:
-                    failed += 1
-            except Exception as e:
-                logger.error(f"Failed to load {symbol}: {e}")
-                failed += 1
-
-            # Progress logging every 50 stocks
-            if (i + 1) % 50 == 0:
-                elapsed = time.time() - start
-                logger.info(
-                    f"  Progress: {i + 1}/{total} ({success} ok, {failed} failed) "
-                    f"[{elapsed:.0f}s elapsed]"
+        cache_hits = 0
+        for symbol in universe:
+            if symbol not in self._data:
+                pack = StockDataPack(symbol=symbol, exchange="NSE")
+                pack.sector = self._sector_map.get(symbol, "")
+                # Seed volume_stats + range_52w from cached daily candles
+                # when available — no API calls, disk-only reads.
+                df = self.market_data.fetch_daily_candles(
+                    symbol, "NSE", days=252, use_cache=True, cache_only=True,
                 )
+                if df is not None and not df.empty:
+                    pack.volume_stats = self.market_data.compute_volume_stats(df)
+                    if len(df) >= 20:
+                        lookback = df.tail(252)
+                        pack.range_52w = {
+                            "high_52w": float(lookback["high"].max()),
+                            "low_52w": float(lookback["low"].min()),
+                        }
+                    cache_hits += 1
+                self._data[symbol] = pack
 
-        elapsed = time.time() - start
         self._boot_complete = True
+        elapsed = time.time() - start
         logger.info(
-            f"DataWarehouse boot complete: {success}/{total} stocks loaded "
-            f"in {elapsed:.1f}s ({failed} failed)"
+            f"DataWarehouse boot complete: {len(universe)} stocks in "
+            f"{elapsed:.2f}s (seeded {cache_hits} from daily cache)"
+        )
+
+    def ensure_loaded(self, symbol: str, exchange: str = "NSE") -> Optional[StockDataPack]:
+        """
+        Ensure a stock's candles + indicators are loaded.
+        Called lazily by deep-dive or watchlist workflows.
+        Returns the fully-populated pack, or None if load fails.
+        """
+        pack = self._data.get(symbol)
+        if pack and pack.daily_df is not None:
+            return pack
+
+        fresh = self._load_stock(symbol, exchange)
+        if fresh is None:
+            return None
+
+        # Preserve live quote fields if pack already exists
+        if pack:
+            fresh.ltp = pack.ltp or fresh.ltp
+            fresh.day_open = pack.day_open or fresh.day_open
+            fresh.day_high = pack.day_high or fresh.day_high
+            fresh.day_low = pack.day_low or fresh.day_low
+            fresh.prev_close = pack.prev_close or fresh.prev_close
+            fresh.volume = pack.volume or fresh.volume
+            fresh.change_pct = pack.change_pct or fresh.change_pct
+
+        self._data[symbol] = fresh
+        return fresh
+
+    def warm_universe(self, symbols: list[str] = None, max_stocks: Optional[int] = None) -> None:
+        """
+        Populate candles + indicators for the universe (or given subset).
+        Intended to run after EOD or in the background to warm disk cache.
+        At ~1.2s per stock, full universe takes ~10 min — call sparingly.
+        """
+        if symbols is None:
+            symbols = list(self._data.keys())
+        if max_stocks is not None:
+            symbols = symbols[:max_stocks]
+
+        start = time.time()
+        loaded = 0
+        for symbol in symbols:
+            try:
+                if self.ensure_loaded(symbol):
+                    loaded += 1
+            except Exception as e:
+                logger.warning(f"Warm failed for {symbol}: {e}")
+
+        logger.info(
+            f"warm_universe: {loaded}/{len(symbols)} stocks warmed in "
+            f"{time.time() - start:.0f}s"
         )
 
     def _load_stock(self, symbol: str, exchange: str = "NSE") -> Optional[StockDataPack]:
@@ -159,9 +210,22 @@ class DataWarehouse:
         return pack
 
     def refresh_quotes(self, universe: list[str]) -> None:
-        """Update live quotes for all stocks in the universe."""
+        """
+        Update live quotes for all stocks in the universe.
+        NOTE on Dhan semantics: `ohlc.close` returned by Dhan's ohlc_data
+        endpoint is TODAY's close (equal to last_price after market close),
+        NOT yesterday's close. For correct change_pct / gap calculation we
+        read previous close from the disk-cached daily candles.
+        """
+        t0 = time.time()
         quotes = self.market_data.fetch_bulk_quotes(universe)
+        logger.info(
+            f"refresh_quotes: fetched {len(quotes)}/{len(universe)} quotes "
+            f"in {time.time() - t0:.1f}s"
+        )
 
+        updated = 0
+        pc_hits = 0
         for symbol, quote in quotes.items():
             if symbol in self._data:
                 pack = self._data[symbol]
@@ -170,15 +234,86 @@ class DataWarehouse:
                 pack.day_open = ohlc.get("open", 0)
                 pack.day_high = ohlc.get("high", 0)
                 pack.day_low = ohlc.get("low", 0)
-                pack.day_close = ohlc.get("close", 0)  # previous close in OHLC
-                pack.prev_close = ohlc.get("close", 0)
+                pack.day_close = ohlc.get("close", 0)  # TODAY's close (= ltp after hours)
                 pack.volume = quote.get("volume", 0)
 
-                if pack.prev_close and pack.prev_close > 0:
-                    pack.change_pct = round(
-                        ((pack.ltp - pack.prev_close) / pack.prev_close) * 100, 2
-                    )
+                # Pull daily candles (cache-first; falls through to API on miss).
+                # 400 calendar days ≈ 280 trading days, guarantees true 52w coverage.
+                df = self.market_data.fetch_daily_candles(
+                    symbol, pack.exchange or "NSE", days=400, use_cache=True,
+                )
+                prev_close = 0.0
+                if df is not None and not df.empty:
+                    try:
+                        from datetime import date as _d
+                        last_date = df.iloc[-1]["date"]
+                        last_dt = last_date.date() if hasattr(last_date, "date") else None
+                        if last_dt is not None and last_dt < _d.today():
+                            prev_close = float(df.iloc[-1]["close"])
+                        elif len(df) >= 2:
+                            prev_close = float(df.iloc[-2]["close"])
+                    except Exception:
+                        pass
+                    # Seed volume_stats + 52w range every cycle — cheap from df
+                    try:
+                        pack.volume_stats = self.market_data.compute_volume_stats(df)
+                    except Exception:
+                        pass
+                    if len(df) >= 20:
+                        try:
+                            lookback = df.tail(252)
+                            pack.range_52w = {
+                                "high_52w": float(lookback["high"].max()),
+                                "low_52w": float(lookback["low"].min()),
+                            }
+                        except Exception:
+                            pass
+
+                if prev_close > 0:
+                    pack.prev_close = prev_close
+                    pc_hits += 1
+                    if pack.ltp > 0:
+                        pack.change_pct = round(
+                            ((pack.ltp - pack.prev_close) / pack.prev_close) * 100, 2
+                        )
+                else:
+                    pack.prev_close = 0
+                    pack.change_pct = 0
+
                 pack.last_updated = datetime.now()
+                updated += 1
+        logger.info(
+            f"refresh_quotes: updated {updated} packs, "
+            f"prev_close hits {pc_hits}/{updated} (daily cache)"
+        )
+
+    def _lookup_prev_close(self, symbol: str, exchange: str = "NSE") -> float:
+        """
+        Return the previous trading day's close from the daily candle cache.
+        We use the last row's close if it pre-dates today; otherwise the
+        second-to-last row (when today's candle is already in the file).
+        """
+        try:
+            df = self.market_data.fetch_daily_candles(
+                symbol, exchange, days=5, use_cache=True,
+            )
+        except Exception:
+            return 0
+        if df is None or df.empty or len(df) < 1:
+            return 0
+        try:
+            from datetime import date
+            today = date.today()
+            last = df.iloc[-1]
+            last_date = last["date"].date() if hasattr(last["date"], "date") else None
+            if last_date is not None and last_date < today:
+                return float(last["close"])
+            # Today's candle is already in the data → use second-to-last
+            if len(df) >= 2:
+                return float(df.iloc[-2]["close"])
+        except Exception:
+            pass
+        return 0
 
     def refresh_intraday(self, symbols: list[str] = None) -> None:
         """Refresh intraday candles and recompute intraday indicators."""
@@ -258,6 +393,29 @@ class DataWarehouse:
         ]
         stocks.sort(key=lambda x: x["volume_ratio"], reverse=True)
         return stocks[:n]
+
+    def get_top_movers_by_sector(self, n_per_sector: int = 3) -> dict[str, list[dict]]:
+        """
+        Top N gainers per sector (absolute gainers only).
+        Surfaces sector rotation that gets buried in absolute top-movers lists.
+        Returns {sector_name: [{symbol, change_pct, ltp, volume_ratio}, ...]}.
+        """
+        by_sector: dict[str, list[dict]] = {}
+        for symbol, pack in self._data.items():
+            if pack.ltp <= 0 or not pack.sector:
+                continue
+            by_sector.setdefault(pack.sector, []).append({
+                "symbol": symbol,
+                "change_pct": pack.change_pct,
+                "ltp": pack.ltp,
+                "volume_ratio": pack.volume_stats.get("volume_ratio", 0),
+            })
+
+        result: dict[str, list[dict]] = {}
+        for sector, stocks in by_sector.items():
+            stocks.sort(key=lambda x: x["change_pct"], reverse=True)
+            result[sector] = stocks[:n_per_sector]
+        return result
 
     def get_52w_high_stocks(self, proximity_pct: float = 2.0) -> list[dict]:
         """Stocks within proximity_pct of their 52-week high."""

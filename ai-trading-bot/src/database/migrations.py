@@ -85,11 +85,11 @@ CREATE TABLE IF NOT EXISTS llm_calls (
     cache_read_tokens INTEGER DEFAULT 0,
     cache_creation_tokens INTEGER DEFAULT 0,
 
-    -- Cost calculation (INR)
-    input_cost_inr REAL NOT NULL DEFAULT 0,
-    output_cost_inr REAL NOT NULL DEFAULT 0,
-    cache_read_cost_inr REAL DEFAULT 0,
-    cache_creation_cost_inr REAL DEFAULT 0,
+    -- Cost calculation (USD)
+    input_cost_usd REAL NOT NULL DEFAULT 0,
+    output_cost_usd REAL NOT NULL DEFAULT 0,
+    cache_read_cost_usd REAL DEFAULT 0,
+    cache_creation_cost_usd REAL DEFAULT 0,
 
     -- File references
     system_prompt_file TEXT,
@@ -132,42 +132,42 @@ CREATE TABLE IF NOT EXISTS llm_daily_costs (
     haiku_calls INTEGER DEFAULT 0,
     haiku_input_tokens INTEGER DEFAULT 0,
     haiku_output_tokens INTEGER DEFAULT 0,
-    haiku_cost_inr REAL DEFAULT 0,
+    haiku_cost_usd REAL DEFAULT 0,
 
     sonnet_calls INTEGER DEFAULT 0,
     sonnet_input_tokens INTEGER DEFAULT 0,
     sonnet_output_tokens INTEGER DEFAULT 0,
-    sonnet_cost_inr REAL DEFAULT 0,
+    sonnet_cost_usd REAL DEFAULT 0,
 
     opus_calls INTEGER DEFAULT 0,
     opus_input_tokens INTEGER DEFAULT 0,
     opus_output_tokens INTEGER DEFAULT 0,
-    opus_cost_inr REAL DEFAULT 0,
+    opus_cost_usd REAL DEFAULT 0,
 
     -- Per call-type breakdown
     news_calls INTEGER DEFAULT 0,
-    news_cost_inr REAL DEFAULT 0,
+    news_cost_usd REAL DEFAULT 0,
     pulse_calls INTEGER DEFAULT 0,
-    pulse_cost_inr REAL DEFAULT 0,
+    pulse_cost_usd REAL DEFAULT 0,
     decision_calls INTEGER DEFAULT 0,
-    decision_cost_inr REAL DEFAULT 0,
+    decision_cost_usd REAL DEFAULT 0,
     eod_calls INTEGER DEFAULT 0,
-    eod_cost_inr REAL DEFAULT 0,
+    eod_cost_usd REAL DEFAULT 0,
     premarket_calls INTEGER DEFAULT 0,
-    premarket_cost_inr REAL DEFAULT 0,
+    premarket_cost_usd REAL DEFAULT 0,
     retry_calls INTEGER DEFAULT 0,
-    retry_cost_inr REAL DEFAULT 0,
+    retry_cost_usd REAL DEFAULT 0,
 
     -- Totals
     total_calls INTEGER DEFAULT 0,
     total_input_tokens INTEGER DEFAULT 0,
     total_output_tokens INTEGER DEFAULT 0,
     total_tokens INTEGER DEFAULT 0,
-    total_cost_inr REAL DEFAULT 0,
+    total_cost_usd REAL DEFAULT 0,
 
     -- Cache efficiency
     total_cache_read_tokens INTEGER DEFAULT 0,
-    cache_savings_inr REAL DEFAULT 0,
+    cache_savings_usd REAL DEFAULT 0,
 
     -- Error tracking
     failed_calls INTEGER DEFAULT 0,
@@ -178,7 +178,7 @@ CREATE TABLE IF NOT EXISTS llm_daily_costs (
     cost_to_pnl_ratio REAL,
 
     -- Cumulative
-    cumulative_cost_inr REAL DEFAULT 0,
+    cumulative_cost_usd REAL DEFAULT 0,
     cumulative_tokens INTEGER DEFAULT 0,
 
     UNIQUE(date)
@@ -212,7 +212,7 @@ CREATE TABLE IF NOT EXISTS daily_summaries (
     portfolio_value REAL,
     market_bias TEXT,
     notes TEXT,
-    llm_cost_inr REAL,
+    llm_cost_usd REAL,
     llm_calls_count INTEGER,
     mode TEXT NOT NULL DEFAULT 'PAPER',
     UNIQUE(date, mode)
@@ -336,8 +336,8 @@ SELECT
     output_tokens,
     cache_read_tokens,
     (input_tokens + output_tokens) AS total_tokens,
-    (input_cost_inr + output_cost_inr + COALESCE(cache_read_cost_inr, 0)
-     + COALESCE(cache_creation_cost_inr, 0)) AS total_cost_inr,
+    (input_cost_usd + output_cost_usd + COALESCE(cache_read_cost_usd, 0)
+     + COALESCE(cache_creation_cost_usd, 0)) AS total_cost_usd,
     latency_ms,
     status,
     decisions_count,
@@ -353,8 +353,8 @@ SELECT
     END AS model_short,
     CASE WHEN (input_tokens + output_tokens) > 0
         THEN ROUND(
-            (input_cost_inr + output_cost_inr + COALESCE(cache_read_cost_inr, 0)
-             + COALESCE(cache_creation_cost_inr, 0))
+            (input_cost_usd + output_cost_usd + COALESCE(cache_read_cost_usd, 0)
+             + COALESCE(cache_creation_cost_usd, 0))
             / ((input_tokens + output_tokens) / 1000.0), 4)
         ELSE 0
     END AS cost_per_1k_tokens
@@ -373,8 +373,8 @@ SELECT
     latency_ms,
     input_tokens,
     output_tokens,
-    (input_cost_inr + output_cost_inr + COALESCE(cache_read_cost_inr, 0)
-     + COALESCE(cache_creation_cost_inr, 0)) AS total_cost_inr,
+    (input_cost_usd + output_cost_usd + COALESCE(cache_read_cost_usd, 0)
+     + COALESCE(cache_creation_cost_usd, 0)) AS total_cost_usd,
     status,
     watchlist_symbols,
     actions_summary,
@@ -454,7 +454,7 @@ def _rebuild_daily_summaries(db) -> None:
                 portfolio_value REAL,
                 market_bias TEXT,
                 notes TEXT,
-                llm_cost_inr REAL,
+                llm_cost_usd REAL,
                 llm_calls_count INTEGER,
                 mode TEXT NOT NULL DEFAULT 'PAPER',
                 UNIQUE(date, mode)
@@ -464,10 +464,10 @@ def _rebuild_daily_summaries(db) -> None:
             INSERT INTO daily_summaries
                 (date, day_number, trades_count, wins, losses, total_pnl,
                  cumulative_pnl, portfolio_value, market_bias, notes,
-                 llm_cost_inr, llm_calls_count, mode)
+                 llm_cost_usd, llm_calls_count, mode)
             SELECT date, day_number, trades_count, wins, losses, total_pnl,
                    cumulative_pnl, portfolio_value, market_bias, notes,
-                   llm_cost_inr, llm_calls_count, 'PAPER'
+                   llm_cost_usd, llm_calls_count, 'PAPER'
             FROM _daily_summaries_old
         """)
         db.execute("DROP TABLE _daily_summaries_old")

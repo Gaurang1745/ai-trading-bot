@@ -40,8 +40,8 @@ export async function GET() {
     // AI cost today
     const costRow = queryOne<{ total: number }>(
       `SELECT COALESCE(SUM(
-        input_cost_inr + output_cost_inr +
-        COALESCE(cache_read_cost_inr, 0) + COALESCE(cache_creation_cost_inr, 0)
+        input_cost_usd + output_cost_usd +
+        COALESCE(cache_read_cost_usd, 0) + COALESCE(cache_creation_cost_usd, 0)
       ), 0) as total FROM llm_calls WHERE date = ?`,
       [today]
     );

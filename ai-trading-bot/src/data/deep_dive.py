@@ -45,8 +45,9 @@ class DeepDiveAssembler:
 
     def _assemble_one(self, symbol: str) -> Optional[dict]:
         """Assemble the complete deep dive data for one stock."""
-        pack = self.warehouse.get_stock_data(symbol)
-        if pack is None:
+        # Lazy-load candles + indicators for this symbol if not yet loaded
+        pack = self.warehouse.ensure_loaded(symbol)
+        if pack is None or pack.daily_df is None:
             return None
 
         result = {

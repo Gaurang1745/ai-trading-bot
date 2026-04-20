@@ -58,7 +58,8 @@ class PerformanceTracker:
         largest_loss = 0
 
         for row in rows:
-            pnl = row.get("pnl", 0) if "pnl" in row.keys() else 0
+            # sqlite3.Row supports __getitem__ but not .get(), so use keys() guard
+            pnl = row["pnl"] if "pnl" in row.keys() else 0
             if pnl is None:
                 pnl = 0
 
@@ -157,10 +158,10 @@ class PerformanceTracker:
 
         # Get LLM costs
         cost_row = self.db.fetchone(
-            "SELECT total_cost_inr, total_calls FROM llm_daily_costs WHERE date = ?",
+            "SELECT total_cost_usd, total_calls FROM llm_daily_costs WHERE date = ?",
             (today,),
         )
-        llm_cost = cost_row["total_cost_inr"] if cost_row else 0
+        llm_cost = cost_row["total_cost_usd"] if cost_row else 0
         llm_calls = cost_row["total_calls"] if cost_row else 0
 
         # Compute experiment day number
@@ -173,7 +174,7 @@ class PerformanceTracker:
                 """INSERT OR REPLACE INTO daily_summaries
                    (date, day_number, trades_count, wins, losses,
                     total_pnl, cumulative_pnl, portfolio_value,
-                    market_bias, notes, llm_cost_inr, llm_calls_count, mode)
+                    market_bias, notes, llm_cost_usd, llm_calls_count, mode)
                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
                 (
                     today, day_number,

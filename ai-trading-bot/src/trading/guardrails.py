@@ -5,11 +5,20 @@ This is the most safety-critical component.
 """
 
 import logging
+import os
 from dataclasses import dataclass, field
 from datetime import datetime, time
 from typing import Optional
 
+import yaml
+
 logger = logging.getLogger(__name__)
+
+# Agent-managed override file (written by Risk Monitor / Strategy agents)
+_RISK_OVERRIDE_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+    "agents", "risk_config.yaml",
+)
 
 
 @dataclass
@@ -62,6 +71,24 @@ class GuardrailEngine:
             "duplicate_order_window_min", 5
         )
 
+        # Save base values so overrides never exceed them
+        self._base_risk = {
+            "daily_loss_limit_pct": self._daily_loss_limit_pct,
+            "drawdown_reduce_pct": self._drawdown_reduce_pct,
+            "drawdown_halt_pct": self._drawdown_halt_pct,
+            "default_sl_pct": self._default_sl_pct,
+            "min_sl_pct": self._min_sl_pct,
+            "max_sl_pct": self._max_sl_pct,
+            "min_confidence": self._min_confidence,
+        }
+        self._base_trading = {
+            "max_position_pct": self._max_position_pct,
+            "max_deployed_pct": self._max_deployed_pct,
+            "min_cash_buffer_pct": self._min_cash_buffer_pct,
+            "max_trades_per_day": self._max_trades_per_day,
+        }
+        self._override_mtime: float = 0.0
+
         # ASM/GSM list (loaded externally)
         self._asm_gsm_list: set[str] = set()
 
@@ -69,12 +96,159 @@ class GuardrailEngine:
         """Update the ASM/GSM restricted list."""
         self._asm_gsm_list = set(symbols)
 
+    def _validate_modify(self, order: dict) -> ValidationResult:
+        """
+        Validate a MODIFY (SL/target adjustment) decision.
+        Rules:
+          - Symbol must be currently held (holdings or MIS position)
+          - new_stop_loss may only *tighten* (raise for long, lower for short)
+          - new_target allowed in either direction but must be on the correct
+            side of the entry (target above entry for long, below for short)
+        """
+        errors: list[str] = []
+        warnings: list[str] = []
+        symbol = order.get("symbol", "")
+        if not symbol:
+            return ValidationResult(False, errors=["BLOCKED: MODIFY missing symbol"], order=order)
+
+        # Locate current position context
+        holding_qty = self.portfolio.get_holdings_qty(symbol)
+        mis_positions = [
+            p for p in self.portfolio.get_positions() if p.get("symbol") == symbol
+        ]
+        if holding_qty <= 0 and not mis_positions:
+            errors.append(f"BLOCKED: MODIFY for {symbol} but no open position/holding")
+            return ValidationResult(False, errors=errors, order=order)
+
+        # Determine side + current entry/SL
+        if mis_positions:
+            pos = mis_positions[0]
+            side = pos.get("side", "BUY")
+            entry = pos.get("entry", 0)
+            current_sl = pos.get("stop_loss") or 0
+            current_target = pos.get("target") or 0
+        else:
+            # CNC holding — side is always BUY
+            side = "BUY"
+            holdings = self.portfolio.get_holdings()
+            entry = next((h.get("avg_price", 0) for h in holdings if h.get("symbol") == symbol), 0)
+            current_sl = 0  # CNC holdings don't carry an SL column; tracked in trades
+            current_target = 0
+
+        new_sl = order.get("new_stop_loss")
+        new_target = order.get("new_target")
+
+        if new_sl is None and new_target is None:
+            errors.append("BLOCKED: MODIFY must set new_stop_loss and/or new_target")
+            return ValidationResult(False, errors=errors, order=order)
+
+        # SL tightening rule
+        if new_sl is not None and entry > 0:
+            if side == "BUY":
+                if current_sl and new_sl < current_sl:
+                    errors.append(
+                        f"BLOCKED: MODIFY SL for long {symbol} may only raise "
+                        f"(current {current_sl}, requested {new_sl})"
+                    )
+                if new_sl > entry:
+                    warnings.append(
+                        f"MODIFY sets SL above entry ({new_sl} > {entry}) — locking in profit"
+                    )
+            else:  # SELL / short
+                if current_sl and new_sl > current_sl:
+                    errors.append(
+                        f"BLOCKED: MODIFY SL for short {symbol} may only lower "
+                        f"(current {current_sl}, requested {new_sl})"
+                    )
+
+        # Target sanity
+        if new_target is not None and entry > 0:
+            if side == "BUY" and new_target <= entry:
+                errors.append(
+                    f"BLOCKED: MODIFY target for long {symbol} must exceed entry "
+                    f"({new_target} <= {entry})"
+                )
+            if side == "SELL" and new_target >= entry:
+                errors.append(
+                    f"BLOCKED: MODIFY target for short {symbol} must be below entry "
+                    f"({new_target} >= {entry})"
+                )
+
+        if errors:
+            return ValidationResult(False, errors=errors, warnings=warnings, order=order)
+        return ValidationResult(True, warnings=warnings, order=order)
+
+    def _apply_agent_overrides(self) -> None:
+        """
+        Load overrides from src/agents/risk_config.yaml and apply any that
+        *tighten* the base config. Loosening overrides are rejected.
+        Re-reads only when the file's mtime changes.
+        """
+        if not os.path.exists(_RISK_OVERRIDE_PATH):
+            return
+        try:
+            mtime = os.path.getmtime(_RISK_OVERRIDE_PATH)
+            if mtime <= self._override_mtime:
+                return
+            with open(_RISK_OVERRIDE_PATH, "r") as f:
+                data = yaml.safe_load(f) or {}
+        except Exception as e:
+            logger.warning(f"Could not read risk_config.yaml: {e}")
+            return
+
+        overrides = (data.get("overrides") or {})
+        risk_over = overrides.get("risk") or {}
+        trading_over = overrides.get("trading") or {}
+
+        # Parameters where HIGHER = tighter (e.g., min_confidence, min_cash_buffer_pct)
+        tighter_when_higher = {
+            "min_confidence", "min_sl_pct", "min_cash_buffer_pct",
+        }
+        # Parameters where LOWER = tighter (loss limits, max sizes, drawdown triggers)
+        tighter_when_lower = {
+            "daily_loss_limit_pct", "drawdown_reduce_pct", "drawdown_halt_pct",
+            "default_sl_pct", "max_sl_pct",
+            "max_position_pct", "max_deployed_pct", "max_trades_per_day",
+        }
+
+        def try_apply(param: str, new_value, base_value, attr: str) -> bool:
+            if not isinstance(new_value, (int, float)):
+                return False
+            if param in tighter_when_higher and new_value > base_value:
+                setattr(self, attr, new_value)
+                return True
+            if param in tighter_when_lower and new_value < base_value:
+                setattr(self, attr, new_value)
+                return True
+            return False
+
+        applied = []
+        # Reset to base before applying (in case override file shrinks)
+        for k, v in self._base_risk.items():
+            setattr(self, f"_{k}", v)
+        for k, v in self._base_trading.items():
+            setattr(self, f"_{k}", v)
+
+        for k, v in risk_over.items():
+            base = self._base_risk.get(k)
+            if base is not None and try_apply(k, v, base, f"_{k}"):
+                applied.append(f"risk.{k}={v}")
+        for k, v in trading_over.items():
+            base = self._base_trading.get(k)
+            if base is not None and try_apply(k, v, base, f"_{k}"):
+                applied.append(f"trading.{k}={v}")
+
+        self._override_mtime = mtime
+        if applied:
+            logger.info(f"Guardrail overrides applied: {', '.join(applied)}")
+
     def validate_order(self, order: dict) -> ValidationResult:
         """
         Validate a single order dict from Claude's response.
         Returns ValidationResult with is_valid, errors, warnings.
         The order may be modified (e.g., default SL/target applied).
         """
+        self._apply_agent_overrides()
         errors = []
         warnings = []
         order = dict(order)  # work on a copy
@@ -83,6 +257,10 @@ class GuardrailEngine:
         action = order.get("action", "").upper()
         if action in ("NO_ACTION", "HOLD"):
             return ValidationResult(is_valid=True, order=order)
+
+        # MODIFY has its own validation path (not a new trade)
+        if action == "MODIFY":
+            return self._validate_modify(order)
 
         # ─── INSTRUMENT CHECKS ───
         if order.get("exchange") not in ("NSE", "BSE"):

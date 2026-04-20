@@ -106,16 +106,20 @@ class MacroDataFetcher:
             return 0.0
 
     def get_india_vix(self) -> dict:
-        """Get India VIX from Kite if available."""
+        """Get India VIX — LTP from quote + real prev_close from daily candles."""
         if self.data_client:
             try:
                 quote = self.data_client.get_quote(["NSE:INDIA VIX"])
                 data = quote.get("NSE:INDIA VIX", {})
-                ohlc = data.get("ohlc", {})
-                prev_close = ohlc.get("close", 0)
                 ltp = data.get("last_price", 0)
+                # Use the same index prev_close helper we use for market indices
+                prev_close = 0
+                try:
+                    prev_close = self.data_client.get_index_prev_close("NSE:INDIA VIX")
+                except Exception:
+                    pass
                 change_pct = 0
-                if prev_close > 0:
+                if prev_close > 0 and ltp > 0:
                     change_pct = round(((ltp - prev_close) / prev_close) * 100, 2)
                 return {"value": ltp, "change_pct": change_pct}
             except Exception as e:

@@ -29,24 +29,29 @@ def config():
             "start_date": "2026-03-01",
         },
         "llm_pricing": {
-            "usd_inr_rate": 84.0,
             "claude-sonnet-4-5-20250929": {
-                "input_per_1m": 252.00,
-                "output_per_1m": 1260.00,
-                "cache_read_per_1m": 25.20,
-                "cache_create_per_1m": 315.00,
+                "input_per_1m": 3.00,
+                "output_per_1m": 15.00,
+                "cache_read_per_1m": 0.30,
+                "cache_create_per_1m": 3.75,
+            },
+            "claude-opus-4-7": {
+                "input_per_1m": 5.00,
+                "output_per_1m": 25.00,
+                "cache_read_per_1m": 0.50,
+                "cache_create_per_1m": 6.25,
             },
             "claude-opus-4-6": {
-                "input_per_1m": 1260.00,
-                "output_per_1m": 6300.00,
-                "cache_read_per_1m": 126.00,
-                "cache_create_per_1m": 1575.00,
+                "input_per_1m": 15.00,
+                "output_per_1m": 75.00,
+                "cache_read_per_1m": 1.50,
+                "cache_create_per_1m": 18.75,
             },
             "claude-haiku-4-5-20251001": {
-                "input_per_1m": 67.20,
-                "output_per_1m": 336.00,
-                "cache_read_per_1m": 6.72,
-                "cache_create_per_1m": 84.00,
+                "input_per_1m": 1.00,
+                "output_per_1m": 5.00,
+                "cache_read_per_1m": 0.10,
+                "cache_create_per_1m": 1.25,
             },
         },
         "logging": {
@@ -71,11 +76,11 @@ class TestLLMLogger:
             cache_read_tokens=200,
             cache_creation_tokens=0,
         )
-        assert "input_cost_inr" in cost
-        assert "output_cost_inr" in cost
-        assert cost["input_cost_inr"] > 0
-        assert cost["output_cost_inr"] > 0
-        assert cost["total_cost_inr"] > 0
+        assert "input_cost_usd" in cost
+        assert "output_cost_usd" in cost
+        assert cost["input_cost_usd"] > 0
+        assert cost["output_cost_usd"] > 0
+        assert cost["total_cost_usd"] > 0
 
     def test_compute_cost_unknown_model_uses_opus_fallback(self, llm_logger):
         cost = llm_logger.compute_cost(
@@ -84,7 +89,7 @@ class TestLLMLogger:
             output_tokens=50,
         )
         # Unknown model falls back to Opus rates (most expensive = safe default)
-        assert cost["total_cost_inr"] > 0
+        assert cost["total_cost_usd"] > 0
 
     def test_log_call(self, llm_logger, config):
         import tempfile, os
@@ -115,12 +120,12 @@ class TestLLMLogger:
         from datetime import date
         today = date.today().isoformat()
         db.execute(
-            "INSERT INTO llm_daily_costs (date, day_number, total_cost_inr, total_calls) "
+            "INSERT INTO llm_daily_costs (date, day_number, total_cost_usd, total_calls) "
             "VALUES (?, ?, ?, ?)",
             (today, 1, 15.50, 5),
         )
         cost = llm_logger.get_daily_cost()
-        assert cost.get("total_cost_inr") == 15.50
+        assert cost.get("total_cost_usd") == 15.50
         assert cost.get("total_calls") == 5
 
 

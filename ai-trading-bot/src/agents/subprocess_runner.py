@@ -61,7 +61,7 @@ class AgentSubprocessRunner:
         self,
         agent_name: str,
         prompt: str,
-        model: str = "opus[1M]",
+        model: str = "claude-opus-4-7[1M]",
         output_file: Optional[str] = None,
         timeout_seconds: int = 300,
         max_turns: int = 20,

@@ -38,7 +38,7 @@ class WatchlistResearchAgent:
         return self.runner.run_agent(
             agent_name=f"watchlist_research_b{batch_id}",
             prompt=prompt,
-            model="opus[1M]",
+            model="claude-opus-4-7[1M]",
             output_file=output_path,
             timeout_seconds=300,
             max_turns=20,
@@ -67,7 +67,7 @@ class WatchlistResearchAgent:
             agent_specs.append({
                 "agent_name": f"watchlist_research_b{idx}",
                 "prompt": prompt,
-                "model": "opus[1M]",
+                "model": "claude-opus-4-7[1M]",
                 "output_file": output_path,
                 "timeout_seconds": 300,
                 "max_turns": 20,

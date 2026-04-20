@@ -26,6 +26,24 @@ class ExecutionEngine:
         Execute a single validated order.
         Returns {order_id, status, fill_price, message}.
         """
+        action = order.get("action", "").upper()
+
+        # MODIFY: adjust SL/target on an existing position — not a new trade
+        if action == "MODIFY":
+            modify_result = self.paper_broker.modify_sl_target(
+                symbol=order.get("symbol", ""),
+                exchange=order.get("exchange", "NSE"),
+                new_stop_loss=order.get("new_stop_loss"),
+                new_target=order.get("new_target"),
+                reason=order.get("reasoning", "")[:100],
+            )
+            return {
+                "order_id": f"MODIFY_{order.get('symbol', '')}",
+                "status": modify_result.get("status", "NO_CHANGE"),
+                "fill_price": None,
+                "message": modify_result.get("message", ""),
+            }
+
         result = self.paper_broker.execute_order(order)
 
         # Log trade to DB
@@ -122,10 +140,11 @@ class GuardrailLogger:
             logger.error(f"Failed to log guardrail result: {e}")
 
         if self.csv_logger:
-            self.csv_logger.log({
-                "symbol": order.get("symbol", ""),
-                "action": order.get("action", ""),
-                "is_valid": validation_result.is_valid,
-                "errors": "; ".join(validation_result.errors),
-                "warnings": "; ".join(validation_result.warnings),
-            })
+            self.csv_logger.log_validation(
+                symbol=order.get("symbol", ""),
+                action=order.get("action", ""),
+                product=order.get("product", ""),
+                is_valid=validation_result.is_valid,
+                errors=validation_result.errors,
+                warnings=validation_result.warnings,
+            )

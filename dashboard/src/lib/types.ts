@@ -54,7 +54,7 @@ export interface LLMCall {
   call_type: string;
   input_tokens: number;
   output_tokens: number;
-  total_cost_inr: number;
+  total_cost_usd: number;
   latency_ms: number;
   status: string;
   watchlist_symbols: string | null;

@@ -12,9 +12,9 @@ export async function GET(request: Request) {
     const calls = queryAll<LLMCall>(
       `SELECT call_id, timestamp, model, call_type,
               input_tokens, output_tokens,
-              (input_cost_inr + output_cost_inr +
-               COALESCE(cache_read_cost_inr, 0) +
-               COALESCE(cache_creation_cost_inr, 0)) as total_cost_inr,
+              (input_cost_usd + output_cost_usd +
+               COALESCE(cache_read_cost_usd, 0) +
+               COALESCE(cache_creation_cost_usd, 0)) as total_cost_usd,
               latency_ms, status, watchlist_symbols, decisions_count
        FROM llm_calls ORDER BY timestamp DESC LIMIT ?`,
       [limit]

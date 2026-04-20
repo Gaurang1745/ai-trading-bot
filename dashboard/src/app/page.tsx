@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import type {
   SummaryStats,
   Trade,
@@ -109,7 +110,10 @@ export default function Dashboard() {
             }}
           />
           {isMarketOpen ? "MARKET OPEN" : "MARKET CLOSED"} &nbsp;&middot;&nbsp;
-          Last refresh: {lastRefresh || "loading..."}
+          Last refresh: {lastRefresh || "loading..."} &nbsp;&middot;&nbsp;
+          <Link href="/logs" style={{ color: "var(--foreground)", textDecoration: "underline" }}>
+            Browse AI logs →
+          </Link>
         </p>
         {error && (
           <p style={{ color: "var(--negative)", fontSize: "0.8rem" }}>{error}</p>
@@ -139,7 +143,7 @@ export default function Dashboard() {
           />
           <StatCard
             label="AI Cost Today"
-            value={`₹${summary.ai_cost_today.toFixed(2)}`}
+            value={`$${summary.ai_cost_today.toFixed(4)}`}
           />
         </div>
       )}
@@ -238,7 +242,7 @@ export default function Dashboard() {
                   <td>{c.model.includes("opus") ? "Opus" : c.model.includes("sonnet") ? "Sonnet" : "Haiku"}</td>
                   <td>{c.call_type}</td>
                   <td className="mono">{(c.input_tokens + c.output_tokens).toLocaleString()}</td>
-                  <td className="mono">₹{c.total_cost_inr.toFixed(2)}</td>
+                  <td className="mono">${c.total_cost_usd.toFixed(4)}</td>
                   <td className="mono">{(c.latency_ms / 1000).toFixed(1)}s</td>
                   <td><StatusTag status={c.status} /></td>
                 </tr>

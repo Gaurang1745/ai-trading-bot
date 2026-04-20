@@ -127,7 +127,7 @@ class ResponseParser:
             return None
 
         action = raw.get("action", "").upper()
-        if action not in ("BUY", "SELL", "HOLD", "EXIT", "NO_ACTION"):
+        if action not in ("BUY", "SELL", "HOLD", "EXIT", "NO_ACTION", "MODIFY"):
             logger.warning(f"Invalid action: {action}")
             return None
 
@@ -142,7 +142,7 @@ class ResponseParser:
         elif action in ("SELL", "EXIT"):
             transaction_type = "SELL"
         else:
-            transaction_type = action
+            transaction_type = action  # HOLD / NO_ACTION / MODIFY — no transaction
 
         product = raw.get("product", "CNC").upper()
         if product not in ("CNC", "MIS"):
@@ -151,6 +151,10 @@ class ResponseParser:
         order_type = raw.get("order_type", "LIMIT").upper()
         if order_type not in ("LIMIT", "MARKET", "SL"):
             order_type = "LIMIT"
+
+        # MODIFY accepts new_stop_loss / new_target instead of (or alongside) stop_loss/target
+        new_stop_loss = raw.get("new_stop_loss")
+        new_target = raw.get("new_target")
 
         return {
             "action": action,
@@ -163,6 +167,8 @@ class ResponseParser:
             "price": float(raw.get("price", 0)),
             "stop_loss": float(raw.get("stop_loss", 0)) if raw.get("stop_loss") else None,
             "target": float(raw.get("target", 0)) if raw.get("target") else None,
+            "new_stop_loss": float(new_stop_loss) if new_stop_loss else None,
+            "new_target": float(new_target) if new_target else None,
             "confidence": float(raw.get("confidence", 0)),
             "timeframe": raw.get("timeframe", "SWING").upper(),
             "max_hold_days": int(raw.get("max_hold_days", 0)),

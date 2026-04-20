@@ -537,6 +537,110 @@ class PaperBroker:
             (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), symbol, pnl),
         )
 
+    # ─── SL / TARGET MODIFICATION ───
+
+    def modify_sl_target(
+        self, symbol: str, exchange: str = "NSE",
+        new_stop_loss: Optional[float] = None,
+        new_target: Optional[float] = None,
+        reason: str = "",
+    ) -> dict:
+        """
+        Update stop_loss and/or target on an open paper position OR on the
+        implied SL/target of a CNC holding (stored as paper_positions row
+        with product='CNC' if tracked, otherwise updates the most recent
+        matching trade record's stop_loss/target).
+        Returns {status, message, old_sl, new_sl, old_target, new_target}.
+        """
+        result = {
+            "status": "NO_CHANGE", "message": "",
+            "old_sl": None, "new_sl": None,
+            "old_target": None, "new_target": None,
+        }
+
+        # Prefer open MIS position row (has sl/target columns)
+        pos = self.db.fetchone(
+            "SELECT * FROM paper_positions WHERE symbol = ? AND exchange = ? "
+            "AND quantity != 0 ORDER BY entry_timestamp DESC LIMIT 1",
+            (symbol, exchange),
+        )
+        updates = []
+        params = []
+        if pos:
+            result["old_sl"] = pos.get("stop_loss") if hasattr(pos, "get") else pos["stop_loss"]
+            result["old_target"] = pos.get("target") if hasattr(pos, "get") else pos["target"]
+            if new_stop_loss is not None:
+                updates.append("stop_loss = ?")
+                params.append(new_stop_loss)
+                result["new_sl"] = new_stop_loss
+            if new_target is not None:
+                updates.append("target = ?")
+                params.append(new_target)
+                result["new_target"] = new_target
+
+            if updates:
+                params.extend([symbol, exchange])
+                self.db.execute(
+                    f"UPDATE paper_positions SET {', '.join(updates)} "
+                    f"WHERE symbol = ? AND exchange = ? AND quantity != 0",
+                    params,
+                )
+                result["status"] = "MODIFIED"
+                result["message"] = (
+                    f"Updated {symbol}: SL {result['old_sl']} -> {result['new_sl']}, "
+                    f"TGT {result['old_target']} -> {result['new_target']} ({reason})"
+                )
+                logger.info(result["message"])
+            return result
+
+        # Fall back: update SL/target on the most recent BUY trade record for a CNC holding
+        holding = self.db.fetchone(
+            "SELECT * FROM paper_holdings WHERE symbol = ? AND exchange = ? "
+            "AND quantity > 0",
+            (symbol, exchange),
+        )
+        if not holding:
+            result["message"] = f"No open position or holding for {symbol}"
+            return result
+
+        latest_trade = self.db.fetchone(
+            "SELECT id, stop_loss, target FROM trades WHERE symbol = ? AND exchange = ? "
+            "AND transaction_type = 'BUY' AND status = 'COMPLETE' AND mode = 'PAPER' "
+            "ORDER BY timestamp DESC LIMIT 1",
+            (symbol, exchange),
+        )
+        if not latest_trade:
+            result["message"] = f"No trade record for {symbol} to update"
+            return result
+
+        result["old_sl"] = latest_trade["stop_loss"]
+        result["old_target"] = latest_trade["target"]
+        sets = []
+        params = []
+        if new_stop_loss is not None:
+            sets.append("stop_loss = ?")
+            params.append(new_stop_loss)
+            result["new_sl"] = new_stop_loss
+        if new_target is not None:
+            sets.append("target = ?")
+            params.append(new_target)
+            result["new_target"] = new_target
+        if not sets:
+            return result
+
+        params.append(latest_trade["id"])
+        self.db.execute(
+            f"UPDATE trades SET {', '.join(sets)} WHERE id = ?",
+            params,
+        )
+        result["status"] = "MODIFIED"
+        result["message"] = (
+            f"Updated CNC {symbol}: SL {result['old_sl']} -> {result['new_sl']}, "
+            f"TGT {result['old_target']} -> {result['new_target']} ({reason})"
+        )
+        logger.info(result["message"])
+        return result
+
     # ─── MARKET DATA HELPERS ───
 
     def get_ltp(self, symbol: str, exchange: str = "NSE") -> float:

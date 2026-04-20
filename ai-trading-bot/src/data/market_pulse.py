@@ -23,7 +23,8 @@ class MarketPulseAggregator:
     def __init__(self, warehouse: DataWarehouse, config: dict):
         self.warehouse = warehouse
         self.config = config
-        self._top_n = config.get("pipeline", {}).get("top_movers_count", 10)
+        self._top_n = config.get("pipeline", {}).get("top_movers_count", 15)
+        self._top_per_sector = config.get("pipeline", {}).get("top_per_sector_count", 3)
         self._gap_threshold = config.get("pipeline", {}).get("gap_threshold_pct", 2.0)
         self._52w_proximity = config.get("pipeline", {}).get("high_low_proximity_pct", 2.0)
 
@@ -51,6 +52,7 @@ class MarketPulseAggregator:
             "top_gainers": self.warehouse.get_top_gainers(self._top_n),
             "top_losers": self.warehouse.get_top_losers(self._top_n),
             "volume_surges": self.warehouse.get_volume_surges(self._top_n),
+            "top_per_sector": self.warehouse.get_top_movers_by_sector(self._top_per_sector),
             "near_52w_highs": self.warehouse.get_52w_high_stocks(self._52w_proximity),
             "near_52w_lows": self.warehouse.get_52w_low_stocks(self._52w_proximity),
             "gap_stocks": self.warehouse.get_gap_stocks(self._gap_threshold),

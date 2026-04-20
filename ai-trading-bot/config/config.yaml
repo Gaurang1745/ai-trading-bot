@@ -1,8 +1,8 @@
 # AI Trading Bot Configuration
 
 experiment:
-  start_date: "2026-03-01"
-  duration_days: 30
+  start_date: "2026-04-20"
+  duration_days: 180
   starting_capital: 100000
 
 trading:
@@ -20,6 +20,12 @@ trading:
   mis_squareoff_start: "15:00"
   mis_squareoff_hard_deadline: "15:10"
   mis_emergency_market_close: "15:12"
+
+trailing_sl:
+  enabled: true
+  breakeven_at_pct: 0.02       # Move SL to entry when unrealized gain >= 2%
+  trail_start_pct: 0.04        # Start trailing when gain >= 4%
+  trail_gap_pct: 0.02          # Trail SL 2% below LTP (above LTP for shorts)
 
 risk:
   daily_loss_limit_pct: 0.03
@@ -44,7 +50,7 @@ corporate_actions:
   exclude_on_exdate: true
 
 pipeline:
-  market_pulse_model: "claude-sonnet-4-5-20250929"
+  market_pulse_model: "claude-sonnet-4-6"
   market_pulse_interval_minutes: 30
   max_watchlist_size: 15
   min_watchlist_size: 3
@@ -53,35 +59,46 @@ pipeline:
   pulse_skip_if_stable: false
   pulse_skip_threshold_pct: 0.2
   bulk_indicator_refresh_minutes: 15
-  top_movers_count: 10
+  top_movers_count: 15
+  top_per_sector_count: 3
   gap_threshold_pct: 2.0
   high_low_proximity_pct: 2.0
 
 ai:
-  decision_model: "claude-opus-4-6"
-  analysis_model: "claude-sonnet-4-5-20250929"
+  decision_model: "claude-opus-4-7"
+  analysis_model: "claude-sonnet-4-6"
   news_model: "claude-haiku-4-5-20251001"
   decision_interval_minutes: 30
   daily_candles_count: 15
   enable_prompt_caching: true
 
+# LLM pricing in USD per 1M tokens. Source: https://claude.com/pricing
 llm_pricing:
-  usd_inr_rate: 84.0
+  claude-opus-4-7:
+    input_per_1m: 5.00
+    output_per_1m: 25.00
+    cache_read_per_1m: 0.50
+    cache_create_per_1m: 6.25
   claude-opus-4-6:
-    input_per_1m: 1260.00
-    output_per_1m: 6300.00
-    cache_read_per_1m: 126.00
-    cache_create_per_1m: 1575.00
+    input_per_1m: 15.00
+    output_per_1m: 75.00
+    cache_read_per_1m: 1.50
+    cache_create_per_1m: 18.75
+  claude-sonnet-4-6:
+    input_per_1m: 3.00
+    output_per_1m: 15.00
+    cache_read_per_1m: 0.30
+    cache_create_per_1m: 3.75
   claude-sonnet-4-5-20250929:
-    input_per_1m: 252.00
-    output_per_1m: 1260.00
-    cache_read_per_1m: 25.20
-    cache_create_per_1m: 315.00
+    input_per_1m: 3.00
+    output_per_1m: 15.00
+    cache_read_per_1m: 0.30
+    cache_create_per_1m: 3.75
   claude-haiku-4-5-20251001:
-    input_per_1m: 67.20
-    output_per_1m: 336.00
-    cache_read_per_1m: 6.72
-    cache_create_per_1m: 84.00
+    input_per_1m: 1.00
+    output_per_1m: 5.00
+    cache_read_per_1m: 0.10
+    cache_create_per_1m: 1.25
 
 dhan:
   client_id: "${DHAN_CLIENT_ID}"

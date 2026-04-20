@@ -37,7 +37,7 @@ class PreMarketResearchAgent:
         return self.runner.run_agent(
             agent_name="premarket_research",
             prompt=prompt,
-            model="opus[1M]",
+            model="claude-opus-4-7[1M]",
             output_file=output_path,
             timeout_seconds=600,
             max_turns=25,

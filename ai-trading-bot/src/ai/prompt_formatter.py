@@ -104,6 +104,7 @@ class PromptFormatter:
         portfolio_state: dict,
         previous_watchlist: list = None,
         corporate_actions: list = None,
+        premarket_research: dict = None,
     ) -> str:
         """
         Build the complete Market Pulse user prompt for Sonnet.
@@ -119,6 +120,10 @@ class PromptFormatter:
         # Experiment status
         sections.append(self._section_experiment_status(exp))
 
+        # Pre-market research (web-searched overnight news + FII/DII + macro themes)
+        if premarket_research:
+            sections.append(self._section_premarket_research(premarket_research))
+
         # Market overview
         sections.append(self._section_market_overview(indices, now))
 
@@ -131,17 +136,22 @@ class PromptFormatter:
 
         # Top gainers
         sections.append(self._section_movers(
-            "TOP 10 GAINERS", pulse_data.get("top_gainers", [])
+            "TOP GAINERS", pulse_data.get("top_gainers", [])
         ))
 
         # Top losers
         sections.append(self._section_movers(
-            "TOP 10 LOSERS", pulse_data.get("top_losers", [])
+            "TOP LOSERS", pulse_data.get("top_losers", [])
         ))
 
         # Volume surges
         sections.append(self._section_movers(
-            "TOP 10 VOLUME SURGES", pulse_data.get("volume_surges", [])
+            "TOP VOLUME SURGES", pulse_data.get("volume_surges", [])
+        ))
+
+        # Sector leaders (top 3 per sector)
+        sections.append(self._section_sector_leaders(
+            pulse_data.get("top_per_sector", {})
         ))
 
         # 52-week extremes
@@ -200,6 +210,7 @@ class PromptFormatter:
         etf_snapshot: list,
         existing_positions: list,
         performance_context: dict,
+        supplementary_research: list = None,
     ) -> str:
         """
         Build the complete Trading Decision user prompt for Opus.
@@ -210,6 +221,14 @@ class PromptFormatter:
         sections = []
 
         sections.append("call_type: TRADING_DECISION")
+
+        # Priority framing: review held positions FIRST
+        sections.append(
+            "PRIORITY: First walk through the EXISTING POSITIONS section and "
+            "issue a HOLD / MODIFY / EXIT decision for each. Only then consider "
+            "new BUY/SELL entries. Use MODIFY (with new_stop_loss / new_target) "
+            "to trail SLs or adjust targets instead of EXIT+re-entry."
+        )
 
         # Experiment status
         sections.append(self._section_experiment_status(exp))
@@ -234,6 +253,10 @@ class PromptFormatter:
 
         # Deep dive stock data
         sections.append(self._section_deep_dive(deep_dive_packs, watchlist_reasons))
+
+        # Supplementary research from watchlist research agents
+        if supplementary_research:
+            sections.append(self._section_supplementary_research(supplementary_research))
 
         # ETF snapshot
         sections.append(self._section_etf_snapshot(etf_snapshot))
@@ -327,6 +350,89 @@ class PromptFormatter:
             )
         return "\n".join(lines)
 
+    def _section_supplementary_research(self, research: list) -> str:
+        """Render per-stock agent research into a compact prompt section."""
+        lines = ["--- SUPPLEMENTARY RESEARCH (per-stock agent findings) ---"]
+        if not research:
+            lines.append("  (no agent research available)")
+            return "\n".join(lines)
+
+        for item in research:
+            symbol = item.get("symbol", "?")
+            lines.append(f"\n[{symbol}]")
+            if item.get("research_sentiment"):
+                mod = item.get("confidence_modifier", 0) or 0
+                lines.append(
+                    f"  Sentiment: {item['research_sentiment']} "
+                    f"(confidence modifier: {mod:+.2f})"
+                )
+            if item.get("recent_news"):
+                lines.append(f"  News: {item['recent_news']}")
+            if item.get("sector_context"):
+                lines.append(f"  Sector: {item['sector_context']}")
+            if item.get("peer_comparison"):
+                lines.append(f"  Peers: {item['peer_comparison']}")
+            red = item.get("red_flags") or []
+            if red:
+                lines.append(f"  Red flags: {', '.join(red)}")
+            cat = item.get("catalysts") or []
+            if cat:
+                lines.append(f"  Catalysts: {', '.join(cat)}")
+
+        return "\n".join(lines)
+
+    def _section_premarket_research(self, brief: dict) -> str:
+        """Render the pre-market research agent output into a prompt section."""
+        lines = ["--- PRE-MARKET RESEARCH (web-searched overnight) ---"]
+        if not brief:
+            return "\n".join(lines)
+
+        summary = brief.get("brief_summary") or ""
+        if summary:
+            lines.append(f"Outlook: {summary}")
+
+        cues = brief.get("global_cues") or {}
+        if cues:
+            parts = []
+            if cues.get("us_markets"): parts.append(f"US: {cues['us_markets']}")
+            if cues.get("european_markets"): parts.append(f"EU: {cues['european_markets']}")
+            if cues.get("asian_markets"): parts.append(f"Asia: {cues['asian_markets']}")
+            if cues.get("sentiment"): parts.append(f"Sentiment: {cues['sentiment']}")
+            if parts:
+                lines.append("Global cues:")
+                for p in parts:
+                    lines.append(f"  - {p}")
+
+        fii = brief.get("fii_dii_summary")
+        if fii:
+            lines.append(f"FII/DII: {fii}")
+
+        earnings = brief.get("earnings_calendar") or []
+        if earnings:
+            lines.append("Earnings calendar:")
+            for e in earnings[:10]:
+                lines.append(f"  - {e}")
+
+        events = brief.get("macro_events") or []
+        if events:
+            lines.append("Macro events:")
+            for e in events[:8]:
+                lines.append(f"  - {e}")
+
+        themes = brief.get("sector_themes") or []
+        if themes:
+            lines.append("Sector themes:")
+            for t in themes[:8]:
+                lines.append(f"  - {t}")
+
+        risks = brief.get("risk_flags") or []
+        if risks:
+            lines.append("Risk flags:")
+            for r in risks[:8]:
+                lines.append(f"  - {r}")
+
+        return "\n".join(lines)
+
     def _section_movers(self, title: str, stocks: list) -> str:
         lines = [f"--- {title} ---"]
         if not stocks:
@@ -336,7 +442,7 @@ class PromptFormatter:
         header = f"{'Symbol':<14} {'CMP':>10} {'Change %':>10} {'Vol Ratio':>10} {'Sector':<12}"
         lines.append(header)
         lines.append("-" * len(header))
-        for s in stocks[:10]:
+        for s in stocks:
             sign = "+" if s.get("change_pct", 0) >= 0 else ""
             lines.append(
                 f"{s.get('symbol', ''):<14} "
@@ -345,6 +451,31 @@ class PromptFormatter:
                 f"{s.get('volume_ratio', 0):>9.1f}x "
                 f"{s.get('sector', ''):<12}"
             )
+        return "\n".join(lines)
+
+    def _section_sector_leaders(self, by_sector: dict) -> str:
+        """Top N gainers per sector — surfaces sector rotation plays."""
+        lines = ["--- SECTOR LEADERS (top movers within each sector) ---"]
+        if not by_sector:
+            lines.append("  (No data available)")
+            return "\n".join(lines)
+
+        # Sort sectors by their strongest stock's change_pct (leaders first)
+        sorted_sectors = sorted(
+            by_sector.items(),
+            key=lambda kv: kv[1][0].get("change_pct", 0) if kv[1] else 0,
+            reverse=True,
+        )
+        for sector, stocks in sorted_sectors:
+            if not stocks:
+                continue
+            parts = []
+            for s in stocks:
+                sign = "+" if s.get("change_pct", 0) >= 0 else ""
+                parts.append(
+                    f"{s.get('symbol', '')} ({sign}{s.get('change_pct', 0):.2f}%)"
+                )
+            lines.append(f"  {sector}: {', '.join(parts)}")
         return "\n".join(lines)
 
     def _section_52w_extremes(self, highs: list, lows: list) -> str:
@@ -394,7 +525,7 @@ class PromptFormatter:
 
         fii_dii = macro.get("fii_dii", {})
         fii_net = fii_dii.get("fii_net", 0)
-        dii_net = dii_dii.get("dii_net", 0)
+        dii_net = fii_dii.get("dii_net", 0)
         fii_sign = "+" if fii_net >= 0 else ""
         dii_sign = "+" if dii_net >= 0 else ""
         fii_label = "net_buy" if fii_net >= 0 else "net_sell"
@@ -428,15 +559,24 @@ class PromptFormatter:
         return "\n".join(lines)
 
     def _section_news(self, headlines: list) -> str:
-        lines = ["--- TOP NEWS HEADLINES ---"]
+        """
+        Render the India-relevant news stream. Each item shows the source,
+        timestamp, title, and RSS summary (when present). No pre-interpretation —
+        Sonnet/Opus form their own view.
+        """
+        lines = [f"--- INDIA-RELEVANT NEWS ({len(headlines)} items) ---"]
         if not headlines:
             lines.append("  (No headlines available)")
             return "\n".join(lines)
 
-        for h in headlines[:10]:
-            summary = h.get("ai_summary", h.get("title", ""))
+        for h in headlines:
+            src = h.get("source", "")
             ts = h.get("published", "")
-            lines.append(f"- [{ts}] {summary}")
+            title = h.get("title", "")
+            summary = h.get("summary", "")
+            lines.append(f"- [{ts} · {src}] {title}")
+            if summary:
+                lines.append(f"    {summary}")
         return "\n".join(lines)
 
     def _section_etf_snapshot(self, etfs: list) -> str:

@@ -359,22 +359,47 @@ class Orchestrator:
                 self.instruments.load_cache()
 
         if self.universe_filter:
-            return self.universe_filter.build_universe()
+            return self.universe_filter.refresh()
         return []
 
     def _load_sector_map(self) -> dict[str, str]:
-        """Load stock-to-sector mapping."""
+        """
+        Load stock-to-sector mapping. Combines:
+          1. Nifty 500 CSV (NSE's official industry tagging — covers ~500 stocks)
+          2. Curated sector_mapping.yaml (fine-grained categories — overrides CSV)
+        The yaml takes precedence so our existing NIFTY sector index groupings
+        (Banking, IT, Pharma) are preserved for the heatmap.
+        """
+        sector_map: dict[str, str] = {}
+
+        # 1. Load broad Nifty 500 "Industry" tags
+        import os
+        import csv
+        csv_path = "config/nifty500.csv"
+        if os.path.exists(csv_path):
+            try:
+                with open(csv_path, encoding="utf-8") as f:
+                    reader = csv.DictReader(f)
+                    for row in reader:
+                        sym = (row.get("Symbol") or "").strip()
+                        industry = (row.get("Industry") or "").strip()
+                        if sym and industry:
+                            sector_map[sym] = industry
+            except Exception as e:
+                logger.warning(f"Failed to read nifty500.csv for sectors: {e}")
+
+        # 2. Overlay curated sector map (stocks in the yaml get the refined tag)
         try:
             with open("config/sector_mapping.yaml", "r") as f:
                 data = yaml.safe_load(f)
-            sector_map = {}
-            for sector_name, info in data.get("sectors", {}).items():
-                for stock in info.get("stocks", []):
+            for sector_name, info in (data or {}).get("sectors", {}).items():
+                for stock in (info or {}).get("stocks", []) or []:
                     sector_map[stock] = sector_name
-            return sector_map
         except Exception as e:
-            logger.warning(f"Failed to load sector map: {e}")
-            return {}
+            logger.warning(f"Failed to load curated sector map: {e}")
+
+        logger.info(f"Sector map assembled: {len(sector_map)} stocks tagged")
+        return sector_map
 
     def _fetch_premarket_data(self):
         """Fetch pre-market data: news, macro, global cues."""
@@ -384,8 +409,9 @@ class Orchestrator:
             logger.warning(f"Pre-market macro fetch failed: {e}")
 
         try:
-            headlines = self.news_fetcher.fetch_market_headlines()
-            self.news_fetcher.summarize_headlines(headlines)
+            # Warm the RSS cache — the first Market Pulse cycle will reuse these
+            # entries (15-min TTL) rather than re-fetching 200 items from scratch.
+            self.news_fetcher.fetch_market_headlines(max_headlines=200, per_source=60)
         except Exception as e:
             logger.warning(f"Pre-market news fetch failed: {e}")
 
@@ -439,7 +465,10 @@ class Orchestrator:
             all_decisions = []
             for i, batch in enumerate(batches):
                 batch_packs = [p for p in deep_packs if p["symbol"] in batch]
-                decisions = self._run_trading_decision(batch_packs, i, len(batches))
+                decisions = self._run_trading_decision(
+                    batch_packs, i, len(batches),
+                    supplementary_research=supplementary_research,
+                )
                 if decisions:
                     all_decisions.extend(decisions.get("decisions", []))
 
@@ -480,8 +509,10 @@ class Orchestrator:
             # Macro
             macro = self.macro_fetcher.get_macro_snapshot()
 
-            # News
-            headlines = self.news_fetcher.fetch_market_headlines(max_headlines=10)
+            # News: raw fetch + mechanical pre-filter + Haiku India-relevance filter
+            headlines = self.news_fetcher.fetch_and_filter_headlines(
+                max_raw=200, per_source=60,
+            )
 
             # ETF snapshot
             etf_quotes = self._fetch_etf_quotes()
@@ -489,6 +520,11 @@ class Orchestrator:
 
             # Portfolio state
             portfolio = self.portfolio_state.get_portfolio_state()
+
+            # Pre-market research (from the 7:30 AM agent, if it ran)
+            premarket_brief = self.premarket_agent.get_latest_brief()
+            if premarket_brief:
+                logger.info("Attaching pre-market research to Market Pulse prompt")
 
             # Format prompt
             prompt = self.prompt_formatter.format_market_pulse(
@@ -500,6 +536,7 @@ class Orchestrator:
                 etf_snapshot=etf_snapshot,
                 portfolio_state=portfolio,
                 previous_watchlist=self._previous_watchlist,
+                premarket_research=premarket_brief,
             )
 
             # Call Sonnet
@@ -544,7 +581,8 @@ class Orchestrator:
             return []
 
     def _run_trading_decision(
-        self, deep_packs: list, batch_idx: int, total_batches: int
+        self, deep_packs: list, batch_idx: int, total_batches: int,
+        supplementary_research: list = None,
     ) -> Optional[dict]:
         """Run Trading Decision call to Opus for a batch of stocks."""
         try:
@@ -557,6 +595,15 @@ class Orchestrator:
             etf_quotes = self._fetch_etf_quotes()
             etf_snapshot = self.pulse_aggregator.build_etf_snapshot(etf_quotes) if self.pulse_aggregator else []
 
+            # Filter supplementary research to the stocks in this batch
+            batch_symbols = {p["symbol"] for p in deep_packs}
+            batch_research = None
+            if supplementary_research:
+                batch_research = [
+                    r for r in supplementary_research
+                    if r.get("symbol") in batch_symbols
+                ]
+
             prompt = self.prompt_formatter.format_trading_decision(
                 indices=indices,
                 macro=macro,
@@ -566,6 +613,7 @@ class Orchestrator:
                 etf_snapshot=etf_snapshot,
                 existing_positions=existing,
                 performance_context=perf,
+                supplementary_research=batch_research,
             )
 
             response = self.claude_client.call_trading_decision(prompt)
@@ -631,6 +679,14 @@ class Orchestrator:
         """End-of-day review and summary."""
         logger.info("--- EOD Review ---")
 
+        # Warm universe cache in background so tomorrow's boot stays fast
+        try:
+            if self.warehouse:
+                logger.info("Warming universe cache for tomorrow...")
+                self.warehouse.warm_universe()
+        except Exception as e:
+            logger.warning(f"Universe warm failed (non-critical): {e}")
+
         try:
             # Save portfolio snapshot
             portfolio = self.portfolio_state.get_portfolio_state()
@@ -655,7 +711,7 @@ class Orchestrator:
                 f"Day P&L: INR {summary.get('total_pnl', 0):+,.0f}\n"
                 f"Cumulative: INR {summary.get('cumulative_pnl', 0):+,.0f}\n"
                 f"Portfolio: INR {portfolio.get('total_value', 0):,.0f}\n"
-                f"LLM cost: INR {daily_cost.get('total_cost_inr', 0):,.2f}"
+                f"LLM cost: ${daily_cost.get('total_cost_usd', 0):,.4f}"
             )
             self.notifier.send_daily_summary(msg)
 
@@ -877,7 +933,11 @@ class Orchestrator:
     # ─── HELPERS ───
 
     def _fetch_index_quotes(self) -> dict:
-        """Fetch index quotes."""
+        """
+        Fetch index quotes + compute real change_pct using a daily-candle
+        lookup for previous close. Index prev_close is cached for the rest
+        of the day (indices' previous close doesn't change intraday).
+        """
         if not self.data_client:
             return {}
 
@@ -887,15 +947,33 @@ class Orchestrator:
             "NSE:NIFTY REALTY", "NSE:NIFTY ENERGY", "NSE:NIFTY PSU BANK",
             "NSE:INDIA VIX",
         ]
+
+        # Lazy init intra-day prev_close cache
+        if not hasattr(self, "_index_prev_close_cache"):
+            self._index_prev_close_cache: dict[str, tuple[str, float]] = {}
+
+        today = date.today().isoformat()
+
         try:
             quotes = self.data_client.get_quote(index_keys)
-            # Normalize: add change_pct
             for key, data in quotes.items():
-                ohlc = data.get("ohlc", {})
-                prev = ohlc.get("close", 0)
                 ltp = data.get("last_price", 0)
-                if prev > 0:
-                    data["change_pct"] = round(((ltp - prev) / prev) * 100, 2)
+                cached = self._index_prev_close_cache.get(key)
+                prev_close = cached[1] if cached and cached[0] == today else 0
+                if prev_close == 0:
+                    # Fetch from daily candles (IDX_I segment)
+                    try:
+                        prev_close = self.data_client.get_index_prev_close(key)
+                        if prev_close > 0:
+                            self._index_prev_close_cache[key] = (today, prev_close)
+                    except Exception:
+                        prev_close = 0
+
+                if prev_close > 0 and ltp > 0:
+                    data["change_pct"] = round(((ltp - prev_close) / prev_close) * 100, 2)
+                    # Overwrite ohlc.close with actual prev_close so downstream sees it
+                    if "ohlc" in data:
+                        data["ohlc"]["close"] = prev_close
                 else:
                     data["change_pct"] = 0
             return quotes

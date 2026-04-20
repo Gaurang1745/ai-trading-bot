@@ -79,8 +79,8 @@ class ClaudeClient:
 
         # Models
         ai_config = config.get("ai", {})
-        self.decision_model = ai_config.get("decision_model", "claude-opus-4-6")
-        self.analysis_model = ai_config.get("analysis_model", "claude-sonnet-4-5-20250929")
+        self.decision_model = ai_config.get("decision_model", "claude-opus-4-7")
+        self.analysis_model = ai_config.get("analysis_model", "claude-sonnet-4-6")
         self.news_model = ai_config.get("news_model", "claude-haiku-4-5-20251001")
         self.enable_caching = ai_config.get("enable_prompt_caching", True)
 
@@ -107,7 +107,7 @@ class ClaudeClient:
             user_prompt=user_prompt,
             call_type="MARKET_PULSE",
             parent_call_id=parent_call_id,
-            max_tokens=2000,
+            max_tokens=4000,
         )
 
     def call_trading_decision(
@@ -122,7 +122,7 @@ class ClaudeClient:
             user_prompt=user_prompt,
             call_type="TRADING_DECISION",
             parent_call_id=parent_call_id,
-            max_tokens=4000,
+            max_tokens=16000,
         )
 
     def call_eod_review(
@@ -135,7 +135,7 @@ class ClaudeClient:
             user_prompt=user_prompt,
             call_type="EOD_REVIEW",
             parent_call_id=parent_call_id,
-            max_tokens=3000,
+            max_tokens=6000,
         )
 
     def call_haiku(
@@ -167,9 +167,9 @@ class ClaudeClient:
         """
         call_id = self.llm_logger.generate_call_id(call_type)
 
-        # Save prompts to files
+        # Save prompts to files (call_type enables date-based dir layout)
         sys_file, user_file = self.llm_logger.save_prompt(
-            call_id, system_prompt, user_prompt
+            call_id, system_prompt, user_prompt, call_type=call_type
         )
 
         start_time = time.time()
@@ -346,17 +346,17 @@ class ClaudeClient:
 
         # Try extracting from code block
         if "```json" in text:
-            start = text.index("```json") + 7
-            end = text.index("```", start)
             try:
+                start = text.index("```json") + 7
+                end = text.index("```", start)
                 return json.loads(text[start:end].strip())
             except (json.JSONDecodeError, ValueError):
                 pass
 
         if "```" in text:
-            start = text.index("```") + 3
-            end = text.index("```", start)
             try:
+                start = text.index("```") + 3
+                end = text.index("```", start)
                 return json.loads(text[start:end].strip())
             except (json.JSONDecodeError, ValueError):
                 pass

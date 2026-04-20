@@ -69,7 +69,7 @@ class PostMarketStrategyAgent:
         return self.runner.run_agent(
             agent_name=f"strategy_review_{review_type}",
             prompt=prompt,
-            model="opus[1M]",
+            model="claude-opus-4-7[1M]",
             output_file=output_path,
             timeout_seconds=timeout,
             max_turns=max_turns,

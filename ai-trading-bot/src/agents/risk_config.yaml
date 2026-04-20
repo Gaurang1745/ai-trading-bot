@@ -2,14 +2,12 @@
 # Values here OVERRIDE the base config/config.yaml when present.
 # Only the Risk Monitor and Strategy agents should modify this file.
 
-overrides: {}
-  # Example overrides (uncomment to activate):
-  # risk:
-  #   daily_loss_limit_pct: 0.02
-  #   min_confidence: 0.60
+overrides:
+  risk:
+    min_confidence: 0.55
 
-changelog: []
-  # - timestamp: "2026-04-09 14:30:00"
-  #   agent: "risk_monitor"
-  #   change: "Tightened daily_loss_limit_pct from 0.03 to 0.02"
-  #   reason: "VIX above 20, market breadth deteriorating"
+changelog:
+  - timestamp: "2026-04-20 22:10:00"
+    agent: "strategy"
+    change: "Raised min_confidence floor from 0.50 to 0.55"
+    reason: "Day 1 observation: the only sub-0.60 confidence trade (GOLDBEES @ 0.58) also had the lowest R:R (1.61) among today's 4 orders. Modestly raising the floor nudges the decision layer away from marginal-conviction trades while remaining non-restrictive (all 4 of today's orders still clear 0.55)."

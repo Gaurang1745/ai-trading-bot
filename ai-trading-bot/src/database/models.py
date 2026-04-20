@@ -74,7 +74,7 @@ class DailySummary:
     portfolio_value: float = 0.0
     market_bias: str = ""
     notes: str = ""
-    llm_cost_inr: float = 0.0
+    llm_cost_usd: float = 0.0
     llm_calls_count: int = 0
 
 
@@ -105,12 +105,12 @@ class LLMCallRecord:
     cache_creation_tokens: int = 0
     total_tokens: int = 0
 
-    # Cost (INR)
-    input_cost_inr: float = 0.0
-    output_cost_inr: float = 0.0
-    cache_read_cost_inr: float = 0.0
-    cache_creation_cost_inr: float = 0.0
-    total_cost_inr: float = 0.0
+    # Cost (USD)
+    input_cost_usd: float = 0.0
+    output_cost_usd: float = 0.0
+    cache_read_cost_usd: float = 0.0
+    cache_creation_cost_usd: float = 0.0
+    total_cost_usd: float = 0.0
 
     # File paths
     system_prompt_file: Optional[str] = None

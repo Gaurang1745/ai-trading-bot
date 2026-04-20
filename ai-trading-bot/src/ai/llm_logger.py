@@ -17,25 +17,38 @@ from src.database.models import LLMCallRecord
 
 logger = logging.getLogger(__name__)
 
-# Default pricing (INR per 1M tokens). Overridden by config if provided.
+# Default pricing (USD per 1M tokens). Overridden by config if provided.
+# Source: https://claude.com/pricing
 DEFAULT_LLM_PRICING = {
+    "claude-opus-4-7": {
+        "input_per_1m": 5.00,
+        "output_per_1m": 25.00,
+        "cache_read_per_1m": 0.50,
+        "cache_create_per_1m": 6.25,
+    },
     "claude-opus-4-6": {
-        "input_per_1m": 1260.00,
-        "output_per_1m": 6300.00,
-        "cache_read_per_1m": 126.00,
-        "cache_create_per_1m": 1575.00,
+        "input_per_1m": 15.00,
+        "output_per_1m": 75.00,
+        "cache_read_per_1m": 1.50,
+        "cache_create_per_1m": 18.75,
+    },
+    "claude-sonnet-4-6": {
+        "input_per_1m": 3.00,
+        "output_per_1m": 15.00,
+        "cache_read_per_1m": 0.30,
+        "cache_create_per_1m": 3.75,
     },
     "claude-sonnet-4-5-20250929": {
-        "input_per_1m": 252.00,
-        "output_per_1m": 1260.00,
-        "cache_read_per_1m": 25.20,
-        "cache_create_per_1m": 315.00,
+        "input_per_1m": 3.00,
+        "output_per_1m": 15.00,
+        "cache_read_per_1m": 0.30,
+        "cache_create_per_1m": 3.75,
     },
     "claude-haiku-4-5-20251001": {
-        "input_per_1m": 67.20,
-        "output_per_1m": 336.00,
-        "cache_read_per_1m": 6.72,
-        "cache_create_per_1m": 84.00,
+        "input_per_1m": 1.00,
+        "output_per_1m": 5.00,
+        "cache_read_per_1m": 0.10,
+        "cache_create_per_1m": 1.25,
     },
 }
 
@@ -50,7 +63,7 @@ class LLMInteractionLogger:
         "timestamp", "call_id", "session_id", "parent_call_id", "day_number",
         "model", "call_type", "call_subtype",
         "input_tokens", "output_tokens", "cache_read_tokens", "total_tokens",
-        "total_cost_inr", "latency_ms", "status", "error_message",
+        "total_cost_usd", "latency_ms", "status", "error_message",
         "decisions_count", "watchlist_symbols", "actions_summary",
         "system_prompt_file", "user_prompt_file", "response_file",
     ]
@@ -172,7 +185,7 @@ class LLMInteractionLogger:
                     "call_type": call_type,
                     "timestamp": datetime.now().isoformat(),
                     "tokens": tokens,
-                    "cost_inr": cost,
+                    "cost_usd": cost,
                     "latency_ms": latency_ms,
                     "status": status,
                 }
@@ -198,7 +211,7 @@ class LLMInteractionLogger:
     def compute_cost(self, model: str, input_tokens: int, output_tokens: int,
                      cache_read_tokens: int = 0,
                      cache_creation_tokens: int = 0) -> dict:
-        """Compute cost in INR for a given token usage."""
+        """Compute cost in USD for a given token usage."""
         rates = self._get_rates(model)
 
         input_cost = (input_tokens / 1_000_000) * rates["input_per_1m"]
@@ -207,27 +220,39 @@ class LLMInteractionLogger:
         cache_create_cost = (cache_creation_tokens / 1_000_000) * rates["cache_create_per_1m"]
 
         return {
-            "input_cost_inr": round(input_cost, 4),
-            "output_cost_inr": round(output_cost, 4),
-            "cache_read_cost_inr": round(cache_read_cost, 4),
-            "cache_creation_cost_inr": round(cache_create_cost, 4),
-            "total_cost_inr": round(
-                input_cost + output_cost + cache_read_cost + cache_create_cost, 4
+            "input_cost_usd": round(input_cost, 6),
+            "output_cost_usd": round(output_cost, 6),
+            "cache_read_cost_usd": round(cache_read_cost, 6),
+            "cache_creation_cost_usd": round(cache_create_cost, 6),
+            "total_cost_usd": round(
+                input_cost + output_cost + cache_read_cost + cache_create_cost, 6
             ),
         }
 
     def _get_rates(self, model: str) -> dict:
         """Get pricing rates for a model, with fuzzy matching."""
-        # Try exact match first
-        if model in self.pricing:
-            return self.pricing[model]
-        # Try partial match
+        # Exact match
+        entry = self.pricing.get(model)
+        if isinstance(entry, dict):
+            return entry
+        # Partial match — only consider dict-valued entries (skip usd_inr_rate etc.)
         for key, rates in self.pricing.items():
-            if key in model or model in key:
+            if isinstance(rates, dict) and (key in model or model in key):
                 return rates
-        # Fallback to most expensive (safe default)
+        # Fallback to any Opus entry, else first available dict entry
         logger.warning(f"Unknown model for pricing: {model}. Using Opus rates.")
-        return self.pricing.get("claude-opus-4-6", list(self.pricing.values())[0])
+        for opus_key in ("claude-opus-4-7", "claude-opus-4-6"):
+            entry = self.pricing.get(opus_key)
+            if isinstance(entry, dict):
+                return entry
+        for rates in self.pricing.values():
+            if isinstance(rates, dict):
+                return rates
+        # Last-resort hardcoded rates (USD, Opus 4.7 levels)
+        return {
+            "input_per_1m": 5.00, "output_per_1m": 25.00,
+            "cache_read_per_1m": 0.50, "cache_create_per_1m": 6.25,
+        }
 
     def log_call(
         self,
@@ -318,7 +343,7 @@ class LLMInteractionLogger:
         logger.info(
             f"LLM call logged: {call_id} | {model} | {call_type} | "
             f"{input_tokens}+{output_tokens} tokens | "
-            f"₹{cost['total_cost_inr']:.2f} | {latency_ms}ms"
+            f"${cost['total_cost_usd']:.4f} | {latency_ms}ms"
         )
 
         return record
@@ -369,8 +394,8 @@ class LLMInteractionLogger:
                     model, call_type, call_subtype,
                     input_tokens, output_tokens, cache_read_tokens,
                     cache_creation_tokens,
-                    input_cost_inr, output_cost_inr, cache_read_cost_inr,
-                    cache_creation_cost_inr,
+                    input_cost_usd, output_cost_usd, cache_read_cost_usd,
+                    cache_creation_cost_usd,
                     system_prompt_file, user_prompt_file, response_file,
                     parsed_output_file,
                     status, error_message, http_status_code, stop_reason,
@@ -388,8 +413,8 @@ class LLMInteractionLogger:
                     record.model, record.call_type, record.call_subtype,
                     record.input_tokens, record.output_tokens,
                     record.cache_read_tokens, record.cache_creation_tokens,
-                    record.input_cost_inr, record.output_cost_inr,
-                    record.cache_read_cost_inr, record.cache_creation_cost_inr,
+                    record.input_cost_usd, record.output_cost_usd,
+                    record.cache_read_cost_usd, record.cache_creation_cost_usd,
                     record.system_prompt_file, record.user_prompt_file,
                     record.response_file, record.parsed_output_file,
                     record.status, record.error_message,
@@ -429,7 +454,7 @@ class LLMInteractionLogger:
                         "output_tokens": record.output_tokens,
                         "cache_read_tokens": record.cache_read_tokens,
                         "total_tokens": record.total_tokens,
-                        "total_cost_inr": record.total_cost_inr,
+                        "total_cost_usd": record.total_cost_usd,
                         "latency_ms": record.latency_ms,
                         "status": record.status,
                         "error_message": record.error_message or "",
@@ -456,18 +481,18 @@ class LLMInteractionLogger:
                 """
                 INSERT OR REPLACE INTO llm_daily_costs (
                     date, day_number,
-                    haiku_calls, haiku_input_tokens, haiku_output_tokens, haiku_cost_inr,
-                    sonnet_calls, sonnet_input_tokens, sonnet_output_tokens, sonnet_cost_inr,
-                    opus_calls, opus_input_tokens, opus_output_tokens, opus_cost_inr,
-                    news_calls, news_cost_inr,
-                    pulse_calls, pulse_cost_inr,
-                    decision_calls, decision_cost_inr,
-                    eod_calls, eod_cost_inr,
-                    premarket_calls, premarket_cost_inr,
-                    retry_calls, retry_cost_inr,
+                    haiku_calls, haiku_input_tokens, haiku_output_tokens, haiku_cost_usd,
+                    sonnet_calls, sonnet_input_tokens, sonnet_output_tokens, sonnet_cost_usd,
+                    opus_calls, opus_input_tokens, opus_output_tokens, opus_cost_usd,
+                    news_calls, news_cost_usd,
+                    pulse_calls, pulse_cost_usd,
+                    decision_calls, decision_cost_usd,
+                    eod_calls, eod_cost_usd,
+                    premarket_calls, premarket_cost_usd,
+                    retry_calls, retry_cost_usd,
                     total_calls, total_input_tokens, total_output_tokens,
-                    total_tokens, total_cost_inr,
-                    total_cache_read_tokens, cache_savings_inr,
+                    total_tokens, total_cost_usd,
+                    total_cache_read_tokens, cache_savings_usd,
                     failed_calls, retry_count
                 )
                 SELECT
@@ -476,71 +501,71 @@ class LLMInteractionLogger:
                     SUM(CASE WHEN model LIKE '%haiku%' THEN input_tokens ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%haiku%' THEN output_tokens ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%haiku%' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%sonnet%' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%sonnet%' THEN input_tokens ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%sonnet%' THEN output_tokens ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%sonnet%' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%opus%' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%opus%' THEN input_tokens ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%opus%' THEN output_tokens ELSE 0 END),
                     SUM(CASE WHEN model LIKE '%opus%' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN call_type = 'NEWS_SUMMARY' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'NEWS_SUMMARY' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN call_type = 'MARKET_PULSE' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'MARKET_PULSE' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN call_type = 'TRADING_DECISION' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'TRADING_DECISION' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN call_type = 'EOD_REVIEW' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'EOD_REVIEW' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN call_type = 'PRE_MARKET' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'PRE_MARKET' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     SUM(CASE WHEN call_type = 'RETRY' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'RETRY' THEN
-                        (input_cost_inr + output_cost_inr +
-                         COALESCE(cache_read_cost_inr, 0) +
-                         COALESCE(cache_creation_cost_inr, 0))
+                        (input_cost_usd + output_cost_usd +
+                         COALESCE(cache_read_cost_usd, 0) +
+                         COALESCE(cache_creation_cost_usd, 0))
                         ELSE 0 END),
                     COUNT(*),
                     SUM(input_tokens),
                     SUM(output_tokens),
                     SUM(input_tokens + output_tokens),
-                    SUM(input_cost_inr + output_cost_inr +
-                        COALESCE(cache_read_cost_inr, 0) +
-                        COALESCE(cache_creation_cost_inr, 0)),
+                    SUM(input_cost_usd + output_cost_usd +
+                        COALESCE(cache_read_cost_usd, 0) +
+                        COALESCE(cache_creation_cost_usd, 0)),
                     SUM(cache_read_tokens),
-                    SUM(COALESCE(cache_read_cost_inr, 0)),
+                    SUM(COALESCE(cache_read_cost_usd, 0)),
                     SUM(CASE WHEN status != 'SUCCESS' THEN 1 ELSE 0 END),
                     SUM(CASE WHEN call_type = 'RETRY' THEN 1 ELSE 0 END)
                 FROM llm_calls
@@ -565,9 +590,9 @@ class LLMInteractionLogger:
         """Get total LLM cost for the entire experiment so far."""
         row = self.db.fetchone(
             """SELECT SUM(
-                input_cost_inr + output_cost_inr +
-                COALESCE(cache_read_cost_inr, 0) +
-                COALESCE(cache_creation_cost_inr, 0)
+                input_cost_usd + output_cost_usd +
+                COALESCE(cache_read_cost_usd, 0) +
+                COALESCE(cache_creation_cost_usd, 0)
             ) as total FROM llm_calls"""
         )
         return row["total"] if row and row["total"] else 0.0
