@@ -3,18 +3,18 @@
 experiment:
   start_date: "2026-04-20"
   duration_days: 180
-  starting_capital: 100000
+  starting_capital: 1000000  # ₹10 lakh
 
 trading:
   exchanges: ["NSE", "BSE"]
   products: ["CNC", "MIS"]
-  max_trades_per_day: 12
   max_position_pct: 0.20
+  max_sector_pct: 0.35              # Max 35% of deployed capital in one sector
   max_deployed_pct: 0.80
   min_cash_buffer_pct: 0.20
   max_cnc_hold_days: 15
   unwind_phase_days: 5
-  min_stock_price: 20
+  min_stock_price: 10               # Loosened from 20 to allow Vodafone Idea / low-priced Nifty 500 names
   min_daily_volume_cr: 1.0
   no_new_mis_after: "14:30"
   mis_squareoff_start: "15:00"
@@ -28,12 +28,10 @@ trailing_sl:
   trail_gap_pct: 0.02          # Trail SL 2% below LTP (above LTP for shorts)
 
 risk:
-  daily_loss_limit_pct: 0.03
-  drawdown_reduce_pct: 0.10
-  drawdown_halt_pct: 0.15
+  daily_loss_limit_pct: 0.075       # 7.5% — volatile days can open wider than 3%
   default_sl_pct: 0.02
   min_sl_pct: 0.005
-  max_sl_pct: 0.05
+  max_sl_pct: 0.06                  # Softened from 5% to give conviction plays more room
   min_confidence: 0.50
   min_risk_reward: 1.5
 
@@ -52,14 +50,14 @@ corporate_actions:
 pipeline:
   market_pulse_model: "claude-sonnet-4-6"
   market_pulse_interval_minutes: 30
-  max_watchlist_size: 15
+  max_watchlist_size: 25
   min_watchlist_size: 3
   always_include_held: true
   watchlist_fallback: "previous"
   pulse_skip_if_stable: false
   pulse_skip_threshold_pct: 0.2
   bulk_indicator_refresh_minutes: 15
-  top_movers_count: 15
+  top_movers_count: 25              # Loosened from 15 for broader coverage at 500-stock universe
   top_per_sector_count: 3
   gap_threshold_pct: 2.0
   high_low_proximity_pct: 2.0

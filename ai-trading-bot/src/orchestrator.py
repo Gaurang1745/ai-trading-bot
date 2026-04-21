@@ -210,6 +210,10 @@ class Orchestrator:
         sector_map = self._load_sector_map()
         self.warehouse.boot(universe, sector_map)
 
+        # Share the sector map with guardrails so sector-concentration check works
+        if self.guardrails and sector_map:
+            self.guardrails.set_sector_map(sector_map)
+
         # Step 5: Fetch pre-market data
         logger.info("Step 5: Fetching pre-market data...")
         self._fetch_premarket_data()

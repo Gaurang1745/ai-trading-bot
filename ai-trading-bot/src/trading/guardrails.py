@@ -52,20 +52,18 @@ class GuardrailEngine:
         risk = config.get("risk", {})
 
         self._max_position_pct = trading.get("max_position_pct", 0.20)
+        self._max_sector_pct = trading.get("max_sector_pct", 0.35)
         self._max_deployed_pct = trading.get("max_deployed_pct", 0.80)
         self._min_cash_buffer_pct = trading.get("min_cash_buffer_pct", 0.20)
-        self._max_trades_per_day = trading.get("max_trades_per_day", 12)
-        self._min_stock_price = trading.get("min_stock_price", 20)
+        self._min_stock_price = trading.get("min_stock_price", 10)
         self._max_cnc_hold_days = trading.get("max_cnc_hold_days", 15)
         self._unwind_days = trading.get("unwind_phase_days", 5)
         self._no_new_mis_after = trading.get("no_new_mis_after", "14:30")
 
-        self._daily_loss_limit_pct = risk.get("daily_loss_limit_pct", 0.03)
-        self._drawdown_reduce_pct = risk.get("drawdown_reduce_pct", 0.10)
-        self._drawdown_halt_pct = risk.get("drawdown_halt_pct", 0.15)
+        self._daily_loss_limit_pct = risk.get("daily_loss_limit_pct", 0.075)
         self._default_sl_pct = risk.get("default_sl_pct", 0.02)
         self._min_sl_pct = risk.get("min_sl_pct", 0.005)
-        self._max_sl_pct = risk.get("max_sl_pct", 0.05)
+        self._max_sl_pct = risk.get("max_sl_pct", 0.06)
         self._min_confidence = risk.get("min_confidence", 0.50)
         self._duplicate_window = config.get("resilience", {}).get(
             "duplicate_order_window_min", 5
@@ -74,8 +72,6 @@ class GuardrailEngine:
         # Save base values so overrides never exceed them
         self._base_risk = {
             "daily_loss_limit_pct": self._daily_loss_limit_pct,
-            "drawdown_reduce_pct": self._drawdown_reduce_pct,
-            "drawdown_halt_pct": self._drawdown_halt_pct,
             "default_sl_pct": self._default_sl_pct,
             "min_sl_pct": self._min_sl_pct,
             "max_sl_pct": self._max_sl_pct,
@@ -83,18 +79,25 @@ class GuardrailEngine:
         }
         self._base_trading = {
             "max_position_pct": self._max_position_pct,
+            "max_sector_pct": self._max_sector_pct,
             "max_deployed_pct": self._max_deployed_pct,
             "min_cash_buffer_pct": self._min_cash_buffer_pct,
-            "max_trades_per_day": self._max_trades_per_day,
         }
         self._override_mtime: float = 0.0
 
         # ASM/GSM list (loaded externally)
         self._asm_gsm_list: set[str] = set()
 
+        # Sector map (symbol -> sector name), set externally by orchestrator
+        self._sector_map: dict[str, str] = {}
+
     def set_asm_gsm_list(self, symbols: list[str]) -> None:
         """Update the ASM/GSM restricted list."""
         self._asm_gsm_list = set(symbols)
+
+    def set_sector_map(self, sector_map: dict[str, str]) -> None:
+        """Set symbol -> sector mapping, used for concentration check."""
+        self._sector_map = sector_map or {}
 
     def _validate_modify(self, order: dict) -> ValidationResult:
         """
@@ -204,11 +207,11 @@ class GuardrailEngine:
         tighter_when_higher = {
             "min_confidence", "min_sl_pct", "min_cash_buffer_pct",
         }
-        # Parameters where LOWER = tighter (loss limits, max sizes, drawdown triggers)
+        # Parameters where LOWER = tighter (loss limits, max sizes)
         tighter_when_lower = {
-            "daily_loss_limit_pct", "drawdown_reduce_pct", "drawdown_halt_pct",
+            "daily_loss_limit_pct",
             "default_sl_pct", "max_sl_pct",
-            "max_position_pct", "max_deployed_pct", "max_trades_per_day",
+            "max_position_pct", "max_sector_pct", "max_deployed_pct",
         }
 
         def try_apply(param: str, new_value, base_value, attr: str) -> bool:
@@ -334,12 +337,21 @@ class GuardrailEngine:
                 f"Limit: INR {daily_limit:,.0f}"
             )
 
-        # ─── TRADE COUNT LIMIT ───
-        trades_today = self.portfolio.trades_today_count()
-        if trades_today >= self._max_trades_per_day:
-            errors.append(
-                f"BLOCKED: Max trades per day ({self._max_trades_per_day}) reached"
-            )
+        # ─── SECTOR CONCENTRATION ───
+        # Max 35% of portfolio in a single sector (including the new position)
+        if tx_type == "BUY" and position_value > 0:
+            new_sector = self._sector_map.get(symbol, "")
+            if new_sector:
+                current_sector_value = self._current_sector_exposure(new_sector)
+                total_sector_value = current_sector_value + position_value
+                max_sector_value = portfolio_value * self._max_sector_pct
+                if total_sector_value > max_sector_value:
+                    errors.append(
+                        f"BLOCKED: Sector '{new_sector}' concentration would exceed "
+                        f"{self._max_sector_pct*100:.0f}% "
+                        f"(current INR {current_sector_value:,.0f} + new INR {position_value:,.0f} "
+                        f"= INR {total_sector_value:,.0f}; max INR {max_sector_value:,.0f})"
+                    )
 
         # ─── TIMING CHECKS ───
         now = datetime.now().time()
@@ -428,23 +440,6 @@ class GuardrailEngine:
             )
             order["max_hold_days"] = self._max_cnc_hold_days
 
-        # ─── DRAWDOWN CHECK ───
-        starting_capital = exp.get("starting_capital", 100000)
-        total_return_pct = (portfolio_value - starting_capital) / starting_capital
-        if total_return_pct < -self._drawdown_halt_pct:
-            errors.append(
-                f"BLOCKED: {self._drawdown_halt_pct*100:.0f}% drawdown breached. Trading halted."
-            )
-        elif total_return_pct < -self._drawdown_reduce_pct:
-            if order.get("product") == "CNC":
-                errors.append(
-                    f"BLOCKED: {self._drawdown_reduce_pct*100:.0f}% drawdown. CNC not allowed."
-                )
-            order["quantity"] = max(1, order.get("quantity", 0) // 2)
-            warnings.append(
-                f"WARNING: {self._drawdown_reduce_pct*100:.0f}% drawdown. Position size halved."
-            )
-
         result = ValidationResult(
             is_valid=len(errors) == 0,
             errors=errors,
@@ -469,6 +464,26 @@ class GuardrailEngine:
             result = self.validate_order(decision)
             results.append(result)
         return results
+
+    def _current_sector_exposure(self, sector: str) -> float:
+        """
+        Sum the INR value of all currently-held positions (CNC holdings + MIS
+        open positions) that belong to `sector`.
+        """
+        if not sector:
+            return 0.0
+        total = 0.0
+        # CNC holdings — use last_price for current value
+        for h in self.portfolio.get_holdings():
+            sym = h.get("symbol", "")
+            if self._sector_map.get(sym, "") == sector:
+                total += (h.get("last_price", 0) or h.get("avg_price", 0)) * h.get("quantity", 0)
+        # MIS positions — use ltp for current value
+        for p in self.portfolio.get_positions():
+            sym = p.get("symbol", "")
+            if self._sector_map.get(sym, "") == sector:
+                total += (p.get("ltp", 0) or p.get("entry", 0)) * abs(p.get("quantity", 0))
+        return total
 
     def _get_ltp(self, symbol: str, exchange: str = "NSE") -> float:
         """Get LTP for a symbol from portfolio state data."""

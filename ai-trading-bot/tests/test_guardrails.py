@@ -187,22 +187,6 @@ class TestGuardrailEngine:
         assert not result.is_valid
         assert any("Confidence" in e for e in result.errors)
 
-    def test_max_trades_per_day_blocked(self, engine, mock_portfolio):
-        mock_portfolio.trades_today_count.return_value = 12  # at max
-        order = {
-            "action": "BUY",
-            "symbol": "ITC",
-            "exchange": "NSE",
-            "product": "CNC",
-            "quantity": 10,
-            "price": 450,
-            "confidence": 0.8,
-            "transaction_type": "BUY",
-        }
-        result = engine.validate_order(order)
-        assert not result.is_valid
-        assert any("Max trades per day" in e for e in result.errors)
-
     def test_default_sl_applied(self, engine):
         order = {
             "action": "BUY",
@@ -249,23 +233,6 @@ class TestGuardrailEngine:
         result = engine.validate_order(order)
         assert not result.is_valid
         assert any("short-sell" in e.lower() for e in result.errors)
-
-    def test_drawdown_halt(self, engine, mock_portfolio):
-        # 15% drawdown: portfolio = 85k from 100k starting
-        mock_portfolio.total_value.return_value = 84000
-        order = {
-            "action": "BUY",
-            "symbol": "ITC",
-            "exchange": "NSE",
-            "product": "CNC",
-            "quantity": 5,
-            "price": 1000,
-            "confidence": 0.8,
-            "transaction_type": "BUY",
-        }
-        result = engine.validate_order(order)
-        assert not result.is_valid
-        assert any("drawdown" in e.lower() for e in result.errors)
 
     def test_validate_all_decisions(self, engine):
         decisions = [
