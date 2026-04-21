@@ -205,7 +205,6 @@ the JSON structure. No code blocks. Just raw JSON. Use this exact schema:
       "confidence": <float between 0.0 and 1.0>,
       "timeframe": "INTRADAY | SWING",
       "max_hold_days": <integer, only for CNC>,
-      "time_exit_plan": "What to do if target/SL not hit by max_hold_days",
       "reasoning": "Detailed reasoning: what setup/thesis, what changed
                     (for MODIFY/EXIT), risk-reward ratio, exit plan."
     }

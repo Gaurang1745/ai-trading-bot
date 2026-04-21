@@ -172,7 +172,6 @@ class ResponseParser:
             "confidence": float(raw.get("confidence", 0)),
             "timeframe": raw.get("timeframe", "SWING").upper(),
             "max_hold_days": int(raw.get("max_hold_days", 0)),
-            "time_exit_plan": raw.get("time_exit_plan", ""),
             "reasoning": raw.get("reasoning", ""),
         }
 
