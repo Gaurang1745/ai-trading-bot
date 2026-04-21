@@ -12,9 +12,10 @@ export async function GET() {
     const snap = queryOne<{
       total_value: number;
       cash_available: number;
+      cumulative_pnl: number;
       timestamp: string;
     }>(
-      `SELECT total_value, cash_available, timestamp
+      `SELECT total_value, cash_available, cumulative_pnl, timestamp
        FROM portfolio_snapshots
        WHERE mode = 'PAPER'
        ORDER BY timestamp DESC LIMIT 1`
@@ -60,6 +61,18 @@ export async function GET() {
       [today]
     );
 
+    // All-time realized P&L (sum of every closed paper trade with a recorded P&L).
+    const realizedRow = queryOne<{ total: number }>(
+      `SELECT COALESCE(SUM(pnl), 0) as total FROM trades
+       WHERE mode = 'PAPER' AND status = 'COMPLETE' AND pnl IS NOT NULL`
+    );
+    const totalRealized = realizedRow?.total ?? 0;
+    // cumulative_pnl (from snapshot) = total_value - starting_capital
+    //                               = all-time realized + current mark-to-market unrealized
+    // So unrealized = cumulative - realized.
+    const totalPnl = snap?.cumulative_pnl ?? 0;
+    const totalUnrealized = snap ? totalPnl - totalRealized : 0;
+
     const wins = tradesRow?.wins ?? 0;
     const losses = tradesRow?.losses ?? 0;
     const totalTrades = wins + losses;
@@ -69,6 +82,9 @@ export async function GET() {
       cash,
       snapshot_timestamp: snap?.timestamp ?? null,
       day_pnl: tradesRow?.pnl ?? 0,
+      total_pnl: totalPnl,
+      total_pnl_realized: totalRealized,
+      total_pnl_unrealized: totalUnrealized,
       win_rate: totalTrades > 0 ? wins / totalTrades : 0,
       ai_cost_today: costRow?.total ?? 0,
       holdings_count: holdings.length,

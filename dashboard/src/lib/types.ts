@@ -77,6 +77,9 @@ export interface SummaryStats {
   cash: number;
   snapshot_timestamp: string | null;
   day_pnl: number;
+  total_pnl: number;
+  total_pnl_realized: number;
+  total_pnl_unrealized: number;
   win_rate: number;
   ai_cost_today: number;
   holdings_count: number;

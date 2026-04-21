@@ -144,6 +144,13 @@ export default function Dashboard() {
             label="Day P&L"
             value={formatINR(summary.day_pnl)}
             color={pnlColor(summary.day_pnl)}
+            sub="realized (closed trades today)"
+          />
+          <StatCard
+            label="Total P&L"
+            value={formatINR(summary.total_pnl)}
+            color={pnlColor(summary.total_pnl)}
+            sub={`Realized ${formatINR(summary.total_pnl_realized)} · Unrealized ${formatINR(summary.total_pnl_unrealized)}`}
           />
           <StatCard
             label="Win Rate"
