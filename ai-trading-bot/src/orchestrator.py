@@ -20,6 +20,7 @@ from dotenv import load_dotenv
 from src.database.db import Database
 from src.database.migrations import run_migrations, initialize_paper_cash
 from src.broker.dhan_client import DhanDataClient
+from src.broker.dhan_auth import DhanAuth
 from src.broker.instruments import InstrumentManager
 from src.data.indicators import IndicatorEngine
 from src.data.levels import LevelCalculator
@@ -124,8 +125,9 @@ class Orchestrator:
         # Notifications
         self.notifier = create_notifier(self.config)
 
-        # Data client (currently Kite, will be replaced by Dhan in Phase 2)
+        # Data client + auth (initialized in boot)
         self.data_client = None
+        self.dhan_auth: Optional[DhanAuth] = None
 
         # Instruments
         self.instruments = InstrumentManager(data_client=None)
@@ -233,21 +235,36 @@ class Orchestrator:
         )
 
     def _init_data_client(self):
-        """Initialize the Dhan market data client."""
+        """Initialize the Dhan market data client with TOTP-based auto-auth."""
         logger.info("Step 1: Initializing Dhan data client...")
         try:
             dhan_config = self.config.get("dhan", {})
             client_id = dhan_config.get("client_id", "")
-            access_token = dhan_config.get("access_token", "")
-            if client_id and access_token:
-                self.data_client = DhanDataClient(
-                    client_id=client_id,
-                    access_token=access_token,
-                    notifier=self.notifier,
-                )
-                logger.info("Dhan data client initialized")
-            else:
-                logger.warning("Dhan credentials not configured. Data client unavailable.")
+            pin = dhan_config.get("pin", "")
+            totp_secret = dhan_config.get("totp_secret", "")
+            fallback_token = dhan_config.get("access_token", "")
+
+            if not client_id:
+                logger.warning("Dhan client_id not configured. Data client unavailable.")
+                return
+
+            # TOTP-based auto-auth: generates a fresh 24h token on boot and
+            # refreshes daily via the scheduler. Falls back to DHAN_ACCESS_TOKEN
+            # env if PIN/TOTP not configured (manual mode).
+            self.dhan_auth = DhanAuth(
+                client_id=client_id,
+                pin=pin,
+                totp_secret=totp_secret,
+                fallback_token=fallback_token,
+            )
+            access_token = self.dhan_auth.get_token()
+
+            self.data_client = DhanDataClient(
+                client_id=client_id,
+                access_token=access_token,
+                notifier=self.notifier,
+            )
+            logger.info("Dhan data client initialized")
         except Exception as e:
             logger.warning(f"Dhan data client initialization failed: {e}")
 
@@ -872,8 +889,40 @@ class Orchestrator:
             id="strategy_review_weekly", replace_existing=True,
         )
 
+        # Daily Dhan token refresh: every day at 06:30 IST (well before 08:30 boot)
+        # Generates a fresh 24h access token via TOTP and caches it on disk.
+        self._scheduler.add_job(
+            self._run_token_refresh,
+            CronTrigger(hour=6, minute=30, timezone="Asia/Kolkata"),
+            id="dhan_token_refresh", replace_existing=True,
+        )
+
         self._scheduler.start()
         logger.info("Scheduler started with all jobs")
+
+    # ─── AUTH ───
+
+    def _run_token_refresh(self):
+        """
+        Daily scheduled Dhan token refresh. Generates a fresh 24h access token
+        via TOTP and re-points the DhanDataClient at it. Runs at 06:30 IST so
+        the new token is in place before the 08:30 boot sequence / 09:15 open.
+        """
+        if not self.dhan_auth:
+            logger.warning("Token refresh skipped: DhanAuth not configured")
+            return
+        try:
+            new_token = self.dhan_auth.force_refresh()
+            if self.data_client and hasattr(self.data_client, "dhan"):
+                # Swap the token on the underlying SDK
+                self.data_client.dhan.access_token = new_token
+                logger.info("Dhan token refreshed and wired into data client")
+            else:
+                logger.info("Dhan token refreshed (data client will pick it up on next init)")
+        except Exception as e:
+            logger.error(f"Dhan token refresh failed: {e}")
+            if self.notifier:
+                self.notifier.send_error_alert("Dhan token refresh failed", str(e))
 
     # ─── AGENT RUNNERS ───
 

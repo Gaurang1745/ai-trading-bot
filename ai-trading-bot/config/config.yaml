@@ -100,6 +100,12 @@ llm_pricing:
 
 dhan:
   client_id: "${DHAN_CLIENT_ID}"
+  # TOTP-based auto-refresh. Set these on web.dhan.co:
+  #   Profile → DhanHQ Trading APIs → Setup TOTP
+  # Copy the base32 secret shown alongside the QR code into DHAN_TOTP_SECRET.
+  pin: "${DHAN_PIN}"
+  totp_secret: "${DHAN_TOTP_SECRET}"
+  # Optional fallback if TOTP is not configured — manually-set 24h token.
   access_token: "${DHAN_ACCESS_TOKEN}"
 
 anthropic:
