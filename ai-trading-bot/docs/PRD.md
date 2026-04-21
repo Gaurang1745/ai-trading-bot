@@ -185,7 +185,7 @@ All parameters are in `config/config.yaml`:
 | Section | Key Parameters |
 |---------|---------------|
 | `experiment` | start_date, duration_days, starting_capital |
-| `trading` | mode, max_trades_per_day, max_position_pct, MIS timings |
+| `trading` | mode, max_position_pct, MIS timings |
 | `risk` | daily_loss_limit, drawdown thresholds, SL range |
 | `resilience` | circuit breaker timeout, SL check interval |
 | `pipeline` | pulse interval, watchlist size limits |

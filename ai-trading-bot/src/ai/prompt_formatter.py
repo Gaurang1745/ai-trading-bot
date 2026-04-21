@@ -25,7 +25,6 @@ class PromptFormatter:
         ).date()
         self._duration_days = exp.get("duration_days", 30)
         trading = config.get("trading", {})
-        self._max_trades = trading.get("max_trades_per_day", 12)
         self._unwind_days = trading.get("unwind_phase_days", 5)
 
     # ─── HELPERS ───
@@ -617,7 +616,7 @@ class PromptFormatter:
         pnl_pct = (total_pnl / total * 100) if total > 0 else 0
         lines.append(
             f"Today's P&L: INR {total_pnl:+,.0f} ({pnl_pct:+.2f}%) | "
-            f"Trades today: {state.get('trades_today', 0)} of {self._max_trades} max"
+            f"Trades today: {state.get('trades_today', 0)}"
         )
 
         # Holdings
@@ -680,7 +679,7 @@ class PromptFormatter:
         lines.append(f"Unrealized P&L:  INR {unrealized:+,.0f}")
         lines.append(f"Total P&L:       INR {total_pnl:+,.0f} ({pnl_pct:+.2f}%)")
         lines.append(f"Daily loss limit: INR {daily_limit:,.0f} | Remaining: INR {limit_remaining:,.0f}")
-        lines.append(f"Trades today: {state.get('trades_today', 0)} of {self._max_trades} max")
+        lines.append(f"Trades today: {state.get('trades_today', 0)}")
         lines.append("")
 
         # Cumulative P&L

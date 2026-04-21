@@ -615,7 +615,6 @@ with tab_details:
             "starting_capital": starting_capital,
             "start_date": start_date_str,
             "duration_days": config.get("experiment", {}).get("duration_days", 30),
-            "max_trades_per_day": config.get("trading", {}).get("max_trades_per_day", 12),
             "max_position_pct": config.get("trading", {}).get("max_position_pct", 0.20),
             "daily_loss_limit_pct": config.get("risk", {}).get("daily_loss_limit_pct", 0.03),
         })

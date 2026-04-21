@@ -22,7 +22,6 @@ def config():
             "max_position_pct": 0.20,
             "max_deployed_pct": 0.80,
             "min_cash_buffer_pct": 0.20,
-            "max_trades_per_day": 12,
             "min_stock_price": 20,
             "max_cnc_hold_days": 15,
             "unwind_phase_days": 5,
