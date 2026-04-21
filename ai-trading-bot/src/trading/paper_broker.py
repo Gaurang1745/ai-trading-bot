@@ -187,7 +187,11 @@ class PaperBroker:
                 )
         elif tx_type == "SELL":
             if row:
-                new_qty = max(0, row["quantity"] - quantity)
+                old_qty = row["quantity"]
+                avg_price = row["avg_price"]
+                actual_sold = min(quantity, old_qty)
+                new_qty = max(0, old_qty - quantity)
+                pnl = round((fill_price - avg_price) * actual_sold, 2)
                 if new_qty == 0:
                     self.db.execute(
                         "DELETE FROM paper_holdings WHERE symbol = ?", (symbol,)
@@ -197,6 +201,9 @@ class PaperBroker:
                         "UPDATE paper_holdings SET quantity = ? WHERE symbol = ?",
                         (new_qty, symbol),
                     )
+                # Record realized P&L so Day/Total P&L on the dashboard sums correctly.
+                # Without this, CNC round-trips showed 0 P&L even though cash moved.
+                self.record_trade_pnl(symbol, pnl, product="CNC", exchange=exchange)
 
     def update_positions(
         self, symbol: str, exchange: str, tx_type: str,
@@ -528,13 +535,16 @@ class PaperBroker:
 
     # ─── P&L RECORDING ───
 
-    def record_trade_pnl(self, symbol: str, pnl: float):
+    def record_trade_pnl(
+        self, symbol: str, pnl: float,
+        product: str = "MIS", exchange: str = "NSE",
+    ):
         """Record realized P&L for a closed trade in the trades table."""
         self.db.execute(
             "INSERT INTO trades (timestamp, symbol, exchange, transaction_type, "
             "quantity, price, product, order_type, status, mode, pnl) "
-            "VALUES (?, ?, 'NSE', 'CLOSE', 0, 0, 'MIS', 'MARKET', 'COMPLETE', 'PAPER', ?)",
-            (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), symbol, pnl),
+            "VALUES (?, ?, ?, 'CLOSE', 0, 0, ?, 'MARKET', 'COMPLETE', 'PAPER', ?)",
+            (datetime.now().strftime("%Y-%m-%d %H:%M:%S"), symbol, exchange, product, pnl),
         )
 
     # ─── SL / TARGET MODIFICATION ───
