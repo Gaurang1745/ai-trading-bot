@@ -17,6 +17,12 @@ const OUTPUTS_ROOT =
  * GET /api/agent-outputs?date=...&file=...
  *                                  -> return the file contents
  */
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function isSafeName(s: string): boolean {
+  return !s.includes("..") && !s.includes("/") && !s.includes("\\") && !s.includes("\0");
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -28,11 +34,18 @@ export async function GET(request: Request) {
     if (!date) {
       const dates = fs
         .readdirSync(OUTPUTS_ROOT)
-        .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))
+        .filter((d) => DATE_RE.test(d))
         .filter((d) => fs.statSync(path.join(OUTPUTS_ROOT, d)).isDirectory())
         .sort()
         .reverse();
       return NextResponse.json(dates);
+    }
+
+    if (!DATE_RE.test(date)) {
+      return NextResponse.json({ error: "invalid date" }, { status: 400 });
+    }
+    if (file && !isSafeName(file)) {
+      return NextResponse.json({ error: "invalid file" }, { status: 400 });
     }
 
     const dir = path.join(OUTPUTS_ROOT, date);

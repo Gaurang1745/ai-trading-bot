@@ -15,6 +15,12 @@ const LOG_ROOT =
  * GET /api/ai-logs?date=YYYY-MM-DD&call=NNN_HHMM_type
  *                            -> return contents of all files in that call dir
  */
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+function isSafeName(s: string): boolean {
+  return !s.includes("..") && !s.includes("/") && !s.includes("\\") && !s.includes("\0");
+}
+
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -26,11 +32,18 @@ export async function GET(request: Request) {
       if (!fs.existsSync(LOG_ROOT)) return NextResponse.json([]);
       const dates = fs
         .readdirSync(LOG_ROOT)
-        .filter((d) => /^\d{4}-\d{2}-\d{2}$/.test(d))
+        .filter((d) => DATE_RE.test(d))
         .filter((d) => fs.existsSync(path.join(LOG_ROOT, d, "ai")))
         .sort()
         .reverse();
       return NextResponse.json(dates);
+    }
+
+    if (!DATE_RE.test(date)) {
+      return NextResponse.json({ error: "invalid date" }, { status: 400 });
+    }
+    if (call && !isSafeName(call)) {
+      return NextResponse.json({ error: "invalid call" }, { status: 400 });
     }
 
     const aiDir = path.join(LOG_ROOT, date, "ai");
