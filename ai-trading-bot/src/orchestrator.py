@@ -497,6 +497,15 @@ class Orchestrator:
             if all_decisions:
                 self._validate_and_execute(all_decisions)
 
+            # Mark-to-market snapshot so the dashboard reflects live portfolio value
+            # between EOD snapshots. Non-critical — never crash the cycle on failure.
+            try:
+                self.performance.save_portfolio_snapshot(
+                    self.portfolio_state.get_portfolio_state()
+                )
+            except Exception as e:
+                logger.warning(f"Portfolio snapshot failed (non-critical): {e}")
+
         except Exception as e:
             logger.error(f"Market Pulse cycle failed: {e}", exc_info=True)
 

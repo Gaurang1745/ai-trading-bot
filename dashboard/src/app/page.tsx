@@ -130,7 +130,16 @@ export default function Dashboard() {
             marginBottom: "2rem",
           }}
         >
-          <StatCard label="Portfolio Value" value={formatINR(summary.portfolio_value)} />
+          <StatCard
+            label="Portfolio Value"
+            value={formatINR(summary.portfolio_value)}
+            sub={
+              summary.snapshot_timestamp
+                ? `as of ${summary.snapshot_timestamp.split(" ")[1]?.slice(0, 5) ?? ""}`
+                : "no snapshot yet"
+            }
+          />
+          <StatCard label="Available Cash" value={formatINR(summary.cash)} />
           <StatCard
             label="Day P&L"
             value={formatINR(summary.day_pnl)}

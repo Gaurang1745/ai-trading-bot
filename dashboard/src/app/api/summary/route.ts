@@ -7,20 +7,34 @@ export async function GET() {
   try {
     const today = new Date().toISOString().split("T")[0];
 
-    // Cash
+    // Latest mark-to-market snapshot (written every market-pulse cycle + EOD).
+    // Prefer this over summing avg_price * qty, which is cost basis and hides P&L.
+    const snap = queryOne<{
+      total_value: number;
+      cash_available: number;
+      timestamp: string;
+    }>(
+      `SELECT total_value, cash_available, timestamp
+       FROM portfolio_snapshots
+       WHERE mode = 'PAPER'
+       ORDER BY timestamp DESC LIMIT 1`
+    );
+
+    // Fallback path if no snapshot exists yet (fresh DB / bot hasn't run a cycle).
     const cashRow = queryOne<{ balance: number }>(
       "SELECT balance FROM paper_cash WHERE id = 1"
     );
-    const cash = cashRow?.balance ?? 0;
-
-    // Holdings
+    const cashFallback = cashRow?.balance ?? 0;
     const holdings = queryAll<{ quantity: number; avg_price: number }>(
       "SELECT quantity, avg_price FROM paper_holdings WHERE quantity > 0"
     );
-    const holdingsValue = holdings.reduce(
+    const holdingsCostBasis = holdings.reduce(
       (sum, h) => sum + h.quantity * h.avg_price,
       0
     );
+
+    const portfolioValue = snap ? snap.total_value : cashFallback + holdingsCostBasis;
+    const cash = snap ? snap.cash_available : cashFallback;
 
     // Positions count
     const positions = queryAll(
@@ -51,8 +65,9 @@ export async function GET() {
     const totalTrades = wins + losses;
 
     return NextResponse.json({
-      portfolio_value: cash + holdingsValue,
+      portfolio_value: portfolioValue,
       cash,
+      snapshot_timestamp: snap?.timestamp ?? null,
       day_pnl: tradesRow?.pnl ?? 0,
       win_rate: totalTrades > 0 ? wins / totalTrades : 0,
       ai_cost_today: costRow?.total ?? 0,

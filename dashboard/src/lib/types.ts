@@ -75,6 +75,7 @@ export interface DailySummary {
 export interface SummaryStats {
   portfolio_value: number;
   cash: number;
+  snapshot_timestamp: string | null;
   day_pnl: number;
   win_rate: number;
   ai_cost_today: number;
