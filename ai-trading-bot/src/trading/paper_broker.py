@@ -361,6 +361,7 @@ class PaperBroker:
         )
 
         for order in sl_orders:
+            order = dict(order)
             symbol = order["symbol"]
             exchange = order.get("exchange", "NSE")
             trigger_price = order.get("trigger_price") or order.get("price", 0)
@@ -411,6 +412,7 @@ class PaperBroker:
         )
 
         for order in limit_orders:
+            order = dict(order)
             symbol = order["symbol"]
             exchange = order.get("exchange", "NSE")
             limit_price = order.get("price", 0)
@@ -459,6 +461,7 @@ class PaperBroker:
             "SELECT * FROM paper_holdings WHERE quantity > 0"
         )
         for h in holdings:
+            h = dict(h)
             symbol = h["symbol"]
             exchange = h.get("exchange", "NSE")
             candle = self.get_candle_or_ltp(symbol, exchange)
@@ -473,6 +476,7 @@ class PaperBroker:
             )
 
             for sl in sl_orders:
+                sl = dict(sl)
                 trigger = sl.get("trigger_price") or sl.get("price", 0)
                 if not trigger:
                     continue
@@ -506,6 +510,7 @@ class PaperBroker:
             "SELECT * FROM paper_positions WHERE quantity != 0"
         )
         for p in positions:
+            p = dict(p)
             symbol = p["symbol"]
             exchange = p.get("exchange", "NSE")
             candle = self.get_candle_or_ltp(symbol, exchange)
