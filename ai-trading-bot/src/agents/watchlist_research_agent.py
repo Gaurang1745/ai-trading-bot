@@ -40,7 +40,7 @@ class WatchlistResearchAgent:
             prompt=prompt,
             model="claude-opus-4-7[1M]",
             output_file=output_path,
-            timeout_seconds=300,
+            timeout_seconds=420,
             max_turns=20,
             effort="max",
         )
@@ -69,7 +69,7 @@ class WatchlistResearchAgent:
                 "prompt": prompt,
                 "model": "claude-opus-4-7[1M]",
                 "output_file": output_path,
-                "timeout_seconds": 300,
+                "timeout_seconds": 420,
                 "max_turns": 20,
                 "effort": "max",
             })
