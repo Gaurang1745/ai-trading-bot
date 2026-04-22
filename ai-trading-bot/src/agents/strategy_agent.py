@@ -51,6 +51,9 @@ class PostMarketStrategyAgent:
         risk_config_path = os.path.join(
             self._project_root, "src", "agents", "risk_config.yaml"
         )
+        config_path = os.path.join(
+            self._project_root, "config", "config.yaml"
+        )
 
         prompt_template = self._load_prompt()
         prompt = (
@@ -58,6 +61,7 @@ class PostMarketStrategyAgent:
             .replace("{db_path}", db_path)
             .replace("{system_prompt_path}", system_prompt_path)
             .replace("{risk_config_path}", risk_config_path)
+            .replace("{config_path}", config_path)
             .replace("{changelog_path}", changelog_path)
             .replace("{output_path}", output_path)
         )
