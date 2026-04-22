@@ -22,17 +22,26 @@ class ClaudeCircuitBreaker:
     Tracks Claude API health and triggers safe mode if unreachable.
     """
 
+    # A streak that has seen no new failure for longer than this is treated as
+    # stale and reset on the next failure — so yesterday's EOD failure does not
+    # combine with tomorrow's premarket failure into a spurious multi-hour streak.
+    _STALE_STREAK_MINUTES = 60
+
     def __init__(self, config: dict, notifier=None):
         self.timeout_minutes = config.get("resilience", {}).get(
             "claude_safe_mode_timeout_min", 15
         )
         self.last_successful_call = datetime.now()
+        self.first_failure_at = None
         self.in_safe_mode = False
         self.notifier = notifier
 
     def record_success(self):
-        """Called after every successful Claude API response."""
+        """Called after every successful Claude API response. Clears any
+        in-progress failure streak so safe mode only cares about *sustained*
+        outages, not old isolated blips."""
         self.last_successful_call = datetime.now()
+        self.first_failure_at = None
         if self.in_safe_mode:
             self.in_safe_mode = False
             if self.notifier:
@@ -41,21 +50,31 @@ class ClaudeCircuitBreaker:
                 )
 
     def record_failure(self, error):
-        """Called after every failed Claude API call."""
-        elapsed = (datetime.now() - self.last_successful_call).total_seconds() / 60
-        if elapsed >= self.timeout_minutes and not self.in_safe_mode:
+        """Safe mode trips only when failures have been sustained for
+        timeout_minutes, measured from the *first failure of the current streak*.
+        Idle time (overnight, cycle gaps) never contributes to the streak."""
+        now = datetime.now()
+        if (
+            self.first_failure_at is not None
+            and (now - self.first_failure_at).total_seconds() / 60
+            > self._STALE_STREAK_MINUTES
+        ):
+            self.first_failure_at = None
+        if self.first_failure_at is None:
+            self.first_failure_at = now
+        streak_duration = (now - self.first_failure_at).total_seconds() / 60
+        if streak_duration >= self.timeout_minutes and not self.in_safe_mode:
             self.in_safe_mode = True
             if self.notifier:
                 self.notifier.send_safe_mode_alert(
-                    f"Claude API unreachable for {elapsed:.0f} min. "
+                    f"Claude API failing for {streak_duration:.0f} min. "
                     f"SAFE MODE activated. No new trades."
                 )
 
     def is_safe_mode(self) -> bool:
-        """Check before making any new trade decisions."""
-        elapsed = (datetime.now() - self.last_successful_call).total_seconds() / 60
-        if elapsed >= self.timeout_minutes:
-            self.in_safe_mode = True
+        """Check before making any new trade decisions. The flag is only set by
+        sustained failures via record_failure, and cleared by record_success —
+        idle time does not trip safe mode."""
         return self.in_safe_mode
 
 
