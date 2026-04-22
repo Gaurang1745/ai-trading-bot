@@ -189,10 +189,13 @@ class PromptFormatter:
         # Footer
         sections.append(self._section_footer(exp, now))
 
+        pipeline = self.config.get("pipeline", {})
+        min_w = pipeline.get("min_watchlist_size", 3)
+        max_w = pipeline.get("max_watchlist_size", 25)
         sections.append(
-            "Scan the market data above. Select 8-15 stocks (or ETFs) you want full data "
-            "on for trading analysis. You MUST include all stocks you currently hold in "
-            "your selections. Respond with JSON in the MARKET_PULSE format."
+            f"Scan the market data above. Select {min_w}-{max_w} stocks (or ETFs) you want "
+            "full data on for trading analysis. You MUST include all stocks you currently "
+            "hold in your selections. Respond with JSON in the MARKET_PULSE format."
         )
 
         return "\n\n".join(sections)

@@ -11,7 +11,7 @@ from typing import Optional
 
 import anthropic
 
-from src.ai.system_prompt import SYSTEM_PROMPT
+from src.ai.system_prompt import build_system_prompt
 from src.ai.llm_logger import LLMInteractionLogger
 
 logger = logging.getLogger(__name__)
@@ -92,6 +92,9 @@ class ClaudeClient:
 
         self.client = anthropic.Anthropic(api_key=api_key)
 
+        # Render system prompt once with current config; stable string => cache hits.
+        self._system_prompt = build_system_prompt(config)
+
         # Circuit breaker
         self.circuit_breaker = ClaudeCircuitBreaker(config, notifier)
 
@@ -103,7 +106,7 @@ class ClaudeClient:
         """
         return self._call(
             model=self.analysis_model,
-            system_prompt=SYSTEM_PROMPT,
+            system_prompt=self._system_prompt,
             user_prompt=user_prompt,
             call_type="MARKET_PULSE",
             parent_call_id=parent_call_id,
@@ -118,7 +121,7 @@ class ClaudeClient:
         """
         return self._call(
             model=self.decision_model,
-            system_prompt=SYSTEM_PROMPT,
+            system_prompt=self._system_prompt,
             user_prompt=user_prompt,
             call_type="TRADING_DECISION",
             parent_call_id=parent_call_id,
@@ -131,7 +134,7 @@ class ClaudeClient:
         """Send end-of-day review prompt to Opus."""
         return self._call(
             model=self.decision_model,
-            system_prompt=SYSTEM_PROMPT,
+            system_prompt=self._system_prompt,
             user_prompt=user_prompt,
             call_type="EOD_REVIEW",
             parent_call_id=parent_call_id,

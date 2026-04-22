@@ -22,7 +22,7 @@ from src.data.deep_dive import DeepDiveAssembler
 # Phase 3: News + AI Pipeline
 from src.news.news_fetcher import NewsFetcher
 from src.news.macro_data import MacroDataFetcher
-from src.ai.system_prompt import SYSTEM_PROMPT
+from src.ai.system_prompt import build_system_prompt
 from src.ai.claude_client import ClaudeClient, ClaudeCircuitBreaker
 from src.ai.prompt_formatter import PromptFormatter
 from src.ai.response_parser import ResponseParser, PromptSizeManager
@@ -41,4 +41,5 @@ from src.trading.performance import PerformanceTracker
 from src.orchestrator import Orchestrator
 
 print("All Phase 1-5 modules import successfully!")
-print(f"System prompt length: {len(SYSTEM_PROMPT)} chars (~{len(SYSTEM_PROMPT)//4} tokens)")
+_sp = build_system_prompt({})
+print(f"System prompt length: {len(_sp)} chars (~{len(_sp)//4} tokens)")
