@@ -130,6 +130,8 @@ class PerformanceTracker:
             rows = []
 
         trades_count = len(rows)
+        # sqlite3.Row has __getitem__ but no .get() — coerce to dict first.
+        rows = [dict(r) for r in rows]
         wins = sum(1 for r in rows if (r.get("pnl") or 0) > 0)
         losses = sum(1 for r in rows if (r.get("pnl") or 0) < 0)
         total_pnl = sum(r.get("pnl", 0) or 0 for r in rows)
