@@ -620,6 +620,7 @@ class Orchestrator:
             macro = self.macro_fetcher.get_macro_snapshot()
             portfolio = self.portfolio_state.get_portfolio_state()
             existing = self.portfolio_state.get_existing_positions_for_prompt()
+            open_orders = self.portfolio_state.get_working_orders()
             perf = self.performance.get_rolling_performance(days=5)
 
             etf_quotes = self._fetch_etf_quotes()
@@ -644,6 +645,7 @@ class Orchestrator:
                 existing_positions=existing,
                 performance_context=perf,
                 supplementary_research=batch_research,
+                open_orders=open_orders,
             )
 
             response = self.claude_client.call_trading_decision(prompt)

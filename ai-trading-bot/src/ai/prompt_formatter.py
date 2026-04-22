@@ -213,6 +213,7 @@ class PromptFormatter:
         existing_positions: list,
         performance_context: dict,
         supplementary_research: list = None,
+        open_orders: list = None,
     ) -> str:
         """
         Build the complete Trading Decision user prompt for Opus.
@@ -262,6 +263,10 @@ class PromptFormatter:
 
         # ETF snapshot
         sections.append(self._section_etf_snapshot(etf_snapshot))
+
+        # Working orders (OPEN LIMITs, TRIGGER PENDING SLs) — shown before
+        # existing positions so ORDER HYGIENE checks see them naturally.
+        sections.append(self._section_open_orders(open_orders or []))
 
         # Existing position updates
         sections.append(self._section_existing_positions(existing_positions))
@@ -895,6 +900,38 @@ class PromptFormatter:
                 lines.append(f"Sector Context: {sector}")
                 lines.append("")
 
+        return "\n".join(lines)
+
+    def _section_open_orders(self, orders: list) -> str:
+        lines = [
+            "=" * 54,
+            "OPEN / PENDING ORDERS",
+            "=" * 54,
+            "Working orders that have NOT yet filled. Before emitting a new "
+            "BUY/SELL, check this list — do NOT stack a second same-direction "
+            "order on a symbol that already appears here (see ORDER HYGIENE).",
+        ]
+
+        if not orders:
+            lines.append("  None.")
+            return "\n".join(lines)
+
+        for o in orders:
+            sym = o.get("symbol", "")
+            side = o.get("transaction_type", "")
+            qty = o.get("quantity", 0)
+            prod = o.get("product", "")
+            otype = o.get("order_type", "")
+            status = o.get("status", "")
+            age = o.get("age_minutes")
+            age_str = f"{age}m ago" if age is not None else o.get("placed_at", "?")
+            # LIMIT orders quote price; SL/TRIGGER PENDING quote trigger_price.
+            price_val = o.get("price", 0) or o.get("trigger_price", 0)
+            price_label = "trigger" if status == "TRIGGER PENDING" else "limit"
+            lines.append(
+                f"  {side:<4} {qty:>4}x {sym:<12} {prod} {otype} "
+                f"@ {price_label} INR {price_val:.2f}  [{status}, placed {age_str}]"
+            )
         return "\n".join(lines)
 
     def _section_existing_positions(self, positions: list) -> str:

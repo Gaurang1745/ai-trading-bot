@@ -5,7 +5,7 @@ Claude NEVER knows this is paper trading.
 """
 
 import logging
-from datetime import date
+from datetime import date, datetime
 
 logger = logging.getLogger(__name__)
 
@@ -228,6 +228,51 @@ class PortfolioStateManager:
             })
 
         return result
+
+    def get_working_orders(self) -> list[dict]:
+        """
+        Return still-active paper orders — LIMITs not yet filled (status='OPEN')
+        and SL orders waiting to trigger (status='TRIGGER PENDING'). Used by the
+        TRADING_DECISION prompt so Claude doesn't stack duplicate BUYs on a
+        symbol that already has a working order.
+        """
+        try:
+            rows = self.db.fetchall(
+                "SELECT order_id, symbol, exchange, transaction_type, quantity, "
+                "price, trigger_price, product, order_type, status, placed_at "
+                "FROM paper_orders WHERE status IN ('OPEN', 'TRIGGER PENDING') "
+                "ORDER BY placed_at DESC"
+            )
+            out = []
+            now = datetime.now()
+            for row in rows:
+                row = dict(row)
+                placed_at_str = row.get("placed_at", "")
+                age_min = None
+                if placed_at_str:
+                    try:
+                        placed_dt = datetime.strptime(placed_at_str, "%Y-%m-%d %H:%M:%S")
+                        age_min = int((now - placed_dt).total_seconds() / 60)
+                    except Exception:
+                        pass
+                out.append({
+                    "order_id": row.get("order_id", ""),
+                    "symbol": row.get("symbol", ""),
+                    "exchange": row.get("exchange", "NSE"),
+                    "transaction_type": row.get("transaction_type", ""),
+                    "quantity": row.get("quantity", 0),
+                    "price": row.get("price", 0) or 0,
+                    "trigger_price": row.get("trigger_price", 0) or 0,
+                    "product": row.get("product", ""),
+                    "order_type": row.get("order_type", ""),
+                    "status": row.get("status", ""),
+                    "placed_at": placed_at_str,
+                    "age_minutes": age_min,
+                })
+            return out
+        except Exception as e:
+            logger.error(f"Failed to get working orders: {e}")
+            return []
 
     def get_held_symbols(self) -> list[str]:
         """Get list of symbols currently held (CNC + MIS)."""
