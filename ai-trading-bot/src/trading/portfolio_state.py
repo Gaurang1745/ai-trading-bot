@@ -32,17 +32,24 @@ class PortfolioStateManager:
             rows = self.db.fetchall(
                 "SELECT * FROM paper_holdings WHERE quantity > 0"
             )
+            exchanges = [
+                (row["exchange"] if "exchange" in row.keys() else "NSE")
+                for row in rows
+            ]
+            ltps = self._get_ltps_bulk(
+                [f"{ex}:{row['symbol']}" for row, ex in zip(rows, exchanges)]
+            )
             holdings = []
-            for row in rows:
+            for row, exchange in zip(rows, exchanges):
                 symbol = row["symbol"]
                 qty = row["quantity"]
                 avg = row["avg_price"]
-                ltp = self._get_ltp(symbol)
+                ltp = ltps.get(f"{exchange}:{symbol}", 0)
                 pnl = (ltp - avg) * qty if ltp else 0
                 pnl_pct = ((ltp - avg) / avg * 100) if avg > 0 and ltp else 0
                 holdings.append({
                     "symbol": symbol,
-                    "exchange": (row["exchange"] if "exchange" in row.keys() else "NSE"),
+                    "exchange": exchange,
                     "quantity": qty,
                     "avg_price": avg,
                     "last_price": ltp,
@@ -66,12 +73,13 @@ class PortfolioStateManager:
             rows = self.db.fetchall(
                 "SELECT * FROM paper_positions WHERE quantity != 0 AND product = 'MIS'"
             )
+            ltps = self._get_ltps_bulk([f"NSE:{row['symbol']}" for row in rows])
             positions = []
             for row in rows:
                 symbol = row["symbol"]
                 qty = row["quantity"]
                 entry = row["entry_price"]
-                ltp = self._get_ltp(symbol)
+                ltp = ltps.get(f"NSE:{symbol}", 0)
                 side = "BUY" if qty > 0 else "SELL"
                 pnl = (ltp - entry) * abs(qty) if ltp else 0
                 if side == "SELL":
@@ -144,12 +152,20 @@ class PortfolioStateManager:
         return self.db.count_trades_today(mode="PAPER")
 
     def get_holdings_qty(self, symbol: str) -> int:
-        """Get holdings quantity for a specific symbol."""
-        holdings = self.get_holdings()
-        for h in holdings:
-            if h.get("symbol") == symbol:
-                return h.get("quantity", 0)
-        return 0
+        """Get holdings quantity for a specific symbol. Direct DB lookup; does
+        not fetch LTPs. Callers that only need quantity (e.g. guardrails'
+        short-sell / MODIFY existence checks) should use this instead of
+        get_holdings() to avoid an unnecessary Dhan round-trip."""
+        try:
+            row = self.db.fetchone(
+                "SELECT quantity FROM paper_holdings "
+                "WHERE symbol = ? AND quantity > 0 LIMIT 1",
+                (symbol,),
+            )
+            return row["quantity"] if row else 0
+        except Exception as e:
+            logger.error(f"Failed to get holdings qty for {symbol}: {e}")
+            return 0
 
     # ─── FULL STATE FOR PROMPTS ───
 
@@ -233,13 +249,23 @@ class PortfolioStateManager:
 
     # ─── HELPERS ───
 
-    def _get_ltp(self, symbol: str) -> float:
-        """Get live LTP for a symbol via data client."""
-        if self.data_client:
-            try:
-                key = f"NSE:{symbol}"
-                quote = self.data_client.get_ltp([key])
-                return quote.get(key, {}).get("last_price", 0)
-            except Exception:
-                pass
-        return 0
+    def _get_ltps_bulk(self, keys: list[str]) -> dict[str, float]:
+        """Fetch LTPs for many instruments in a single Dhan call.
+
+        keys: list of "EXCHANGE:SYMBOL" strings, e.g. ["NSE:RELIANCE", "BSE:TCS"].
+        Returns: {"EXCHANGE:SYMBOL": last_price, ...}, 0 for misses.
+
+        Dhan's market-feed endpoint is one HTTP call per invocation regardless
+        of payload size, and our rate limiter charges one slot per call — so
+        this replaces N per-symbol calls (N×2s at the 1-req/2s limit) with a
+        single ~2s request, which is why MODIFY validation used to take 32s
+        with 8 holdings and now takes ~2s.
+        """
+        if not self.data_client or not keys:
+            return {}
+        try:
+            quote = self.data_client.get_ltp(keys)
+        except Exception as e:
+            logger.error(f"Bulk LTP fetch failed for {len(keys)} keys: {e}")
+            return {}
+        return {k: quote.get(k, {}).get("last_price", 0) for k in keys}
