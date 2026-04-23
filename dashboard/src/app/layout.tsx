@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "AI Trading Bot",
-  description: "Paper Trading Dashboard",
+  description: "AI Trading Bot Dashboard",
 };
 
 export default function RootLayout({
