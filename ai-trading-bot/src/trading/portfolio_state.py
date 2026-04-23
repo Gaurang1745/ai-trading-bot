@@ -39,6 +39,14 @@ class PortfolioStateManager:
             ltps = self._get_ltps_bulk(
                 [f"{ex}:{row['symbol']}" for row, ex in zip(rows, exchanges)]
             )
+            # CNC holdings store SL/target on the latest COMPLETE BUY trade row
+            # in the trades table (see paper_broker.modify_sl_target's CNC
+            # fallback). Without this lookup the prompt formatter shows
+            # SL=0 / target=0 to Opus and he re-modifies every cycle from
+            # scratch, unaware of the state he already set.
+            sl_target_by_symbol = self._latest_cnc_sl_targets(
+                [(row["symbol"], ex) for row, ex in zip(rows, exchanges)]
+            )
             holdings = []
             for row, exchange in zip(rows, exchanges):
                 symbol = row["symbol"]
@@ -47,6 +55,7 @@ class PortfolioStateManager:
                 ltp = ltps.get(f"{exchange}:{symbol}", 0)
                 pnl = (ltp - avg) * qty if ltp else 0
                 pnl_pct = ((ltp - avg) / avg * 100) if avg > 0 and ltp else 0
+                sl, tgt = sl_target_by_symbol.get((symbol, exchange), (0, 0))
                 holdings.append({
                     "symbol": symbol,
                     "exchange": exchange,
@@ -56,8 +65,8 @@ class PortfolioStateManager:
                     "pnl": round(pnl, 2),
                     "pnl_pct": round(pnl_pct, 2),
                     "days_held": 0,
-                    "stop_loss": 0,
-                    "target": 0,
+                    "stop_loss": sl or 0,
+                    "target": tgt or 0,
                 })
             return holdings
         except Exception as e:
@@ -293,6 +302,41 @@ class PortfolioStateManager:
         return 0.0
 
     # ─── HELPERS ───
+
+    def _latest_cnc_sl_targets(
+        self, symbol_exchanges: list[tuple[str, str]]
+    ) -> dict[tuple[str, str], tuple[float, float]]:
+        """Read each CNC holding's current SL/target from the latest COMPLETE
+        BUY trade row (the source of truth — paper_broker.modify_sl_target
+        writes the values here on every MODIFY). Returns {(symbol, exchange):
+        (stop_loss, target)}."""
+        if not symbol_exchanges:
+            return {}
+        try:
+            # One subquery per symbol would be N round-trips; instead select
+            # every BUY trade row for the set of symbols and pick the latest
+            # per (symbol, exchange) in Python. CNC books are small (10-ish
+            # rows), so this stays cheap.
+            symbols = sorted({s for s, _ in symbol_exchanges})
+            placeholders = ",".join("?" * len(symbols))
+            rows = self.db.fetchall(
+                f"SELECT symbol, exchange, stop_loss, target, timestamp "
+                f"FROM trades "
+                f"WHERE transaction_type = 'BUY' AND status = 'COMPLETE' "
+                f"  AND mode = 'PAPER' AND symbol IN ({placeholders}) "
+                f"ORDER BY timestamp DESC",
+                symbols,
+            )
+            out: dict[tuple[str, str], tuple[float, float]] = {}
+            for r in rows:
+                key = (r["symbol"], r["exchange"])
+                if key in out:
+                    continue  # already took the newest (rows are DESC)
+                out[key] = (r["stop_loss"] or 0, r["target"] or 0)
+            return out
+        except Exception as e:
+            logger.error(f"Failed to read CNC SL/targets: {e}")
+            return {}
 
     def _get_ltps_bulk(self, keys: list[str]) -> dict[str, float]:
         """Fetch LTPs for many instruments in a single Dhan call.
