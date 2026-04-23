@@ -61,6 +61,14 @@ export async function GET() {
       [today]
     );
 
+    // AI cost to date (all-time across every llm_calls row, all models)
+    const costAllRow = queryOne<{ total: number }>(
+      `SELECT COALESCE(SUM(
+        input_cost_usd + output_cost_usd +
+        COALESCE(cache_read_cost_usd, 0) + COALESCE(cache_creation_cost_usd, 0)
+      ), 0) as total FROM llm_calls`
+    );
+
     // All-time realized P&L (sum of every closed paper trade with a recorded P&L).
     const realizedRow = queryOne<{ total: number }>(
       `SELECT COALESCE(SUM(pnl), 0) as total FROM trades
@@ -87,6 +95,7 @@ export async function GET() {
       total_pnl_unrealized: totalUnrealized,
       win_rate: totalTrades > 0 ? wins / totalTrades : 0,
       ai_cost_today: costRow?.total ?? 0,
+      ai_cost_total: costAllRow?.total ?? 0,
       holdings_count: holdings.length,
       positions_count: positions.length,
       trades_today: tradesRow?.cnt ?? 0,

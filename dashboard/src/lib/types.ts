@@ -16,6 +16,26 @@ export interface Position {
   side: string;
 }
 
+export interface ActivePosition {
+  symbol: string;
+  exchange: string;
+  product: string; // "CNC" | "MIS"
+  side: string; // "BUY" | "SELL"
+  quantity: number;
+  entry_price: number;
+  last_price: number;
+  pnl: number;
+  pnl_pct: number;
+  days_held: number;
+  stop_loss: number;
+  target: number;
+}
+
+export interface ActivePositionsResponse {
+  snapshot_timestamp: string | null;
+  rows: ActivePosition[];
+}
+
 export interface Trade {
   id: number;
   timestamp: string;
@@ -82,6 +102,7 @@ export interface SummaryStats {
   total_pnl_unrealized: number;
   win_rate: number;
   ai_cost_today: number;
+  ai_cost_total: number;
   holdings_count: number;
   positions_count: number;
   trades_today: number;

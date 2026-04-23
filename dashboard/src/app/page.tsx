@@ -8,6 +8,8 @@ import type {
   AgentRunRow,
   LLMCall,
   DailySummary,
+  ActivePosition,
+  ActivePositionsResponse,
 } from "@/lib/types";
 
 function formatINR(n: number): string {
@@ -48,17 +50,20 @@ export default function Dashboard() {
   const [agents, setAgents] = useState<AgentRunRow[]>([]);
   const [llmCalls, setLlmCalls] = useState<LLMCall[]>([]);
   const [performance, setPerformance] = useState<DailySummary[]>([]);
+  const [positions, setPositions] = useState<ActivePosition[]>([]);
+  const [positionsSnapshotTs, setPositionsSnapshotTs] = useState<string | null>(null);
   const [lastRefresh, setLastRefresh] = useState<string>("");
   const [error, setError] = useState<string>("");
 
   const refresh = async () => {
     try {
-      const [sumRes, trRes, agRes, llmRes, perfRes] = await Promise.all([
+      const [sumRes, trRes, agRes, llmRes, perfRes, posRes] = await Promise.all([
         fetch("/api/summary"),
         fetch("/api/trades"),
         fetch("/api/agents"),
         fetch("/api/llm-calls"),
         fetch("/api/performance"),
+        fetch("/api/positions"),
       ]);
 
       if (sumRes.ok) setSummary(await sumRes.json());
@@ -66,6 +71,11 @@ export default function Dashboard() {
       if (agRes.ok) setAgents(await agRes.json());
       if (llmRes.ok) setLlmCalls(await llmRes.json());
       if (perfRes.ok) setPerformance(await perfRes.json());
+      if (posRes.ok) {
+        const data: ActivePositionsResponse = await posRes.json();
+        setPositions(data.rows ?? []);
+        setPositionsSnapshotTs(data.snapshot_timestamp ?? null);
+      }
 
       setLastRefresh(new Date().toLocaleTimeString());
       setError("");
@@ -98,7 +108,7 @@ export default function Dashboard() {
           AI Trading Bot
         </h1>
         <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
-          Paper Trading &mdash; Autonomous Agent System &nbsp;
+          Autonomous Agent System &nbsp;
           <span
             style={{
               display: "inline-block",
@@ -161,6 +171,10 @@ export default function Dashboard() {
             label="AI Cost Today"
             value={`$${summary.ai_cost_today.toFixed(4)}`}
           />
+          <StatCard
+            label="AI Cost To Date"
+            value={`$${summary.ai_cost_total.toFixed(4)}`}
+          />
         </div>
       )}
 
@@ -195,6 +209,63 @@ export default function Dashboard() {
                     {t.pnl != null ? formatINR(t.pnl) : "-"}
                   </td>
                   <td><StatusTag status={t.status} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
+      </Section>
+
+      {/* Active Positions — live book from the latest mark-to-market snapshot */}
+      <Section
+        title="Active Positions"
+        subtitle={
+          positionsSnapshotTs
+            ? `as of ${positionsSnapshotTs.replace("T", " ").slice(0, 16)}`
+            : undefined
+        }
+      >
+        {positions.length === 0 ? (
+          <Empty>No open positions</Empty>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Symbol</th>
+                <th>Side</th>
+                <th>Product</th>
+                <th>Qty</th>
+                <th>Entry</th>
+                <th>LTP</th>
+                <th>P&L</th>
+                <th>P&L %</th>
+                <th>SL</th>
+                <th>Target</th>
+              </tr>
+            </thead>
+            <tbody>
+              {positions.map((p) => (
+                <tr key={`${p.symbol}-${p.product}-${p.side}`}>
+                  <td style={{ fontWeight: 600 }}>{p.symbol}</td>
+                  <td><SideTag side={p.side} /></td>
+                  <td>{p.product}</td>
+                  <td className="mono">{p.quantity}</td>
+                  <td className="mono">{p.entry_price.toFixed(2)}</td>
+                  <td className="mono">
+                    {p.last_price ? p.last_price.toFixed(2) : "-"}
+                  </td>
+                  <td className="mono" style={{ color: pnlColor(p.pnl) }}>
+                    {formatINR(p.pnl)}
+                  </td>
+                  <td className="mono" style={{ color: pnlColor(p.pnl_pct) }}>
+                    {p.pnl_pct.toFixed(2)}%
+                  </td>
+                  <td className="mono">
+                    {p.stop_loss ? p.stop_loss.toFixed(2) : "-"}
+                  </td>
+                  <td className="mono">
+                    {p.target ? p.target.toFixed(2) : "-"}
+                  </td>
                 </tr>
               ))}
             </tbody>
@@ -360,9 +431,11 @@ function StatCard({
 
 function Section({
   title,
+  subtitle,
   children,
 }: {
   title: string;
+  subtitle?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -374,9 +447,24 @@ function Section({
           marginBottom: "0.75rem",
           paddingBottom: "0.5rem",
           borderBottom: "2px solid var(--foreground)",
+          display: "flex",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+          gap: "1rem",
         }}
       >
-        {title}
+        <span>{title}</span>
+        {subtitle && (
+          <span
+            style={{
+              fontSize: "0.75rem",
+              fontWeight: 400,
+              color: "var(--muted)",
+            }}
+          >
+            {subtitle}
+          </span>
+        )}
       </h2>
       {children}
     </section>
