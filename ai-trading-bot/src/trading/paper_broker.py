@@ -128,11 +128,18 @@ class PaperBroker:
 
     def _sync_trade_fill(self, order_id: str, fill_price: float):
         """Mirror a paper_orders fill onto the trades row with the same order_id.
-        Keeps the trades table — which is what the prompt builder reads for the
-        OPEN/PENDING section — in sync with the orders table. Without this the
-        ORDER HYGIENE rule false-triggers: the order is COMPLETE in paper_orders
-        but still OPEN in trades, so the prompt shows phantom pending orders and
-        Opus refuses to place new entries on the same symbol."""
+
+        Two tables track the same logical event:
+          - paper_orders is the broker-side order book; the prompt's
+            OPEN/PENDING section reads from here.
+          - trades is the user-facing trade journal; the dashboard's
+            "Today's Trades" table, the EOD review, and daily summaries
+            read from here.
+        When OrderReconciler flips a LIMIT/SL row in paper_orders to
+        COMPLETE, the matching trades row stays at OPEN unless we mirror
+        the change. The dashboard would then show a phantom OPEN row for
+        a trade that has actually filled, and EOD aggregation would
+        under-count fills. This sync keeps the two tables consistent."""
         if not order_id:
             return
         try:
