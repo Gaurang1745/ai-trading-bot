@@ -67,7 +67,7 @@ class PostMarketStrategyAgent:
         )
 
         # Weekly reviews get more time and turns
-        timeout = 900 if review_type == "weekly" else 600
+        timeout = 1500 if review_type == "weekly" else 1200
         max_turns = 40 if review_type == "weekly" else 30
 
         return self.runner.run_agent(
