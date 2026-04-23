@@ -126,6 +126,24 @@ class PaperBroker:
             "message": "Order could not be filled",
         }
 
+    def _sync_trade_fill(self, order_id: str, fill_price: float):
+        """Mirror a paper_orders fill onto the trades row with the same order_id.
+        Keeps the trades table — which is what the prompt builder reads for the
+        OPEN/PENDING section — in sync with the orders table. Without this the
+        ORDER HYGIENE rule false-triggers: the order is COMPLETE in paper_orders
+        but still OPEN in trades, so the prompt shows phantom pending orders and
+        Opus refuses to place new entries on the same symbol."""
+        if not order_id:
+            return
+        try:
+            self.db.execute(
+                "UPDATE trades SET status = 'COMPLETE', fill_price = ?, "
+                "fill_timestamp = ? WHERE order_id = ? AND status = 'OPEN'",
+                (fill_price, datetime.now().strftime("%Y-%m-%d %H:%M:%S"), order_id),
+            )
+        except Exception as e:
+            logger.error(f"Failed to sync trade fill for {order_id}: {e}")
+
     # ─── PORTFOLIO MUTATIONS ───
 
     def apply_fill(
@@ -387,6 +405,7 @@ class PaperBroker:
                     "fill_price = ?, fill_timestamp = ? WHERE order_id = ?",
                     (trigger_price, now_str, order["order_id"]),
                 )
+                self._sync_trade_fill(order["order_id"], trigger_price)
 
                 self.apply_fill(
                     symbol, exchange, tx_type, order["quantity"],
@@ -438,6 +457,7 @@ class PaperBroker:
                     "fill_price = ?, fill_timestamp = ? WHERE order_id = ?",
                     (limit_price, now_str, order["order_id"]),
                 )
+                self._sync_trade_fill(order["order_id"], limit_price)
 
                 self.apply_fill(
                     symbol, exchange, tx_type, order["quantity"],
@@ -495,6 +515,7 @@ class PaperBroker:
                         (trigger, datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                          sl["order_id"]),
                     )
+                    self._sync_trade_fill(sl["order_id"], trigger)
                     logger.info(f"Paper SL triggered: {symbol} @ INR {trigger}")
                     if self.notifier:
                         self.notifier.send_message(
