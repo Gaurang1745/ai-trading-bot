@@ -925,8 +925,22 @@ class Orchestrator:
         try:
             new_token = self.dhan_auth.force_refresh()
             if self.data_client and hasattr(self.data_client, "dhan"):
-                # Swap the token on the underlying SDK
-                self.data_client.dhan.access_token = new_token
+                # The dhanhq SDK caches the token in TWO places on its client:
+                # self.access_token (attribute) and self.header['access-token']
+                # (the dict passed to every requests.Session.get/post call).
+                # Setting only the attribute leaves the old token in every HTTP
+                # header — authenticated endpoints like historical_daily_data
+                # then return DH-901 Invalid_Authentication for the rest of the
+                # day, which is exactly what we saw on 2026-04-23 (1,591
+                # failures between 09:00 and 15:55). Update both, plus any
+                # session-level default headers, so the refresh actually lands.
+                dhan = self.data_client.dhan
+                dhan.access_token = new_token
+                if isinstance(getattr(dhan, "header", None), dict):
+                    dhan.header["access-token"] = new_token
+                session = getattr(dhan, "session", None)
+                if session is not None and hasattr(session, "headers"):
+                    session.headers["access-token"] = new_token
                 logger.info("Dhan token refreshed and wired into data client")
             else:
                 logger.info("Dhan token refreshed (data client will pick it up on next init)")
