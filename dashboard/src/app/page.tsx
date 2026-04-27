@@ -47,6 +47,7 @@ function SideTag({ side }: { side: string }) {
 export default function Dashboard() {
   const [summary, setSummary] = useState<SummaryStats | null>(null);
   const [trades, setTrades] = useState<Trade[]>([]);
+  const [tradeHistory, setTradeHistory] = useState<Trade[]>([]);
   const [agents, setAgents] = useState<AgentRunRow[]>([]);
   const [llmCalls, setLlmCalls] = useState<LLMCall[]>([]);
   const [performance, setPerformance] = useState<DailySummary[]>([]);
@@ -57,13 +58,14 @@ export default function Dashboard() {
 
   const refresh = async () => {
     try {
-      const [sumRes, trRes, agRes, llmRes, perfRes, posRes] = await Promise.all([
+      const [sumRes, trRes, agRes, llmRes, perfRes, posRes, histRes] = await Promise.all([
         fetch("/api/summary"),
         fetch("/api/trades"),
         fetch("/api/agents"),
         fetch("/api/llm-calls"),
         fetch("/api/performance"),
         fetch("/api/positions"),
+        fetch("/api/trade-history"),
       ]);
 
       if (sumRes.ok) setSummary(await sumRes.json());
@@ -76,6 +78,7 @@ export default function Dashboard() {
         setPositions(data.rows ?? []);
         setPositionsSnapshotTs(data.snapshot_timestamp ?? null);
       }
+      if (histRes.ok) setTradeHistory(await histRes.json());
 
       setLastRefresh(new Date().toLocaleTimeString());
       setError("");
@@ -273,6 +276,59 @@ export default function Dashboard() {
         )}
       </Section>
 
+      {/* Trade History — every paper trade across all dates, newest first */}
+      <Section
+        title="Trade History"
+        subtitle={
+          tradeHistory.length > 0
+            ? `${tradeHistory.length} trades`
+            : undefined
+        }
+        defaultOpen={false}
+      >
+        {tradeHistory.length === 0 ? (
+          <Empty>No trades yet</Empty>
+        ) : (
+          <table>
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Symbol</th>
+                <th>Action</th>
+                <th>Qty</th>
+                <th>Price</th>
+                <th>Type</th>
+                <th>P&L</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {tradeHistory.map((t) => {
+                const [d, time] = t.timestamp.split(" ");
+                return (
+                  <tr key={t.id}>
+                    <td className="mono">{d}</td>
+                    <td className="mono">{time?.slice(0, 5)}</td>
+                    <td style={{ fontWeight: 600 }}>{t.symbol}</td>
+                    <td><SideTag side={t.transaction_type} /></td>
+                    <td className="mono">{t.quantity}</td>
+                    <td className="mono">
+                      {t.fill_price?.toFixed(2) ?? t.price.toFixed(2)}
+                    </td>
+                    <td>{t.product}</td>
+                    <td className="mono" style={{ color: pnlColor(t.pnl ?? 0) }}>
+                      {t.pnl != null ? formatINR(t.pnl) : "-"}
+                    </td>
+                    <td><StatusTag status={t.status} /></td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        )}
+      </Section>
+
       {/* Agent Activity */}
       <Section title="Agent Activity">
         {agents.length === 0 ? (
@@ -432,28 +488,83 @@ function StatCard({
 function Section({
   title,
   subtitle,
+  defaultOpen = true,
   children,
 }: {
   title: string;
   subtitle?: string;
+  defaultOpen?: boolean;
   children: React.ReactNode;
 }) {
+  // Persist open/closed per section across refreshes. The key is derived from
+  // the title so adding new sections doesn't disturb existing user state.
+  const storageKey = `dash.section.open.${title}`;
+  const [open, setOpen] = useState<boolean>(defaultOpen);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(storageKey);
+      if (stored !== null) setOpen(stored === "1");
+    } catch {
+      // localStorage unavailable (private mode, SSR mismatch) — keep default
+    }
+    setHydrated(true);
+  }, [storageKey]);
+
+  const toggle = () => {
+    setOpen((prev) => {
+      const next = !prev;
+      try {
+        localStorage.setItem(storageKey, next ? "1" : "0");
+      } catch {}
+      return next;
+    });
+  };
+
   return (
     <section style={{ marginBottom: "2rem" }}>
       <h2
+        onClick={toggle}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            toggle();
+          }
+        }}
         style={{
           fontSize: "1rem",
           fontWeight: 700,
-          marginBottom: "0.75rem",
+          marginBottom: open ? "0.75rem" : 0,
           paddingBottom: "0.5rem",
           borderBottom: "2px solid var(--foreground)",
           display: "flex",
           alignItems: "baseline",
           justifyContent: "space-between",
           gap: "1rem",
+          cursor: "pointer",
+          userSelect: "none",
         }}
       >
-        <span>{title}</span>
+        <span style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
+          <span
+            aria-hidden="true"
+            style={{
+              display: "inline-block",
+              width: "0.7rem",
+              fontSize: "0.7rem",
+              color: "var(--muted)",
+              transition: "transform 120ms ease",
+              transform: open ? "rotate(90deg)" : "rotate(0deg)",
+              transformOrigin: "center",
+            }}
+          >
+            ▶
+          </span>
+          {title}
+        </span>
         {subtitle && (
           <span
             style={{
@@ -466,7 +577,9 @@ function Section({
           </span>
         )}
       </h2>
-      {children}
+      {/* Avoid SSR/CSR open-state mismatch: only show body once hydrated has
+          read localStorage. defaultOpen still renders on first paint pre-JS. */}
+      {(hydrated ? open : defaultOpen) && children}
     </section>
   );
 }
