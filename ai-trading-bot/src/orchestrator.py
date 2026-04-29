@@ -162,6 +162,11 @@ class Orchestrator:
         self.sl_health: Optional[SLHealthCheck] = None
         self.performance = PerformanceTracker(self.db, self.config)
 
+        # Lazy-loaded ticker → company-name table fed into the symbol
+        # resolver (Haiku call). Built on first need from
+        # config/nifty500.csv and cached for the lifetime of the run.
+        self._resolver_universe_text: Optional[str] = None
+
         # Loggers
         self.trade_logger = TradeLogger(
             log_dir=os.path.join(
@@ -706,7 +711,24 @@ class Orchestrator:
                 f"Symbol resolution: resolved={resolved_log or 'none'}, "
                 f"dropped={dropped_log or 'none'}"
             )
-        return kept
+
+        # Dedupe by (exchange, symbol). After resolution, two entries can
+        # collapse onto the same canonical ticker — e.g., the held-stock
+        # injection added ATGL while Sonnet's hallucinated ADANITOTALGAS
+        # also rewrote to ATGL. Without this, deep_dive would double-process
+        # and Opus would see the same stock twice with conflicting reasons.
+        # First occurrence wins so held-stock entries (added before the
+        # resolver) take precedence over hallucinated duplicates.
+        seen: set[tuple[str, str]] = set()
+        deduped: list[dict] = []
+        for w in kept:
+            key = (w.get("exchange", "NSE"), w.get("symbol", ""))
+            if key in seen:
+                logger.info(f"Symbol resolution: deduped {key[1]} (duplicate after rewrite)")
+                continue
+            seen.add(key)
+            deduped.append(w)
+        return deduped
 
     def _get_resolver_universe_text(self) -> str:
         """
@@ -714,9 +736,8 @@ class Orchestrator:
         resolver. Read once from config/nifty500.csv, cached on the instance
         for the lifetime of the orchestrator.
         """
-        cached = getattr(self, "_resolver_universe_text", None)
-        if cached:
-            return cached
+        if self._resolver_universe_text is not None:
+            return self._resolver_universe_text
         import csv as _csv
         rows: list[str] = []
         try:
