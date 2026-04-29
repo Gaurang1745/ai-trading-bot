@@ -38,11 +38,11 @@ class MarketDataFetcher:
         self, symbol: str, exchange: str, days: int
     ) -> Optional[pd.DataFrame]:
         """
-        Return cached daily candles if fresh (last row's date within ~3 days).
-        If the cache has fewer rows than requested we still return what we
-        have — the caller decides whether to augment with a fresh fetch.
-        This avoids thrashing the API when different call sites ask for
-        different history lengths.
+        Return cached daily candles if the parquet file exists. The cache is
+        authoritative during market hours — no freshness check. The EOD job
+        (warm_universe(force_refresh=True)) is the single source that
+        rewrites the cache once per trading session, so daytime callers
+        never need to refetch.
         """
         path = self._daily_cache_path(symbol, exchange)
         if not os.path.exists(path):
@@ -51,11 +51,6 @@ class MarketDataFetcher:
             df = pd.read_parquet(path)
             if df.empty:
                 return None
-            last_date = pd.to_datetime(df["date"].iloc[-1]).date()
-            # Fresh if last candle is from today or within ~3 days (weekends/holidays ok)
-            age_days = (date.today() - last_date).days
-            if age_days > 3:
-                return None  # Too stale — caller will re-fetch
             return df.tail(days).reset_index(drop=True) if len(df) > days else df
         except Exception as e:
             logger.warning(f"Failed to read daily cache for {symbol}: {e}")
