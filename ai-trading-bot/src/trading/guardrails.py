@@ -183,8 +183,12 @@ class GuardrailEngine:
 
     def _apply_agent_overrides(self) -> None:
         """
-        Load overrides from src/agents/risk_config.yaml and apply any that
-        *tighten* the base config. Loosening overrides are rejected.
+        Load overrides from src/agents/risk_config.yaml and apply them. Both
+        tightening and loosening are accepted, BUT loosening cannot go past
+        the base config — base is the floor. This lets the Strategy / Risk
+        Monitor agents revert an over-cautious tightening when its original
+        trigger has resolved, while preventing them from drifting beyond
+        the operator's authored safety floor.
         Re-reads only when the file's mtime changes.
         """
         if not os.path.exists(_RISK_OVERRIDE_PATH):
@@ -215,13 +219,30 @@ class GuardrailEngine:
         }
 
         def try_apply(param: str, new_value, base_value, attr: str) -> bool:
+            """
+            Apply override if it is between [stricter than base] and base
+            (inclusive). For tighter_when_higher params, the override may
+            sit anywhere in [base, ∞); for tighter_when_lower params,
+            anywhere in (0, base]. Anything beyond base in the loose
+            direction is silently clamped at base — base is the floor.
+            """
             if not isinstance(new_value, (int, float)):
                 return False
-            if param in tighter_when_higher and new_value > base_value:
-                setattr(self, attr, new_value)
+            if param in tighter_when_higher:
+                # base is the floor (loose end); any value >= base is valid
+                if new_value >= base_value:
+                    setattr(self, attr, new_value)
+                    return True
+                # Loosening past base — clamp at base
+                setattr(self, attr, base_value)
                 return True
-            if param in tighter_when_lower and new_value < base_value:
-                setattr(self, attr, new_value)
+            if param in tighter_when_lower:
+                # base is the ceiling (loose end); any value <= base is valid
+                if new_value <= base_value:
+                    setattr(self, attr, new_value)
+                    return True
+                # Loosening past base — clamp at base
+                setattr(self, attr, base_value)
                 return True
             return False
 
