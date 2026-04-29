@@ -31,12 +31,44 @@ The JSON must have this structure:
     "sentiment": "POSITIVE/NEGATIVE/MIXED"
   },
   "fii_dii_summary": "Net FII/DII flows and trend",
-  "earnings_calendar": ["Company1 - date", "Company2 - date"],
+  "earnings_calendar": ["TICKER (Company Name) - date - optional note", ...],
   "macro_events": ["event1", "event2"],
-  "sector_themes": ["theme1", "theme2"],
+  "sector_themes": ["theme description with TICKER mentions", ...],
   "risk_flags": ["risk1", "risk2"],
   "brief_summary": "2-3 sentence market outlook for today"
 }
 ```
+
+## Symbol convention (IMPORTANT)
+
+Whenever a string in this JSON refers to a specific Indian-listed company,
+you MUST use the **NSE ticker symbol** as the primary identifier, not the
+long-form company name. The downstream consumer (Sonnet's market pulse)
+sees these strings verbatim and will copy your symbols directly into the
+watchlist — if you write "Adani Total Gas" instead of "ATGL", Sonnet
+will hallucinate a non-existent symbol and the stock gets dropped from
+the deep dive.
+
+Format examples:
+
+- earnings_calendar:
+    "MARUTI (Maruti Suzuki) - Apr 28 (board meet, Q4 FY26; consensus +27% rev YoY)"
+    "ATGL (Adani Total Gas) - Apr 28"
+    "AUBANK (AU Small Finance Bank) - Apr 28"
+    "JIOFIN (Jio Financial Services) - this week"
+    "VEDL (Vedanta) - this week"
+
+- sector_themes:
+    "Pharma outperforming: SUNPHARMA +7% on Organon acquisition"
+    "Energy/Oil & Gas: ATGL earnings today amid elevated crude"
+    "Banking: PSU banks under pressure on RBI ECL framework — CANBK, UNIONBANK, BANKBARODA in focus"
+
+- macro_events / risk_flags / global_cues / brief_summary: use tickers
+  whenever you reference a specific listed company. Tickers in prose are
+  fine and preferred.
+
+If you genuinely don't know a company's NSE ticker, look it up via web
+search before writing the entry — do not guess. The official NSE ticker
+is what trades; everything else is a hallucination risk.
 
 Be concise and factual. Focus on information that would help a trading bot make better decisions today.
