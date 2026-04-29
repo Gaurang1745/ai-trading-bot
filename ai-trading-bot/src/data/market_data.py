@@ -38,11 +38,11 @@ class MarketDataFetcher:
         self, symbol: str, exchange: str, days: int
     ) -> Optional[pd.DataFrame]:
         """
-        Return cached daily candles if fresh (last row's date within ~3 days).
-        If the cache has fewer rows than requested we still return what we
-        have — the caller decides whether to augment with a fresh fetch.
-        This avoids thrashing the API when different call sites ask for
-        different history lengths.
+        Return cached daily candles if the parquet file exists. The cache is
+        authoritative during market hours — no freshness check. The EOD job
+        (warm_universe(force_refresh=True)) is the single source that
+        rewrites the cache once per trading session, so daytime callers
+        never need to refetch.
         """
         path = self._daily_cache_path(symbol, exchange)
         if not os.path.exists(path):
@@ -51,11 +51,6 @@ class MarketDataFetcher:
             df = pd.read_parquet(path)
             if df.empty:
                 return None
-            last_date = pd.to_datetime(df["date"].iloc[-1]).date()
-            # Fresh if last candle is from today or within ~3 days (weekends/holidays ok)
-            age_days = (date.today() - last_date).days
-            if age_days > 3:
-                return None  # Too stale — caller will re-fetch
             return df.tail(days).reset_index(drop=True) if len(df) > days else df
         except Exception as e:
             logger.warning(f"Failed to read daily cache for {symbol}: {e}")
@@ -76,8 +71,14 @@ class MarketDataFetcher:
     ) -> Optional[pd.DataFrame]:
         """
         Fetch daily OHLCV candles for a symbol.
-        Uses per-symbol parquet disk cache — refreshes only if cache is stale
-        (last row older than ~3 days) or insufficient history.
+
+        `use_cache` controls only the READ path — when False, the cache is
+        bypassed and Dhan is called directly. A successful API fetch ALWAYS
+        writes back to disk, regardless of `use_cache`, so the EOD
+        force-refresh path actually persists the fresh data. The previous
+        behavior coupled write-gating to read-gating, which silently
+        discarded API results when callers used `use_cache=False`.
+
         Returns DataFrame with columns: date, open, high, low, close, volume
         """
         if use_cache:
@@ -103,8 +104,9 @@ class MarketDataFetcher:
             df["date"] = pd.to_datetime(df["date"])
             df = df.sort_values("date").reset_index(drop=True)
 
-            if use_cache:
-                self._write_daily_cache(symbol, exchange, df)
+            # Always persist a successful API fetch. `use_cache` is the
+            # READ knob, not the write knob — see docstring above.
+            self._write_daily_cache(symbol, exchange, df)
 
             return df
         except Exception as e:

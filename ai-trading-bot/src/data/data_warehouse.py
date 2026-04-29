@@ -148,11 +148,22 @@ class DataWarehouse:
         self._data[symbol] = fresh
         return fresh
 
-    def warm_universe(self, symbols: list[str] = None, max_stocks: Optional[int] = None) -> None:
+    def warm_universe(
+        self,
+        symbols: list[str] = None,
+        max_stocks: Optional[int] = None,
+        force_refresh: bool = False,
+    ) -> None:
         """
         Populate candles + indicators for the universe (or given subset).
         Intended to run after EOD or in the background to warm disk cache.
         At ~1.2s per stock, full universe takes ~10 min — call sparingly.
+
+        When force_refresh=True, bypass the parquet cache entirely and
+        re-fetch every symbol from Dhan, rewriting the parquet. Use this
+        at EOD so the next morning's refresh_quotes hits a fresh cache
+        instead of stampeding the API at 09:00. Wall time is bounded by
+        Dhan's 1-req-per-2s rate limit (~17 min for ~510 stocks).
         """
         if symbols is None:
             symbols = list(self._data.keys())
@@ -163,14 +174,23 @@ class DataWarehouse:
         loaded = 0
         for symbol in symbols:
             try:
-                if self.ensure_loaded(symbol):
-                    loaded += 1
+                if force_refresh:
+                    pack = self._data.get(symbol)
+                    exchange = pack.exchange if pack else "NSE"
+                    df = self.market_data.fetch_daily_candles(
+                        symbol, exchange, days=400, use_cache=False,
+                    )
+                    if df is not None and not df.empty:
+                        loaded += 1
+                else:
+                    if self.ensure_loaded(symbol):
+                        loaded += 1
             except Exception as e:
                 logger.warning(f"Warm failed for {symbol}: {e}")
 
         logger.info(
             f"warm_universe: {loaded}/{len(symbols)} stocks warmed in "
-            f"{time.time() - start:.0f}s"
+            f"{time.time() - start:.0f}s (force_refresh={force_refresh})"
         )
 
     def _load_stock(self, symbol: str, exchange: str = "NSE") -> Optional[StockDataPack]:
@@ -178,9 +198,13 @@ class DataWarehouse:
         pack = StockDataPack(symbol=symbol, exchange=exchange)
         pack.sector = self._sector_map.get(symbol, "")
 
-        # Fetch daily candles
+        # Fetch daily candles. Cache-only — EOD owns the API path.
+        # If the parquet is missing for this symbol, return None and let
+        # the caller skip it rather than stampede Dhan during market hours.
         pack.daily_df = self.market_data.fetch_daily_candles(
-            symbol, exchange, days=self._daily_candles_count + 200  # extra for indicator warmup
+            symbol, exchange,
+            days=self._daily_candles_count + 200,  # extra for indicator warmup
+            use_cache=True, cache_only=True,
         )
         if pack.daily_df is None or pack.daily_df.empty:
             return None
@@ -237,10 +261,14 @@ class DataWarehouse:
                 pack.day_close = ohlc.get("close", 0)  # TODAY's close (= ltp after hours)
                 pack.volume = quote.get("volume", 0)
 
-                # Pull daily candles (cache-first; falls through to API on miss).
+                # Cache-only read: the parquet is rewritten daily by the
+                # EOD warm_universe(force_refresh=True) job, so daytime
+                # cycles must never call the Dhan API. cache_only=True
+                # short-circuits the API fallthrough on cache miss.
                 # 400 calendar days ≈ 280 trading days, guarantees true 52w coverage.
                 df = self.market_data.fetch_daily_candles(
-                    symbol, pack.exchange or "NSE", days=400, use_cache=True,
+                    symbol, pack.exchange or "NSE", days=400,
+                    use_cache=True, cache_only=True,
                 )
                 prev_close = 0.0
                 if df is not None and not df.empty:
@@ -295,7 +323,8 @@ class DataWarehouse:
         """
         try:
             df = self.market_data.fetch_daily_candles(
-                symbol, exchange, days=5, use_cache=True,
+                symbol, exchange, days=5,
+                use_cache=True, cache_only=True,
             )
         except Exception:
             return 0

@@ -853,14 +853,6 @@ class Orchestrator:
         """End-of-day review and summary."""
         logger.info("--- EOD Review ---")
 
-        # Warm universe cache in background so tomorrow's boot stays fast
-        try:
-            if self.warehouse:
-                logger.info("Warming universe cache for tomorrow...")
-                self.warehouse.warm_universe()
-        except Exception as e:
-            logger.warning(f"Universe warm failed (non-critical): {e}")
-
         try:
             # Save portfolio snapshot
             portfolio = self.portfolio_state.get_portfolio_state()
@@ -893,6 +885,20 @@ class Orchestrator:
 
         except Exception as e:
             logger.error(f"EOD review failed: {e}", exc_info=True)
+
+        # Force-refresh the daily candle parquet cache for the full universe
+        # AFTER the user-facing summary has been sent. Bypasses the cache
+        # freshness check and re-fetches via Dhan so tomorrow's 09:00
+        # refresh_quotes hits a fresh cache instead of stampeding the API
+        # for ~22 minutes. Bounded by Dhan's 1-req-per-2s rate limit
+        # (~17 min wall time for ~510 stocks). Non-critical — never crash
+        # EOD on failure.
+        try:
+            if self.warehouse:
+                logger.info("Refreshing daily candle cache for tomorrow...")
+                self.warehouse.warm_universe(force_refresh=True)
+        except Exception as e:
+            logger.warning(f"Universe cache refresh failed (non-critical): {e}")
 
     def run_daily_backup(self):
         """Back up database, logs, and config."""
@@ -1002,10 +1008,13 @@ class Orchestrator:
             id="eod_review", replace_existing=True,
         )
 
-        # Daily backup
+        # Daily backup — runs at 4:30 PM (not 4:00) to give the EOD
+        # cache refresh (~17 min wall time) a comfortable buffer before
+        # the backup snapshots files. Avoids any race between the
+        # warm_universe parquet writer and the backup tarball.
         self._scheduler.add_job(
             self.run_daily_backup,
-            CronTrigger(day_of_week="mon-fri", hour=16, minute=0, timezone="Asia/Kolkata"),
+            CronTrigger(day_of_week="mon-fri", hour=16, minute=30, timezone="Asia/Kolkata"),
             id="daily_backup", replace_existing=True,
         )
 
