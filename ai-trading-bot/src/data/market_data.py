@@ -71,8 +71,14 @@ class MarketDataFetcher:
     ) -> Optional[pd.DataFrame]:
         """
         Fetch daily OHLCV candles for a symbol.
-        Uses per-symbol parquet disk cache — refreshes only if cache is stale
-        (last row older than ~3 days) or insufficient history.
+
+        `use_cache` controls only the READ path — when False, the cache is
+        bypassed and Dhan is called directly. A successful API fetch ALWAYS
+        writes back to disk, regardless of `use_cache`, so the EOD
+        force-refresh path actually persists the fresh data. The previous
+        behavior coupled write-gating to read-gating, which silently
+        discarded API results when callers used `use_cache=False`.
+
         Returns DataFrame with columns: date, open, high, low, close, volume
         """
         if use_cache:
@@ -98,8 +104,9 @@ class MarketDataFetcher:
             df["date"] = pd.to_datetime(df["date"])
             df = df.sort_values("date").reset_index(drop=True)
 
-            if use_cache:
-                self._write_daily_cache(symbol, exchange, df)
+            # Always persist a successful API fetch. `use_cache` is the
+            # READ knob, not the write knob — see docstring above.
+            self._write_daily_cache(symbol, exchange, df)
 
             return df
         except Exception as e:
