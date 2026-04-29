@@ -625,10 +625,13 @@ class Orchestrator:
         Sonnet sometimes outputs long-form names (ADANITOTALGAS, JIOFINL,
         VEDANTA) instead of the canonical NSE ticker (ATGL, JIOFIN, VEDL).
         Anything that doesn't resolve in the instrument cache is batched
-        into a single Haiku call asking for the correct tickers. Each
-        Haiku response is validated against the same instrument cache —
-        successful matches replace the original symbol; everything else
-        is dropped. Zero LLM cost on cycles where every symbol resolves.
+        into a single Haiku call asking for the correct tickers, with the
+        full Nifty 500 ticker → company name table embedded in the prompt
+        so Haiku is selecting from a constrained set, not generating from
+        memory. Each response is then validated against the instrument
+        cache — successful matches replace the original symbol; everything
+        else is dropped. Zero LLM cost on cycles where every symbol
+        resolves; ~₹0.50 per fire on cycles where one or more don't.
         """
         if not watchlist:
             return watchlist
@@ -646,18 +649,20 @@ class Orchestrator:
             f"{original_symbols} — calling Haiku for resolution"
         )
 
+        universe_text = self._get_resolver_universe_text()
         prompt = (
-            "For each Indian-listed company below, return its official NSE "
-            "ticker symbol. The input may be a long-form upper-snake company "
-            "name (e.g. 'ADANITOTALGAS' for Adani Total Gas Ltd, ticker ATGL) "
-            "or any other naming variant. Return UNKNOWN if you don't know "
-            "the ticker with high confidence — guessing causes the order to "
-            "be dropped, which is preferable to a hallucinated ticker.\n\n"
-            "Inputs:\n"
+            "You will see a list of mistyped or long-form Indian company "
+            "references. For each, identify the correct NSE ticker symbol "
+            "from the canonical table provided below. The TICKER MUST APPEAR "
+            "IN THE TABLE — do not invent tickers. If no entry in the table "
+            "matches with high confidence, return UNKNOWN.\n\n"
+            "═══ CANONICAL NSE TICKER TABLE (Nifty 500) ═══\n"
+            f"{universe_text}\n"
+            "═══ END TABLE ═══\n\n"
+            "Inputs to resolve:\n"
             + "\n".join(f"- {s}" for s in original_symbols)
-            + '\n\nRespond ONLY as a JSON object mapping each input string to '
-            'its NSE ticker (or "UNKNOWN"). Example: '
-            '{"ADANITOTALGAS": "ATGL", "FOOBAR": "UNKNOWN"}'
+            + '\n\nRespond ONLY as a JSON object: '
+            '{"INPUT_STRING": "TICKER_FROM_TABLE_OR_UNKNOWN", ...}'
         )
 
         try:
@@ -702,6 +707,29 @@ class Orchestrator:
                 f"dropped={dropped_log or 'none'}"
             )
         return kept
+
+    def _get_resolver_universe_text(self) -> str:
+        """
+        Build the canonical ticker → company name table fed into the symbol
+        resolver. Read once from config/nifty500.csv, cached on the instance
+        for the lifetime of the orchestrator.
+        """
+        cached = getattr(self, "_resolver_universe_text", None)
+        if cached:
+            return cached
+        import csv as _csv
+        rows: list[str] = []
+        try:
+            with open("config/nifty500.csv") as f:
+                for row in _csv.DictReader(f):
+                    sym = (row.get("Symbol") or "").strip()
+                    name = (row.get("Company Name") or "").strip()
+                    if sym and name:
+                        rows.append(f"{sym:<14}{name}")
+        except Exception as e:
+            logger.warning(f"Could not load nifty500 universe for resolver: {e}")
+        self._resolver_universe_text = "\n".join(rows)
+        return self._resolver_universe_text
 
     def _run_trading_decision(
         self, deep_packs: list, batch_idx: int, total_batches: int,
