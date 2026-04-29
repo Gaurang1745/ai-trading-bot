@@ -592,6 +592,14 @@ class Orchestrator:
                         "reason": "Currently held — need updated data for position management",
                     })
 
+            # Resolve any symbols that don't match a tradeable instrument.
+            # Sonnet occasionally writes long-form names (ADANITOTALGAS,
+            # JIOFINL, VEDANTA) instead of the canonical NSE ticker. We
+            # batch all unresolved symbols into one Haiku call asking for
+            # the correct tickers, validate each response against the
+            # instrument cache, then rewrite or drop accordingly.
+            watchlist = self._resolve_unresolved_symbols(watchlist)
+
             # Update tracking
             self._previous_watchlist = [w["symbol"] for w in watchlist]
             self._current_watchlist = watchlist
@@ -609,6 +617,91 @@ class Orchestrator:
         except Exception as e:
             logger.error(f"Market Pulse failed: {e}", exc_info=True)
             return []
+
+    def _resolve_unresolved_symbols(self, watchlist: list[dict]) -> list[dict]:
+        """
+        Fix Sonnet's symbol hallucinations before deep_dive sees them.
+
+        Sonnet sometimes outputs long-form names (ADANITOTALGAS, JIOFINL,
+        VEDANTA) instead of the canonical NSE ticker (ATGL, JIOFIN, VEDL).
+        Anything that doesn't resolve in the instrument cache is batched
+        into a single Haiku call asking for the correct tickers. Each
+        Haiku response is validated against the same instrument cache —
+        successful matches replace the original symbol; everything else
+        is dropped. Zero LLM cost on cycles where every symbol resolves.
+        """
+        if not watchlist:
+            return watchlist
+
+        unresolved = [
+            w for w in watchlist
+            if self.instruments.get_token(w.get("exchange", "NSE"), w.get("symbol", "")) is None
+        ]
+        if not unresolved:
+            return watchlist
+
+        original_symbols = [w["symbol"] for w in unresolved]
+        logger.info(
+            f"Watchlist has {len(original_symbols)} unresolved symbol(s): "
+            f"{original_symbols} — calling Haiku for resolution"
+        )
+
+        prompt = (
+            "For each Indian-listed company below, return its official NSE "
+            "ticker symbol. The input may be a long-form upper-snake company "
+            "name (e.g. 'ADANITOTALGAS' for Adani Total Gas Ltd, ticker ATGL) "
+            "or any other naming variant. Return UNKNOWN if you don't know "
+            "the ticker with high confidence — guessing causes the order to "
+            "be dropped, which is preferable to a hallucinated ticker.\n\n"
+            "Inputs:\n"
+            + "\n".join(f"- {s}" for s in original_symbols)
+            + '\n\nRespond ONLY as a JSON object mapping each input string to '
+            'its NSE ticker (or "UNKNOWN"). Example: '
+            '{"ADANITOTALGAS": "ATGL", "FOOBAR": "UNKNOWN"}'
+        )
+
+        try:
+            response = self.claude_client.call_haiku(
+                prompt, call_type="SYMBOL_RESOLUTION"
+            )
+        except Exception as e:
+            logger.warning(f"Haiku symbol-resolution call failed: {e}")
+            response = None
+
+        mapping: dict[str, str] = {}
+        if isinstance(response, dict):
+            mapping = {
+                str(k): str(v).strip().upper()
+                for k, v in response.items()
+                if isinstance(v, str)
+            }
+
+        resolved_log: list[str] = []
+        dropped_log: list[str] = []
+        kept: list[dict] = []
+        for w in watchlist:
+            sym = w.get("symbol", "")
+            exch = w.get("exchange", "NSE")
+            if self.instruments.get_token(exch, sym) is not None:
+                kept.append(w)
+                continue
+            candidate = mapping.get(sym, "")
+            if (
+                candidate
+                and candidate != "UNKNOWN"
+                and self.instruments.get_token(exch, candidate) is not None
+            ):
+                resolved_log.append(f"{sym}→{candidate}")
+                kept.append({**w, "symbol": candidate})
+            else:
+                dropped_log.append(sym)
+
+        if resolved_log or dropped_log:
+            logger.info(
+                f"Symbol resolution: resolved={resolved_log or 'none'}, "
+                f"dropped={dropped_log or 'none'}"
+            )
+        return kept
 
     def _run_trading_decision(
         self, deep_packs: list, batch_idx: int, total_batches: int,
