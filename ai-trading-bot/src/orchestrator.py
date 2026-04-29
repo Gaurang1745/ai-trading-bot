@@ -162,6 +162,11 @@ class Orchestrator:
         self.sl_health: Optional[SLHealthCheck] = None
         self.performance = PerformanceTracker(self.db, self.config)
 
+        # Lazy-loaded ticker → company-name table fed into the symbol
+        # resolver (Haiku call). Built on first need from
+        # config/nifty500.csv and cached for the lifetime of the run.
+        self._resolver_universe_text: Optional[str] = None
+
         # Loggers
         self.trade_logger = TradeLogger(
             log_dir=os.path.join(
@@ -592,6 +597,14 @@ class Orchestrator:
                         "reason": "Currently held — need updated data for position management",
                     })
 
+            # Resolve any symbols that don't match a tradeable instrument.
+            # Sonnet occasionally writes long-form names (ADANITOTALGAS,
+            # JIOFINL, VEDANTA) instead of the canonical NSE ticker. We
+            # batch all unresolved symbols into one Haiku call asking for
+            # the correct tickers, validate each response against the
+            # instrument cache, then rewrite or drop accordingly.
+            watchlist = self._resolve_unresolved_symbols(watchlist)
+
             # Update tracking
             self._previous_watchlist = [w["symbol"] for w in watchlist]
             self._current_watchlist = watchlist
@@ -609,6 +622,135 @@ class Orchestrator:
         except Exception as e:
             logger.error(f"Market Pulse failed: {e}", exc_info=True)
             return []
+
+    def _resolve_unresolved_symbols(self, watchlist: list[dict]) -> list[dict]:
+        """
+        Fix Sonnet's symbol hallucinations before deep_dive sees them.
+
+        Sonnet sometimes outputs long-form names (ADANITOTALGAS, JIOFINL,
+        VEDANTA) instead of the canonical NSE ticker (ATGL, JIOFIN, VEDL).
+        Anything that doesn't resolve in the instrument cache is batched
+        into a single Haiku call asking for the correct tickers, with the
+        full Nifty 500 ticker → company name table embedded in the prompt
+        so Haiku is selecting from a constrained set, not generating from
+        memory. Each response is then validated against the instrument
+        cache — successful matches replace the original symbol; everything
+        else is dropped. Zero LLM cost on cycles where every symbol
+        resolves; ~₹0.50 per fire on cycles where one or more don't.
+        """
+        if not watchlist:
+            return watchlist
+
+        unresolved = [
+            w for w in watchlist
+            if self.instruments.get_token(w.get("exchange", "NSE"), w.get("symbol", "")) is None
+        ]
+        if not unresolved:
+            return watchlist
+
+        original_symbols = [w["symbol"] for w in unresolved]
+        logger.info(
+            f"Watchlist has {len(original_symbols)} unresolved symbol(s): "
+            f"{original_symbols} — calling Haiku for resolution"
+        )
+
+        universe_text = self._get_resolver_universe_text()
+        prompt = (
+            "You will see a list of mistyped or long-form Indian company "
+            "references. For each, identify the correct NSE ticker symbol "
+            "from the canonical table provided below. The TICKER MUST APPEAR "
+            "IN THE TABLE — do not invent tickers. If no entry in the table "
+            "matches with high confidence, return UNKNOWN.\n\n"
+            "═══ CANONICAL NSE TICKER TABLE (Nifty 500) ═══\n"
+            f"{universe_text}\n"
+            "═══ END TABLE ═══\n\n"
+            "Inputs to resolve:\n"
+            + "\n".join(f"- {s}" for s in original_symbols)
+            + '\n\nRespond ONLY as a JSON object: '
+            '{"INPUT_STRING": "TICKER_FROM_TABLE_OR_UNKNOWN", ...}'
+        )
+
+        try:
+            response = self.claude_client.call_haiku(
+                prompt, call_type="SYMBOL_RESOLUTION"
+            )
+        except Exception as e:
+            logger.warning(f"Haiku symbol-resolution call failed: {e}")
+            response = None
+
+        mapping: dict[str, str] = {}
+        if isinstance(response, dict):
+            mapping = {
+                str(k): str(v).strip().upper()
+                for k, v in response.items()
+                if isinstance(v, str)
+            }
+
+        resolved_log: list[str] = []
+        dropped_log: list[str] = []
+        kept: list[dict] = []
+        for w in watchlist:
+            sym = w.get("symbol", "")
+            exch = w.get("exchange", "NSE")
+            if self.instruments.get_token(exch, sym) is not None:
+                kept.append(w)
+                continue
+            candidate = mapping.get(sym, "")
+            if (
+                candidate
+                and candidate != "UNKNOWN"
+                and self.instruments.get_token(exch, candidate) is not None
+            ):
+                resolved_log.append(f"{sym}→{candidate}")
+                kept.append({**w, "symbol": candidate})
+            else:
+                dropped_log.append(sym)
+
+        if resolved_log or dropped_log:
+            logger.info(
+                f"Symbol resolution: resolved={resolved_log or 'none'}, "
+                f"dropped={dropped_log or 'none'}"
+            )
+
+        # Dedupe by (exchange, symbol). After resolution, two entries can
+        # collapse onto the same canonical ticker — e.g., the held-stock
+        # injection added ATGL while Sonnet's hallucinated ADANITOTALGAS
+        # also rewrote to ATGL. Without this, deep_dive would double-process
+        # and Opus would see the same stock twice with conflicting reasons.
+        # First occurrence wins so held-stock entries (added before the
+        # resolver) take precedence over hallucinated duplicates.
+        seen: set[tuple[str, str]] = set()
+        deduped: list[dict] = []
+        for w in kept:
+            key = (w.get("exchange", "NSE"), w.get("symbol", ""))
+            if key in seen:
+                logger.info(f"Symbol resolution: deduped {key[1]} (duplicate after rewrite)")
+                continue
+            seen.add(key)
+            deduped.append(w)
+        return deduped
+
+    def _get_resolver_universe_text(self) -> str:
+        """
+        Build the canonical ticker → company name table fed into the symbol
+        resolver. Read once from config/nifty500.csv, cached on the instance
+        for the lifetime of the orchestrator.
+        """
+        if self._resolver_universe_text is not None:
+            return self._resolver_universe_text
+        import csv as _csv
+        rows: list[str] = []
+        try:
+            with open("config/nifty500.csv") as f:
+                for row in _csv.DictReader(f):
+                    sym = (row.get("Symbol") or "").strip()
+                    name = (row.get("Company Name") or "").strip()
+                    if sym and name:
+                        rows.append(f"{sym:<14}{name}")
+        except Exception as e:
+            logger.warning(f"Could not load nifty500 universe for resolver: {e}")
+        self._resolver_universe_text = "\n".join(rows)
+        return self._resolver_universe_text
 
     def _run_trading_decision(
         self, deep_packs: list, batch_idx: int, total_batches: int,
