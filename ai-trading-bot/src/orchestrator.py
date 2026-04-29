@@ -866,10 +866,13 @@ class Orchestrator:
             id="eod_review", replace_existing=True,
         )
 
-        # Daily backup
+        # Daily backup — runs at 4:30 PM (not 4:00) to give the EOD
+        # cache refresh (~17 min wall time) a comfortable buffer before
+        # the backup snapshots files. Avoids any race between the
+        # warm_universe parquet writer and the backup tarball.
         self._scheduler.add_job(
             self.run_daily_backup,
-            CronTrigger(day_of_week="mon-fri", hour=16, minute=0, timezone="Asia/Kolkata"),
+            CronTrigger(day_of_week="mon-fri", hour=16, minute=30, timezone="Asia/Kolkata"),
             id="daily_backup", replace_existing=True,
         )
 
