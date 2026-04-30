@@ -1151,9 +1151,17 @@ class Orchestrator:
             return []
 
     def stop(self):
-        """Graceful shutdown."""
+        """
+        Graceful shutdown. Idempotent — safe to call multiple times.
+
+        SIGTERM handler in main.py calls stop() then sys.exit(0); the
+        resulting SystemExit unwinds through main()'s `finally` clause,
+        which calls stop() a second time. Without the `running` guard,
+        the second call hits an already-shut-down scheduler and raises
+        SchedulerNotRunningError, exiting the process with code 1.
+        """
         self._is_running = False
-        if self._scheduler:
+        if self._scheduler is not None and self._scheduler.running:
             self._scheduler.shutdown(wait=False)
         if self.db:
             self.db.close()
