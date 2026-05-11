@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-04-22 10:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 1000000.0,
+    "deployed_pct": 0.0,
+    "holdings_count": 0,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Portfolio state unchanged for the third consecutive tick (09:00 → 09:30 → 10:00): ₹10,00,000 fully in cash, zero holdings, zero open intraday positions. Thirty minutes past the market open and the paper trade tape is still empty.",
+    "Sector concentration: N/A — no holdings. Zero sector risk.",
+    "Correlated exposures: N/A — no positions to correlate.",
+    "Deployment level: 0% deployed vs 100% cash. Well below the 80% max_deployed_pct ceiling and the 20% max_position_pct per-name cap; both caps are trivially satisfied.",
+    "Daily loss: ₹0 realized and ₹0 unrealized today. The 3% daily-loss limit (₹30,000) is not approached. Neither the 10% drawdown-reduce nor the 15% drawdown-halt threshold is engaged.",
+    "Position sizing: N/A — no single-name exposure exists to evaluate.",
+    "Active override: min_confidence = 0.55 (raised from base 0.50 by the strategy agent on 2026-04-20 22:10). Override remains appropriate; today's empty trade tape gives no new evidence to revisit it.",
+    "Observation: the strategy layer has produced no fills 30 minutes into the session. This is a signal-generation question, not a risk question — risk cannot meaningfully tighten further without constraining the strategy agent below a viable operating point."
+  ],
+  "actions_taken": [
+    "No guardrail changes made. With zero market exposure, zero intraday P&L, and no new trade activity since the 09:30 assessment, there is no fresh risk signal to act on. Tightening further (e.g., raising min_confidence above 0.55 or lowering caps that are already unused) would only suppress legitimate strategy entries without reducing any measurable risk. Existing 0.55 min_confidence override retained."
+  ]
+}

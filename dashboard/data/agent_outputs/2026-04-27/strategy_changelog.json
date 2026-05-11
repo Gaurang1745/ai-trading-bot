@@ -1,0 +1,75 @@
+{
+  "date": "2026-04-27",
+  "review_type": "daily",
+  "agent": "strategy_review_daily",
+  "session_window": "2026-04-27 (Day-5, 13 trade rows / 7 BUYs + 3 SELL-CLOSE pairs, +₹131.38 realized, 9 OPEN+filled holdings)",
+  "changes": [
+    {
+      "timestamp": "2026-04-27 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE / HARD CONSTRAINTS / Rule 10 SECTOR / CLUSTER DISCIPLINE",
+      "change_type": "STRENGTHEN",
+      "what": "Added a HARD LIMIT clause to Rule 10: in any single trading session, admit AT MOST 1 NEW position in a cluster where you already hold a name; AT MOST 2 NEW positions in a cluster where you hold none. Counting includes OPEN/PENDING orders submitted earlier in the same session. Cites today's Power-cluster failure as the reference incident.",
+      "why": "Day-5 evidence: TATAPOWER 10:13:02 + POWERGRID 11:13:02 + TORNTPOWER 11:45:12 — three new Power-cluster admissions in 92 minutes on top of held NTPC. The existing Rule 10 prose ('do NOT add a second, third, and fourth breakout-to-52-week-high in the SAME theme in a single session') was present but did not bite. Risk layer responded with FOUR sequential binding tightenings in 90 minutes: max_sector_pct 0.30 → 0.25 (11:30) → 0.22 (12:00); max_deployed_pct 0.70 → 0.65 (11:30); min_confidence 0.60 → 0.62 (12:00) → 0.65 (12:30). The strategy layer should not require the risk layer to manually brake every cluster expansion — converting a soft prose rule into an enumerated hard limit is the disciplined response.",
+      "expected_impact": "Future cluster-stack pattern (4+ Power names, or 4+ BFSI names admitted in one session) is preempted by the strategy layer's own pre-commitment, before the risk layer has to ratchet. Should reduce the cadence of mid-session sector_pct tightenings — those are correct responses but each one introduces friction that propagates across subsequent ticks (raised confidence floors, narrower deployment slots). Non-numeric — applies on next bot restart (system prompt rebuilt at boot).",
+      "scope": "Behavioral / philosophy. Effective on next bot restart."
+    },
+    {
+      "timestamp": "2026-04-27 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE / HARD CONSTRAINTS / NEW Rule 13 REGULATORY / GOVERNANCE DUE DILIGENCE",
+      "change_type": "ADD",
+      "what": "Added new Rule 13 REGULATORY / GOVERNANCE DUE DILIGENCE — BEFORE NEW ENTRY. Mandates pre-entry scan of news/research data for active SFIO/SEBI/RBI/CBI/ED probes, USFDA Form 483/Warning Letter/Import Alert, whistleblower/audit issues, insider-trading restraints, suspected internal fraud. If any unresolved overhang flagged, default disposition on a NEW entry is NO_ACTION even when technical/sector setup is bullish. Frames discovering bearish governance signals AFTER entry as a research-quality failure, not edge.",
+      "why": "Day-5 evidence: INDUSINDBK BUY at 10:42:49 (conf 0.62, reasoning emphasized 'Q4 turnaround, NII +43.4%, NIM expansion, microfinance stress easing') → INDUSINDBK SELL at 12:14:45 (92 min later) once subsequent research surfaced active SFIO criminal probe, SEBI insider-trading restraint on former officials, Rs 1,979 cr derivatives lapse, suspected internal fraud not fully ring-fenced, RBI examining peer derivatives. Net realized P&L +₹41.80 — lucky near-breakeven on a position the bot would not have admitted had it surfaced these signals at entry time. The SFIO probe and SEBI restraint are public information that pre-existed the BUY decision; the failure was sequencing (bullish narrative weighed first, governance overhang surfaced second). On a different LTP path the same round-trip could have been a -₹2,000 to -₹5,000 loss. Codifying the rule converts a one-time lucky escape into a persistent guardrail.",
+      "expected_impact": "Future BFSI/Pharma names with live regulator action (the dominant overhang categories in the Indian universe) are flagged at entry instead of at exit. Should eliminate a class of same-session round-trip BUY-then-SELL patterns that cost decision slots and produce no edge. Risk-asymmetric: false positives (skipping a name with a flagged-but-immaterial overhang) are cheap; false negatives (entering a name with a live SFIO probe) are expensive. The asymmetry favors the cautious default.",
+      "scope": "Behavioral / philosophy. Effective on next bot restart."
+    },
+    {
+      "timestamp": "2026-04-27 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE / HARD CONSTRAINTS / NEW Rule 14 SAME-NAME RE-ENTRY COOLDOWN",
+      "change_type": "ADD",
+      "what": "Added new Rule 14 SAME-NAME RE-ENTRY COOLDOWN. After EXIT or SELL-to-zero on a symbol, no fresh BUY on the same symbol for at least 5 trading sessions UNLESS one of: (a) a new post-exit catalyst materially changes the prior thesis, or (b) the original exit thesis has been demonstrably invalidated by subsequent price action AND new information. If re-entering, the new BUY's reasoning must explicitly acknowledge the prior exit and state the new catalyst.",
+      "why": "Day-3 → Day-5 evidence: TORNTPOWER SELL at Day-3 10:12 (+₹1,834, reasoning 'asymmetric risk into Q4 results at 52-week high, exit ahead of binary event') → TORNTPOWER BUY at Day-5 11:45 at the SAME ENTRY PRICE 1810 (reasoning 'Power sector breakout +6.7% on 3.3x volume, JERA partnership + Nabha catalysts'). The Q4 binary risk that justified the Day-3 exit was STILL pending on Day-5 — the two thesis are mutually inconsistent within a 72-hour window. The Day-5 reasoning did not lead with the new JERA / Nabha information nor explicitly retract the Day-3 exit thesis; it read as a fresh entry as if Day-3 had not happened. Risk-monitor flagged this same pattern at 12:00:00 ('TORNTPOWER was SOLD at Day-3 10:12 (+₹1,834 win) and now re-bought today at the SAME entry... the buy-back-what-you-just-sold pattern within 24h... is itself a quality concern — strategy is testing the perimeter created by the 11:30 deployment cap by trading old slots for new ones').",
+      "expected_impact": "Round-trip churn on the same symbol (sell at +X% on thesis A → re-buy a few sessions later at the same price on thesis B) is preempted unless explicitly justified. The 5-session cooldown is the friction floor that forces the re-entry to clear a higher bar than continued-upside FOMO. Should also reduce the 'trading old slots for new ones' pattern flagged today, where strategy uses SELLs to free deployment slots for cosmetically-different but thematically-identical re-entries. Non-numeric — applies on next bot restart.",
+      "scope": "Behavioral / philosophy. Effective on next bot restart."
+    }
+  ],
+  "considered_but_declined": [
+    {
+      "considered_change": "Promote risk_config min_confidence 0.65 override to base config.yaml min_confidence 0.50 → 0.60",
+      "why_declined": "Risk-monitor only ratcheted to 0.65 today (12:30); under-2h of binding data at the new floor. The 2026-04-25 weekly changelog already declined this on n=2 closed-trade sample grounds; today added 3 closes (AUBANK loss, GRANULES win, INDUSINDBK win) bringing total to n=5 — still below the 'wait for ≥10 closed trades' bar set in the prior changelog. Holding in risk_config.yaml preserves the ratchet; a future weekly review with n≥10 closes can promote 0.60 to base for durability.",
+      "revisit_after": "10+ closed trades total (currently 5)"
+    },
+    {
+      "considered_change": "Add a SECTOR-RECYCLE COOLDOWN rule (no fresh same-sector BUY in same session as a binary-event-driven SELL)",
+      "why_declined": "Day-5 evidence on Pharma is mixed: GRANULES SELL at 11:45:44 ('FDA Form 483 overhang + earnings binary risk') → SUNPHARMA BUY at 12:14:33 + PHARMABEES BUY at 12:14:55. SUNPHARMA's reasoning cited a fresh material catalyst ($11.75B Organon acquisition, stock +7% on volume) that did not exist when GRANULES was held — this is a legitimate name-specific edge, not a recycle. PHARMABEES' reasoning explicitly stated 'Diversified pharma ETF avoids single-stock earnings binary risk during peak results week' — the bot deliberately switched from single-stock binary risk to sector-ETF diversification, which is the textbook right move. Codifying a blanket sector-recycle ban would have blocked both legitimate moves. The pattern flagged today does not generalize cleanly into a hard rule. Will keep watching; if a future session shows a recycle WITHOUT a name-specific or vehicle-class shift in thesis, revisit.",
+      "revisit_after": "any future session showing same-sector recycle within 60 min of a binary-event exit, with reasoning that does NOT cite a fresh name-specific catalyst or a vehicle-class shift (e.g., single-stock → ETF)"
+    },
+    {
+      "considered_change": "Promote risk_config max_sl_pct 0.04 override to base config.yaml max_sl_pct 0.05 → 0.04",
+      "why_declined": "The 0.04 override has been live since 2026-04-23 (Day-2 EOD review) — 4 trading sessions. The 2026-04-25 weekly changelog declined promotion on '~3 trading days... ≥5-10 days of stable data' grounds; today is Day-5, so still inside the wait window. SL-band ceiling tightening has bitten cleanly today (TATAPOWER warning 'SL too wide (4.1%)' at 10:13 — the 4% override worked as intended), confirming the lever is calibrated; promotion to base is a durability-only consideration with no urgency. Will re-evaluate at next weekly (post-Day-10).",
+      "revisit_after": "Day-10 weekly review (≥5 more sessions of stable behavior under 0.04 override)"
+    },
+    {
+      "considered_change": "Add a numeric guardrail enforcing the new Rule 10 HARD LIMIT (max-1-or-2 new same-cluster admissions per session)",
+      "why_declined": "The risk layer does not currently track a 'session admission count per cluster' metric; introducing one would require new state-tracking in GuardrailEngine and could double-count across the OPEN-then-fill flow. The prompt-layer pre-commitment is the lighter intervention with the same target behavior. If the new prose rule fails to bite in a future session (i.e., the bot admits 3+ same-cluster names again despite the explicit rule), revisit and design the engine-side counter.",
+      "revisit_after": "any future session with 3+ same-cluster admissions despite the new prose rule"
+    },
+    {
+      "considered_change": "Add a numeric guardrail enforcing the new Rule 14 SAME-NAME RE-ENTRY COOLDOWN (block any BUY on a symbol that was SELL-to-zero in the last 5 sessions)",
+      "why_declined": "Same architectural reasoning as the cluster counter — would require new state in GuardrailEngine. The prompt-layer cooldown with explicit-justification carve-out is more flexible (carve-out (a) and (b) preserve legitimate post-news re-entry) than a blunt engine-side window. If the prose rule fails to bite (i.e., another same-name same-week buy-back without a stated new catalyst), revisit.",
+      "revisit_after": "any future session with same-name re-entry within 5 sessions of a SELL-to-zero, with no stated new catalyst"
+    }
+  ],
+  "risk_monitor_overrides_today_for_context": {
+    "note": "Recorded here as context — these are risk_monitor changes already logged in src/agents/risk_config.yaml; not strategy_review changes.",
+    "fired": [
+      {"timestamp": "2026-04-27 11:30", "lever": "max_sector_pct 0.30 → 0.25", "trigger": "POWERGRID admission as 3rd Power-cluster name, exposure projected 14.73% > 13% trigger"},
+      {"timestamp": "2026-04-27 11:30", "lever": "max_deployed_pct 0.70 → 0.65", "trigger": "POWERGRID as 4th BUY of session, projected deployment 68.30% > 65% trigger"},
+      {"timestamp": "2026-04-27 12:00", "lever": "max_sector_pct 0.25 → 0.22", "trigger": "TORNTPOWER admission as 4th Power-cluster name, exposure projected 19.78% > 17% trigger"},
+      {"timestamp": "2026-04-27 12:00", "lever": "min_confidence 0.60 → 0.62", "trigger": "TORNTPOWER as 5th BUY without intervening SELL"},
+      {"timestamp": "2026-04-27 12:30", "lever": "min_confidence 0.62 → 0.65", "trigger": "SUNPHARMA as 6th BUY of session + BUY-then-SELL ordering vs INDUSINDBK exit (12-second gap)"}
+    ]
+  }
+}

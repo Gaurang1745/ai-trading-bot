@@ -1,0 +1,21 @@
+{
+  "timestamp": "2026-05-11 09:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1006488.64,
+    "cash": 351766.09,
+    "deployed_pct": 65.05,
+    "holdings_count": 15,
+    "positions_count": 0,
+    "daily_pnl": 8211.5
+  },
+  "findings": [
+    "Deployment 65.05% (holdings 654,722.55 / total 1,006,488.64). Comfortably inside base max_deployed_pct 0.80 with ~15 pp headroom; not under-deployed (>50%) so no loosen-pressure on deployment cap.",
+    "15 holdings spread across 9 sector buckets — BFSI 15.29% (PNBHOUSING+CAMS+ABCAPITAL), Auto 9.15% (BHARATFORG+BAJAJ-AUTO), Chemicals 8.60% (PIDILITIND+SRF), FMCG 6.88% (MARICO+DABUR), Pharma 6.81% (WOCKPHARMA+LAURUSLABS), Gold-ETF 4.92%, Defense 4.77%, Industrials 4.51%, IT 4.12%. Max-sector BFSI 15.29% sits well below any plausible sector cap; concentration risk is LOW.",
+    "Largest single position PNBHOUSING 8.62% of total (well under base max_position_pct 0.20). Smallest LAURUSLABS 1.97% / DABUR 1.91% — only 2 of 15 sub-3%, so the portfolio is NOT hedging-against-itself with all-tiny sizing; most names sit in the healthy 4–5% band.",
+    "Daily P&L +₹8,211.5 (from 09:29:24 portfolio snapshot) — net positive intraday, nowhere near base daily_loss_limit_pct 0.03 (≈₹30,000 loss threshold). Unrealized P&L vs cost basis +₹6,488.64. No daily-loss pressure.",
+    "Today's guardrail_log shows zero entries (NSE opened 15 min ago, no trades placed yet). Friday 2026-05-08 blocks were mechanical validation (CNC short-sell attempts, MODIFY without position, confidence=0.0 full-exit handling) — none were min_confidence-override rejections of legitimate ≥0.70 signals, so no evidence overrides are eating signal.",
+    "Overrides block in risk_config.yaml remains empty ({}) — all guardrails at base config floor since 2026-05-05 16:00 EOD reset (~5.7 days, 36 consecutive HOLD ticks including weekend gap). There is no override to loosen (already at base), and no risk condition justifying a tighten."
+  ],
+  "actions_taken": []
+}

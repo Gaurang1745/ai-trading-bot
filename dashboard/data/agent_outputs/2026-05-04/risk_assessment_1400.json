@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-04 14:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1002381.34,
+    "cash": 485981.34,
+    "deployed_pct": 51.52,
+    "holdings_count": 10,
+    "positions_count": 0,
+    "daily_pnl": 4946.45
+  },
+  "findings": [
+    "Zero state delta since 13:30 BAJFINANCE exit at 13:16:18 (+₹199.00); 30-min quiet window with no admissions, exits, fills, or BLOCKEDs. Latest trade row unchanged.",
+    "Risk level LOW: composite distress meta-trigger 0/3 — realized P&L +₹4,946.45 (₹19,946 swing buffer to leg (h) -₹15,000 trigger); zero BLOCKED rows across 19/19 today trades; no single-name distress signal.",
+    "Sector concentration well within caps: BFSI closest at 12.86% across 2 names (PNBHOUSING 7.85% + BANDHANBNK 5.00%) — 15.14 pp under 28% cap post-BAJFINANCE de-risk. All 9 named sectors hold ≥15.14 pp buffer.",
+    "Position sizing disciplined: largest PNBHOUSING 7.85% (7.15 pp under 15% cap); today's 7 admissions all in 4.62-5.51% band — no concentration, no sub-3% hedging-against-self pattern.",
+    "Auto-related correlation watch: live active 2 names (MARUTI 5.51% + EXIDEIND 4.85% = 10.36% combined) within 28% cap; lenient (d-NEW) interpretation continues to hold (live concentration, not cumulative admit count).",
+    "Loosen leg (j) status: '0 BLOCKED' precondition SATISFIED (19/19 COMPLETE, no signal-eating at 0.60 floor) but profitable-by-EOD precondition STILL BROKEN — ADANIPORTS 0.70 conf admitted 09:42 (~4hr 18min held, trail SL ratcheted to 1715 above 1700 cost) is leading must-close-profitable candidate; only today-admit close so far is BAJAJ-AUTO -₹570.50.",
+    "Loosen leg (k) status: deployment 51.52% (8.48 pp short of 60% threshold) AND high-conf admits 1 of 2 strict ≥0.70 (only ADANIPORTS qualifies; the other 6 today admissions sit at 0.62-0.68) — both preconditions UNCHANGED short of trigger; no new admissions in window means neither precondition advanced.",
+    "Signal acceptance check: 0.60 confidence floor admitting clean signal without biting — 7 today admissions cleared at 0.62-0.70 with ZERO db-BLOCKED rows. The override is NOT eating legitimate signal at this calibration.",
+    "Trail-stop activity at 13:45:20-13:45:48 cluster (8 MODIFY rows) ratcheting SLs above entry on PNBHOUSING/ADANIPORTS/PHARMABEES — healthy in-flight risk reduction locking unrealized gains, indicates no single-name distress.",
+    "Deployment trajectory across the day: 46.74% (11:30) → 51.39% (12:30) → 56.24% (13:00) → 51.52% (13:30/14:00). Peaked at 13:00, regressed on BAJFINANCE exit, holding flat. Bot is not chronically under-deployed but also not breaching the 60% loosen-leg (k) threshold.",
+    "~1 hour to 15:00 MIS squareoff window — ADANIPORTS or other today-admit close pending; remaining session window is the cleanest path to clearing loosen leg (j) validation gate."
+  ],
+  "actions_taken": [
+    "HOLD all 7 overrides at current state (min_confidence 0.60, max_position_pct 0.15, max_deployed_pct 0.75, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.045, max_sector_pct 0.28). Reasoning: NO firing tighten leg — every DORMANT leg from 13:30 remains DORMANT, and the two closest tighten legs (a)/(b) BFSI moved AWAY from firing post-BAJFINANCE exit (n=3 → n=2; buffer 4.43 → 15.14 pp). NO loosen leg with all preconditions met — leg (j) profitable-by-EOD BROKEN (ADANIPORTS 0.70 still open as leading candidate); leg (k) UNCHANGED short on BOTH deployment (51.52% < 60%) and high-conf admits (1 < 2 strict); leg (l) DORMANT. Per cost-of-override doctrine, HOLD lets the validation gate accumulate evidence at the proper pace; premature loosening with leg (j) validation broken on a day where the first today-admit exit was a loss would skip safety. ADANIPORTS at 0.70 conf admitted 09:42 with trail SL above cost is positioned to either bank profit or hold into 15:00 MIS squareoff — whichever resolves leg (j) for the next tick."
+  ]
+}

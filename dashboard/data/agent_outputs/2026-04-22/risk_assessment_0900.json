@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-04-22 09:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 1000000.0,
+    "deployed_pct": 0.0,
+    "holdings_count": 0,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Portfolio is 100% in cash (₹10,00,000) with zero holdings and zero intraday positions — no market exposure at all.",
+    "Sector concentration: N/A — no holdings to assess.",
+    "Correlated exposures: N/A — no positions.",
+    "Deployment level: 0% deployed vs 100% cash, well below the 80% max_deployed_pct ceiling.",
+    "Daily loss: ₹0 realized/unrealized P&L today; no trades executed yet. Daily loss limit (3% = ₹30,000) is not threatened.",
+    "Position sizing: N/A — no single-name exposure exists to evaluate against the 20% max_position_pct cap.",
+    "Existing override in risk_config.yaml (min_confidence floor at 0.55 from 2026-04-20 strategy run) remains appropriate and active."
+  ],
+  "actions_taken": [
+    "No guardrail changes made. Portfolio is fully in cash with no exposure; tightening parameters further would offer no additional risk protection and could unnecessarily suppress legitimate entries when the strategy agent proposes trades. The existing 0.55 min_confidence override is retained."
+  ]
+}

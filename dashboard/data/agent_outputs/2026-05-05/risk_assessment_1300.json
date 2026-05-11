@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-05 13:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 516981.64,
+    "deployed_pct": 48.40,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "Holdings 9 unchanged vs 12:30 — PNBHOUSING 7.86%, MARUTI 5.51%, SOBHA 5.16%, ADANIPORTS 5.09%, HAL 5.02%, BANDHANBNK 5.01%, GOLDBEES 4.99%, BHEL 4.93%, NAVINFLUOR 4.82%. Cost basis ₹484,875, cash ₹516,981.64, total ₹1,001,856.64. Deployment 48.40%, mid-band; under-deployment trigger from 09:00/10:00 has resolved (33.48%→48.40% over 3h).",
+    "Sector spread 8 distinct: BFSI cluster 12.87% n=2 (PNBHOUSING+BANDHANBNK), 22.13 pp buffer to base 0.35 cap. Other 7 sectors single-name (Gold ETF / Ports-Infra / Auto OEM / Defense / Capital Goods / Realty / Spec Chem). No n≥3 cluster; no correlated-exposure concentration.",
+    "Position sizing all 4.82–7.86%, well clear of base 0.20 max_position cap. No oversized positions; also no sub-3% hedging-against-itself pattern.",
+    "Daily P&L +₹909.20 (GESHIP -589.80 + PHARMABEES +510.00 + ANANTRAJ +989.00). Buffer ~₹30,965 to base -3% loss limit. Composite distress 0/3.",
+    "State delta vs 12:30: ZERO new trades (no 13:00-tick admits/exits), but guardrail_log shows strategy ran 2 trail-stop MODIFYs at 12:42–12:43 raising SL ABOVE entry on PNBHOUSING (984→1029, locking +4.6%) and ADANIPORTS (1700→1710, locking +0.6%). Defensive protection active, not idle. No BLOCKED entries on confidence floor.",
+    "Signal acceptance test for min_confidence 0.52 override: today's 3 admits (BHEL/NAVINFLUOR/SOBHA) all at conf 0.68–0.70 — well above the 0.52–0.55 licensing band that the 10:00 partial revert (0.55→0.52) gated full revert on. Override remains empirically non-binding (0 BLOCKED in 7+ trading days), but the licensing test is structurally unexercised. Pacing-consistent move is to wait for an actual sub-0.55 admit before claiming the licensing condition is met.",
+    "SL trio (default_sl_pct 0.015 / min_sl_pct 0.01) remains the actively-binding lever from the 05-04 SL-discipline thesis. Recent losses (GESHIP -1.27% on entry, BAJAJ-AUTO -0.55%, EXIDEIND -2.5%) all sat within the tightened SL geometry; thesis unrefuted. Today's 3 admits intraday-pending; no new exit data to challenge either way.",
+    "Yellow flag from 05-04 (today-admit ledger 0W/2L: BAJAJ-AUTO + EXIDEIND) remains technically unresolved — today's 3 admits not yet closed, today's only closes are carry-closes."
+  ],
+  "actions_taken": [
+    "HOLD all 3 overrides unchanged: min_confidence 0.52, default_sl_pct 0.015, min_sl_pct 0.01. No revert, no tighten. Reason: zero distress legs (8-sector spread, BFSI n=2 with 22 pp buffer, max position 7.86%, day P&L positive, deployment healthily refilled at 48.40%) so no tightening trigger; min_confidence licensing test (sub-0.55 admit) still unexercised so no admit-side evidence to support full revert; SL-trio thesis from 05-04 unrefuted and remains the actively-binding protection layer."
+  ]
+}

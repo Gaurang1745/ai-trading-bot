@@ -1,0 +1,117 @@
+{
+  "timestamp": "2026-04-24 12:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 996514.20,
+    "cash": 324460.30,
+    "deployed_pct": 67.44,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": -3488.75
+  },
+  "snapshot_ref": {
+    "snapshot_id": 26,
+    "snapshot_timestamp": "2026-04-24 11:42:45",
+    "cumulative_pnl": -3485.80,
+    "daily_pnl_pct": -0.35,
+    "source": "portfolio_snapshots row 26 — the latest snapshot as of 12:00 tick"
+  },
+  "session_context": {
+    "day_of_session": "Day 3 — 2026-04-24",
+    "market_status": "OPEN (~2h45m into regular session)",
+    "trades_today_count": 2,
+    "open_orders_count": 0,
+    "strategy_silence_since_last_action": "1h 16m (last action ADANIPOWER SELL at 10:43:24)",
+    "delta_vs_11_30_tick": "Essentially STABLE. Total value ₹996,562 → ₹996,514 (-₹48 drift in 30 min, ~0.005%). Deployment unchanged at 67.44%. Cash unchanged at ₹324,460 (no activity). Two intraday offsetting moves under the surface: (i) MAHABANK marginally IMPROVED -6.64% → -6.44% (+20 bps recovery, back inside the 11:00 fire-line area), (ii) HINDUNILVR extended DOWN -1.33% (10:43) → -2.66% (11:42) — a quiet 133 bps widening over the hour, now the second-largest MTM drag."
+  },
+  "concentration": {
+    "by_sector_pct_of_total": {
+      "BFSI": 35.94,
+      "FMCG": 16.70,
+      "Power": 5.02,
+      "Pharma": 4.81,
+      "GoldETF": 4.97
+    },
+    "by_sector_pct_of_deployed": {
+      "BFSI": 53.29,
+      "FMCG": 24.77,
+      "Power": 7.45,
+      "Pharma": 7.13,
+      "GoldETF": 7.37
+    },
+    "top_positions_pct_of_total": {
+      "AUBANK": 18.54,
+      "NESTLEIND": 12.07,
+      "MAHABANK": 9.18,
+      "PNBHOUSING": 8.22
+    },
+    "per_holding_marks": {
+      "MAHABANK":   {"qty": 1200, "avg_price": 81.50,   "last_price": 76.25,  "pnl_pct": -6.44, "pnl_inr": -6300.00, "pct_capital": 9.18,  "sector": "BFSI-PSU",     "note": "Improved from -6.64% → -6.44% (+20 bps). Still past the 11:00 -6% fire line but trajectory flattened/reversed this tick. SL ₹75.00 intact; LTP ₹76.25 is 1.64% to stop."},
+      "PNBHOUSING": {"qty": 80,   "avg_price": 984.00,  "last_price": 1023.5, "pnl_pct": 4.01,  "pnl_inr": 3160.00,  "pct_capital": 8.22,  "sector": "BFSI-NBFC",    "note": "Continued to strengthen (+2.69% @ 10:43 → +4.01% @ 11:42, +132 bps). Largest absolute gainer on the book."},
+      "GOLDBEES":   {"qty": 400,  "avg_price": 125.10,  "last_price": 123.76, "pnl_pct": -1.07, "pnl_inr": -536.00,  "pct_capital": 4.97,  "sector": "Gold-ETF"},
+      "NESTLEIND":  {"qty": 85,   "avg_price": 1412.94, "last_price": 1414.9, "pnl_pct": 0.14,  "pnl_inr": 166.60,   "pct_capital": 12.07, "sector": "FMCG",         "note": "Near flat; cooled from +0.31% to +0.14%."},
+      "AUBANK":     {"qty": 176,  "avg_price": 1049.05, "last_price": 1049.9, "pnl_pct": 0.08,  "pnl_inr": 149.60,   "pct_capital": 18.54, "sector": "BFSI-Private", "note": "Further cooled +0.65% → +0.08%; triangle gain-leg still FALSE. Grandfathered oversize ~3.54 pp above 0.15 cap."},
+      "GRANULES":   {"qty": 70,   "avg_price": 681.00,  "last_price": 684.6,  "pnl_pct": 0.53,  "pnl_inr": 252.00,   "pct_capital": 4.81,  "sector": "Pharma"},
+      "HINDUNILVR": {"qty": 20,   "avg_price": 2372.00, "last_price": 2309.0, "pnl_pct": -2.66, "pnl_inr": -1260.00, "pct_capital": 4.63,  "sector": "FMCG",         "note": "NEW WATCH ITEM. Widened -1.33% (10:43) → -2.66% (11:42), +133 bps in ~1h. Now second-largest MTM drag behind MAHABANK. Not near any configured trigger yet but trajectory is directional."},
+      "NTPC":       {"qty": 125,  "avg_price": 404.50,  "last_price": 400.55, "pnl_pct": -0.98, "pnl_inr": -493.75,  "pct_capital": 5.02,  "sector": "Power",        "note": "Single-name Power survivor after TORNTPOWER/ADANIPOWER exits. Essentially flat vs 11:30."}
+    }
+  },
+  "realized_today": {
+    "TORNTPOWER_SELL_36": 1834.20,
+    "ADANIPOWER_SELL_230": -409.40,
+    "net_realized": 1424.80
+  },
+  "trigger_check": {
+    "trigger_a_book_below_neg_1_pct":         {"fired": false, "value": -0.0035, "threshold": -0.01, "buffer_inr": 6479.00, "delta_vs_11_30": "Buffer narrowed ₹6,572 → ₹6,479 (-₹93, essentially noise)", "note": "Book at -0.35%, ~65 bps inside trigger band. Drift rate has slowed materially from the 11:00 → 11:30 window (~₹2,700 / 30 min) to ~₹95 / 30 min. Trajectory decelerating."},
+    "trigger_a_extreme_book_below_neg_2_pct": {"fired": false, "value": -0.0035, "threshold": -0.02, "buffer_inr": 16436.00, "note": "Far inside; not near."},
+    "trigger_d_bfsi_above_0_37":              {"fired": false, "value": 0.3594, "threshold": 0.37, "buffer_pp": 1.06, "delta_vs_11_30": "+0.06 pp (flat)", "note": "Compositional creep only; no BFSI admission. AUBANK mark softened while PNBHOUSING firmed — net BFSI value +₹40. No firing trigger."},
+    "trigger_d_extreme_bfsi_above_0_40":      {"fired": false, "value": 0.3594, "threshold": 0.40, "buffer_pp": 4.06, "note": "Not near."},
+    "trigger_e_mahabank_below_neg_6_pct":     {"fired_prior_tick": true, "value": -0.0644, "threshold": -0.06, "note": "Already fired at 11:00 (min_sl_pct 0.005 → 0.01). Current mark -6.44% is a 20-bps recovery from the -6.64% seen at 11:13. Does NOT re-fire; the lever is in place."},
+    "trigger_e_extreme_mahabank_below_neg_8_pct": {"fired": false, "value": -0.0644, "threshold": -0.08, "buffer_bps": 156, "fire_line_price": 74.98, "note": "Buffer widened by 20 bps vs 11:30 (from -6.64% → -6.44%). Not near HIGH elevation."},
+    "trigger_f_strategy_silence_past_2h":     {"fired": false, "silence_minutes": 77, "threshold_minutes": 120, "buffer_minutes": 43, "note": "Silence clock at 1h16m post the 10:43:24 ADANIPOWER SELL. Approaching the 2h threshold but not tripped. If no activity by 12:43, this leg of the composite HIGH meta-trigger flips ON."},
+    "trigger_meta_high_composite":            {"fired": false, "components": {"strategy_silent": false, "book_below_neg_0_5_pct": false, "mahabank_below_neg_5_5_pct": true}, "note": "1-of-3. Strategy-silence leg will flip to TRUE at 12:43 if no action; book-negative leg remains 15 bps inside its threshold. MAHABANK leg continues firing but its intensity eased +20 bps."},
+    "trigger_aubank_triangle":                {"fired": false, "legs": {"gain_above_1pct": false, "unacted": false, "oversize": true}, "note": "Triangle 1-of-3. Gain leg cooled further to +0.08%; unacted leg FALSE (strategy active today); oversize leg persists (grandfathered drift 18.54%, -0.09 pp vs 11:30)."},
+    "trigger_hindunilvr_watch":               {"fired": false, "value": -0.0266, "note": "NEW this tick. No pre-specified trigger on HINDUNILVR individually, but flagging the 133-bp widening over the last hour. Would join a composite if book broke below -0.5% and this continued to extend."}
+  },
+  "findings": [
+    "Book essentially STABLE vs 11:30 tick: total value ₹996,562 → ₹996,514 (-₹48, -0.005%). Deployment flat at 67.44% (2.56 pp under the 0.70 override cap). Cash unchanged at ₹324,460 — admission surface remains open.",
+    "MAHABANK marginally RECOVERED +20 bps: -6.64% (11:13) → -6.44% (11:42). Still 44 bps past the 11:00 min_sl_pct fire line but the trajectory slope is the first positive tick since Day-3 market open. The 156-bps buffer to the -8% HIGH-elevation extreme widened modestly.",
+    "HINDUNILVR is the NEW watch item. Widened -1.33% (10:43) → -2.66% (11:42), +133 bps in ~1h. Now the second-largest single-name drag at -₹1,260 MTM on a 4.63%-of-capital position. Position-size small enough that no configured trigger fires, but trajectory is directional. Will escalate if the -4% threshold is tested OR if a HINDUNILVR+MAHABANK double-drag coincides with book below -0.5%.",
+    "PNBHOUSING COUNTER-BALANCE strengthened further: +2.69% → +4.01%, +132 bps over the hour. This single position is absorbing most of the MAHABANK + HINDUNILVR drag today. Largest absolute gainer on the book at +₹3,160 MTM.",
+    "BFSI cluster flat-ish at 35.94% of capital (vs 35.88% at 11:30, +0.06 pp compositional creep as PNBHOUSING firmed). Buffer to the 37% d-trigger at 1.06 pp. No BFSI admission — the admission-surface opening has been unused, a clean signal the strategy layer is not yet re-stacking the cluster post-SELL.",
+    "Daily P&L -₹3,488.75 (-0.35% of portfolio). Buffer to -1% findings trigger ₹6,479 (narrowed just ₹93 vs 11:30 — the drift rate decelerated from ~₹2,700/30min at 11:00 to ~₹95/30min this window). Loss-gate buffer ~₹26,420. The negative slope of the 10:30–11:30 window has flattened.",
+    "Strategy silence clock at 1h 16m since ADANIPOWER SELL (10:43:24). Approaching but 43m inside the 2h strategy-silence threshold. Composite HIGH meta-trigger remains 1-of-3 (MAHABANK leg only). If no action by 12:43:24, silence leg flips TRUE and meta becomes 2-of-3 — but the book-negative leg is still 15 bps inside its -0.5% threshold, so the composite HIGH would still not fire on 2-of-3 alone.",
+    "AUBANK triangle dispersed further: gain leg cooled +0.65% → +0.08% (now essentially flat), unacted leg still FALSE (strategy is active today), oversize leg still TRUE at 18.54% (grandfathered drift, now narrowed -0.09 pp). 1-of-3 legs — lowest triangle intensity since Day-1.",
+    "No new trades since 10:43:24; no OPEN orders; pending-order book continues empty. Structurally, the book is in a quiet-hold state: no new admission, no new exit, no OPEN gating to monitor."
+  ],
+  "actions_taken": [],
+  "hold_rationale": "No numeric overrides changed this tick. (1) No spec-hard trigger fired: book at -0.35% (inside -1%), MAHABANK at -6.44% (improved 20 bps — past the 11:00 fire line but that lever is already in place, nowhere near the -8% HIGH-elevation threshold), BFSI at 35.94% (inside 37%), strategy silence 1h 16m (inside 2h), deployment 67.44% (under cap). (2) min_sl_pct was just fired 60 min ago (11:00, 0.005 → 0.01) on MAHABANK's -6.42% breach — stacking a second SL-floor lever on a partial recovery would be counter-signal. (3) The admission surface opened via the two SELLs has been UNUSED for 1h 16m — tightening now to re-close it without a firing trigger would friction the very SELL-first discipline the system is trying to reinforce. (4) HINDUNILVR's 133-bp widening is the most notable new datapoint, but at 4.63% of capital and -2.66% MTM, per-name risk is ~0.12% of portfolio — well inside tolerance, and HINDUNILVR is not on any pre-specified trigger list. (5) BFSI compositional creep of +0.06 pp is noise, not a signal. (6) Book drift-rate decelerated materially (from ~₹2,700/30min at 11:00 → ~₹95/30min at 12:00) — tightening daily_loss_limit_pct on a decelerating book inside buffer is theatrical. Disciplined HOLD is the correct action.",
+  "watch_triggers_next_tick": {
+    "if_strategy_silence_exceeds_2h_at_12_43_24": "Composite HIGH meta-trigger becomes 2-of-3 (silence + MAHABANK). Not yet HIGH (book-negative leg still inside buffer) but escalate the monitoring cadence. Flag that the opened admission surface is also ageing without use.",
+    "if_MAHABANK_pnl_pct_le_-7.00": "Consider tightening max_sl_pct 0.04 → 0.03 — pre-specified in 11:30 watch list; still pending.",
+    "if_MAHABANK_pnl_pct_le_-8.00": "FIRE: elevate risk_level to HIGH AND flag strategy_reviewer for same-day intervention. Current buffer 156 bps (widened 20 bps vs 11:30).",
+    "if_book_daily_pnl_pct_le_-1.0": "FIRE: daily_loss_limit_pct 0.03 → 0.025. Current buffer ₹6,479; drift rate decelerated to ~₹95/30min, so next 30 min expected to stay well inside.",
+    "if_book_daily_pnl_pct_le_-2.0": "FIRE: daily_loss_limit_pct 0.03 → 0.02 AND risk_level to HIGH.",
+    "if_HINDUNILVR_pnl_pct_le_-4.0": "NEW WATCH: tighten max_sl_pct 0.04 → 0.03 (blends with MAHABANK -7% trigger if both fire).",
+    "if_BFSI_pct_of_total_ge_37.0_via_admission": "FIRE: min_confidence 0.60 → 0.65. Current buffer 1.06 pp; would require a BFSI add to move materially.",
+    "if_new_BUY_through_opened_admission_surface": "Verify: (i) min_confidence ≥ 0.60, (ii) position size ≤ 15%, (iii) SL band within [1.0%, 4.0%], (iv) no 4th BFSI unless sub-36% post-admission, (v) no Power re-add (cluster just resolved). Apply fire (d) pre-emptively if the BUY is BFSI to prevent re-stacking.",
+    "if_strategy_executes_MAHABANK_SELL": "Risk_level candidate for LOW step-down. Would resolve the -6% breach and the single-name drag; book likely flips positive on the realized reduction.",
+    "if_strategy_executes_AUBANK_TRIM_below_15pct_capital": "Risk_level candidate for LOW step-down. Resolves the longest-standing structural grandfathered breach."
+  },
+  "config_state": {
+    "active_overrides": {
+      "min_confidence": 0.60,
+      "max_position_pct": 0.15,
+      "max_deployed_pct": 0.70,
+      "default_sl_pct": 0.015,
+      "min_sl_pct": 0.01,
+      "max_sl_pct": 0.04
+    },
+    "last_override_change": "2026-04-24 11:00:00 (min_sl_pct 0.005 → 0.01)"
+  },
+  "housekeeping": {
+    "risk_config_state": "Unchanged — no override added, removed, or modified this tick. Changelog untouched.",
+    "output_file": "/home/ubuntu/trading/ai-trading-bot/src/agents/outputs/2026-04-24/risk_assessment_1200.json",
+    "next_scheduled_tick": "12:30 IST — watch: (i) strategy silence crossing 2h at 12:43, (ii) MAHABANK trajectory (20 bps recovery this tick — does it continue or reverse?), (iii) HINDUNILVR widening past -3%, (iv) any admission through the opened surface, (v) book daily_pnl_pct drift rate (currently decelerated)."
+  }
+}

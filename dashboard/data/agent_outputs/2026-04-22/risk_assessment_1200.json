@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-04-22 12:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 773440.0,
+    "deployed_pct": 22.66,
+    "holdings_count": 3,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Regime shift since the last tick: portfolio moved from 100% cash at 11:30 to 3 CNC holdings at 12:00. Today's trades table shows three BUY fills — MAHABANK 1200 @ ₹81.5 (₹97,800), PNBHOUSING 80 @ ₹984.0 (₹78,720), GOLDBEES 400 @ ₹125.1 (₹50,040) — total deployed ₹2,26,560, leaving ₹7,73,440 cash. No intraday positions (paper_positions is empty), no sells, no realized P&L.",
+    "Deployment level: 22.66% deployed vs 77.34% cash. Comfortably below the 80% max_deployed_pct ceiling with ~57 percentage points of headroom before the cap binds. Adequate dry powder remains for additional opportunities today.",
+    "Position sizing: largest single-name exposure is MAHABANK at 9.78% of total capital — roughly half the 20% max_position_pct cap. PNBHOUSING 7.87%, GOLDBEES 5.00%. All three comfortably inside the per-name limit.",
+    "Sector concentration: financials exposure is MAHABANK (PSU bank) + PNBHOUSING (housing NBFC) = ₹1,76,520 / ₹10,00,000 = 17.65% of total capital, i.e. ~77.9% of the deployed book. This is a notable single-sector tilt, though not alarming at the portfolio level because absolute exposure stays well under the 20% per-name cap and total deployment is low. Worth watching if further entries land in the same sector.",
+    "Correlated exposures: MAHABANK and PNBHOUSING are both interest-rate-sensitive Indian financials with PSU/PSU-adjacent parentage and would likely co-move on rate-cycle, credit-policy, or PSU re-rating news. GOLDBEES (gold ETF) is a natural offset — gold typically hedges against financial-sector stress and rupee weakness, so the book has some built-in diversification despite the narrow name count.",
+    "Daily loss: ₹0 realized, ~₹0 unrealized (fills are fresh, prices ≈ cost). The 3% daily-loss limit (₹30,000) is not engaged. Drawdown-reduce (10%) and drawdown-halt (15%) thresholds are inapplicable.",
+    "Active override: min_confidence = 0.55 (raised from base 0.50 by strategy agent on 2026-04-20). The three entries fired today cleared this floor, so the override is not suppressing legitimate signal. No reason to revisit it from a risk standpoint this tick.",
+    "No guardrail breach across any dimension — deployment, per-name size, sector size, daily P&L, or drawdown. Risk level LOW."
+  ],
+  "actions_taken": [
+    "No guardrail changes made. All exposure metrics are well inside limits (max position 9.78% vs 20% cap; deployment 22.66% vs 80% cap; daily loss 0% vs 3% cap). The financial-sector tilt is worth monitoring but is not yet a risk event — tightening per-name or per-sector caps now would preemptively block the strategy layer without any measurable risk signal justifying it. Existing 0.55 min_confidence override is retained."
+  ]
+}

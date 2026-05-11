@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-11 09:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 998142.09,
+    "cash": 371382.09,
+    "deployed_pct": 62.79,
+    "holdings_count": 14,
+    "positions_count": 0,
+    "daily_pnl": 0
+  },
+  "findings": [
+    "overrides:{} has held empty since 2026-05-05 16:00 EOD (~137 hr / 5.7 days including weekend gap) — bot is operating at base config floor on every lever; the weekly strategy review (2026-05-09) confirmed loosening is impossible from here and tightening hasn't been needed.",
+    "Deployment 62.79% (cost basis: 14 holdings ₹626,760 / total ₹998,142.09) sits in the healthy active-trader band: 12.79 pp above the 50% chronic-under-deployment threshold and 17.21 pp shy of the 80% max-deployed cap. Idle-capital concern absent.",
+    "No daily P&L event: today is Monday 2026-05-11 pre-market (NSE opens 09:15); zero realized P&L on the session ledger so far; full -3% daily-loss buffer (~₹29,944) intact.",
+    "Position-size band 1.95%–7.89% with 12/14 names tightly clustered in 3.78%–7.89%. Max PNBHOUSING 7.89% (12.11 pp under 20% cap). Two sub-3% outliers (DABUR 1.95%, CAMS 2.02%) on a 14-name book is not a hedging-against-self signature — >85% of names sit in the primary cluster.",
+    "Sector composition diversified across 9 buckets on cost basis (% of total ₹998,142.09): BFSI/NBFC 14.65% n=3 / Auto-Forging 9.36% n=2 / Specialty Chem 8.83% n=2 / FMCG 6.88% n=2 / Gold-ETF 5.01% / Pharma 4.86% n=1 / Defense+Rail 4.85% / Cables 4.56% / IT 3.78%. Largest cluster (BFSI) retains 20.35 pp buffer to 35% cap.",
+    "Signal-acceptance surface fully open at base min_confidence=0.50: zero high-confidence (≥0.70) BLOCKED rows in DB; every 5/8 admit (DABUR fill, BHARATFORG, POLYCAB, SRF, PIDILITIND, WOCKPHARMA, ABCAPITAL re-entry, BAJAJ-AUTO) cleared the floor without gate friction. No anti-block signal to relax.",
+    "SL geometry validated by six 5/8 exits inside ±5% bounds (ADANIPORTS +1.59%, TITAGARH +0.16%, NAVINFLUOR +2.79%, HAL +1.96%, ABCAPITAL -0.94%, LUPIN -3.66%). Base SL band six-times-validated this week — tightening would friction freshly-validated geometry.",
+    "Macro premarket (per 09:00 premarket_brief): GIFT Nifty +0.2-0.4% gap-up implied; US records (S&P 7,399, Nasdaq 26,247); Brent ~$101 (Auto headwind on BHARATFORG+BAJAJ-AUTO, Gold/Defense tailwind on GOLDBEES+GRSE); INR ~93 (Pharma/IT export tailwind on WOCKPHARMA+COFORGE); persistent FII outflows; India CPI print tomorrow 5/12 (rate-sensitive node on PNBHOUSING+ABCAPITAL); DRREDDY/CIPLA earnings 5/12 (read-across to WOCKPHARMA); no holding exposure to today's INDHOTEL Q4 or 5/13 HAL print. Book ballast: defensives (FMCG 6.88% + Pharma 4.86% + Gold 5.01% + Defense 4.85% = 21.60%) provide reasonable counter-cyclical sleeve. Pre-emptive tighten on forecasts that have not fired manufactures friction without trigger.",
+    "Pending-order state delta vs 5/8 EOD: LAURUSLABS BUY 16 @ ₹1,226 (placed 5/8 14:21:45, OPEN at 5/8 15:30) FILLED this morning at 09:00:20 — trades.status=COMPLETE but paper_holdings has not yet reflected the admission (same orchestrator state-sync lag pattern flagged in weekly review: 23/41 weekly blocks were holdings-snapshot artifacts). On reconciliation: +1.91% Pharma position (Pharma sleeve widens n=1 → n=2), deployment lifts ~62.79% → ~64.76%, total conserved. Not risk-config scope; flagged for next-tick re-check. HFCL BUY 600 @ ₹133.5 still OPEN — ~4 calendar days stale since 2026-05-06 10:16:40 — strategy/broker reconciliation scope, not risk-config bite.",
+    "Distress meta-trigger 0/3: max position 7.89% << 20%, largest sector 14.65% << 35%, deployment 62.79% << 80%. No tighten leg fires."
+  ],
+  "actions_taken": [
+    "HOLD — overrides:{} unchanged (36th consecutive HOLD tick). No tighten because all distress legs read 0/3 and signal-acceptance / SL geometry empirically non-binding. No loosen because every lever is already at base — config.yaml is the floor in the loose direction by spec.",
+    "Pre-armed Day-15 watch items: (a) 09:15 NSE open gap reaction (BFSI weak Friday, IT/Pharma stronger); (b) any new BFSI admit pushing cluster >22% → max_sector_pct re-arm; (c) any new Auto admit pushing cluster >15% on Brent $101 backdrop → max_sector_pct re-arm; (d) any high-conf (≥0.70) BLOCK → immediate config-issue surface (no base-floor relief possible but signals a defect); (e) realized P&L crossing -1.0% (~-₹10,000) → loss-gate review; (f) any new admit at conf <0.55 → conf-floor re-arm check; (g) any single position crossing 12% → max_position_pct re-arm; (h) deployment crossing 75% → max_deployed_pct headroom; (i) LAURUSLABS paper_holdings reconciliation expected next tick (post-fill cost basis ₹646,376, deployment 64.76%, Pharma sleeve n=2); (j) HFCL ~4-day-stale OPEN — strategy/broker scope; (k) tomorrow's (5/12) India April CPI print is the major near-term macro node on rate-sensitive BFSI/NBFC trio (PNBHOUSING+CAMS+ABCAPITAL combined 14.65%); (l) DRREDDY/CIPLA earnings 5/12 — Pharma read-across to WOCKPHARMA (+post-fill LAURUSLABS)."
+  ]
+}

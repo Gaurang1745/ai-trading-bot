@@ -1,0 +1,42 @@
+{
+  "date": "2026-05-05",
+  "agent": "strategy_review",
+  "session": "EOD",
+  "changes": [
+    {
+      "id": 1,
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides block",
+      "what": "Emptied the overrides block (set to {}). Reverted default_sl_pct override 0.015 → base 0.02 and min_sl_pct override 0.01 → base 0.005. Override count 2 → 0. Logged a strategy_review changelog entry on top of the day's 14 risk_monitor entries.",
+      "why": "Day-11 evidence empirically refutes the SL-discipline thesis used to defend these two overrides through 14 risk-monitor HOLD ticks today. (a) NAVINFLUOR was admitted at 11:13:31 with stop_loss=6900=entry — a 0% SL well below the 1% min_sl_pct floor — and the engine ALLOWED it (guardrail_log is_valid=1, no warning). The override did NOT catch the worst SL submission of the day, undermining the claim that it was 'actively-binding for SL discipline.' (b) Recent 'losses' the override defended (GESHIP -1.27%, BAJAJ-AUTO -0.55%, EXIDEIND -2.5%) were DISCRETIONARY pre-SL exits driven by binary-event / governance / R:R reasoning — not SL fires. The strategy was doing the risk work; the override gets credit for outcomes it did not produce. (c) PHARMABEES exit at 10:11:43 explicitly cited 'Stored SL 23.75 ~1% below CMP — extremely tight, one normal downtick stops out' — direct evidence the 1% floor was constraining the strategy into preemptive booking rather than letting the trail-gap rule (Rule 14c, 1% floor) do its work. (d) The 14-tick HOLD pattern recapitulated the same 'SL-discipline thesis is unrefuted' justification without new evidence — exactly the rationalized-inaction shape the prompt warns against. (e) Original 04-22 MAHABANK 10.4% SL blow-up trigger is 9+ trading days stale; the 05-04 today-admit 0W/2L losses (BAJAJ-AUTO conf 0.66 + EXIDEIND conf 0.68) were ADMITTED at SLs well within the BASE bands — neither rationale is presently load-bearing.",
+      "expected_impact": "Hot-effect immediate (GuardrailEngine re-reads risk_config.yaml on mtime change). Strategy can now use sub-1% SLs on stable-name plays where appropriate; default SL pads back to base 2% from 1.5%, giving more room on lower-volatility names. System_prompt-vs-guardrail drift on SL placeholders is eliminated. Per-trade risk discipline now sits in (i) the new Rule 16 SL-direction check, (ii) Rule 5 risk-budget cap (0.5% per name), (iii) strategy's own conviction-scaled sizing — none of which depended on the override floor. If a future loss is genuinely a 'too-tight base SL' problem, we'll have evidence to re-tighten; until then, holding non-binding (or actively-harmful) overrides has measurable opportunity cost (PHARMABEES preemptive book + the rationalized-inaction shape the override stack itself contributed to)."
+    },
+    {
+      "id": 2,
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 16 — R:R-EXECUTION CONSISTENCY",
+      "what": "Added new SL-DIRECTION CHECK clause requiring stop_loss strictly different from entry AND on the correct side of the trade direction (BUY: stop_loss < price; short SELL: stop_loss > price). Added a Day-11 NAVINFLUOR prior-failure-mode citation: stop_loss=6900=entry, target=7300, reasoning narrative claimed 'SL 6650 = -3.6%' but the executed `stop_loss` field landed at 6900. R:R math is undefined (divide by zero), engine accepted, position carries CNC into next session with 0% downside protection.",
+      "why": "Today's NAVINFLUOR submission proved the existing Rule 16 R:R-math check is insufficient: |entry - stop_loss| = 0 produces an undefined value, not a clean rejection by the engine. The reasoning self-described a 3.6% SL but the executed `stop_loss` field landed at entry — same root cause as the 04-30 BAJFINANCE R:R-mismatch (Rule 16) but a strictly worse variant. Sub-floor R:R is bad; divide-by-zero with 0% downside protection on a CNC carry is worse. The strategy must explicitly verify the SL number is on the correct side of entry before submitting, not rely on the engine to catch SL=entry.",
+      "expected_impact": "Forward-looking on next bot restart when system_prompt is rebuilt. Reduces probability of SL=entry submissions by adding explicit final-step audit on the SL field. Does NOT replace the recommended engine-side hardening (which is filed as a recommendation in the daily review) — the engine should still reject SL=entry, but the prompt now flags this as a known failure mode rather than relying on the validator alone. Combined with the existing Rule 16 R:R math check, the strategy now has two independent gates against SL submission errors."
+    },
+    {
+      "id": 3,
+      "file": "src/ai/system_prompt.py",
+      "section": "TRADING PHILOSOPHY",
+      "what": "Added new bullet stating 'A morning admit cluster does NOT \"satisfy\" the session.' Explicit prose: watchlist research running through the afternoon is meant to feed new admits when fresh BULLISH-rated candidates with +0.05+ confidence modifiers surface — regardless of whether 2-3 names were already added in the morning. Cited Day-11 as the failure mode: 11:13 cluster of 3 names → 257-minute admit freeze → 5+ BULLISH candidates declined (M&M +0.10, ADANIGREEN +0.08, LALPATHLAB +0.10, CAMS +0.13, MEESHO +0.05) → deployment held at 48.40% with ~₹517K idle.",
+      "why": "Today's admit cadence collapsed into a single 22-second window (11:13:23-11:13:45) and then froze for ~257 minutes through to EOD. This is NOT the 'cumulative tightening made the bot over-cautious' shape — overrides were being actively reverted in the same hours (3 reverts executed today) — it is an ANCHORING shape. The morning admit decision was treated as 'the day's view' and afternoon research was used to confirm rather than to add. The existing 'tick-level' philosophy bullet ('a tick that only emits HOLDs and never a BUY when the watchlist contains qualifying setups is also incomplete') addresses the per-tick version but not the session-level version. Day-11 evidence shows the session-level version is the live failure mode: 1 of 12 decision cycles produced admits (8% admit rate vs Day-10's ~46%), and 5+ qualifying afternoon candidates were declined.",
+      "expected_impact": "Forward-looking on next bot restart. Should bias the afternoon decision cycles toward converting fresh BULLISH-rated candidates into admits when deployment is below the soft target. Combined with the empty-overrides change (which gives the strategy the regulatory headroom to push deployment higher), the strategy now has both the prose nudge and the freedom to act on it. Day-12 watch metrics: (i) admits distributed across ≥3 decision cycles, not concentrated in 1 cluster; (ii) EOD deployment >55%; (iii) admit rate vs Day-10's 46% baseline."
+    }
+  ],
+  "summary_metrics": {
+    "trades_today": 6,
+    "wins": 2,
+    "losses": 1,
+    "total_pnl": 909.20,
+    "eod_deployment_pct": 48.40,
+    "override_count_eod_pre_review": 2,
+    "override_count_post_review": 0,
+    "files_modified": 2,
+    "individual_changes": 3
+  }
+}

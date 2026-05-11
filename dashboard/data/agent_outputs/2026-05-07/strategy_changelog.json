@@ -1,0 +1,68 @@
+{
+  "date": "2026-05-07",
+  "agent": "strategy_review",
+  "session": "EOD",
+  "changes": [
+    {
+      "id": 1,
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 18 — ZERO-ADMIT DORMANCY DISCIPLINE — DO NOT FREEZE THE ADMIT BOOK (NEW)",
+      "what": "Added new Rule 18 immediately after Rule 17 (within the _TEMPLATE string, before its closing triple-quote). Rule 18 mirrors Rule 17 but on the admit side: for any TRADING_DECISION cycle where deployment is below the soft <<MAX_DEPLOYED_PCT>> target AND watchlist research has surfaced one or more BULLISH-rated candidates with confidence_modifier >= +0.05, the strategy MUST do one of (a) emit at least one BUY, (b) emit a CANCEL on a stale working order, or (c) cite EXPLICITLY by-name in market_assessment.reasoning / watchlist_notes WHY each qualifying BULLISH candidate was rejected. Valid reject reasons enumerated (binary event within 3 sessions / governance overhang / cluster cap / re-entry cooldown / R:R fails / valuation stretched); 'I already added enough' explicitly listed as NOT valid for an under-deployed book. Includes the audit-question framing for EOD self-review and an anti-anchoring note that sub-sector concentration tags don't preclude an add when the 35% cap has room. Cites Day-13 (today) as the prior failure mode in detail: 48 cycles, 664 sub-decisions, 0 BUYs, 17 BULLISH-rated watchlist names with mods up to +0.13, deployment 53.57%, cash idle Rs 462,827, risk overrides empty {}, risk monitor in 21-tick HOLD with composite distress 0/3. Frames Day-13 as the INVERSE of Day-12's failure (yesterday over-traded the exit side with -Rs 5,029 from 5 preemptive closes; today under-traded the admit side at Rs 0 realized but Rs 462K idle) and explicitly states that Rule 17 + Rule 18 must operate together: let SLs fire AND walk admit candidates explicitly each cycle.",
+      "why": "Today's data is the textbook opportunity-cost case the experiment is designed to surface. ALL 48 strategy cycles were 100% management-side: 130+ MODIFY trail-SL operations (validated by guardrails) + 480+ HOLD slots + 3 EXIT attempts (all broker-rejected on a Dhan ticker outage; the strategy's intent to act was visible but the data feed broke). ZERO new BUY decisions emitted across the full session. Watchlist research batches b0-b5 produced fresh BULLISH ratings on CAMS (+0.10), GRSE (+0.10), MRF (+0.05), CHOLAHLDNG (NEUTRAL but interesting catalyst), GABRIEL (NEUTRAL momentum reversal), plus the 11 holdings re-rated bullish. None admitted, none cited as rejected with a per-name reason. Risk-side levers were entirely floored at base (overrides {}) — so the dormancy was not externally imposed; it was strategy-side decision logic. The prompt already had a paragraph (lines 354-372) covering the morning-admit-cluster freeze pattern (Day-11), but that rule's framing assumed an existing morning cluster to anchor against. Today's pattern was the whole-day variant: no morning anchor was ever set, so the existing rule never fired. Rule 18 closes that gap with explicit per-name walk-through requirement. Override-side fixes considered and rejected: every relax lever (min_confidence 0.50, max_position_pct 0.20, max_deployed_pct 0.80, min_risk_reward 1.5) is already at base which is the floor by spec; risk_config.yaml cannot loosen further. The decision being mis-made is by the LLM at decision time, so the fix belongs in the prompt where the admit decision is generated. Companion update to the trading-philosophy paragraph (lines 354-372) cross-links the whole-day variant to Rule 18.",
+      "expected_impact": "Forward-looking on next bot restart (system_prompt is built at boot from config.yaml + _TEMPLATE). No immediate behavioral change today — Day-13 is closed. Day-14 watch metrics: (i) cycles_with_admits / total_cycles ratio: should rise from today's 0/48 = 0% to a non-zero rate when watchlist has BULLISH candidates and deployment < 60%. Realistic target: >= 2 admit cycles per 48-cycle session unless a fact-based risk-off case is articulated in market_assessment.reasoning. (ii) Per-cycle reject rationale presence: when no admit is emitted, market_assessment.reasoning or watchlist_notes should name at least one BULLISH watchlist candidate and its disqualifying reason; silent skips on qualifying names should drop toward zero. (iii) EOD deployment stability: should track upward from 53.57% toward the 60-70% band on sessions with healthy watchlist supply, absent active risk-off triggers. (iv) NOT a target: realized P&L. The point is to put admission decisions back on the table; whether those admits win or lose is the next question. A flat-but-decided session is preferable to a flat-but-anchored session even if the headline P&L is identical."
+    },
+    {
+      "id": 2,
+      "file": "src/ai/system_prompt.py",
+      "section": "Trading Philosophy — morning admit cluster paragraph (EXTENDED)",
+      "what": "Added a final sentence to the morning-cluster paragraph in the TRADING PHILOSOPHY section cross-linking the whole-day-zero-admit case to Rule 18 (Day-13). Two-line addition; preserves all existing Day-11 content and framing.",
+      "why": "The morning-admit-cluster paragraph already covered the intra-day freeze pattern (admit early, then anchor) but its framing implicitly assumed a morning admit cluster existed. Today demonstrated the same anchoring failure WITHOUT a morning trigger — the strategy never opened a single admit slot. Cross-linking the two cases keeps the philosophy section coherent and tells the reader where the harder-form Rule 18 lives.",
+      "expected_impact": "Reinforces Rule 18 from the philosophy side. No incremental behavior beyond what Rule 18 produces."
+    }
+  ],
+  "non_changes_with_rationale": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "decision": "NO CHANGE — overrides block remains empty {}",
+      "rationale": "Today's dormancy was strategy-side, not guardrail-side. Risk monitor was in 21-tick HOLD with composite distress 0/3, daily P&L exactly 0.0, max position 7.90% vs 20% cap, deployment 53.57% vs 80% cap, zero high-conf risk_config blocks all session. The 1 guardrail block today (HFCL phantom MODIFY at 11:16:59) was a strategy/broker reconciliation artefact, NOT a real signal block. Every relax lever is already at base which is the floor by spec — there is nothing to revert and no further loosening possible at the override layer. Loosening must happen in the prompt's decision logic, which is what Rule 18 does."
+    },
+    {
+      "file": "config/config.yaml",
+      "decision": "NO CHANGE — base parameters unchanged",
+      "rationale": "min_confidence (0.50), min_risk_reward (1.5), max_position_pct (0.20), max_sector_pct (0.35), max_deployed_pct (0.80), min_cash_buffer_pct (0.20), default_sl_pct (0.02), max_sl_pct (0.05), daily_loss_limit_pct (0.075) are all calibrated permissively. None of these bound today's decisions — every BULLISH watchlist candidate could in principle have cleared the floors. The constraint that produced today's zero-admit shape was the LLM-side decision logic, not numeric thresholds. Numeric tuning would not change today's pattern; loosening 0.50 -> 0.45 min_confidence does not help when zero candidates were ever evaluated for admission."
+    },
+    {
+      "file": "Dhan ticker_data feed (broker-side infrastructure)",
+      "decision": "FLAGGED — outside strategy review scope",
+      "rationale": "2,603 'Dhan ticker_data failed: error_message=null' errors logged today. This caused all 3 EXIT attempts (TITAGARH 10:44, COFORGE 11:48, GOLDBEES 13:47) to be REJECTED at the broker layer with price=0.0 — not a strategy decision quality issue, an infrastructure issue. The strategy's intent to exit was correct (TITAGARH +0.86% binary-event approach, COFORGE +1.6% gap-fill risk, GOLDBEES -0.78% thesis fading); the broker just couldn't price the orders. Risk assessment 1530.json correctly flagged this as 'payload-shape issue at the strategy layer, NOT a risk-config lever' — but the actual root cause is the broker data feed. Not fixable from the strategy review surface; needs ops attention on the Dhan client integration. Mentioned here so it's not conflated with Rule 18's admit-side dormancy diagnosis."
+    }
+  ],
+  "summary_metrics": {
+    "trading_decision_cycles": 48,
+    "total_sub_decisions": 664,
+    "new_buys_today": 0,
+    "exits_attempted": 3,
+    "exits_filled": 0,
+    "exits_broker_rejected": 3,
+    "modify_actions_validated": 130,
+    "hold_actions": 480,
+    "wins": 0,
+    "losses": 0,
+    "total_realized_pnl": 0.0,
+    "eod_cash": 462827.37,
+    "eod_holdings_cost": 534000,
+    "eod_total_value": 996827.37,
+    "eod_deployment_pct": 53.57,
+    "watchlist_bullish_candidates": 17,
+    "watchlist_bullish_admits": 0,
+    "admit_rate": 0.0,
+    "guardrail_blocks_real": 0,
+    "guardrail_blocks_reconciliation_only": 1,
+    "override_count_eod_pre_review": 0,
+    "override_count_post_review": 0,
+    "risk_monitor_consecutive_holds": 21,
+    "files_modified": 1,
+    "individual_changes": 2,
+    "dhan_ticker_failures": 2603
+  }
+}

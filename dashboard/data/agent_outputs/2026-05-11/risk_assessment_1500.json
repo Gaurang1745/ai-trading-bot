@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-11 15:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 969621.51,
+    "cash": 443924.51,
+    "deployed_pct": 54.22,
+    "holdings_count": 13,
+    "positions_count": 0,
+    "daily_pnl": -28520.58
+  },
+  "findings": [
+    "Daily realized P&L is -₹28,520.58 (-2.85% of ₹1M baseline), dominated by a single MCX exit at -₹31,245.60. Offset partially by PNBHOUSING +₹7,436.80. The remaining 7 closes were small (-₹1,539 to +₹311); LALPATHLAB -₹91.65 was the latest exit (between 14:30 and 15:00). MCX is the tail event, not a broad-book deterioration.",
+    "Realized loss sits at 71% of the active 4% daily_loss_limit_pct override (3.8% of base 7.5%). The override is meaningfully biting — it gates further admissions on a day with one confirmed bad trade — but is not at the trip line.",
+    "Book is well-diversified: 13 holdings, largest single name GOLDBEES at 5.16% of cost basis (far inside max_position_pct 0.20). Sector profile: FMCG 12.23% (MARICO+DABUR+TATACONSUM), Pharma 9.86% (LAURUSLABS+SUNPHARMA+TORNTPHARM), Capital Goods 9.60% (CGPOWER+POLYCAB), ETF 5.16%, Healthcare 5.01%, Auto 4.44%, Chemicals 4.02%, IT 3.89% — all sectors well under the 35% base cap.",
+    "Cost-basis deployment is 54.22% (₹525,697 deployed / ₹969,621.51 portfolio). Inside the 'moderate' band — not chronically idle (54% > 50% threshold), not pushing the 80% base cap.",
+    "Position-sizing is healthy with no all-sub-3% pattern: 10 of 13 holdings are 3.89%-5.16% of cost basis (well-sized conviction). Two outliers (DABUR 2.01%, LAURUSLABS 2.02%) appear to be earlier top-up/partial fills, not a sign of self-hedging.",
+    "Post-13:30-tighten activity (Day-15): one new admit (TORNTPHARM 6 @ ₹4,541 at 14:14:28, ~2.81% of cost basis) in 14:00→14:30; one small exit (LALPATHLAB SELL 5 sh, realized -₹91.65) in 14:30→15:00 — same-session BUY-then-SELL cycle of a tiny 0.86% sleeve; ~20+ MODIFY-SL trailing actions on profitable holdings (MARICO/COFORGE/LAURUSLABS) earlier in the afternoon; ZERO rejected admits in the 0.50-0.59 min_confidence band; ZERO new admit attempts since TORNTPHARM. The min_confidence=0.60 override has no firing evidence of binding friction yet.",
+    "TATACONSUM top-up BUY 20 @ ₹1,240 has been OPEN since 12:41:33 — now ~2h 20m stale. Persistent unfilled order suggests price hasn't returned to limit; strategy-layer concern, not a risk-monitor lever.",
+    "No firing trigger for tightening: daily-loss buffer holding, no concentration breach, no concerning admit cadence (1 BUY in 90 min post-tighten). No firing trigger for loosening: override is only 90 min old, two prior ticks (14:00, 14:30) held, no rejected legitimate signal observed."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block unchanged: daily_loss_limit_pct 0.04 (vs base 0.075, TIGHTER by 3.5pp) and min_confidence 0.60 (vs base 0.50, TIGHTER by 10pp). Third consecutive HOLD tick post-13:30 tighten (14:00, 14:30, now 15:00).",
+    "Rationale for not TIGHTENING daily_loss_limit_pct (0.04 → 0.035): realized -2.85% is real but contained; remaining 1.15pp buffer is appropriate for the 60 min remaining in the session. Stepping to 0.035 leaves only 0.65pp buffer — too easy to trip on a single normal-volatility loss and halt the session prematurely. No 2nd-name deterioration evident.",
+    "Rationale for not LOOSENING min_confidence (0.60 → 0.55 or base 0.50): override is only 90 minutes old; no evidence yet of legitimate-signal blocking (zero admit attempts observed in 0.50-0.59 band). Premature revert would surrender the post-MCX quality buffer without telemetry justifying it. Re-evaluate at 15:30 with 2 hours of post-tighten admission data.",
+    "Rationale for not LOOSENING daily_loss_limit_pct: today's MCX -3.1% single-trade event IS the kind of risk this override exists to gate against further compounding. Reverting to base 7.5% on a day where one bad trade has already cleared 38% of the base-cap budget would be procyclical and inconsistent with the evidence."
+  ]
+}

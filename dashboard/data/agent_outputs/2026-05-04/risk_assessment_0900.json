@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-05-04 09:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 587249.89,
+    "deployed_pct": 41.12,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 0
+  },
+  "current_overrides": {
+    "risk.min_confidence": 0.60,
+    "risk.max_position_pct": 0.15,
+    "risk.max_deployed_pct": 0.75,
+    "risk.default_sl_pct": 0.015,
+    "risk.min_sl_pct": 0.01,
+    "risk.max_sl_pct": 0.045,
+    "trading.max_sector_pct": 0.28
+  },
+  "sector_exposure_cost_basis": {
+    "BFSI": {"pct": 17.64, "names": ["PNBHOUSING 7.89%", "BANDHANBNK 5.01%", "BAJFINANCE 4.73%"]},
+    "Pharma": {"pct": 8.77, "names": ["SUNPHARMA 5.21%", "PHARMABEES 3.56%"]},
+    "Energy_OilGas_Mining": {"pct": 9.70, "names": ["ONGC 5.00%", "COALINDIA 4.70%"]},
+    "Gold_ETF": {"pct": 5.02, "names": ["GOLDBEES 5.02%"]}
+  },
+  "findings": [
+    "Day-10 09:00 premarket tick. Holdings + cash byte-identical to 04-30 EOD: 8 holdings (PNBHOUSING+GOLDBEES+SUNPHARMA+COALINDIA+BANDHANBNK+ONGC+PHARMABEES+BAJFINANCE) totaling ₹410,185, cash ₹587,249.89, total ₹997,434.89. No Day-9 (2026-05-01) trades — likely Maharashtra Day market holiday or weekend gap; no Day-10 trades yet.",
+    "Override stack reflects a holistic loosen versus the 04-30 EOD changelog reference state (changelog references min_confidence 0.65 / max_deployed_pct 0.65 / max_sl_pct 0.035 / max_sector_pct 0.22, file holds 0.60 / 0.75 / 0.045 / 0.28). Pattern matches the long-flagged Day-10 (~2026-05-04) holistic-stack-refinement review — appears to have been applied externally between EOD 04-30 and this tick. Current stack still imposes ~30 pp of notional tightening below base, down from the ~50.5 pp peak of EOD 04-30.",
+    "Sector concentration HEALTHY: BFSI 17.64% vs cap 28% (10.36 pp buffer), Pharma 8.77% (19.23 pp buffer), Energy 9.70% (18.30 pp buffer), Gold 5.02% (22.98 pp buffer). No sector near-binding; the just-loosened 0.28 cap is non-binding by 10+ pp on every sector.",
+    "Position sizing HEALTHY across the band: largest PNBHOUSING 7.89%, smallest PHARMABEES 3.56% — none near the 15% cap (7.11 pp buffer on the largest), none sub-3% suggesting bot is hedging against itself. The 0.15 cap remains non-binding.",
+    "Deployment 41.12% — sub-50% but max_deployed_pct cap (0.75) is non-binding by 33.88 pp. Under-deployment is signal-gated (strategy quiet 12:30 onward yesterday) not parameter-gated; loosening the cap further would not unlock additional admissions. The carry-over 8-holding book is mid-cycle rotation state, not chronic idle.",
+    "Daily loss gate entirely non-binding: 0 trades, ₹0 P&L today, base 0.075 cap = ₹74,807 of intraday loss before halt — full headroom.",
+    "Signal acceptance UNTESTED today (no admissions since 04-30 13:50 BAJFINANCE fill). The min_confidence loosen 0.65 → 0.60 should now admit the 0.60-0.62 band signals that 04-30 audit showed were being blocked (11:12:43 conf=0.62; 13:43:02 conf=0.60). High-conf (≥0.70) admission of 04-30 was ONGC 0.72 ADMITTED — the floor was not eating top-tier signal even at 0.65; at 0.60 it definitely does not.",
+    "Open carry-over watch: GESHIP CNC LIMIT order from 04-30 11:12 (30 @ ₹1542, trigger ₹1490) was 258 min stale at 04-30 EOD; status today not visible from holdings/positions tables but no fill telemetry — likely cancelled at session-end or still pending.",
+    "BAJFINANCE R:R = 1.41 (admitted 04-30 below base 1.5 floor, n=1 sub-1.5 admission) is still the only data point on min_risk_reward override seed. Today's gap behavior on BAJFINANCE will provide first n=1 outcome data on sub-1.5-R:R-admission distribution."
+  ],
+  "rearm_triggers_intraday": {
+    "tighten": [
+      "(a) any 4th BFSI name admitted → fire max_sector_pct 0.28 → 0.22 (revoke today's holistic loosen on a clean re-stacking signal, mirroring the Day-8 12:30 same-day revocation precedent)",
+      "(b) BFSI on full-fill > 22% → same 0.28 → 0.22 revocation",
+      "(c) any 3rd Pharma name OR Pharma > 14% on full-fill → fire 0.28 → 0.22",
+      "(d) any 4-name sector cluster emergence in any sector → fire 0.28 → 0.20",
+      "(e) any 3rd ≥3.5% SL admission today → fire max_sl_pct 0.045 → 0.035 (revoke today's holistic loosen)",
+      "(f) admit-then-exit-within-60-min pattern n=2 in single day → fire min_confidence 0.60 → 0.65 (revoke today's holistic loosen)",
+      "(g) any 2nd R:R admission below 1.5 floor → seed new min_risk_reward 1.5 → 1.55 override (BAJFINANCE 1.41 = n=1 first instance, ARMED)",
+      "(h) realized daily P&L < -₹15,000 (-1.5%) → fire daily_loss_limit_pct (no current override) base 0.075 → 0.05",
+      "(i) any single new admission with position size > 12% capital → fire max_position_pct 0.15 → 0.12"
+    ],
+    "loosen": [
+      "(j) sustained healthy book by 12:00 (0 BLOCKED admissions on confidence floor today, ≥1 admission cleared above 0.65 with profitable trail) → consider loosening default_sl_pct 0.015 → 0.020 toward base",
+      "(k) ≥2 high-conf (≥0.70) entries admitted by EOD AND deployment > 60% on full fill → consider loosening max_deployed_pct 0.75 → 0.80 (full revert to base)",
+      "(l) deployment > 65% sustained for 2+ trading days with no concentration breach → consider loosening max_position_pct 0.15 → 0.18"
+    ]
+  },
+  "actions_taken": [
+    "HOLD all 7 overrides at current loosened state (min_confidence 0.60, max_position_pct 0.15, max_deployed_pct 0.75, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.045, max_sector_pct 0.28). No firing trigger today and the holistic Day-10 loosens already shed ~20 pp of notional tightening vs 04-30 EOD — further loosening on this tick (premarket, no admissions yet) would be premature without intraday evidence to validate the recent loosens. Disciplined no-action."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-05-08 15:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 998142.09,
+    "cash": 371382.09,
+    "deployed_pct": 62.79,
+    "holdings_count": 14,
+    "positions_count": 0,
+    "daily_pnl": 1314.72
+  },
+  "findings": [
+    "State delta vs 15:00: DABUR limit @ ₹487 FILLED — admitted to paper_holdings (qty 40, cost ₹19,480). Pre-armed 15:00 watch item (a) RESOLVED via fill, not cancel-modify. Holdings 13 → 14; cost basis ₹607,280 → ₹626,760; cash ₹390,862.09 → ₹371,382.09; total ₹998,142.09 unchanged; deployment 60.84% → 62.79%.",
+    "Distress 0/3: max position PNBHOUSING 7.89% (12.11 pp under 20% cap), largest sector BFSI/NBFC 14.65% n=3 (20.35 pp under 35% cap), deployment 62.79% (17.21 pp under 80% cap).",
+    "Diversification improved by DABUR fill: FMCG widens 4.93% n=1 → 6.88% n=2 (MARICO + DABUR) — defensive sleeve restored to n=2 exactly as forecasted at 15:00. NINE sector buckets across 14 names: BFSI 14.65% n=3 / Auto 9.36% n=2 / Specialty Chem 8.83% n=2 / FMCG 6.88% n=2 (upgraded) / Gold-ETF 5.01% / Pharma 4.86% n=1 / Defense+Rail 4.85% / Cables 4.56% / IT 3.78%.",
+    "Position-size band 1.95%–7.89% with 12/14 names in 3.78%–7.89% tight cluster — DABUR 1.95% is sole sub-3% outlier (CAMS 2.02% second-smallest). Two sub-3% names on 14-name book is NOT tiny-everything anti-pattern: >85% of names sit in primary cluster, no hedging-against-self signature.",
+    "Daily P&L POSITIVE +₹1,314.72 (+0.131%) flat from 15:00 — full 3% daily-loss buffer (₹29,944.26) intact; 4W/2L pattern (gross wins ₹4,123.38 vs gross losses ₹2,808.66, loss-to-gross-win ratio 68.1%); six exits today all inside ±5% SL bounds — base SL band six-times-validated this session.",
+    "LAURUSLABS BUY 16 @ ₹1,226 still OPEN at 15:30 — ~68.3 min stale, just crossed 60-min surfacing threshold at ~15:21 (~9 min past); HFCL still pending ~53.7 hr; both strategy/reconciliation scope, NOT risk-config bite. Even on retroactive double-fill, deployment lifts to ~70.6% (still 9.4 pp under 80% cap).",
+    "Signal-acceptance surface fully open: zero high-confidence (≥0.70) blocks in today's session and across 9+ prior sessions; DABUR fill cleared base 0.50 floor with no gate friction; LAURUSLABS placement also cleared base — floors empirically non-binding for 9+ sessions including today's heaviest cadence.",
+    "Idle-capital concern further resolved: deployment 62.79% sits 12.79 pp above 50% chronic-under-deployment threshold, rising on each fill; today's busy ledger (8 admits including DABUR fill + 1 top-up + 6 exits + 1 working) = strategy actively rotating, not stalled.",
+    "Overrides block has been {} for ~71.5 hours since 2026-05-05 16:00 EOD reset — bot is operating on the floor; nothing to revert in loose direction (base IS the floor by spec, min_confidence cannot drop below 0.50 base, etc).",
+    "Macro backdrop (Iran/US tensions + PSU bank earnings cluster) unchanged; book reinforced post-DABUR fill — FMCG defensive sleeve restored to n=2; Auto/Forging Iran-tailwind sleeve at 9.36% n=2, Gold-ETF 5.01% risk-off ballast, Pharma 4.86% defensive ballast (pending LAURUSLABS would widen Pharma to n=2). BFSI tilt is sympathy-beta only (housing-finance + registrar + financial-conglomerate, not direct PSU-bank earnings beta)."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains {}. 35th consecutive HOLD tick. No tighten: 0/3 distress fires (max position 7.89% / largest sector 14.65% / deployment 62.79% all far from caps), positive daily P&L flat from 15:00, SL band six-times-validated this session, signal-acceptance surface non-binding through DABUR fill, FMCG diversification IMPROVED by fill (n=1→n=2). No loosen: every lever already at base — base is the floor in loose direction by spec, literally nothing to revert; idle-capital concern further resolved by fill (deployment 62.79%, +1.95 pp from 15:00, +12.79 pp above chronic threshold). Pre-emptive macro tighten declined — would manufacture friction without trigger and chill the freshly engaged admission cadence (LAURUSLABS still working at ~68 min, base-cleared)."
+  ]
+}

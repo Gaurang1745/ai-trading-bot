@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-05-05 11:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 516981.64,
+    "deployed_pct": 48.40,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "9 CNC holdings totaling cost basis Rs.484,875; 48.40% deployment (up +14.92pp from 33.48% at 11:00) on 3 fresh admits at 11:13. The under-deployment cited in the 10:00/10:30/11:00 ticks has materially resolved within this 30-min window without any further override changes.",
+    "Three new admits at 11:13: BHEL 130@380 conf 0.68 (Capital Goods, 4.93% of book), NAVINFLUOR 7@6900 conf 0.70 (Specialty Chem, 4.82%), SOBHA 35@1478 conf 0.68 (Realty, 5.16%). All three at conf 0.68-0.70, well above min_confidence 0.52 floor and even above the prior 0.55 override.",
+    "Sector spread now 8 distinct sectors: BFSI cluster 12.87% n=2 (PNBHOUSING 7.86% + BANDHANBNK 5.01%, buffer 22.13pp to base 0.35 sector cap); 7 single-name sectors (Gold ETF / Ports-Infra / Auto OEM / Defense / Capital Goods / Spec Chem / Realty). All sector caps quiet.",
+    "Position sizing healthy in 4.82-7.86% band: PNBHOUSING 7.86%, MARUTI 5.51%, SOBHA 5.16%, ADANIPORTS 5.09%, HAL 5.02%, BANDHANBNK 5.01%, GOLDBEES 4.99%, BHEL 4.93%, NAVINFLUOR 4.82%. Max position has 12.14pp buffer to base 0.20 cap; no sub-3% hedging-against-itself, no oversize risk.",
+    "Day realized P&L +Rs.909.20 (GESHIP -589.80 + PHARMABEES +510.00 + ANANTRAJ +989.00); buffer ~Rs.30,965 to base 3% daily_loss_limit. Position-side day P&L on the 3 new admits is intraday-pending (no closes yet).",
+    "Composite distress trigger 0/3 fires: (a) no n>=3 sector cluster (largest BFSI n=2); (b) no single-name >12% capital threat (max 7.86%); (c) day realized P&L positive.",
+    "0 BLOCKED on min_confidence floor across 7+ trading days — the override has never bound. Today's 3 admits at conf 0.68-0.70 also clear comfortably; no low-quality signal slipping through.",
+    "Yellow flag from 05-04 (today-admit ledger 0W/2L: BAJAJ-AUTO -Rs.570.50 conf 0.66 + EXIDEIND -Rs.1,433.90 conf 0.68) remains technically unresolved — today's 3 fresh admits are not yet closed. Today's only closes are carry-closes (PHARMABEES/ANANTRAJ profitable, GESHIP small loss).",
+    "10:00 partial revert test condition (min_confidence 0.55->0.52) has NOT been exercised: that commit licensed full revert only after 'admits in the 0.52-0.55 range performing cleanly.' Today's admits at 0.68-0.70 don't touch the 0.52-0.55 band, so the test signal hasn't materialized either way."
+  ],
+  "actions_taken": [
+    "HOLD all overrides unchanged: min_confidence 0.52, default_sl_pct 0.015, min_sl_pct 0.01. Override count 3 unchanged. No revert, no tighten.",
+    "Did NOT full-revert min_confidence 0.52 to base 0.50: the 10:00 commit set a clear test discipline — admits in 0.52-0.55 performing cleanly licenses the next revert step. Today's 3 admits at conf 0.68-0.70 leave that band untested. While the override is empirically non-binding (0 BLOCKED in 7+ days, no admit below 0.68 today), reverting on cosmetic grounds at 11:30 would short-circuit the pacing the prior commits committed to. The cost of holding is essentially zero given non-binding behavior.",
+    "Did NOT revert default_sl_pct (0.015) or min_sl_pct (0.01): these are the actively-binding SL levers — recent losses (GESHIP -1.27%, BAJAJ-AUTO -0.55%, EXIDEIND -2.5% on entry) all sat within the override-tightened SL geometry. SL-discipline thesis remains the strongest evidence in the override stack and is unrefuted by any subsequent activity.",
+    "Did NOT tighten: zero distress legs fire — (a) 8 distinct sectors with BFSI n=2 only and 22+pp buffer; (b) day P&L positive +Rs.909.20 with ~Rs.30,965 buffer to base 3% loss limit; (c) max position 7.86% well under base 0.20; (d) deployment healthily refilled 33.48%->48.40% on 3 admits with no over-deployment; (e) all new admits at conf 0.68-0.70, none at marginal quality; (f) no n>=3 sector cluster, no single-name >12% threat; (g) 0 BLOCKED in 7+ days indicates the entry-side floor is well-calibrated.",
+    "Reassess at 12:00. Key watchpoints: (1) whether today's 3 admits (BHEL/NAVINFLUOR/SOBHA) close cleanly to lift the 05-04 today-admit yellow flag, (2) whether any sub-0.55 admit arrives to actually test the loosened min_confidence floor, (3) whether deployment continues climbing past 50% as more admits land."
+  ]
+}

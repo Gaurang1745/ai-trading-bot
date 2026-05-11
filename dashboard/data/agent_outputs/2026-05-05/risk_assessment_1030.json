@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-05 10:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 666411.64,
+    "deployed_pct": 33.48,
+    "holdings_count": 6,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "6 CNC holdings post 2 profitable carry exits (PHARMABEES +510, ANANTRAJ +989) in 10:00-10:30 window: PNBHOUSING 7.86%, MARUTI 5.51%, ADANIPORTS 5.09%, HAL 5.02%, BANDHANBNK 5.01%, GOLDBEES 4.99% — all in disciplined 5-8% band, max 7.86% well under 20% base position cap.",
+    "Sector concentration LOW: BFSI cluster 12.86% n=2 (PNBHOUSING+BANDHANBNK) with 22.14 pp buffer to base 0.35 cap; 4 single-name sectors (Gold ETF / Ports-Infra / Auto OEM / Defense). No n>=3 sector cluster anywhere.",
+    "Daily P&L +909.20 (positive) after net of GESHIP -589.80 + PHARMABEES +510.00 + ANANTRAJ +989.00; ~30,965 buffer to base -3% daily_loss_limit. Composite distress trigger 0/3.",
+    "Under-deployment WIDENING: deployment 42.14% (10:00) -> 33.48% (10:30), a -8.66 pp drop on the two profit-taking exits with no refilling admits. Cash now 66.5% of portfolio. Has been chronically 33-47% across 13+ ticks since 05-04 09:00 — 46.5+ pp idle vs base 0.80 cap. The 10:00 min_confidence partial revert (0.55->0.52) targets this but is too fresh (30 min, 0 admits in window) to evaluate.",
+    "Position sizing healthy: NOT hedging-against-itself pattern (no sub-3% positions; smallest is GOLDBEES at 4.99%). All 6 holdings sized in tight ~5% band reflecting disciplined sizing by strategy itself.",
+    "Signal-acceptance: 0 BLOCKED rows today across all completed trade rows; 0 BLOCKED on conf floor across 7+ trading days. min_confidence override is not actively eating signal at this time, but could be holding back marginal admits in the 0.50-0.52 range (which 0.52 floor is set to test).",
+    "Recent SL-discipline exits all fit well within both override and base SL ceilings: GESHIP -1.27% on entry, BAJAJ-AUTO ~-0.55%, EXIDEIND ~-2.5% — max_sl_pct override (0.045) has been NON-BINDING through every loss event, behaving as a trailing ceiling no trade approaches. The actively-binding SL levers are default_sl_pct (0.015) and min_sl_pct (0.01).",
+    "Original tightening triggers stale: 04-22 MAHABANK 10.4% SL blow-up is 8+ trading days old; cluster-stack incidents from 04-25/04-27 also stale. Strategy now self-disciplined on sizing (~5%) and cluster avoidance (BFSI n=2 max).",
+    "Yellow flag from 05-04 today-admit ledger (0W/2L: BAJAJ-AUTO + EXIDEIND) gets partial validation today: ANANTRAJ 05-04 admit closed today +989.00 (a carried-overnight profit, not strict same-day round-trip)."
+  ],
+  "actions_taken": [
+    "Reverted max_sl_pct override (0.045) to base 0.05 — removed from overrides block. Override count 4 -> 3. Reason: max_sl_pct is a CEILING, never binds tighter than what strategy chooses; reverting widens by 0.5 pp without forcing anything. Has been non-binding through every recent SL exit (all fit in -0.55% to -2.5% range, well within both 4.5% and 5%). Original 04-22 MAHABANK trigger 8+ days stale; trajectory was already on revert path (0.05 base -> tightened to 0.035 -> externally loosened to 0.045 -> completing revert here). Held the actively-binding SL pair (default_sl_pct 0.015, min_sl_pct 0.01) which directly shape per-trade SL geometry.",
+    "Held min_confidence at 0.52 (just changed 30 min ago; zero admits in window to test new floor; layered loosens at 30-min cadence would over-correct). Held default_sl_pct 0.015 and min_sl_pct 0.01 (the actually-binding SL levers; recent loss containment validates them).",
+    "Did NOT tighten: zero distress legs fire — no concentration build-up (BFSI n=2, 22+ pp buffer), positive day P&L, max position 7.86% well under threat, 0 BLOCKED on conf floor today, no n>=3 cluster. Risk LOW unchanged from 10:00."
+  ]
+}

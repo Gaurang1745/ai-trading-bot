@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-05-04 09:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 587249.89,
+    "deployed_pct": 41.12,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 0
+  },
+  "current_overrides": {
+    "risk.min_confidence": 0.60,
+    "risk.max_position_pct": 0.15,
+    "risk.max_deployed_pct": 0.75,
+    "risk.default_sl_pct": 0.015,
+    "risk.min_sl_pct": 0.01,
+    "risk.max_sl_pct": 0.045,
+    "trading.max_sector_pct": 0.28
+  },
+  "sector_exposure_cost_basis": {
+    "BFSI": {"pct": 17.64, "names": ["PNBHOUSING 7.89%", "BANDHANBNK 5.01%", "BAJFINANCE 4.73%"]},
+    "Pharma": {"pct": 8.77, "names": ["SUNPHARMA 5.21%", "PHARMABEES 3.56%"]},
+    "Energy_OilGas_Mining": {"pct": 9.70, "names": ["ONGC 5.00%", "COALINDIA 4.70%"]},
+    "Gold_ETF": {"pct": 5.02, "names": ["GOLDBEES 5.02%"]}
+  },
+  "findings": [
+    "Day-10 09:30 tick — 15 min into NSE session (open 09:15). Snapshot byte-identical to 09:00 premarket and to 04-30 EOD: 8 holdings (PNBHOUSING+GOLDBEES+SUNPHARMA+COALINDIA+BANDHANBNK+ONGC+PHARMABEES+BAJFINANCE) totaling ₹410,185 cost basis, cash ₹587,249.89, total ₹997,434.89, deployment 41.12%, 0 paper_positions, 0 trades today, ₹0 daily P&L. Strategy is in observation/scanning mode with no admissions yet — entirely within session-open arc.",
+    "Override stack unchanged from 09:00 — the holistic Day-10 loosen (min_confidence 0.65→0.60, max_deployed_pct 0.65→0.75, max_sl_pct 0.035→0.045, max_sector_pct 0.22→0.28) applied externally between 04-30 EOD and this morning is now ~30 pp of notional tightening below base, down from the ~50.5 pp peak of 04-30 EOD — already shed ~20 pp on the Day-10 refinement, validating room for the loosened stack to breathe under live conditions.",
+    "Sector concentration HEALTHY and unchanged from 09:00: BFSI 17.64% vs 28% cap (10.36 pp buffer), Pharma 8.77% (19.23 pp buffer), Energy 9.70% (18.30 pp buffer), Gold 5.02% (22.98 pp buffer). No sector near-binding; the loosened 0.28 cap is non-binding by 10+ pp on every sector and BFSI sits 4.36 pp under the OLD 0.22 revocation threshold — i.e., a 4th BFSI add or BFSI > 22% on full-fill is the clean revocation tripwire.",
+    "Position sizing HEALTHY: largest PNBHOUSING 7.89%, smallest PHARMABEES 3.56% — none near the 15% cap (7.11 pp buffer on the largest), none sub-3% suggesting hedging-against-itself. The 0.15 cap is non-binding.",
+    "Deployment 41.12% with cap 0.75 non-binding by 33.88 pp. Under-deployment is signal-gated (strategy quiet through end-of-04-30 except passive BAJFINANCE fill, no intraday signal yet today) not parameter-gated; loosening the cap further would not unlock new admissions when signal supply is the bottleneck.",
+    "Daily loss gate entirely non-binding: 0 trades, ₹0 P&L today, base 0.075 cap = ₹74,807 of intraday loss before halt — full headroom.",
+    "Signal acceptance UNTESTED today (15 min into session, no admissions). The min_confidence loosen 0.65 → 0.60 is calibrated to admit 0.60-0.62 band signals previously BLOCKED on 04-30 (11:12:43 conf=0.62; 13:43:02 conf=0.60); empirical validation is the rest of today's session, not the first 15 min.",
+    "BAJFINANCE R:R = 1.41 (admitted 04-30 below base 1.5 floor, n=1 sub-1.5 admission cumulative) is still the only data point on min_risk_reward override seed — armed: a 2nd sub-1.5 R:R admission today fires a new min_risk_reward 1.5 → 1.55 override.",
+    "GESHIP CNC LIMIT carry-over from 04-30 11:12 (30 @ ₹1542) is not visible in today's holdings or positions — likely cancelled at session-end 04-30 or still pending broker-side; if a fill arrives today it adds ₹46,260 to Shipping/Transport, well inside any sector cap."
+  ],
+  "rearm_triggers_intraday": {
+    "tighten": [
+      "(a) any 4th BFSI name admitted → fire max_sector_pct 0.28 → 0.22 (revoke today's holistic loosen on a clean re-stacking signal, mirroring the Day-8 12:30 same-day-revocation precedent)",
+      "(b) BFSI on full-fill > 22% → same 0.28 → 0.22 revocation (requires BFSI add ≥ ₹43.5k on full fill)",
+      "(c) any 3rd Pharma name OR Pharma > 14% on full-fill → fire 0.28 → 0.22 (requires Pharma add ≥ ₹52.2k)",
+      "(d) any 4-name sector cluster emergence in any sector → fire 0.28 → 0.20",
+      "(e) any 3rd ≥3.5% SL admission today → fire max_sl_pct 0.045 → 0.035 (revoke today's holistic loosen)",
+      "(f) admit-then-exit-within-60-min pattern n=2 in single day → fire min_confidence 0.60 → 0.65 (revoke today's holistic loosen)",
+      "(g) any 2nd R:R admission below 1.5 floor → seed new min_risk_reward 1.5 → 1.55 override (BAJFINANCE 1.41 = n=1 first instance, ARMED)",
+      "(h) realized daily P&L < -₹15,000 (-1.5%) → fire daily_loss_limit_pct (no current override) base 0.075 → 0.05",
+      "(i) any single new admission with position size > 12% capital → fire max_position_pct 0.15 → 0.12"
+    ],
+    "loosen": [
+      "(j) full session with 0 BLOCKED admissions on confidence floor AND ≥1 admission profitable-by-EOD → consider default_sl_pct 0.015 → 0.020 (full revert to base)",
+      "(k) ≥2 high-conf (≥0.70) entries admitted by EOD AND deployment > 60% on full fill → consider max_deployed_pct 0.75 → 0.80 (full revert to base)",
+      "(l) deployment > 65% sustained for 2+ trading days with no concentration breach → consider max_position_pct 0.15 → 0.18 (one-step toward base 0.20)"
+    ]
+  },
+  "actions_taken": [
+    "HOLD all 7 overrides at current loosened state (min_confidence 0.60, max_position_pct 0.15, max_deployed_pct 0.75, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.045, max_sector_pct 0.28). Day-10 09:30 tick is 15 min into the validation session for the holistically-refined stack; with snapshot byte-identical to 09:00 premarket (no trades, no fills, no order activity, no guardrail events), there is no firing tighten trigger and no fresh evidence to validate further loosening. Re-tightening freshly-loosened levers without intraday data would amount to over-cautious churn that undoes the Day-10 refinement on day-of; loosening further at minute 15 of an empty session would be premature. Disciplined no-action — let the session generate evidence, re-evaluate at 10:00."
+  ]
+}

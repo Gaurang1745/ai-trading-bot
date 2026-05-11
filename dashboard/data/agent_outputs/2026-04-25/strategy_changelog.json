@@ -1,0 +1,65 @@
+{
+  "date": "2026-04-25",
+  "review_type": "weekly",
+  "agent": "strategy",
+  "session_window": "2026-04-22 → 2026-04-24 (Days 1-3, 17 trades, +₹1,425 realized, 8 open positions)",
+  "changes": [
+    {
+      "timestamp": "2026-04-25 09:05:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE / HARD CONSTRAINTS",
+      "change_type": "ADD",
+      "what": "Added rule 11 BINARY-EVENT DISCIPLINE — for any held position with binary catalyst (Q-results, board meeting, ex-date, regulatory action, USFDA) within 3 trading sessions, default disposition is EXIT or risk-trim, NOT passive HOLD. Three explicit dispositions: (a) full close, (b) MODIFY tighten SL to ~2-3% of LTP, (c) reduce position to ≤5% of capital. Inverse rule: do NOT open new full-size CNC entries when a binary catalyst falls within next 3 sessions; event-trades require ≤5% sizing and tighter-than-default SL.",
+      "why": "Day-3 evidence: TORNTPOWER (+₹1,834, 0.68 conf, exited at +3% citing Q4 May results + 52w high asymmetry) and ADANIPOWER (-₹409, 0.66 conf, exited at -0.4% citing Apr 29 concall expected -12.3% YoY PAT) — both correctly trimmed binary risk; together they delivered the +₹1,425 realized week P&L. But the discipline isn't codified: AUBANK at 18.6% of capital faces Apr 27 board meeting and remains held passive at full size; same playbook should apply but is not currently a rule. GRANULES (Apr 29) and HINDUNILVR (Apr 30) are next-in-queue tests within the same week.",
+      "expected_impact": "AUBANK gets trimmed/exited before 2026-04-27 open, capping the largest binary tail in the book. Sequential rule-test on GRANULES (Apr 29) and HINDUNILVR (Apr 30). Symmetric inverse rule prevents new fresh-into-earnings entries. Right calls become rule-driven instead of remembered-from-prior-reasoning.",
+      "scope": "Behavioral / philosophy — applies to all future TRADING_DECISION cycles starting next bot restart (system prompt rebuilt at boot)."
+    },
+    {
+      "timestamp": "2026-04-25 09:05:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE / HARD CONSTRAINTS",
+      "change_type": "ADD",
+      "what": "Added rule 12 EXIT IS FINAL — explicit prohibition on emitting MODIFY (or HOLD, or any reference) for a symbol on the tick AFTER an EXIT/SELL-to-zero. Cites the Day-3 failure mode by name (TORNTPOWER, ADANIPOWER) and instructs to read EXISTING POSITIONS fresh each tick.",
+      "why": "5 guardrail rejections this week — 3 ADANIPOWER + 2 TORNTPOWER 'BLOCKED: MODIFY for X but no open position/holding' on Day-3 ticks AFTER the 10:12 and 10:43 SELL exits. Engine correctly blocked all 5; each was a wasted Opus decision slot.",
+      "expected_impact": "Eliminates a class of zero-yield decisions. Cleaner audit log; no spurious MODIFYs after exits.",
+      "scope": "Behavioral — applies on next bot restart."
+    },
+    {
+      "timestamp": "2026-04-25 09:05:00",
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides.trading",
+      "change_type": "ADD",
+      "what": "Added trading.max_sector_pct override 0.35 → 0.30. Hot-reloads at next guardrail validation (no bot restart required).",
+      "why": "BFSI cluster (AUBANK 18.6% + MAHABANK 9.8% + PNBHOUSING 7.9% = 36.2% of capital) is grandfathered above the 35% base cap from Day-1 stacking. With base cap intact, future BFSI adds could re-inflate exposure. Tighter 0.30 cap means: while BFSI > 30% (it is), guardrail will REJECT any new BFSI BUY, forcing SELL-before-BUY dynamics in financials. Verified override path is wired: guardrails.py:55 reads max_sector_pct from base trading config; line 214 lists it in tighter_when_lower allowed-tighten set; lines 239-242 apply trading.* overrides via try_apply. (This corrects an erroneous 2026-04-23 10:30 risk_monitor note claiming 'no sector-cap concept in base config — override would be dead letter'.)",
+      "expected_impact": "Mechanical lock against further BFSI stacking. Combined with rule 11 (AUBANK Apr 27 binary-event discipline), this should force a BFSI trim within 1-2 sessions. Non-punitive — all 3 existing BFSI holdings continue; only NEW BFSI admissions are blocked. Will stop binding once BFSI drops below 30% via SELL.",
+      "scope": "Numeric / hot-effect. Bites on next validate_order call (file mtime triggers reload)."
+    }
+  ],
+  "considered_but_declined": [
+    {
+      "considered_change": "Raise min_confidence override 0.60 → 0.65",
+      "why_declined": "Sample too small (2 closed trades). Winner 0.68, loser 0.66 — confidence has no signal yet. Re-visit after 10+ closed trades.",
+      "revisit_after": "10+ closed trades or 7 more trading days, whichever first"
+    },
+    {
+      "considered_change": "Add max_working_orders_per_symbol=1 as a new numeric guardrail param",
+      "why_declined": "Day-1 stacking (3 AUBANK + 2 NESTLEIND lots) was addressed in 2026-04-22 16:00 EOD review via the ORDER HYGIENE prompt-layer additions. Days 2-3 had no duplicate-stacking failures — the prompt fix is holding. New numeric guardrail without a current firing trigger is over-engineering.",
+      "revisit_after": "any future re-occurrence of duplicate-on-symbol stacking"
+    },
+    {
+      "considered_change": "Tighten trailing_sl.trail_gap_pct 0.02 → 0.01 in base config.yaml",
+      "why_declined": "Per 2026-04-24 strategy_changelog: engine-side CNC trailing is not wired up (paper_broker.modify_sl_target bypasses CNC). The lever has no effect. TRAIL-GAP DISCIPLINE rule in the prompt is the actual lever; already in place.",
+      "revisit_after": "engine-side CNC trailing implementation"
+    },
+    {
+      "considered_change": "Promote current risk_config overrides to base config.yaml",
+      "why_declined": "Premature — only ~3 trading days of observed behavior under the overrides. Lock-in should follow ≥5-10 days of stable data showing the levers are not over-tightening. Hold in risk_config.yaml for now.",
+      "revisit_after": "5-10 more trading days under current overrides"
+    },
+    {
+      "considered_change": "Strengthen Day-2-style silence prevention with mandatory position_actions audit",
+      "why_declined": "The prompt already says 'Always include an entry in decisions for EVERY existing position (use HOLD if no change, EXIT to close early, MODIFY to adjust SL/target)' and 'every decision cycle, the FIRST question is what do I do with what I already own'. Adding another sentence on top of these two would be redundant. The Day-2 silence is more likely an engineering issue (cycle scheduling) than a prompt issue. Routed to engineering-side recommendation in the review.",
+      "revisit_after": "any future >4h silence event; or after engineering-side cycle-audit feature is shipped"
+    }
+  ]
+}

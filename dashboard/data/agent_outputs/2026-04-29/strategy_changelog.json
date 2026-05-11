@@ -1,0 +1,130 @@
+{
+  "date": "2026-04-29",
+  "agent": "strategy_post_market_review",
+  "session_summary": {
+    "trading_day": 7,
+    "closes": 2,
+    "wins": 1,
+    "losses": 1,
+    "total_pnl": -103.25,
+    "lifetime_realized_pnl": -4511.31,
+    "lifetime_win_rate": 0.4,
+    "portfolio_value": 1006064.99
+  },
+  "changes": [
+    {
+      "id": 1,
+      "timestamp": "2026-04-29T16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "change_type": "prose_tightening",
+      "section": "HARD CONSTRAINTS rule 5 (RISK MANAGEMENT) — SL range bullet",
+      "title": "Removed permissive 'for conviction plays with wider stops' qualifier from MAX_SL_PCT; reframed as HARD CEILING with explicit acknowledgment that engine-level guardrail emits warning-not-block",
+      "before": "- Stop-loss range: min <<MIN_SL_PCT>>, max <<MAX_SL_PCT>> (for conviction plays with wider stops).",
+      "after": "- Stop-loss range: min <<MIN_SL_PCT>>, max <<MAX_SL_PCT>> (HARD CEILING — no exceptions, not even for \"high conviction\" entries). A thesis that requires a stop wider than <<MAX_SL_PCT>> is a thesis whose POSITION SIZE must shrink, not whose stop can widen. The per-position-risk math (size × SL ≤ 0.5%) and the SL ceiling are STACKED constraints — clearing one does not unlock the other. Guardrails currently emit only a WARNING (not a BLOCK) on >max SL — that is the engine being permissive, not the rule being flexible. Prior failure mode (2026-04-29): GLENMARK admitted at 4.4% SL > 4% cap with reasoning '5% × 4.4% = 0.22% portfolio risk within budget' — the per-position math does NOT justify breaching the SL ceiling.",
+      "summary": "Made max_sl_pct an absolute, no-exception ceiling at the prompt layer. Disqualified the per-position-risk-math justification pattern that GLENMARK used today. Acknowledged the engine-level warning-only enforcement so future Claude understands the discipline must come from itself.",
+      "evidence": {
+        "session": "2026-04-29",
+        "trade_id": 38,
+        "specific_trade": {
+          "symbol": "GLENMARK",
+          "timestamp": "2026-04-29 09:10:58",
+          "entry_price": 2400.0,
+          "stop_loss": 2295.0,
+          "sl_pct": 4.375,
+          "max_sl_pct_override": 4.0,
+          "breach_pct_points": 0.375,
+          "guardrail_outcome": "WARNING (not blocked) — trade admitted as OPEN",
+          "guardrail_message": "WARNING: SL too wide (4.4%). Max 4%.",
+          "reasoning_excerpt": "Position size ~5% of capital. Risk-reward ~1:1.7. Position risk: 5% × 4.4% = 0.22% of portfolio (within budget).",
+          "diagnosis": "Bot used per-position-risk math as a justification for breaching the absolute SL ceiling. The two constraints stack (both must be satisfied independently); clearing the per-position-risk one does not unlock the SL one."
+        }
+      },
+      "expected_impact": "Future entries with proposed SL > MAX_SL_PCT should be redirected to one of: (a) shrink size and tighten SL, (b) widen SL and route as a smaller-tactical setup, (c) NO_ACTION. Verification metric: count of >max_sl_pct admissions in next 5 sessions should be 0 (1 admission in 7 sessions to date)."
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-04-29T16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "change_type": "prose_addition",
+      "section": "HARD CONSTRAINTS rule 16 (NEW)",
+      "title": "STALE-CNC POSITION REVIEW — DEAD MONEY IS A DECISION",
+      "summary": "Added new rule 16 with three legs. (a) Any held CNC ≥ 5 sessions AND not within 30% of entry→target distance must surface explicit thesis-review verdict — catalyst pending (justified hold), catalyst played out without price response (default EXIT), or unreviewed (force review). (b) Positions held > MAX_CNC_HOLD_DAYS must EXIT next tick regardless of pnl unless fresh thesis-extending catalyst is articulated. (c) Companion ENTRY rule: swing entries with absolute target distance < ~4% should be sized small (≤ 3% capital) or rewritten as MIS. Cited NTPC 2026-04-22→2026-04-29 as the failure pattern.",
+      "evidence": {
+        "session": "2026-04-29",
+        "trade_id_close": 42,
+        "trade_id_open": 11,
+        "specific_trade": {
+          "symbol": "NTPC",
+          "entry_timestamp": "2026-04-22 13:42:55",
+          "entry_price": 404.5,
+          "target": 414.0,
+          "target_pct": 2.347,
+          "stop_loss": 401.0,
+          "sl_pct": 0.866,
+          "rr_at_entry": 2.71,
+          "qty": 125,
+          "size_pct": 5.05,
+          "exit_timestamp": "2026-04-29 14:42:27",
+          "exit_price": 402.30,
+          "pnl": -275.0,
+          "hold_trading_sessions": 6,
+          "hold_calendar_days": 7,
+          "max_hold_days_override": 15,
+          "diagnosis": "Target distance ~1.5x daily ATR — could be hit OR missed within a single normal session of volatility, making the 6-trading-session (7 calendar day) hold structurally questionable. R:R 1:2.71 cleared min_risk_reward 1.5 gate but the absolute target was too tight for a multi-day capital lock-up. Trade drifted +0.9% (Day-3) → -0.5% (Day-7) with no thesis-review tick before the approaching-SL exit."
+        },
+        "thesis_review_candidates_eod": [
+          {"symbol": "PNBHOUSING", "days_held": 7, "review_due_next_tick": true},
+          {"symbol": "GOLDBEES", "days_held": 7, "review_due_next_tick": true},
+          {"symbol": "NESTLEIND", "days_held": 7, "review_due_next_tick": true}
+        ]
+      },
+      "expected_impact": "Three observable behavior shifts. (1) Thesis-review entries on 5+ session holdings should appear in next session's decision log — PNBHOUSING / NESTLEIND / GOLDBEES are at 6 trading sessions today (entry 2026-04-22, well past the 5-session trigger), so they should fire next tick. (2) Preemptive EXIT on positions whose catalyst played out without price response, before they mature into approaching-SL exits. (3) Tighter sizing or rejection of swing entries with sub-4% targets. Verification: (a) avg hold of EXIT-at-loss positions should drop from today's 6 sessions (NTPC) toward 3-5 sessions over the next 10 closes; (b) count of new entries with target_pct < 4% should drop materially or be paired with size ≤ 3%."
+    }
+  ],
+  "changes_NOT_made_with_rationale": [
+    {
+      "candidate": "Tighten max_sl_pct override 0.04 → 0.035",
+      "reason_skipped": "Engine emits a WARNING (not BLOCK) on >max_sl_pct. Tightening the value to 0.035 doesn't change warning-vs-block; the breach mechanism is identical. Right fix is at the prompt layer (done in change #1) or engine-side (out of scope; recommended)."
+    },
+    {
+      "candidate": "Tighten min_confidence 0.65 → 0.68",
+      "reason_skipped": "0.65 floor blocked 4 attempts today (all 0.60-0.62) — performing as designed. Both filled entries cleared 0.65/0.68. At n=10 lifetime closes, win-rate split by confidence has no clean gradient (winners 0.65-0.75, losers 0.65-0.72). Floor held."
+    },
+    {
+      "candidate": "Promote overrides to base config.yaml",
+      "reason_skipped": "Day 7 of 180 — under the 10-day promotion threshold from 2026-04-28 EOD review. Override stack functioning correctly. Listed in recommendations for the next milestone."
+    },
+    {
+      "candidate": "Add 'max_oscillations_per_position_per_session' numeric param",
+      "reason_skipped": "Engine doesn't currently support this. PNBHOUSING showed 4+ SL DOWN-moves today, but the prompt rule 14(c) already covers the behavioral case ('trailing SL is monotonic-up'). Engine accepts loosenings without rejection — listed in recommendations as a code-level fix."
+    },
+    {
+      "candidate": "Tighten max_position_pct 0.15 → 0.12",
+      "reason_skipped": "Today's entries sized 4.8% / 5.0% — both well within 15% cap and following the prompt's '5% for confidence ~0.65' guidance. No firing trigger."
+    },
+    {
+      "candidate": "Lower max_cnc_hold_days 15 → 10",
+      "reason_skipped": "New rule 16 (5-session thesis review + 15-session hard EXIT) provides structural pressure on stale carries. Stacking a numeric tighten with the behavioral fix in the same cycle would prevent attribution of which lever is biting. Wait one cycle to evaluate rule 16 alone — PNBHOUSING / NESTLEIND / GOLDBEES are at day 7 today, so the test fires next tick."
+    },
+    {
+      "candidate": "Tighten max_deployed_pct 0.65 → 0.60",
+      "reason_skipped": "Deployment ~49.4% EOD — non-binding with 15.6 pp buffer to current cap. No firing trigger."
+    },
+    {
+      "candidate": "Tighten max_sector_pct 0.22 → 0.20",
+      "reason_skipped": "Largest sector exposure today is BFSI at ~12.9% (PNBHOUSING 7.9% + BANDHANBNK 5.0%) — 9.1 pp buffer to 22% cap. No firing trigger."
+    },
+    {
+      "candidate": "Tighten daily_loss_limit_pct 0.04 → 0.03",
+      "reason_skipped": "Today's session pnl -₹103 = -0.01% — 400x under 4% cap. Override hasn't bound and was set yesterday EOD; needs more sessions of evidence before further tightening, especially against a 0.6%-worst-day session-loss distribution."
+    }
+  ],
+  "verification_for_next_review": [
+    "GLENMARK (the >max_sl_pct admission): does the next decision tick (a) cancel and re-emit at tighter SL, (b) explicitly accept the breach, or (c) fall silent? Silence past day 1 = rule violation.",
+    "PNBHOUSING / NESTLEIND / GOLDBEES (day-7 holdings): do next tick's position_actions include an explicit thesis-review verdict (catalyst pending vs. played out vs. unreviewed)?",
+    ">max_sl_pct admission count over the next 5 sessions: target = 0",
+    "Trail-SL oscillation count: track per-position non-monotonic SL changes; target = 0 (current ~4-5 per session on PNBHOUSING)",
+    "Avg hold duration of LOSS-CLOSE positions over next 10 closes: target ≤ 5 sessions (NTPC was 7)",
+    "Count of new swing entries with target_pct < 4%: target = 0 unless paired with size ≤ 3%"
+  ]
+}

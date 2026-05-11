@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-05-05 12:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 516981.64,
+    "deployed_pct": 48.40,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "Book frozen for ~47 min: ZERO trades since 11:13:45 (BHEL/NAVINFLUOR/SOBHA admits). All state unchanged vs 11:30 — 9 holdings, cash Rs.516,981.64, cost basis Rs.484,875, total Rs.1,001,856.64, deployment 48.40%, day P&L +Rs.909.20.",
+    "Holdings (9) sized in healthy 4.82-7.86% band: PNBHOUSING 7.86%, MARUTI 5.51%, SOBHA 5.16%, ADANIPORTS 5.09%, HAL 5.02%, BANDHANBNK 5.01%, GOLDBEES 4.99%, BHEL 4.93%, NAVINFLUOR 4.82%. Max position has 12.14pp buffer to base 0.20 cap; no sub-3% hedging-against-itself, no oversize risk.",
+    "Sector spread 8 distinct: BFSI cluster 12.87% n=2 (PNBHOUSING 7.86% + BANDHANBNK 5.01%), 22.13pp buffer to base 0.35 sector cap; 7 single-name sectors (Gold ETF / Ports-Infra / Auto OEM / Defense / Capital Goods / Spec Chem / Realty). All sector caps quiet, no n>=3 cluster.",
+    "Day realized P&L +Rs.909.20 (GESHIP -589.80 + PHARMABEES +510.00 + ANANTRAJ +989.00); buffer ~Rs.30,965 to base 3% daily_loss_limit and ~Rs.76,000 to current 7.5% override. Today's 3 fresh admits remain intraday-pending (no closes since 11:13:45).",
+    "Composite distress trigger 0/3 fires: (a) no n>=3 sector cluster (largest BFSI n=2); (b) no single-name >12% capital threat (max 7.86%); (c) day realized P&L positive.",
+    "0 BLOCKED on min_confidence 0.52 floor across 7+ trading days — override has never bound. Today's 3 admits at conf 0.68-0.70 clear comfortably; no low-quality signal slipping through.",
+    "Yellow flag from 05-04 (today-admit ledger 0W/2L: BAJAJ-AUTO -Rs.570.50 conf 0.66 + EXIDEIND -Rs.1,433.90 conf 0.68) remains technically unresolved — today's 3 fresh admits not yet closed. Today's only closes are carry-closes (PHARMABEES/ANANTRAJ profitable, GESHIP small loss).",
+    "10:00 partial revert test condition (min_confidence 0.55->0.52) has NOT been exercised: that commit licensed full revert only after 'admits in the 0.52-0.55 range performing cleanly.' Today's admits at 0.68-0.70 don't touch the 0.52-0.55 band, so the test signal hasn't materialized either way.",
+    "Deployment 48.40% sits 31.6pp under the base 80% cap — mild under-deployment, but materially improved from 33.48% at 11:00 (+14.92pp on 3 admits). The under-deployment trigger that drove 09:00/10:00 loosens has substantially resolved without any further override changes."
+  ],
+  "actions_taken": [
+    "HOLD all overrides unchanged: min_confidence 0.52, default_sl_pct 0.015, min_sl_pct 0.01. Override count 3 unchanged. No revert, no tighten.",
+    "Did NOT full-revert min_confidence 0.52 to base 0.50: nothing material changed since 11:30 hold (book frozen for 47 min). The 10:00 commit set a clear test discipline — admits in 0.52-0.55 performing cleanly licenses the next revert step. Today's 3 admits at conf 0.68-0.70 leave that band untested. While the override is empirically non-binding (0 BLOCKED in 7+ days, no admit below 0.68 today), reverting on cosmetic grounds without exercising the licensing test would short-circuit the pacing the prior commits committed to. Cost of holding is zero given non-binding behavior.",
+    "Did NOT revert default_sl_pct (0.015) or min_sl_pct (0.01): these are the actively-binding SL levers — recent losses (GESHIP -1.27%, BAJAJ-AUTO -0.55%, EXIDEIND -2.5% on entry) all sat within the override-tightened SL geometry. 05-04 SL-discipline thesis remains the strongest evidence in the override stack and is unrefuted by any subsequent activity. Today's 3 admits are intraday-pending; no exit data yet to challenge the thesis either way.",
+    "Did NOT tighten: zero distress legs fire — (a) 8 distinct sectors with BFSI n=2 only and 22+pp buffer; (b) day P&L positive +Rs.909.20 with ~Rs.30,965 buffer to base 3% loss limit; (c) max position 7.86% well under base 0.20; (d) deployment healthily refilled 33.48%->48.40% on 3 admits with no over-deployment; (e) all new admits at conf 0.68-0.70, none at marginal quality; (f) no n>=3 sector cluster, no single-name >12% threat; (g) 0 BLOCKED in 7+ days indicates the entry-side floor is well-calibrated.",
+    "Reassess at 12:30. Key watchpoints: (1) whether today's 3 admits (BHEL/NAVINFLUOR/SOBHA) close cleanly to lift the 05-04 today-admit yellow flag, (2) whether any sub-0.55 admit arrives to actually test the loosened min_confidence floor, (3) whether deployment continues climbing past 50% as more admits land, (4) whether the 47-min book freeze extends — prolonged inactivity in the active-trader regime is itself a soft signal worth monitoring."
+  ]
+}

@@ -1,0 +1,85 @@
+{
+  "timestamp": "2026-04-28 10:30:49",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1004200.78,
+    "cash": 406119.48,
+    "deployed_pct": 0.5956,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "portfolio_detail": {
+    "holdings_value_at_cost": 595437.40,
+    "holdings_value_at_mtm": 598081.30,
+    "total_unrealized_pnl": 4200.78,
+    "intraday_unrealized_change_vs_eod_d4": 2630.40,
+    "intraday_unrealized_change_vs_1000_tick": 1748.45,
+    "open_orders_value": 130105.00,
+    "open_orders_count": 3,
+    "open_orders": [
+      {"symbol": "TATAPOWER", "qty": 110, "price": 443.00, "value": 48730.00, "sector": "Power", "submitted": "2026-04-27 10:13:02", "age_at_tick": "24h17m", "day_stale": true},
+      {"symbol": "HINDZINC", "qty": 75, "price": 612.00, "value": 45900.00, "sector": "Metals", "submitted": "2026-04-27 10:42:57", "age_at_tick": "23h47m", "day_stale": false},
+      {"symbol": "PHARMABEES", "qty": 1500, "price": 23.65, "value": 35475.00, "sector": "Pharma-ETF", "submitted": "2026-04-27 12:14:55", "age_at_tick": "22h15m", "day_stale": false}
+    ],
+    "projected_deployed_pct_on_full_fill": 0.7244,
+    "sector_exposure_filled": {
+      "BFSI": {"pct": 0.1762, "names": ["MAHABANK", "PNBHOUSING"]},
+      "FMCG": {"pct": 0.1673, "names": ["NESTLEIND", "HINDUNILVR"]},
+      "Power": {"pct": 0.1491, "names": ["NTPC", "TORNTPOWER", "POWERGRID"]},
+      "Pharma": {"pct": 0.0519, "names": ["SUNPHARMA"]},
+      "Gold-ETF": {"pct": 0.0500, "names": ["GOLDBEES"]}
+    },
+    "sector_exposure_on_full_fill": {
+      "BFSI": 0.1762,
+      "FMCG": 0.1673,
+      "Power": 0.1977,
+      "Pharma": 0.0874,
+      "Metals": 0.0458,
+      "Gold-ETF": 0.0500
+    },
+    "position_sizes_pct": {
+      "NESTLEIND": 0.1199,
+      "MAHABANK": 0.0977,
+      "PNBHOUSING": 0.0786,
+      "SUNPHARMA": 0.0519,
+      "TORNTPOWER": 0.0506,
+      "NTPC": 0.0505,
+      "GOLDBEES": 0.0500,
+      "POWERGRID": 0.0480,
+      "HINDUNILVR": 0.0474
+    },
+    "largest_position": {"symbol": "NESTLEIND", "pct": 0.1199, "buffer_to_cap_pp": 0.0301}
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.22
+  },
+  "delta_since_1000": {
+    "holdings_changes": "none — same 9 filled holdings at the same quantities and avg prices",
+    "cash_change": 0.0,
+    "open_orders_changes": "none in count or composition — same 3 carryover OPEN orders. TATAPOWER crossed the 24h day-stale threshold at ~10:13:02 (now 24h17m old). HINDZINC and PHARMABEES have not yet crossed (23h47m / 22h15m).",
+    "trades_today": 0,
+    "realized_pnl_today": 0.0,
+    "unrealized_pnl_change": "+₹1,748.45 vs the 09:31 mark (snapshot 46: +₹2,452.33 → snapshot 47 at 10:12:03: +₹4,200.78). Book is rallying intraday — MTM improvement is the dominant state delta this tick.",
+    "trigger_state": "all 5 armed triggers from 09:00/09:30/10:00 remain DORMANT — TATAPOWER day-stale event is observability-only (trigger ii spec requires a 3rd day-stale, not a 1st)"
+  },
+  "findings": [
+    "Live MTM at portfolio_snapshot 47 (10:12:03): total ₹1,004,200.78, holdings_value ₹598,081.30 (vs ₹595,437.40 at cost), total unrealized P&L +₹4,200.78 (+0.42%). Intraday delta vs Day-4 EOD: +₹2,630.40. Intraday delta vs 09:31 mark: +₹1,748.45. Book is in a clear MTM rally — broadly positive across the holdings.",
+    "TATAPOWER OPEN order (submitted 2026-04-27 10:13:02, 110 @ ₹443) has now crossed the 24h day-stale threshold at ~10:13:02 today — first OPEN order this session to do so. Trigger (ii) spec from 09:00 fires only on the 3rd day-stale OR a re-submission at worse price; current count is 1, so DORMANT. Worth flagging to the strategy layer as order-hygiene observability: this order was submitted at the start of the previous session and has not filled in 24h+, suggesting either limit price is too tight against current market or the symbol has drifted away from the entry zone.",
+    "HINDZINC will cross the 24h day-stale line at ~10:42:57 today (12 minutes from this tick). PHARMABEES at ~12:14:55. If both cross without fills, count rises to 3 by ~12:15 → trigger (ii) WILL FIRE for an order-hygiene flag (still observability-level; the spec does not auto-tighten a numeric override on day-stale alone).",
+    "Sector concentration unchanged at the cost basis: BFSI 17.62% (4.38 pp buffer to 0.22 cap), FMCG 16.73% (5.27 pp), Power 14.91% (7.09 pp), Pharma 5.19%, Gold-ETF 5.00%. On full carryover fill: Power 19.77% (2.23 pp buffer), Pharma 8.74%, Metals 4.58%. No projected breach of the 0.22 max_sector_pct override.",
+    "Position sizing unchanged: NESTLEIND 11.99% remains largest filled holding (3.01 pp buffer to 0.15 cap). All 8 others sit between 4.74% and 9.77%. No single name approaches the per-name cap.",
+    "Deployment: filled 59.45% at cost / 59.56% at MTM (5.44–5.55 pp under the binding 0.65 max_deployed_pct cap, admission window OPEN by ~5.5 pp); projected 72.44% on full carryover fill (7.44 pp grandfathered breach). The cap mechanically gates any new BUY by the strategy layer until either (a) a SELL frees deployment under 65%, or (b) one of the 3 carryover OPEN orders is rejected/cancelled.",
+    "All 5 pre-armed triggers from 09:00/09:30/10:00 remain DORMANT this tick: (i) Power on full fill 19.77% — 2.23 pp short of 22% line; (ii) only 1 OPEN order day-stale (TATAPOWER), spec needs 3rd; (iii) MAHABANK live mark at 09:31 was -4.15%, no fresher mark for 10:12 in the snapshot fields (book-level +₹4,200.78 implies MAHABANK has not deteriorated materially); spec line is -7%; (iv) BFSI flat at 17.62%, 0.88 pp under the 18.5% re-inflection line, no new BFSI add; (v) realized day-loss ₹0, book is in fact POSITIVE MTM at +₹4,200.78.",
+    "All 7 risk overrides remain materially tighter than base config from progressive Day 1-4 tightening (min_confidence 0.65 vs base 0.50, max_position_pct 0.15 vs 0.20, max_deployed_pct 0.65 vs 0.80, default_sl_pct 0.015 vs 0.02, min_sl_pct 0.01 vs 0.005, max_sl_pct 0.04 vs 0.05, max_sector_pct 0.22 vs 0.35). The book is structurally well-bracketed.",
+    "Strategy-layer silence: ZERO trades on 2026-04-28 (no SELL, no MODIFY, no new BUY in the 60-minute window 09:30→10:30 after market open). The 3 carryover OPEN orders remain untouched — neither cancelled, modified, nor re-priced. This is the second consecutive session opening with no early activity (Day-5 starts mirror Day-4 cadence). Not a firing trigger — observability flag for the strategy layer to consider trimming day-stale OPEN orders or initiating SELL decisions on outperforming names (PNBHOUSING +6.39% from 09:31 mark, NTPC +1.66%) to free deployment slots.",
+    "Disciplined call: no firing trigger, MTM improving, no override change. All 5 triggers from 09:00 carry forward to the 11:00 tick — by which point HINDZINC will have crossed the 24h day-stale line (count → 2) and the AU SFB Q4 print is scheduled to land (any sharp re-rating in BFSI peers could re-test trigger (iv)'s 18.5% BFSI re-inflection line via repricing rather than new admissions)."
+  ],
+  "actions_taken": []
+}

@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-04-24 09:30:00",
+  "risk_level": "MEDIUM",
+  "session_context": {
+    "day_of_session": "Day 3 — 2026-04-24",
+    "market_status": "OPEN (cash equities opened 09:15 IST; ~15 min into regular session)",
+    "latest_mark_source": "portfolio_snapshots row 21 @ 2026-04-23 15:40:22 (Day-2 EOD) — NO Day-3 intraday snapshot has been written to the DB yet, so this tick still has no live mark",
+    "trades_today_count": 0,
+    "open_orders_count": 0,
+    "strategy_silence_since": "2026-04-22 14:13:33 (HINDUNILVR fill) — ~43h15m cumulative, extended 30 min since 09:00 tick",
+    "delta_vs_09_00_tick": "Market transitioned premarket → open. No trades. No new snapshot. No book mutation. Overrides unchanged."
+  },
+  "portfolio_summary": {
+    "total_value": 1000721.15,
+    "cash": 214415.50,
+    "deployed_pct": 0.7857,
+    "holdings_count": 10,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "pnl_detail": {
+    "realized_daily_pnl_today": 0.0,
+    "last_eod_unrealized_pnl": 721.15,
+    "daily_loss_limit_value_today": 30021.63,
+    "buffer_to_limit_inr": 30021.63,
+    "note": "Still anchored to Day-2 EOD. First live Day-3 mark expected on next snapshot write; buffers will be re-measured then."
+  },
+  "book_structure_unchanged_from_09_00": {
+    "holdings_count": 10,
+    "sector_concentration_eod_day_2": {
+      "BFSI":  {"names": ["MAHABANK", "PNBHOUSING", "AUBANK"],  "pct_capital": 0.3591, "pct_deployed": 0.4570},
+      "FMCG":  {"names": ["NESTLEIND", "HINDUNILVR"],           "pct_capital": 0.1671, "pct_deployed": 0.2127},
+      "Power": {"names": ["TORNTPOWER", "NTPC", "ADANIPOWER"],  "pct_capital": 0.1620, "pct_deployed": 0.2061},
+      "Pharma":{"names": ["GRANULES"],                          "pct_capital": 0.0481, "pct_deployed": 0.0612},
+      "Gold":  {"names": ["GOLDBEES"],                          "pct_capital": 0.0496, "pct_deployed": 0.0631}
+    },
+    "grandfathered_cap_breaches": [
+      {"cap": "max_position_pct=0.15", "symbol": "AUBANK", "pct_capital": 0.1858, "over_by_pp": 3.58},
+      {"cap": "max_deployed_pct=0.70", "portfolio_pct": 0.7857, "over_by_pp": 8.57}
+    ],
+    "largest_single_name_risk": {"symbol": "MAHABANK", "pct_capital": 0.0927, "eod_pnl_pct": -0.0514, "status": "already below -5% priority threshold at Day-2 EOD; default_sl_pct lever fired at Day-2 15:00 remains in force"}
+  },
+  "current_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.70,
+    "default_sl_pct": 0.015,
+    "max_sl_pct": 0.04
+  },
+  "trigger_check": {
+    "trigger_a_book_below_neg_1_pct": {"fired": false, "value": null, "reason": "No live Day-3 mark yet in DB. Cannot measure book %. Will evaluate at first intraday snapshot."},
+    "trigger_d_bfsi_above_0_37": {"fired": false, "value_last_known": 0.3591, "threshold": 0.37, "buffer_pp": 1.09, "note": "Flat vs 09:00 — no mark update."},
+    "trigger_g_power_above_0_20_of_capital": {"fired": false, "value_last_known": 0.1620, "threshold": 0.20, "buffer_pp": 3.80},
+    "trigger_e_mahabank_below_neg_6_pct": {"fired": null, "armed_for_open": true, "note": "ARMED since 09:00 — awaiting first Day-3 MAHABANK mark. Second-knob stacking (min_sl_pct 0.005→0.01) fires if breach confirmed."},
+    "trigger_aubank_plus_1_unacted": {"fired": false, "value_last_known": 0.0069, "threshold": 0.010, "note": "Awaiting Day-3 mark."},
+    "trigger_f_strategy_silence_past_1st_hour": {"fired": false, "time_to_fire": "45 min (fires at 10:15 IST)", "note": "Silence is 43h15m cumulative and 15 min into Day-3 trading. Non-numeric trigger — escalates to strategy_reviewer if still zero activity at 10:15."}
+  },
+  "findings": [
+    "T+15m post-open. Market is now open but no Day-3 intraday snapshot or trade has been written to the DB since the 09:00 tick. Book, deployment, and override posture are unchanged.",
+    "Strategy-layer silence now at ~43h15m cumulative. Day-3 first-hour activity watch (trigger f) fires at 10:15 IST if still zero decisions — 45 minutes from this tick.",
+    "All three armed Day-3 triggers from the 09:00 tick (MAHABANK below -6%, AUBANK above +1% unacted, BFSI above 37% via mark) remain unresolvable without a live snapshot. This is a data-availability gap, not a risk absence — the underlying macro setup (GIFT Nifty -0.79%, PSU Bank -2.19% carry, Brent $103+) is exactly as flagged at 09:00 and the first intraday mark will be material.",
+    "MAHABANK remains the single highest-probability escalation path: already -5.14% at Day-2 EOD + PSU-bank segment negative carry + default_sl_pct lever already fired Day-2 15:00. Gap-through -6% at open fires second-knob stacking (min_sl_pct 0.005 → 0.01).",
+    "BFSI cluster buffer to 37% trigger is 1.09 pp, the narrowest of the sector-concentration gates. Weak-BFSI day compresses this fastest. AUBANK resilient-to-positive on ICICI Q4 beat spillover; MAHABANK and PNBHOUSING are the at-risk members.",
+    "Deployed 78.57% — 8.57 pp over the 0.70 override cap (grandfathered). Zero admission surface exists for NEW entries until a SELL frees cash. Strategy silence + binding deployment cap = no buy-side friction available; the only lever that could change structure is a strategy-originated SELL.",
+    "Cumulative book remains green (+0.072%, +₹721.15) as of last mark. Composite HIGH-meta-trigger (silent + MAHABANK below priority-watch + book below -0.5%) still fails on the third leg; 2-of-3 has held for multiple ticks. Risk_level stays MEDIUM.",
+    "Override posture (0.60 / 0.15 / 0.70 / 0.015 / 0.04) continues to be structurally appropriate. Each lever has a live rationale tied to a concrete book characteristic; none is obsolete or over-tightened for the current exposure profile."
+  ],
+  "actions_taken": [
+    "No numeric override changes this tick. Holding min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.70, default_sl_pct=0.015, max_sl_pct=0.04.",
+    "Discipline rationale (unchanged from 09:00): no tightening without a firing numeric trigger. At 09:30 with still NO live Day-3 mark and NO trades today, no trigger can have fired on realized data. Pre-firing a lever on a 30-minute-stale forecast would break the spec discipline that has kept the override posture coherent through Days 1–2.",
+    "All Day-3-armed triggers from 09:00 remain ARMED and carry forward to the next tick (typically ~10:15/10:30) when a live snapshot should exist: (i) MAHABANK gap-down below -6% → stack min_sl_pct 0.005 → 0.01; (ii) AUBANK above +1% AND strategy still silent → flag 'oversize+gain+unacted' triangle for strategy_reviewer; (iii) BFSI above 37% via mark → raise min_confidence 0.60 → 0.65.",
+    "Risk_level held at MEDIUM. Composite HIGH meta-trigger fails on book component (last known +0.072%). No reason to elevate without realized Day-3 data.",
+    "Escalation clock on strategy silence: 45 min to the 10:15 first-hour threshold. If still zero activity at 10:15, non-numeric escalation to strategy_reviewer for same-day intervention consideration."
+  ],
+  "actions_not_taken": [
+    "Did NOT tighten daily_loss_limit_pct (0.03 → 0.025). Reason: trigger (a) not fired — no live Day-3 book mark exists. Tightening a loss gate before any realized Day-3 mark is pure speculation.",
+    "Did NOT raise min_confidence (0.60 → 0.65). Reason: trigger (d) not fired — BFSI last-known 35.91%, 1.09 pp buffer. Zero admission surface anyway given 0.70 deployed cap is binding.",
+    "Did NOT tighten max_deployed_pct (0.70 → 0.68). Reason: 8.57 pp binding gap is already maximum SELL-before-BUY friction. Further tightening without an active SELL is decorative.",
+    "Did NOT tighten max_position_pct (0.15 → 0.12). Reason: AUBANK 18.58% grandfathered drift; tighter cap cannot retract. Deployed cap blocks any new entry from approaching 0.15 anyway.",
+    "Did NOT stack min_sl_pct (0.005 → 0.01) on MAHABANK. Reason: second-knob spec requires NEW distinct breach (-6% gap-down) beyond the -5% that fired Day-2 15:00. No Day-3 mark exists to confirm.",
+    "Did NOT elevate risk_level to HIGH. Reason: meta-trigger composite fails on book component (+0.072% last known); silence + MAHABANK watch are 2-of-3."
+  ],
+  "reassessment_triggers_next_tick": [
+    "All 09:00 triggers carry forward unchanged — see 09:00 file. Consolidated here by priority:",
+    "(e-ARMED) MAHABANK first Day-3 mark below ₹76.61 (-6%) → fire: min_sl_pct 0.005 → 0.01. HIGHEST priority.",
+    "(a) First Day-3 book mark below -1% → fire: daily_loss_limit_pct 0.03 → 0.025.",
+    "(a-EXTREME) Book mark below -2% → fire both: daily_loss_limit_pct 0.03 → 0.02 AND risk_level → HIGH.",
+    "(d) BFSI above 37% via mark OR new admission → fire: min_confidence 0.60 → 0.65.",
+    "(AUBANK-specific) AUBANK above +1% AND still no SELL → flag 'oversize+gain+unacted' to strategy_reviewer.",
+    "(f) Strategy silent at 10:15 IST (1st hour end) → escalate to strategy_reviewer for same-day intervention.",
+    "(b) First SELL by strategy → relax max_deployed_pct 0.70 → 0.72 one-way; verify admission of any new BUY against cluster discipline."
+  ],
+  "housekeeping": {
+    "risk_config_state": "risk_config.yaml correctly reflects 0.60 / 0.15 / 0.70 / 0.015 / 0.04. No changelog entry required this tick (no change).",
+    "output_file": "/home/ubuntu/trading/ai-trading-bot/src/agents/outputs/2026-04-24/risk_assessment_0930.json",
+    "next_scheduled_tick": "10:00 / 10:15 / 10:30 IST — at least one should coincide with the first Day-3 intraday snapshot write, resolving the data gap."
+  }
+}

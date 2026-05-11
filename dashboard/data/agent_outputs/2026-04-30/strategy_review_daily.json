@@ -1,0 +1,74 @@
+{
+  "date": "2026-04-30",
+  "review_type": "daily",
+  "trades_analyzed": 13,
+  "summary": {
+    "wins": 2,
+    "losses": 3,
+    "total_pnl": 1945.5,
+    "win_rate": 0.40,
+    "avg_win": 1185.2,
+    "avg_loss": -141.63,
+    "closed_pnl_breakdown": {
+      "NESTLEIND": 2298.4,
+      "GLENMARK": 72.0,
+      "POWERGRID": -159.0,
+      "TATAPOWER": -150.7,
+      "CHENNPETRO": -115.2
+    },
+    "new_entries": [
+      {"symbol": "ONGC", "qty": 165, "price": 302.0, "conf": 0.72, "rr": 2.0, "status": "FILLED"},
+      {"symbol": "CHENNPETRO", "qty": 45, "price": 1120.0, "conf": 0.68, "rr": 1.78, "status": "FILLED then SOLD same session"},
+      {"symbol": "GESHIP", "qty": 30, "price": 1542.0, "conf": 0.65, "rr": 2.0, "status": "OPEN, unfilled 4+ hrs"},
+      {"symbol": "BAJFINANCE", "qty": 50, "price": 944.0, "conf": 0.66, "rr": 1.41, "status": "FILLED — sub-floor R:R"}
+    ],
+    "deployment_pct": {"filled": 41.12, "full_fill": 45.76, "cash_buffer": 58.88},
+    "cumulative_experiment_pnl": -2565.81,
+    "cumulative_win_rate_11d": 0.40,
+    "ex_outlier_cumulative_pnl": 950.19
+  },
+  "patterns_found": [
+    "WHIPSAW: Same-session round-trip on CHENNPETRO. BUY 09:42 at ₹1120 on ATH breakout (Q4 PAT +203%, conf 0.68, SL 1075 = -4%, R:R 1.78), SELL 10:44 at ₹1116.60 (-0.3% in 62 min). Exit reasoning cited 'OMC refinery price-freeze overhang' and 'single-asset Manali operational binary' — both items were public BEFORE the 09:42 entry, so the exit was a research-quality failure, not a thesis-break trade. Chart action (-3.7% off intraday high) was within the SL's 4% absorption budget; SL at 1075 would not have tripped. Cost: -₹115 plus a burned decision slot. Pattern parallel to Day-5 INDUSINDBK round-trip cited in prompt rule 13.",
+    "SL-vs-CMP MATH ERROR on NESTLEIND. CLOSE 11:12 reasoning claimed 'Stored SL 1442 is ABOVE CMP 1449.10 — guard will not allow loosening' and used that to justify panic exit. But 1442 < 1449.10 (SL was 7 pts BELOW CMP, no self-stopout risk). Outcome was a +₹2,298 winner exit so the result was good — but the reasoning was numerically wrong, meaning the win was luck not skill. This perception-error pattern is not safe to repeat.",
+    "R:R-EXECUTION INCONSISTENCY on BAJFINANCE. Reasoning paragraph self-corrected mid-sentence: 'R:R 1:1.4 — slightly below 1.5 minimum... reconsidering: target 990 gives R:R 1:1.6. Adjusting target.' But the submitted `target` field was 985 (not 990), yielding stored R:R 1.41. The bot's prose self-correction never flowed into the structured output, and a sub-floor R:R position landed in the overnight book. Guardrails check executed numbers, not paragraphs.",
+    "BINARY-EVENT EXITS WORKED AS DESIGNED on POWERGRID and TATAPOWER. POWERGRID exited at -0.16% ahead of today's board meeting on fund-raise/borrowing (binary capital-structure event); TATAPOWER exited at -0.34% ahead of May-12 Q4 results on -25% YoY PAT trajectory. Both follow rule 11 disposition (a) — small loss on closed door beats binary tail risk. These are good defensive trades, not noise.",
+    "GESHIP LIMIT 1542 STALE 4+ HRS UNFILLED. Order placed 11:12, still OPEN at 15:30 close. Suggests entry LIMIT was set at or above the offer-side and never crossed during a session where shipping price action faded. n=1 stale-limit pattern — not yet actionable, but flag for entry-execution discipline (LIMIT realism check from rule 9 should catch the next instance).",
+    "CONFIDENCE-FLOOR BLOCKING: 2 mid-tier signals blocked at conf 0.60 and 0.62 by the 0.65 override. All 4 admitted entries clustered in the 0.65-0.72 band — strategy is hugging the floor. Combined with cumulative 40% win rate where the worst single loss (MAHABANK -₹3,516) dominates net P&L (-₹2,566 cumulative; ex-MAHABANK +₹950), the 0.65 cap looks like an opportunity cost without a clear edge in support of it. Day-11 conditions (n=15+ sample, no live high-conf block, deployment chronically <50%) meet the loosen precondition cited in today's risk_assessment_1530.json for the strategy review window.",
+    "TRAIL-STOP DISCIPLINE WORKING WELL on the held book. Multiple MODIFY ticks raising SL above entry on PNBHOUSING (984→1032, locking +4.9%), SUNPHARMA (1734→1788, locking +3.1%), COALINDIA (469→478.5, locking +2.0%). These cap downside on 3 of 8 holdings to small profits even on a tomorrow gap-down. No trail-gap-discipline violations observed today.",
+    "DEPLOYMENT GAP: 41% filled / 46% full-fill is signal-gated, not parameter-gated (override cap is 65%, base is 80%). Capital under-utilization is the dominant opportunity cost on a positive-P&L day where the bot found 4 worth-entering setups but blocked 2 mid-tier signals at the conf floor."
+  ],
+  "changes_made": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "what": "Loosened 4 risk overrides toward base config: min_confidence 0.65 → 0.60; max_deployed_pct 0.65 → 0.75; max_sl_pct 0.035 → 0.045; max_sector_pct 0.22 → 0.28. Held max_position_pct 0.15, default_sl_pct 0.015, min_sl_pct 0.01.",
+      "why": "Cumulative 11-day data (6W/9L = 40%, net -₹2,566 dominated by single MAHABANK -₹3,516; ex-outlier +₹950) shows core process is roughly breakeven, not catastrophic — earning room to test the mid-conviction band. Today blocked 2 entries at conf 0.60/0.62 by the 0.65 floor; today admitted entries cluster at 0.65-0.72 (strategy hugs floor). max_sl_pct 0.035 binding on CHENNPETRO entry (4% SL warning). max_sector_pct 0.22 was already trial-loosened to 0.28 by risk_monitor at 09:00 today and revoked at 12:30 — strategy-side review re-instates the looser cap to give thematic plays room. max_deployed_pct 0.65 cap is non-binding (today's 45.76% sits 19.24 pp under it) so loosening to 0.75 unlocks zero immediate admission capacity but removes the psychological ceiling.",
+      "expected_impact": "Admits the ~0.60-0.65 confidence band where 2 trades were blocked today; allows 4-5% wider SLs on conviction plays so R:R sizing isn't artificially compressed; restores sector breathing room for thematic expression (energy, BFSI, shipping cluster building today). Should raise daily admission count by ~1-2 ticks per session and average deployment toward the 50-60% band on future positive-tape days."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added rule 15 (SAME-SESSION ROUND-TRIP DISCIPLINE) to the _TEMPLATE: exits in the same session as the entry must cite a fact that materialized AFTER entry, not pre-existing overhangs. Generalizes rule 13's governance-specific 'research-quality failure' framing to all overhangs.",
+      "why": "CHENNPETRO BUY 09:42 → SELL 10:44 (-₹115, 62-min round-trip) cited overhangs ('OMC price-freeze, single-asset binary') that were public BEFORE the 09:42 entry. The -3.7% intraday fade off the high was within the SL's 4% absorption budget; the SL at 1075 would not have tripped. Either entry was wrong (skip) or exit was wrong (hold to SL) — both can't be right. Rule 13 already covers governance overhangs after Day-5 INDUSINDBK; today shows the same failure mode generalizes to operational/structural overhangs.",
+      "expected_impact": "Forces an explicit before-entry overhang scan and prevents premature panic exits at -1% intraday wobble that pre-empt the SL by several percentage points. Should reduce same-session whipsaw count and convert ambiguous entries into either NO_ACTION or held-to-real-SL outcomes."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added subsection (d) STATE-VERIFICATION ARITHMETIC to rule 12 trailing-SL guidance: before invoking 'SL is above/below CMP' as exit rationale, do the comparison numerically.",
+      "why": "NESTLEIND CLOSE 11:12 reasoning claimed 'Stored SL 1442 is ABOVE CMP 1449.10' but 1442 < 1449.10 (SL was 7 pts BELOW CMP). The claimed self-stopout risk did not exist; the panic-exit was triggered by a perception error. Outcome was lucky (+₹2,298 winner) but luck is not a strategy.",
+      "expected_impact": "Prevents perception-error panic exits where the bot mis-reads the SL/CMP relation. Forces a numeric check before EXIT rationale invokes the self-stopout argument."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added rule 16 (R:R-EXECUTION CONSISTENCY) to _TEMPLATE: claimed R:R in reasoning prose must equal the R:R implied by submitted stop_loss and target fields. Final-step arithmetic check before emitting BUY/SELL.",
+      "why": "BAJFINANCE BUY 12:12: reasoning self-corrected from R:R 1.4 to 1.6 by 'adjusting target to 990' but submitted target was 985, yielding stored R:R 1.41 — sub-floor admission to overnight book. Guardrails check the submitted numbers, not the paragraph; sloppy target fields admit sub-floor R:R regardless of prose self-corrections.",
+      "expected_impact": "Forces the final-step |target − entry|/|entry − stop_loss| ≥ MIN_RISK_REWARD check in the bot's decision pipeline, so the structured output reflects what the prose claims. Should eliminate prose-vs-execution drift on R:R."
+    }
+  ],
+  "recommendations": [
+    "Day-12 watch: Did the conf 0.60-0.65 band start admitting trades? Track post-decline tape on the 2 blocked-today symbols if observability allows — if they would have been profitable, the loosen was correct; if they sold off, escalate caution.",
+    "Day-12 watch: Same-session whipsaw count. If rule 15 reduces CHENNPETRO-style round-trips to zero or one over the next 5 sessions, the rule is doing its job. If whipsaws persist, the failure mode is upstream (entry research) not downstream (exit discipline) and the prompt should pivot to entry-side overhang gating.",
+    "Day-12 watch: GESHIP — if the LIMIT 1542 still has not filled by Day-12 open, CANCEL or re-emit at MARKET / tighter LIMIT. Persistent stale LIMITs are a rule-9 violation pattern.",
+    "Promote winning loosens to config.yaml only after 5 sessions of stable performance: if min_confidence 0.60 doesn't degrade win rate below 35% over Days 12-16, promote 0.50 → 0.60 in config.yaml as the durable base (the current 0.50 base is too loose given observed signal quality).",
+    "Consider adding a structured pre-trade checklist micro-prompt for BUY decisions: (1) overhang scan (rule 13 + rule 15 inverse), (2) R:R math (rule 16), (3) cluster-cap check (rule 10), (4) SL-distance × position-size ≤ 0.5% portfolio risk (rule 5). Today missed checks 1 and 2 silently; an explicit checklist surfaces the bot's own internal contradiction before submission rather than after.",
+    "Cumulative-P&L ex-outlier (+₹950) framing is more useful for daily review than headline (-₹2,566). Worth surfacing in EOD risk_assessment outputs so the strategy-vs-risk-monitor reviews don't over-weight a single Day-2 MAHABANK fat-tail."
+  ]
+}

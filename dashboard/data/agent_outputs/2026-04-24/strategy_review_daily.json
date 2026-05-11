@@ -1,0 +1,114 @@
+{
+  "date": "2026-04-24",
+  "review_type": "daily",
+  "trades_analyzed": 2,
+  "summary": {
+    "wins": 1,
+    "losses": 1,
+    "total_pnl": 1424.8,
+    "win_rate": 0.5,
+    "avg_win": 1834.2,
+    "avg_loss": -409.4,
+    "expectancy_per_trade": 712.4,
+    "payoff_ratio": 4.48,
+    "portfolio_value_eod": 1003611.95,
+    "session_pnl_pct": 0.14,
+    "llm_cost_usd": 10.32,
+    "llm_calls": 55
+  },
+  "trades_detail": [
+    {
+      "symbol": "TORNTPOWER",
+      "entry_date": "2026-04-22",
+      "entry_price": 1650.0,
+      "exit_date": "2026-04-24 10:12:35",
+      "exit_price": 1700.95,
+      "qty": 36,
+      "pnl": 1834.2,
+      "pnl_pct": 3.09,
+      "confidence_at_exit": 0.75,
+      "outcome": "WIN",
+      "thesis": "Defensive exit ahead of Q4 results in May; parabolic +35% April rally at 52w high showing blow-off-top characteristics; Q1 prior had -25% PAT decline signalling asymmetric downside into earnings. SL at 1704.81 was above CMP 1696.50 — AI closed manually rather than wait for engine stop."
+    },
+    {
+      "symbol": "ADANIPOWER",
+      "entry_date": "2026-04-22",
+      "entry_price": 214.0,
+      "exit_date": "2026-04-24 10:43:24",
+      "exit_price": 212.22,
+      "qty": 230,
+      "pnl": -409.4,
+      "pnl_pct": -0.83,
+      "confidence_at_exit": 0.65,
+      "outcome": "LOSS",
+      "thesis": "Defensive exit ahead of Apr 29 concall; stock trading ~20% above consensus target Rs 177; JM Financial expected Q4 PAT -12.3% YoY; bearish engulfing/doji on daily confirming exhaustion at 52w high. Also cut Power cluster exposure (NTPC + ADANIPOWER = 2 power names in book)."
+    }
+  ],
+  "patterns_found": [
+    "PATTERN 1 — Strategy layer finally activated after 44h silence (Day 1 EOD → Day 3 10:12). Both exits were well-reasoned defensive moves citing specific earnings catalysts and valuation over-extension, not panic. Big win (+₹1,834) vs small loss (−₹409) = payoff ratio 4.48x — this is exactly the asymmetric-outcome shape the prompt is designed to reward. With only 2 closed trades the statistic is noisy, but the QUALITATIVE reasoning on both exits (Q4 earnings asymmetry, consensus-target overshoot, blow-off-top technicals, cluster trim) is sound and the kind of decision we want to see repeated.",
+    "PATTERN 2 — TORNTPOWER trailing was over-aggressive. Between 09:30:52 and 09:31:14 (22 seconds), SL was raised in three fast hops 1650 → 1680 → 1685 → 1704.81 while LTP was in the ~1700 area. Price then reverted and by 10:12 the AI's own exit reasoning explicitly noted 'Current SL at 1704.81 is ABOVE CMP of 1696.50 — the SL has effectively been breached intraday (day low 1685.60).' The position was booked at 1700.95 only because the AI manually intervened — had the engine-side stop been live and LTP pulled back further before 10:12, the fill would have been worse. Capture was forced by self-stop dynamics, not clean thesis execution.",
+    "PATTERN 3 — PNBHOUSING MODIFY churn. 24 MODIFY warnings fired for PNBHOUSING across the session trailing SL through 985 / 995 / 1004.5 / 1007.15 / 1011.65 / 1013.22, with OSCILLATION on at least 3 ticks (1011.65 → 1000 at 12:41, 1007.15 → 995 at 12:13, 1011.65 → 1000 at 13:12). Only ~6 of 24 MODIFYs advance SL by ≥0.5%; the remainder are noise or reversions. Root cause is the 2026-04-23 engineering note that MODIFYs don't persist to trades.stop_loss for CNC, so each tick reads SL=0 from the snapshot and re-derives a trail level from LTP. The prompt edits land a partial fix (monotonic-up + micro-adjust suppression); the durable fix is engine-side persistence.",
+    "PATTERN 4 — Guardrails functioning as designed. Two BLOCKED events at 10:12:43 / 10:12:45 ('MODIFY for TORNTPOWER but no open position/holding') fired on the tick AFTER the TORNTPOWER exit — the AI tried to MODIFY an SL on a position it had just closed. This is Claude not yet reading its own exit. The block was correct and the system self-corrected on the next tick. Informational, not a change required today.",
+    "PATTERN 5 — Exit-trade SL-defaulting warnings. Both CLOSE orders (TORNTPOWER at 10:12:33, ADANIPOWER at 10:43:22) fired 'WARNING: No stop-loss specified. Applied default 2% SL.' These were exit SELLs, so the default SL is a formality on an about-to-square-off order. Not harmful, but if the engine can skip the default-SL injection on MARKET SELL-to-exit orders it would clean the log. Minor.",
+    "PATTERN 6 — No MIS activity. All trades remain CNC. No timing-related guardrail fires. Daily P&L ratio positive for first time since experiment start (cumulative P&L +₹1,425, +0.14%). Deployment dropped below the 0.70 override cap (67.49% per 11:00 risk_monitor) for the first time, opening admission surface again."
+  ],
+  "guardrail_effectiveness": {
+    "fires_today": {
+      "modify_sl_above_entry_info": 27,
+      "blocked_modify_no_position": 2,
+      "default_sl_applied": 2,
+      "errors_that_stopped_a_trade": 0,
+      "hot_overrides_fired_today": ["min_sl_pct 0.005 → 0.01 at 11:00 on MAHABANK -6.42% breach"]
+    },
+    "assessment": "Guardrails blocked 0 good trades and 0 bad trades — they fired as informational/default-handling. The 27 SL-above-entry info-logs correspond to the 24 PNBHOUSING + 3 TORNTPOWER trailing attempts; every one of them is the healthy direction (tighter-than-entry SL on a profitable long), so the warning itself is a low-signal log line. Consider downgrading it from 'warning' to 'info' severity in future engine work so real warnings don't drown in it."
+  },
+  "timing_assessment": {
+    "entry_timing": "N/A today (no new entries). Prior entries from 2026-04-22 still held for MAHABANK / PNBHOUSING / GOLDBEES / NESTLEIND / AUBANK / GRANULES / HINDUNILVR / NTPC.",
+    "exit_timing": "TORNTPOWER exit at 10:12:35 (57 min after open) pre-empted what the risk_monitor and AI both read as earnings asymmetry 1-2 weeks out. Chart evidence (gap-up-fade, -2.33% intraday) supported. ADANIPOWER exit 31 min later at 10:43:24 — small loss booked 5 days ahead of concall. Both within the first hour of the session, before the 11:00 risk_monitor SL-floor tightening, so the exits were purely strategy-driven, not guardrail-forced. Good proactive exit timing.",
+    "mis_squareoff_compliance": "No MIS positions; no square-off action required."
+  },
+  "position_sizing_assessment": {
+    "observation": "Closed positions today: TORNTPOWER was 5.94% of capital at entry (36 × 1650 = ₹59,400); ADANIPOWER was 4.92% (230 × 214 = ₹49,220). Both below the current 15% per-name cap with significant headroom — sensible for confidence 0.68/0.66 at entry time. Confidence at exit (0.75 and 0.65) matched the directional clarity of each thesis. No size-to-confidence mismatches on today's closed trades.",
+    "remaining_book_size_concerns": "AUBANK at 18.63% of capital (per 11:00 risk_monitor) remains above the 0.15 cap as grandfathered drift. MAHABANK at -6.42% unrealized is the single largest drag but size is 9.26% of capital — any further downside feeds the daily-loss-limit buffer. Not a today-action, but the Day-4 morning review should reassess whether the MAHABANK thesis is still intact at that drawdown."
+  },
+  "stop_loss_performance": {
+    "sls_hit_today": 0,
+    "assessment": "No stop-losses triggered today. Both exits were AI-initiated discretionary closures, not SL fills. This validates the prompt's PRIORITY ORDER text ('first walk through every existing position and decide EXIT / MODIFY / HOLD'). However, the TORNTPOWER case shows that an AI-initiated close is sometimes a FORCED choice because the SL has already been implicitly triggered by over-aggressive trailing — which is why the trail-gap rule was added.",
+    "sl_band_status": "Effective new-entry SL band is now [1.0%, 4.0%] after today's 11:00 override. Wider than typical volatility (0.8-1.5%/day on Nifty 500 mid-caps) in band-min, so stops should rarely whipsaw; narrower than 6% in band-max so single-name risk per 15%-sized admission tops out at 0.60% of capital. Healthy."
+  },
+  "changes_made": [
+    {
+      "file": "system_prompt.py",
+      "what": "Added MICRO-ADJUST and OSCILLATION rule under MODIFY rules: suppress MODIFYs whose |new_stop_loss − stored SL| < 0.5% of stored SL, and forbid proposing a lower new_stop_loss than last tick's without a broken thesis. Framed trailing SL for longs as monotonic-up.",
+      "why": "PNBHOUSING had 24 MODIFYs today with only ~6 materially advancing SL and at least 3 oscillations. The existing no-op rule only handled exact-match MODIFYs; this extends it to near-match and reversion noise that dominated today's churn.",
+      "expected_impact": "Per-position MODIFY density drops from ~3/tick to ~0-1/tick; decision-JSON bandwidth is freed for higher-signal actions; the SL trajectory of any held position becomes monotonic-up (tightening only), matching the engine's tighten-only semantics."
+    },
+    {
+      "file": "system_prompt.py",
+      "what": "Added sub-rule (c) TRAIL-GAP DISCIPLINE under TRAILING SL MANDATE: new_stop_loss for longs must sit ≥0.5% BELOW LTP (≥0.5% ABOVE LTP for shorts). Included TORNTPOWER anti-example as inline teaching text.",
+      "why": "TORNTPOWER SL was trailed 1650 → 1704.81 in 22 seconds this morning while LTP was ~1700. Price reverted to 1696.50 and the AI's own exit reasoning cited 'SL at 1704.81 is ABOVE CMP of 1696.50 — the SL has effectively been breached intraday.' The +3.09% exit captured profit but was forced by a self-inflicted-stop dynamic.",
+      "expected_impact": "Winners no longer risk self-stop from over-aggressive trailing during micro-pullbacks. When the AI wants a tight lock on a winner, the prompt now steers it toward an explicit EXIT action rather than parking SL on top of CMP. 0.5% gap aligns with the min_sl_pct floor in risk overrides for a consistent minimum-SL-band story."
+    }
+  ],
+  "changes_deferred": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "considered_change": "Further tighten max_deployed_pct 0.70 → 0.68 or daily_loss_limit_pct 0.03 → 0.025",
+      "decision": "DEFER",
+      "reason": "11:00 min_sl_pct tightening just fired. Strategy finally activated with two good exits. Tightening admission right after the first healthy SELL-signal would undercut the very regime change (SELL → freed cash → quality-gated BUY) we want to reinforce."
+    },
+    {
+      "file": "config/config.yaml",
+      "considered_change": "Lower trailing_sl.trail_gap_pct from 0.02 to 0.01, or promote the current risk_config overrides to base",
+      "decision": "DEFER",
+      "reason": "Engine-side CNC trailing isn't wired per the 2026-04-23 engineering note, so tuning trail_gap_pct has no effect on today's failure modes. Promoting max_sl_pct=0.04 / min_sl_pct=0.01 overrides to base is premature with <3 trading days of observed outcomes; wait for more samples."
+    }
+  ],
+  "recommendations": [
+    "ENGINEERING (carried over from 2026-04-23): Fix the CNC SL persistence bug. paper_broker.modify_sl_target for CNC holdings should write new_stop_loss into trades.stop_loss so portfolio_snapshots can surface it on the next tick. This is the structural root of the MODIFY-churn observed on PNBHOUSING today — Claude sees SL=0 every tick and re-derives a trail level. The prompt's monotonic-up rule is a scaffold, not a guarantee, until the snapshot feeds the real stored SL back to the decision layer.",
+    "ENGINEERING: Consider a guardrail hard-block on MODIFY decisions where new_stop_loss ≥ LTP (longs) or ≤ LTP (shorts). The prompt now forbids it, but a guardrail check would make the TORNTPOWER pattern literally impossible to enter. Symmetric with how the engine treats other invalid SL states.",
+    "MONITORING: Tomorrow morning, the first premarket decision should reassess MAHABANK explicitly. It's −6.42% unrealized as of 10:43 and carrying 9.26% of capital — a combined 0.60% of portfolio unrealized drag, one-third of today's +0.14% session gain. The book cannot keep carrying a name that breached both the −5% and −6% Day-2/Day-3 firing thresholds without a fresh thesis review. Either the AI emits a size-trim MODIFY-equivalent (partial EXIT) or renews the long conviction with evidence.",
+    "MONITORING: Of the 8 still-held positions, 5 are BFSI / rate-sensitive (MAHABANK, PNBHOUSING, AUBANK, NESTLEIND via FMCG = 1 non-BFSI, HINDUNILVR FMCG, GRANULES pharma, NTPC power, GOLDBEES gold). Cluster count: BFSI 3 (MAHABANK/PNBHOUSING/AUBANK) = 35.76% of capital per 11:00 risk_monitor. Power trimmed to 1 (NTPC only) after today's ADANIPOWER exit. The cluster-discipline section of the prompt warned against this exact shape; today's ADANIPOWER exit reduced the problem but BFSI remains the concentration to monitor.",
+    "PROMPT (for future iteration, not today): Consider adding a bullet that explicitly uses 'drawdown trigger' language — e.g., 'if a held CNC position marks −5% or more for two consecutive decision ticks, the default action is EXIT unless you can cite NEW evidence that the thesis is still intact.' MAHABANK has dragged through 10 snapshots at below −4.5% across two sessions and the decision layer has emitted only MODIFY or HOLD; a prose-level drawdown trigger could force a thesis-review each tick past threshold. Flagged but not added today — a 10-snapshot sample on 1 name isn't enough to justify a new rule yet."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-11 10:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1003963.12,
+    "cash": 505057.42,
+    "deployed_pct": 49.69,
+    "holdings_count": 12,
+    "positions_count": 0,
+    "daily_pnl": 5781.73
+  },
+  "findings": [
+    "Re-deployment confirmed: TATACONSUM BUY 40 @ ₹1248 = ₹49,920 (4.97% of capital) filled at 10:12:08 — 16 minutes after the 09:57 rotation freed ₹203K cash. Deployment lifted 44.68% → 49.69% (+5.01 pp), holdings count 11 → 12. The 10:00 pre-armed two-tick chronic-stall watch (deployment <50% through 11:00 with zero admits) is DEFUSED — strategy redeployed ~24.6% of freed cash within one tick, validating the single-tick rotation hypothesis over the chronic-idle hypothesis.",
+    "Daily P&L further improved to +₹5,781.73 (+₹653 vs 10:00 snapshot's +₹5,128.43) — MTM gains accruing on profit-locked holdings (COFORGE, MARICO per SL-up MODIFYs in guardrail_log between 10:11-10:12). Loss-gate buffer ~₹35,800 (3.6% of total) fully intact.",
+    "Sector composition shifts after TATACONSUM admit (cost basis, % of total ₹1,003,963, n=12 across 8 buckets): FMCG 11.81% n=3 (MARICO+DABUR+TATACONSUM) NEW MAX SECTOR — replaces the 10:00 max Specialty Chem 8.79%; Specialty Chem 8.78% n=2 (PIDILITIND+SRF); Pharma 6.79% n=2 (WOCKPHARMA+LAURUSLABS); Gold-ETF 4.98%; BFSI/NBFC 4.72% n=1 (ABCAPITAL); Cables 4.53% n=1 (POLYCAB); Auto 4.29% n=1 (BAJAJ-AUTO); IT 3.76% n=1 (COFORGE). Max-sector FMCG 11.81% retains ~23 pp buffer to base 35% cap and ~10 pp to a hypothetical 0.22 cap.",
+    "Position-size band 1.94%–4.98% with 10/12 names tightly clustered 3.76%–4.98%. Max GOLDBEES 4.98%, min DABUR 1.94%. Two sub-3% outliers (DABUR 1.94%, LAURUSLABS 1.95%) = 17% of names — not the >85% tiny-everything anti-pattern. No oversized position.",
+    "Distress meta-trigger 0/3: max position 4.98% << 20% cap, max sector 11.81% << 35% cap, deployment 49.69% << 80% cap. No tighten leg fires.",
+    "Signal acceptance surface fully open: TATACONSUM admit cleared the base 0.50 confidence floor without friction. Guardrail_log today shows continuous benign MODIFY events (profit-lock SL raises on COFORGE 1259→1340/1356, MARICO 820→822/825, LAURUSLABS 1226→1228) — zero high-confidence (≥0.70) BLOCKs across 9+ sessions. Base floor empirically non-binding.",
+    "SL geometry working as designed — five separate profit-lock MODIFYs in the 10:11-10:12 window (LAURUSLABS SL raised above entry +₹2/+0.16%, MARICO +₹2-5/+0.24-0.61%, COFORGE +₹81-97/+6.4-7.7%). Locking gains, not biting. Base SL band 6x-validated by 5/8 exits; tightening freshly-validated geometry would manufacture friction.",
+    "Defensive sleeve rebuild via TATACONSUM admit: FMCG sleeve widened n=2 → n=3 (replaces some of the BFSI n=3→n=1 and Defense n=1→n=0 narrowing from 09:57 rotation). Cumulative defensive ballast (FMCG 11.81% + Pharma 6.79% + Gold 4.98% = 23.58%) up vs 10:00's 18.61%. Pre-5/12 CPI/Pharma-earnings posture remains de-risked on rate-sensitive BFSI (single-name ABCAPITAL 4.72%) while restoring consumer-staple ballast.",
+    "Overrides block remains empty ({}) for ~138.5 hr (5.77 days) since 2026-05-05 16:00 EOD reset — nothing to revert in the loose direction (base config IS the floor per spec). No tighten trigger fires this tick."
+  ],
+  "actions_taken": [
+    "HOLD all parameters at base config (overrides:{} unchanged). 39th consecutive HOLD tick. No tighten (0/3 distress fires, P&L positive +₹5,782, no high-conf blocks, SL geometry validated by 5 profit-locks this tick, FMCG max sector at 11.81% retains 23 pp buffer to base cap). No loosen (overrides already at the floor — base config is the maximum-loose state per spec).",
+    "Pre-armed Re-deployment Watch from 10:00 RETIRED — TATACONSUM admit defuses the two-tick chronic-stall threshold. Re-arm at higher trigger: if deployment fails to climb above 55% by 11:30 AND no further admits beyond TATACONSUM, re-flag idle-capital concern (single admit acceptable; two-tick stall at ~50% is the next escalation threshold).",
+    "Pre-armed FMCG sleeve watch: 4th FMCG name pushing sleeve above 15% of capital → max_sector_pct re-arm check (currently 11.81% with ~23 pp buffer to base, 10 pp to a hypothetical 0.22 cap). Also pre-armed: any new admit at conf <0.55, any high-conf (≥0.70) BLOCK, realized P&L crossing -1.0% intraday (~-₹10,040), any single position crossing 12%, deployment crossing 75%."
+  ]
+}

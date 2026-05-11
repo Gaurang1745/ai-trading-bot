@@ -1,0 +1,117 @@
+{
+  "timestamp": "2026-04-30 14:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 587249.89,
+    "deployed_pct": 41.12,
+    "deployed_pct_full_fill": 45.76,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": 1945.50,
+    "daily_pnl_pct": 0.195
+  },
+  "holdings_breakdown": [
+    {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.0, "value": 78720, "pct_capital": 7.89, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.0, "value": 52020, "pct_capital": 5.21, "sector": "Pharma"},
+    {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.10, "value": 50040, "pct_capital": 5.02, "sector": "Gold ETF"},
+    {"symbol": "BANDHANBNK", "qty": 250, "avg_price": 200.0, "value": 50000, "pct_capital": 5.01, "sector": "BFSI"},
+    {"symbol": "ONGC", "qty": 165, "avg_price": 302.0, "value": 49830, "pct_capital": 4.99, "sector": "Oil & Gas"},
+    {"symbol": "BAJFINANCE", "qty": 50, "avg_price": 944.0, "value": 47200, "pct_capital": 4.73, "sector": "BFSI"},
+    {"symbol": "COALINDIA", "qty": 100, "avg_price": 469.0, "value": 46900, "pct_capital": 4.70, "sector": "Mining/Energy"},
+    {"symbol": "PHARMABEES", "qty": 1500, "avg_price": 23.65, "value": 35475, "pct_capital": 3.56, "sector": "Pharma"}
+  ],
+  "open_orders": [
+    {"symbol": "GESHIP", "type": "BUY", "qty": 30, "price": 1542.0, "stop_loss": 1490, "target": 1645, "sl_pct": 3.37, "rr": 1.98, "confidence": 0.65, "submitted_at": "2026-04-30 11:12:21", "sector": "Shipping/Transport", "value_pct": 4.64}
+  ],
+  "sector_concentration_full_fill": {
+    "BFSI": {"pct": 17.63, "names": ["PNBHOUSING", "BANDHANBNK", "BAJFINANCE"], "buffer_to_cap": 4.37, "cap": 22.0},
+    "Oil_Gas_Mining": {"pct": 9.69, "names": ["COALINDIA", "ONGC"], "buffer_to_cap": 12.31, "cap": 22.0},
+    "Pharma": {"pct": 8.77, "names": ["SUNPHARMA", "PHARMABEES"], "buffer_to_cap": 13.23, "cap": 22.0},
+    "Gold_ETF": {"pct": 5.02, "names": ["GOLDBEES"], "buffer_to_cap": 16.98, "cap": 22.0},
+    "Shipping": {"pct": 4.64, "names": ["GESHIP"], "buffer_to_cap": 17.36, "cap": 22.0}
+  },
+  "today_trade_activity": {
+    "buys": 4,
+    "sells_or_closes": 5,
+    "buy_to_sell_ratio": 0.80,
+    "high_conf_admissions_ge_070": 1,
+    "high_conf_symbols": ["ONGC@0.72"],
+    "realized_pnl_breakdown": [
+      {"symbol": "POWERGRID", "pnl": -159.0},
+      {"symbol": "GLENMARK", "pnl": 72.0},
+      {"symbol": "TATAPOWER", "pnl": -150.7},
+      {"symbol": "CHENNPETRO", "pnl": -115.2},
+      {"symbol": "NESTLEIND", "pnl": 2298.4}
+    ],
+    "winners": 2,
+    "losers": 3,
+    "win_rate_today": 0.40,
+    "admit_then_exit_within_60min_count": 1,
+    "admit_exit_pattern_detail": "CHENNPETRO admit 09:42:35 → exit 10:44:50 (62 min, marginally outside strict 60-min window)",
+    "sub_15_rr_admissions_count": 1,
+    "sub_15_rr_detail": "BAJFINANCE R:R = 41/29 = 1.41 (n=1 first instance, observability seed)"
+  },
+  "delta_since_1330": {
+    "primary_change": "BAJFINANCE OPEN order FILLED at 13:50:00 (passive broker match — was the projected fill of the 12:12 submit). Cash dropped ₹47,200 from ₹634,449.89 → ₹587,249.89. Holdings count 7 → 8. Open orders count 2 → 1. Filled deployment 36.39% → 41.12%. Full-fill deployment unchanged at 45.76% (BAJFINANCE was already in the full-fill projection).",
+    "strategy_decisions_since_1212_bajfinance_submit": 0,
+    "strategy_silence_minutes": 108,
+    "geship_open_status": "Still OPEN since 11:12:21 (~2h48m), no fill, no cancel.",
+    "sector_full_fill_deltas": "ZERO. All sector percentages unchanged from 13:30 (BAJFINANCE fill simply realizes the projected exposure).",
+    "today_realized_pnl_change": "ZERO (no new closes since 11:12 NESTLEIND). Book holds at +₹1,945.50."
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.035,
+    "max_sector_pct": 0.22,
+    "min_risk_reward": "no override (base 1.5)",
+    "daily_loss_limit_pct": "no override (base 0.03)"
+  },
+  "trigger_walk_for_1400": {
+    "a_4th_bfsi_name_cluster": "DORMANT — BFSI count holds at 3 (PNBHOUSING + BANDHANBNK + BAJFINANCE). Zero new BFSI admissions since 12:12.",
+    "b_bfsi_full_fill_above_22pct": "DORMANT — BFSI 17.63% sits 4.37 pp below cap. Would require BFSI add ≥ 4.37% capital ≈ ₹43.6k.",
+    "c_3rd_pharma_or_pharma_above_14pct": "DORMANT — still 2 Pharma names (SUNPHARMA + PHARMABEES = 8.77%), 5.23 pp below 14% threshold.",
+    "d_3rd_sl_above_35pct_today": "DORMANT — today's ≥3.5% SL admissions count holds at 1 (CHENNPETRO 4.02% admitted 09:42 BEFORE the 10:00 max_sl_pct tighten, exited 10:44). GESHIP 3.37% and BAJFINANCE 3.07% both below the 3.5% threshold. ONGC actual SL distance is 1.99% (₹296 vs entry ₹302) — well below threshold (prior changelogs erroneously stated ONGC at 3.97%; corrected here for accuracy).",
+    "e_admit_exit_60min_n_equals_2": "DORMANT — count holds at n=1 (CHENNPETRO 62 min, marginally outside strict 60-min window). GESHIP and BAJFINANCE admissions still active (BAJFINANCE just FILLED at 13:50, no exit).",
+    "f_2nd_sub_15_rr_admission": "DORMANT — count holds at n=1 (BAJFINANCE 1.41). No new BUY admissions since 12:12.",
+    "g_loosen_max_sector_pct_022_to_028": "DORMANT — BFSI 17.63% sits 4.63 pp ABOVE the 13% sustained-low precondition. Would compound wrong direction against today's active BFSI re-stacking pattern.",
+    "h_loosen_max_deployed_pct_065_to_070": "BOTH LEGS FAIL — high-conf admissions today still 1 (ONGC 0.72), threshold ≥2; deployment full-fill 45.76% sits 9.24 pp below 55% threshold. Cap also non-binding by 19.24 pp on full-fill — loosening unlocks no actual admission capacity.",
+    "i_loosen_min_confidence_065_to_060": "DEFERRED — n≥15 closed-trade sample precondition was actually met as of today's 5 closes (cumulative n=15: TORNTPOWER+1834.2 / ADANIPOWER-409.4 / AUBANK-865.92 / GRANULES+955.5 / INDUSINDBK+41.8 / HINDUNILVR-1099.2 / TORNTPOWER-1349.04 / MAHABANK-3516 / HINDZINC+171.75 / NTPC-275 / POWERGRID-159 / GLENMARK+72 / TATAPOWER-150.7 / CHENNPETRO-115.2 / NESTLEIND+2298.4 = net -₹2,565.81 across 8 trading days, win-rate 6/15 = 40%). Per the 13:30 finding, fire is held for the Day-10 (~2026-05-04) holistic-stack-refinement review, not a tick-based fire — to preserve the strategic-review venue for the holistic stack, and because confidence-band overlap (winners 0.65-0.75, losers 0.65-0.72) shows no clean statistical signal."
+  },
+  "findings": [
+    "Single state change since 13:30 is the BAJFINANCE OPEN→FILLED transition at 13:50 — a passive broker match on the 12:12 submit, NOT a new strategy decision. Cash dropped ₹47,200; filled deployment moved 36.39% → 41.12%; full-fill deployment unchanged at 45.76% (BAJFINANCE was already in the projection). All sector percentages on full-fill basis identical to 13:30.",
+    "Strategy is quiet at 14:00: zero new BUY or SELL decisions since the 12:12 BAJFINANCE submit (108 minutes of strategy silence — second silent period today, the first being 12:30 → 13:30 also at zero decisions). GESHIP OPEN since 11:12:21 (~2h48m), still unfilled and uncancelled.",
+    "Book remains in healthy state: realized P&L +₹1,945.50 (+0.195%) — POSITIVE session. 8 diversified holdings spanning 5 sectors on filled basis (BFSI, Pharma, Energy, Gold ETF — Shipping pending GESHIP fill). Largest single position PNBHOUSING 7.89% holds 7.11 pp buffer to the 15% cap — no per-name concentration concern.",
+    "Cash position 58.88% (₹587,249.89 / ₹997,435) is well above the 20% min cash buffer; full-fill cash 54.24%. The 65% max_deployed_pct cap is non-binding by 19.24 pp on full-fill — under-deployment is signal-gated (strategy quiet for 108 min), not parameter-gated. Loosening max_deployed_pct would not unlock any additional admission capacity.",
+    "Sector profile on full-fill is unchanged from 13:30: BFSI 17.63% (4.37 pp buffer to cap), Pharma 8.77% (13.23 pp buffer), Oil/Gas/Mining 9.69%, Gold ETF 5.02%, Shipping 4.64%. The 0.22 max_sector_pct cap holds binding-by-design but not breached. Today's 3-name BFSI shape (PNBHOUSING + BANDHANBNK + BAJFINANCE) still morphologically echoes the Day-1/Day-2 originating pattern at half magnitude — the cap is doing its job by narrowing remaining headroom.",
+    "Confidence floor (0.65) continues to admit top-tier signal correctly: ONGC 0.72 was the only ≥0.70 admission today (FIRST high-confidence admission of the experiment per the 10:00 changelog). Other today's BUYs cleared at 0.66/0.65/0.68 — all near-floor. By the prompt's criterion ('high-confidence ≥0.70 entries being blocked'), the 0.65 floor is NOT eating top-tier signal; it is admitting it.",
+    "Closed-trade sample status corrected: the 13:30 changelog correctly identified n=15 (not n=12 as 13:00 had stated) — today actually had 5 closes (POWERGRID 09:09, GLENMARK 10:44, TATAPOWER 10:44, CHENNPETRO 10:44, NESTLEIND 11:12), bringing cumulative to n=15 across 8 trading days. Net -₹2,565.81, win-rate 6/15 = 40%. The n≥15 sample-size precondition for min_confidence loosen is now SATISFIED, but per the 13:30 reasoning the loosen is held for the Day-10 (~2026-05-04) holistic-stack-refinement review rather than firing on this tick.",
+    "MAHABANK -₹3,516 single-loss continues to dominate the cumulative red — net loss without that trade would be -₹2,565.81 + ₹3,516 = +₹950.19 (positive). NESTLEIND +₹2,298.40 single-trade today is the largest single winner of the experiment. Confidence-band overlap (winners 0.65-0.75, losers 0.65-0.72) shows NO clean statistical signal between confidence and outcome on this sample — supports HOLD at 0.65 over auto-loosening to 0.60.",
+    "BAJFINANCE R:R 1.41 < base 1.5 floor (n=1 first instance) remains seeded as observability item; no new BUY admissions since 12:12 means no n=2 escalation to seed a min_risk_reward override.",
+    "No pre-armed trigger from the 13:30 spec fires at 14:00 — every leg evaluates dormant (BFSI 17.63%<22%, no 4th BFSI name, only 2 Pharma names at 8.77%, no 3rd ≥3.5% SL admission, admit-exit-60min n=1 still marginally outside window, sub-1.5 R:R n=1). Composite distress meta-trigger 0/3 (positive book, no single-name distress data, strategy on second 100+ min silent stretch but day was active overall with 9 trades).",
+    "No clean LOOSEN path fires either — max_deployed_pct loosen requires ≥2 high-conf entries (only 1: ONGC@0.72) AND >55% deployment (currently 45.76%); both legs fail. min_confidence loosen sample-precondition met but deferred to Day-10 strategic-review milestone. max_sector_pct loosen direction is opposite to today's BFSI re-stacking vector.",
+    "Cumulative override stack remains heavy (7 active overrides representing ~50.5 pp of notional total tightening). Per the prompt's cost doctrine ('every notch tighter loses some legitimate signal'), disciplined HOLD avoids reflexive re-tightening when no trigger fires AND avoids reflexive loosening when no clean precondition fires."
+  ],
+  "actions_taken": [
+    "HOLD all 7 active overrides at current levels: min_confidence=0.65, max_position_pct=0.15, max_deployed_pct=0.65, default_sl_pct=0.015, min_sl_pct=0.01, max_sl_pct=0.035, max_sector_pct=0.22. Identical state to 13:30 and 13:00 — third consecutive HOLD tick.",
+    "No tighten fires: walked all 6 tighten triggers from the 13:30 spec — every leg dormant. BFSI count holds at 3 names (no 4th cluster); BFSI 17.63% on full-fill (no 22% breach); Pharma at 2 names / 8.77% (no 3rd, well under 14%); no 3rd ≥3.5% SL admission (count still 1: CHENNPETRO 4.02% exited; today's GESHIP 3.37% + BAJFINANCE 3.07% land below threshold); admit-exit-60min still n=1 (CHENNPETRO marginally outside window); sub-1.5 R:R still n=1 (BAJFINANCE 1.41).",
+    "No loosen fires: max_deployed_pct 0.65→0.70 requires ≥2 high-conf entries (only 1: ONGC@0.72) AND >55% deployment (45.76%) — both legs fail; max_sector_pct 0.22→0.28 needs BFSI<13% sustained (currently 17.63%, opposite direction); min_confidence 0.65→0.60 sample-size precondition (n≥15) NOW SATISFIED at n=15 but deferred to Day-10 (~2026-05-04) holistic-stack-refinement review per the 13:30 reasoning — confidence-band overlap (W: 0.65-0.75, L: 0.65-0.72) shows no clean signal, and a tick-based fire would bypass the strategic-review venue for the override stack.",
+    "Risk level held at LOW: composite distress meta-trigger 0/3 (book +₹1,945.50 positive +0.195%, no single-name distress data with positions stable, strategy is in second silent stretch today but overall day was active with 9 trades + 1 in-flight)."
+  ],
+  "rearm_triggers_for_1430": [
+    "(a) Any 4th BFSI name admitted → fire max_sector_pct 0.22 → 0.20 (cluster-emergence)",
+    "(b) BFSI on full-fill > 22% → fire max_sector_pct 0.22 → 0.20 (currently 17.63%, requires BFSI add ≥ 4.37% capital ≈ ₹43.6k)",
+    "(c) Any 3rd Pharma name OR Pharma > 14% on full fill → fire max_sector_pct 0.22 → 0.20 (currently 8.77%, requires Pharma add ≥ 5.23% capital ≈ ₹52.2k)",
+    "(d) Any 3rd ≥3.5% SL admission today → fire max_sl_pct 0.035 → 0.030 (today's count: 1 — CHENNPETRO 4.02% exited; current threshold = 2 more fresh admissions)",
+    "(e) Admit-then-exit-within-60-min pattern n=2 → fire min_confidence 0.65 → 0.68 (CHENNPETRO 62 min is marginally outside strict 60 min)",
+    "(f) Any 2nd R:R admission below 1.5 floor → seed min_risk_reward 1.5 → 1.55 override (BAJFINANCE 1.41 = n=1 first instance)",
+    "(g) LOOSEN max_sector_pct 0.22 → 0.28 deferred — requires 5+ ticks without BFSI-near-17% pattern AND BFSI < 13% sustained (Day-10 review item)",
+    "(h) LOOSEN max_deployed_pct 0.65 → 0.70 RE-ARM if ≥2 high-conf (≥0.70) entries admitted today AND deployment > 55% — currently 1/2 + 9.24 pp under threshold",
+    "(i) LOOSEN min_confidence 0.65 → 0.60 sample-precondition NOW MET at n=15, deferred to Day-10 (~2026-05-04) holistic-stack-refinement review — preserves strategic-review venue, avoids tick-based bypass"
+  ]
+}

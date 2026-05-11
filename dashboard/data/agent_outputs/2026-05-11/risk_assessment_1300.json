@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-11 13:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000958.76,
+    "cash": 452107.76,
+    "deployed_pct": 54.83,
+    "holdings_count": 13,
+    "positions_count": 0,
+    "daily_pnl": 2816.67
+  },
+  "findings": [
+    "Deployment recovered 44.93% (12:30) -> 54.83% (13:00) via paired admit burst at 12:41 — SUNPHARMA BUY 26 @ Rs.1875 = Rs.48,750 immediately followed by MCX BUY 6 @ Rs.8400 = Rs.50,400, totaling Rs.99,150 of cash deployed within 8 seconds of each other and 12 minutes of post-lunch session resume. The 12:00 RE-DEPLOYMENT WATCH (2-tick stall <50% with zero admits) is fully DEFUSED.",
+    "Sector bucket count IMPROVED 9 -> 10: MCX adds a new Financial Exchange/Capital Markets sleeve at 5.03%, the new max position in the book. Pharma sleeve RESTORED n=1 -> n=2 (SUNPHARMA 4.87% + LAURUSLABS 1.96% = 6.83%), recovering the diversification posture lost when WOCKPHARMA exited at 11:44 — meaningful ahead of tomorrow's (5/12) DRREDDY/CIPLA earnings read-across.",
+    "Position-size band 1.95%-5.03% across 13 names; 11 of 13 names in the 3.77%-5.03% primary cluster; only 2 sub-3% outliers (DABUR 1.95%, LAURUSLABS 1.96%) at 15.4% of names — well under the >85% tiny-everything anti-pattern threshold. No oversized name and no hedge-against-self signature.",
+    "Daily P&L net realized +Rs.2,816.67 (+0.28% vs Rs.1M) — POSITIVE; 7-exit set 3W/4L with all 4 losing exits inside the 5% max-SL bound. Full ~Rs.30,029 daily-loss buffer (3% of total) intact; ~Rs.32,845 cushion above the -3% halt gate.",
+    "Signal acceptance: 5 admits today (TATACONSUM, CGPOWER, APOLLOHOSP, SUNPHARMA, MCX) all cleared the base 0.50 confidence floor without friction. ZERO high-confidence (>=0.70) BLOCKs in today's guardrail_log — every BLOCKED row is mechanical (conf=0.0 sentinels from the full-exit pathway, or stale MODIFY-without-position on closed names). Confidence floor is demonstrably non-binding.",
+    "Distress dashboard 0/3: max position MCX 5.03% << 20% cap (14.97 pp buffer); largest sector FMCG 11.85% << 35% cap (23.15 pp buffer); deployment 54.83% << 80% cap (25.17 pp buffer).",
+    "Open pending order: TATACONSUM BUY 20 @ Rs.1240 at 12:41:33 (top-up of existing 40-sh holding). If filled, TATACONSUM single-name moves 4.99% -> ~7.46% and FMCG sleeve moves 11.85% -> ~14.32% — still 20.68 pp under the 35% sector cap. Worth tracking cumulative concentration but no current bite.",
+    "Cumulative-override audit: overrides:{} for ~141 hr (5.875 days) since the 2026-05-05 16:00 EOD reset. Nothing to revert; base is the floor by spec."
+  ],
+  "actions_taken": [
+    "HOLD — no changes to overrides. 44th consecutive HOLD tick. Risk LOW across all six gauges (shape, daily P&L, signal acceptance, SL geometry, sector concentration, cumulative override audit). LOOSEN is N/A because overrides:{} already equals the base config floor; further loosening below base is disallowed by spec. TIGHTEN is unjustified because: (1) distress 0/3, (2) realized P&L +0.28% with full daily-loss buffer intact, (3) zero high-confidence BLOCKs and 5 admits cleared base floor without friction, (4) the post-lunch SUNPHARMA + MCX paired admit burst already defused the only outstanding watch item (chronic-under-deployment) by restoring deployment from 44.93% to 54.83% within 12 minutes of session resume, and (5) Pharma sleeve has been organically restored to n=2 ahead of tomorrow's earnings read-across without any config intervention. Pre-armed 13:30/14:00 watch items recorded in changelog."
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-05 11:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 666411.64,
+    "deployed_pct": 33.48,
+    "holdings_count": 6,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "Portfolio frozen since 10:12 (~48 min stale at this tick). 6 CNC holdings unchanged from 10:30: PNBHOUSING 7.86%, MARUTI 5.51%, ADANIPORTS 5.09%, HAL 5.02%, BANDHANBNK 5.01%, GOLDBEES 4.99% — all sized in disciplined 5-8% band, max 7.86% well under base 0.20 position cap.",
+    "Sector concentration LOW: BFSI cluster 12.86% n=2 (PNBHOUSING + BANDHANBNK) with 22.14 pp buffer to base 0.35 sector cap; 4 single-name sectors (Gold ETF / Ports-Infra / Auto OEM / Defense). No n>=3 cluster anywhere.",
+    "Daily P&L +₹909.20 (positive). Composition: GESHIP -₹589.80 (SL-discipline carry exit at 09:43) + PHARMABEES +₹510.00 (carry close at 10:11) + ANANTRAJ +₹989.00 (carry close at 10:12). Buffer ~₹76,000 to base -7.5% daily_loss_limit. Composite distress trigger 0/3.",
+    "Under-deployment chronic: 33.48% deployed (down from 42.14% at 10:00 on profit-taking with no refilling admits). Cash 66.5% of portfolio. Deployment held in 33-47% band across 14+ consecutive ticks since 05-04 09:00 — 46+ pp idle vs base 0.80 cap. The 10:00 min_confidence partial revert (0.55→0.52) targets this but remains untested: ZERO admits in the 60-min window since.",
+    "Position sizing healthy — NOT hedging-against-itself pattern (smallest position GOLDBEES 4.99%, no sub-3% sliver positions). All 6 holdings sized in tight ~5-8% band reflecting disciplined sizing at the strategy layer, not enforced by overrides.",
+    "Signal-acceptance: still 0 BLOCKED rows on conf floor across 7+ trading days. The min_confidence override (now 0.52) is non-binding empirically. However, the 10:00 entry's licensing rule for a full revert to base 0.50 (a session of admits in the 0.52-0.55 range) has not been satisfied — no admits at any conf in the 60-min window.",
+    "Original tightening triggers stale: 04-22 MAHABANK 10.4% SL blow-up is 8+ trading days old; cluster-stack incidents from 04-25/04-27 also stale (max_sl_pct already reverted at 10:30 on this basis). The freshest piece of evidence in the override stack is the 05-04 today-admit 0W/2L yellow flag (BAJAJ-AUTO -₹570.50 + EXIDEIND -₹1,433.90, both SL-discipline events at conf 0.66-0.68), and it remains unresolved at 11:00 — today's only closes are CARRY closes (PHARMABEES/ANANTRAJ profitable, GESHIP loss), no fresh same-day round-trip data either way.",
+    "Override stack remaining: 3 (min_confidence 0.52, default_sl_pct 0.015, min_sl_pct 0.01). The SL-trio is actively binding and validated by recent loss-containment (every recent loss landed at -0.55% to -2.5% on entry, well within the tight SL band). The conf floor is the next revert candidate but is still serving its 10:00 partial-revert / await-admit-test phase."
+  ],
+  "actions_taken": [
+    "HELD all 3 overrides unchanged: min_confidence 0.52, default_sl_pct 0.015, min_sl_pct 0.01. Reason: the 10:00 partial revert (min_confidence 0.55→0.52) explicitly conditioned a further revert to base 0.50 on 'a successful 1-2 session run with admits in the 0.52-0.55 range.' Zero admits in the 60-min window since 10:00 — the licensing condition is unmet. The 10:30 entry already deliberated this exact next step ('Pushing to 0.51 now would over-correct — layered loosens at 30-min cadence don't give the change time to manifest') and chose hold; nothing material has changed in the 30 min since to flip that judgment.",
+    "Did NOT loosen further on min_confidence (0.52 → 0.50): under-deployment 33.48% is a real cost per the active-trader doctrine, but the entry-side stack has already been pre-loosened three times in the trailing 2 hours (09:00 max_position_pct revert + 10:00 min_confidence partial revert + 10:30 max_sl_pct revert). A 4th loosen with no new admit evidence in the 0.52-0.55 test window would be over-correction; need to let strategy generate signal at the 0.52 floor first before evaluating the next step.",
+    "Did NOT loosen the SL-discipline pair (default_sl_pct 0.015, min_sl_pct 0.01): these are the actively-binding levers that have contained every recent loss (GESHIP -1.27% on entry, BAJAJ-AUTO -0.55%, EXIDEIND -2.5%). The 05-04 today-admit 0W/2L yellow flag remains technically unresolved — today's CARRY closes don't refute the same-day round-trip SL-discipline thesis. SL-trio remains evidence-validated for one more session.",
+    "Did NOT tighten any override: zero distress legs fire — (a) BFSI n=2 with 22+ pp buffer to base 0.35 sector cap; (b) day P&L positive +₹909.20 with ~₹76k buffer to base -7.5% daily loss limit; (c) max position 7.86% well below base 0.20; (d) 0 BLOCKED on conf floor in 7+ days; (e) no n>=3 sector cluster; (f) position sizing healthy 4.99-7.86%, no sub-3% hedging-against-itself pattern. Tightening with no firing trigger would skip the cost-of-override safety in the wrong direction."
+  ]
+}

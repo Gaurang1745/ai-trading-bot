@@ -1,0 +1,38 @@
+{
+  "date": "2026-04-24",
+  "agent": "strategy_reviewer",
+  "review_type": "daily_post_market",
+  "changes": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "scope": "prompt_prose",
+      "what": "Added a new 'MICRO-ADJUST and OSCILLATION' bullet under MODIFY rules forbidding (a) MODIFYs whose |new_stop_loss − stored SL| is < 0.5% of stored SL, and (b) proposing a lower new_stop_loss than last tick's absent a broken thesis. Explicitly framed trailing-SL for longs as a monotonic-up process.",
+      "why": "PNBHOUSING received 24 MODIFY decisions today (09:15 → 14:44) trailing SL through 985 → 995 → 1004.5 → 1007.15 → 1011.65 → 1013.22. Within that ladder the decision layer also emitted LOWER values on several ticks (1011.65 → 1000 @ 12:41, 1007.15 → 995 @ 12:13) — oscillations that the guardrail silently accepts (CNC current_sl reads 0 from snapshot) but that represent no-op or noisy risk management. Of the 24 MODIFYs, only ~6 advance SL by more than 0.5%; the rest are churn. The cost is two-fold: (i) each MODIFY consumes a decision-JSON slot that could have been a position audit or new-entry consideration, and (ii) it inflates the guardrail_log noise floor and makes it harder for later reviewers to spot real trailing events.",
+      "expected_impact": "MODIFY emission density per held position drops from ~3/tick (observed today) to ~0-1/tick. Oscillation pattern disappears. Decision-JSON bandwidth is freed for higher-signal actions. The existing no-op rule handled the exact-match case; this extends the filter to near-match and reversion cases that dominated today's MODIFY log."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "scope": "prompt_prose",
+      "what": "Added sub-rule (c) TRAIL-GAP DISCIPLINE under TRAILING SL MANDATE requiring new_stop_loss for longs to sit at least 0.5% BELOW current LTP (and 0.5% ABOVE LTP for shorts). Includes the TORNTPOWER anti-example as inline teaching text.",
+      "why": "TORNTPOWER exit today: at 09:30:52 → 09:31:14 (22 seconds) SL was raised in three fast hops 1650 → 1680 → 1685 → 1704.81 while LTP was in the 1700 area. Price then reverted and by 10:12 the AI's own exit reasoning said: 'Current SL at 1704.81 is ABOVE CMP of 1696.50 — the SL has effectively been breached intraday (day low 1685.60).' The position booked +₹1,834 (+3.09%) but the capture was forced by a self-inflicted-stop dynamic, not by a clean thesis-driven exit. Had LTP pulled back further before the AI intervened at 10:12, the engine-side stop (had it been live) would have filled at a worse price than the 1700.95 the AI got. Trailing SL flush with or above CMP is a process failure that a 0.5% minimum-gap rule prevents mechanically.",
+      "expected_impact": "Winners no longer risk self-stop from over-aggressive trailing during micro-pullbacks. When the AI wants a tight lock-in on a winner, the prompt now explicitly steers it toward an explicit EXIT rather than stacking SL on top of CMP. The 0.5% gap matches the min_sl_pct floor currently in the risk overrides, giving the prompt and guardrails a consistent minimum-SL-band story."
+    }
+  ],
+  "no_change_items": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "considered_change": "Further tighten max_deployed_pct (0.70 → 0.68) or lower daily_loss_limit_pct (0.03 → 0.025)",
+      "why_declined": "The 11:00 risk_monitor tightening (min_sl_pct 0.005 → 0.01) just fired today on the MAHABANK -6.42% breach; new-entry SL band is now [1%, 4%]. Strategy activated after 44h of silence with two well-reasoned exits (TORNTPOWER +3.09% / ADANIPOWER −0.83%) — exactly the behavior the 14:00 Day-1 deployment cap was designed to incentivize (SELL → free cash). Tightening the deployed cap immediately after the first healthy SELL-signal would punish the regime we want to reward. Book P&L is +₹1,425 (+0.14%) today, cumulative positive for the first time, ~15x buffer to the 1% findings trigger. No firing condition on the loss-gate either."
+    },
+    {
+      "file": "config/config.yaml",
+      "considered_change": "Lower trailing_sl.trail_gap_pct from 2% to 1%, or promote risk_config overrides to base config",
+      "why_declined": "Per 2026-04-23 engineering notes, engine-side CNC trailing is not wired up (paper_broker.modify_sl_target bypasses CNC), so tuning trail_gap_pct has no effect on today's failure mode. The relevant trailing lever is prompt-side, which is where the edits above land. Promoting the current overrides to base config is premature — the max_sl_pct=0.04 and min_sl_pct=0.01 overrides have <3 trading days of observed behavior; wait for more samples before locking them into base."
+    }
+  ],
+  "recommendations_for_engineering": [
+    "The MODIFY persistence bug flagged 2026-04-23 is still active: PNBHOUSING SL values today travelled through 985/995/1004.5/1007.15/1011.65/1013.22 in both directions, but trades.stop_loss for the position remains 984 (the entry-time default 2%). Because the snapshot continues to read SL=0 for CNC holdings, Claude sees 'no SL' each tick and re-derives a trail level from LTP — this is the structural driver of the MODIFY churn the prompt change above can only partially compensate for. A real fix is (a) wire paper_broker.modify_sl_target to persist CNC SL into trades.stop_loss, and (b) make portfolio_snapshots surface that SL to the decision prompt. Until then, the prompt-level monotonic-up rule is a scaffold, not a guarantee.",
+    "TORNTPOWER's SL-above-CMP failure also has an engine-side preventive fix: reject MODIFY decisions where new_stop_loss ≥ LTP (for longs). The prompt now forbids it, but a guardrail check would make it impossible to enter the state in the first place. Suggest adding this to GuardrailEngine alongside the existing 'MODIFY sets SL above entry' info-log — the existing log fires as an informational note; a new hard-block on SL ≥ LTP would be symmetric with how the engine treats other invalid SL states.",
+    "Today's daily_summaries row shows trades_count=4 (2 CLOSE + 2 SELL paired rows) but only 2 economic trades. Reporting reads cleaner if CLOSE rows are excluded from the trades_count or a separate exits_count column is introduced. Low priority; flag for next schema pass."
+  ]
+}

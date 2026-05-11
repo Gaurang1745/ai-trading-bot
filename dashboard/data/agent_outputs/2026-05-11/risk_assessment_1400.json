@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-05-11 14:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 969713.16,
+    "cash": 462912.16,
+    "deployed_pct": 52.26,
+    "holdings_count": 13,
+    "positions_count": 0,
+    "daily_pnl": -28428.93
+  },
+  "findings": [
+    "Acute risk DESCALATED from 13:30 HIGH: no new exits, no new losses, no new admit attempts in the 30 min since the MCX disaster tighten. Realized P&L unchanged at -₹28,428.93 (-2.84% vs ₹1M cost basis). The book has stabilized — bot is voluntarily in defensive trailing-only mode.",
+    "State delta vs 13:30 is minimal and benign: LALPATHLAB OPEN admit from 12:41:33 FILLED (submitted at base 0.50 conf BEFORE the 13:30 tighten, so override does not apply); cash 471,262.16 → 462,912.16 (-₹8,350 = LALPATHLAB cost); holdings 12 → 13; cost-basis deployment 51.40% → 52.26% (+0.86 pp). Total portfolio cost-basis unchanged at ₹969,713.16 (cash→holdings book-value preserving transfer).",
+    "TATACONSUM 20-sh top-up at ₹1,240 submitted 12:41:33 still OPEN — 1hr 19min stale. Not yet filled this window. Pending-order surface (strategy/broker scope) — if it expires at 15:30 close it self-cleans, not a risk-config matter.",
+    "Guardrail_log 13:30-14:00: 16 entries, all is_valid=1, ZERO BLOCKs, all are SL-trail MODIFYs on existing positions (MARICO 820→836, COFORGE 1259→1360, LAURUSLABS 1226→1255, etc.). ZERO new BUY/SELL admit attempts. Last guardrail entry 13:43:41 — book quiet for ~17 min. The min_confidence 0.60 override has had NO admit attempts to evaluate; cannot conclude it's biting or non-binding from a no-sample window.",
+    "Book shape remains healthy: max position GOLDBEES 5.16% (vs 20% cap, 14.84 pp buffer); max sector FMCG 12.23% (vs 35% cap, 22.77 pp buffer); deployment 52.26% (vs 80% cap, 27.74 pp buffer). 10 sector buckets across 13 names — bucket count UP from 9 at 13:30 via Healthcare sleeve RESTORATION (APOLLOHOSP 5.01% + LALPATHLAB 0.86% new = n=2). 0/3 distress fires.",
+    "Position-size band 0.86%-5.16%; 10 of 13 names in primary 3.89%-5.16% cluster; 3 sub-3% outliers (DABUR 2.01%, LAURUSLABS 2.02%, LALPATHLAB 0.86%) at 23.1% of names — well under any tiny-everything anti-pattern threshold. LALPATHLAB 0.86% is a deliberately-small debut admit, not a hedge-against-self signature.",
+    "Defensive sector cluster strengthened ahead of tomorrow's 5/12 DRREDDY/CIPLA earnings: Pharma 7.05% n=2 (SUNPHARMA 5.03% + LAURUSLABS 2.02%) + Healthcare 5.87% n=2 (APOLLOHOSP 5.01% + LALPATHLAB 0.86%) = 12.92% combined across n=4 names — reduces idiosyncratic single-name read-across risk vs the pre-noon n=1 Pharma posture.",
+    "CHRONIC daily-loss risk remains the binding concern: -2.84% realized only 116 bps from the 13:30-imposed override -4% halt (~₹11,571 cushion). Soft -3% gate sits only 16 bps below current (~₹1,571). Any further loss this session would squeeze the buffer rapidly; tomorrow's CPI + earnings catalysts could create gap risk if loss extends into close.",
+    "Override revert audit: 13:30 tighten was explicitly time-bounded — 'Revert candidate at EOD if no further adverse event, otherwise retain through tomorrow's 5/12 CPI + DRREDDY/CIPLA earnings session.' At T+30min only one of four revert conditions favorably resolved (no new adverse event); the other three (MCX root cause undiagnosed, loss buffer thin, tomorrow's catalysts) all favor hold. Revert is structurally premature this tick."
+  ],
+  "actions_taken": [
+    "HOLD — overrides unchanged at daily_loss_limit_pct 0.04 (base 0.075) and min_confidence 0.60 (base 0.50). Override count stays at 2. Both overrides are 30 min old (added 13:30); too early to revert based on a single quiet tick.",
+    "Did NOT loosen daily_loss_limit_pct: realized loss -2.84% still only 116 bps from override -4% gate. Reverting to base 0.075 would widen the gate by 3.5 pp / ₹35,000 — appropriate at EOD if no further adverse event, but premature mid-session with MCX root cause still undiagnosed and tomorrow's catalysts pending.",
+    "Did NOT loosen min_confidence: zero admit attempts in the 30-min window since override imposed → no telemetry yet on whether 0.60 floor is biting medium-band (0.50-0.59) signals. Cannot conclude the override is eating legitimate signal from a no-sample. Defer revert review to 14:30/15:00 ticks if bot resumes admit attempts.",
+    "Did NOT further tighten: no new adverse event in 30 min, shape metrics 0/3 distress, override is functioning as designed (bot voluntarily quiescent). A second tighten (e.g., daily_loss_limit_pct 0.04 → 0.035) would shave the buffer to ~66 bps with no triggering signal — overcautious.",
+    "Did NOT touch max_sl_pct: MCX blew 5% by 12.4x — that's a strategy/broker-layer diagnostic (was the SL machinery consulted? did broker accept the SL?) not a risk-config lever. Tightening would not have prevented the MCX outcome.",
+    "Pre-armed for 14:30/15:00: (a) any new admit at conf 0.60-0.69 — first real test of override bite; (b) any high-conf ≥0.70 BLOCK — immediate partial-revert trigger; (c) realized P&L crossing -3.0% (~₹1,571 below current) → escalate daily_loss_limit_pct toward 0.035; (d) realized P&L crossing -3.5% (~₹35,000) → hard escalation + max_position_pct re-arm; (e) TATACONSUM top-up fill or expiry by 15:30; (f) MCX root cause diagnosis — if confirmed feed/execution anomaly, strategy-layer fix could enable earlier revert; (g) EOD 16:00 primary revert decision point if loss buffer holds and no further adverse event."
+  ]
+}

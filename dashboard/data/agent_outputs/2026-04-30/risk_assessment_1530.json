@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-04-30 15:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 587249.89,
+    "deployed_pct": 41.12,
+    "deployed_pct_full_fill": 45.76,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": 1945.50
+  },
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 17.64,
+    "Pharma": 8.77,
+    "Oil_Gas_Mining": 9.70,
+    "Gold_ETF": 5.02,
+    "Shipping": 4.64
+  },
+  "findings": [
+    "EOD tick at market close (15:30 IST). Snapshot byte-identical to 15:00 — zero trades, zero guardrail events, zero fills, zero exits in the 15:00→15:30 window. 8 holdings unchanged (PNBHOUSING+GOLDBEES+SUNPHARMA+COALINDIA+BANDHANBNK+ONGC+PHARMABEES+BAJFINANCE), 1 OPEN order unchanged (GESHIP 30 @ ₹1542 LIMIT, trigger ₹1490, CNC product).",
+    "Day closes POSITIVE: realized P&L +₹1,945.50 (+0.195% on ₹10L base). Today's 9 closed trades net to gain because NESTLEIND +₹2,298.40 single-trade alone offset the 4 loss-makers (POWERGRID -₹159, TATAPOWER -₹150.70, CHENNPETRO -₹115.20) plus the small GLENMARK +₹72 winner. Daily-loss-limit guardrail (currently 0.075 base, no override) has been entirely non-binding all day — the cap-side risk concern is moot.",
+    "Deployment closes the day at 41.12% filled / 45.76% full-fill (cash 58.88%). This is sub-50% but is signal-gated, not parameter-gated: the max_deployed_pct 0.65 cap is non-binding by 19.24 pp on full-fill, so loosening it unlocks ZERO actual admission capacity. Today was a half-active day (9 trades 09:00-12:30, then signal silence 12:30-15:30 except the BAJFINANCE passive fill at 13:50 and the 14:41 defensive trail-stop wave). End-of-day capital preservation, not chronic over-cautiousness — Days 1-7 had heavy deployment activity, so the prompt's 'chronically under-deployed across multiple sessions' criterion explicitly does not apply.",
+    "Position sizing healthy: PNBHOUSING is the largest at 7.89% with a 7.11 pp buffer to the 15% cap. No sub-3% over-fragmentation either — all 8 holdings sit in a 3.56-7.89% band. The 7-position spread across 5 sectors is a reasonable diversified book, not bot-hedging-against-itself.",
+    "Sector concentration well within all caps on full-fill basis: BFSI 17.64% (4.36 pp under the 22% override cap, 17.36 pp under the 35% base cap), Pharma 8.77% (5.23 pp under the 14% concentration threshold, 26.23 pp under base cap), Oil/Gas/Mining 9.70%, Gold ETF 5.02%, Shipping 4.64%. The 09:00 max_sector_pct loosen 0.22 → 0.28 was REVOKED 12:30 same-day on a clean BFSI re-stacking trigger (PNBHOUSING+BANDHANBNK+BAJFINANCE) — the 0.22 cap is doing real defensive work given today's BFSI bias and remains warranted.",
+    "STRATEGY ENGAGED, NOT IDLE: the 14:41 guardrail-log wave (6 MODIFY + 1 BLOCKED) shows active defensive risk-reduction — stop-losses raised ABOVE entry on 3 oldest profitable holdings (PNBHOUSING SL 984→1032 locking +4.9%, SUNPHARMA 1734→1788 locking +3.1%, COALINDIA 469→478.5 locking +2.0%). This caps the day's downside on those 3 positions to small profits even on a tomorrow gap-down, and is real risk mitigation that does not show in the override stack but does show in per-holding SL state.",
+    "Signal-acceptance health: by the prompt's explicit 'high-confidence (≥ 0.70) entries being blocked' criterion, today shows ZERO such cases. ONGC 0.72 was the only ≥0.70 signal of the day and was ADMITTED. The 6 BLOCKED actions in today's 102-event guardrail log break down as: 2 operational (10:44:58 MODIFY-GLENMARK 26-sec race; 10:45:06 CNC short-sell routing error on TATAPOWER), 2 malformed conf=0.0 (11:12:13, 14:41:47), 2 mid-tier conf-floor blocks at 0.62 and 0.60 (sub-high-conf-but-above-base). The 0.60/0.62 blocks are Day-10 review evidence, NOT tick-actionable loosen signal under the prompt's strict criterion.",
+    "All 6 tightening triggers from the 15:00 RE-ARM spec evaluate DORMANT: (a) no 4th BFSI name (count holds at 3); (b) BFSI 17.64% on full-fill is 4.36 pp under the 22% cap; (c) Pharma at 2 names / 8.77% is 5.23 pp under threshold; (d) today's ≥3.5% SL admission count holds at 1 (CHENNPETRO 4.02% exited 10:44; GESHIP 3.37% + BAJFINANCE 3.07% land below); (e) admit-then-exit-within-60-min pattern still n=1 (CHENNPETRO 62-min round-trip marginally outside strict window); (f) sub-1.5 R:R admission still n=1 (BAJFINANCE 1.41).",
+    "All 3 loosen paths fail their preconditions today: (g) max_sector_pct 0.22 → 0.28 — BFSI 17.64% sits 4.64 pp ABOVE the 13% sustained-low precondition, deferred to Day-10; (h) max_deployed_pct 0.65 → 0.70 — closes the day with both legs FAILED (high-conf admissions 1, threshold ≥2; deployment full-fill 45.76% sits 9.24 pp below 55% threshold); (i) min_confidence 0.65 → 0.60 — n≥15 sample precondition MET (cumulative 6W/9L = 40%, net -₹2,565.81 dominated by single MAHABANK -₹3,516; ex-MAHABANK net would be +₹950.19), but is held for the Day-10 (~2026-05-04) holistic-stack-refinement review per the disciplined venue established 04-25 09:05.",
+    "Composite distress meta-trigger: 0/3 firing — realized P&L positive, no single-name distress with positions stable, strategy demonstrably engaged via 14:41 trail-stop wave. Risk level LOW is well-supported.",
+    "DAY-9 PREMARKET WATCH ITEMS (carry-forward to ~2026-05-01): (1) GESHIP CNC LIMIT order is now 258 min stale at 15:30 close — observability flag for tomorrow's premarket: was the ₹1542 limit too tight against today's price action? n=1 stale-OPEN is not actionable today; if Day-9 produces a 2nd similar stale-LIMIT pattern, that's Day-10 review fodder for entry-execution discipline. (2) BAJFINANCE FILLED 13:50 with R:R 1.41 is the first overnight-hold below the 1.5 floor — tomorrow's gap on BAJFINANCE will produce the n=1 first outcome data on the sub-1.5 R:R-admission distribution. (3) Today's signal-emission anomalies (2 conf=0.0, 1 CNC short-sell route, 1 MODIFY-no-position race) are Day-10 strategy-side hardening items, not risk-monitor parameter calls."
+  ],
+  "actions_taken": [
+    "HOLD all 7 overrides (min_confidence 0.65, max_position_pct 0.15, max_deployed_pct 0.65, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.035, max_sector_pct 0.22). Sixth and final consecutive HOLD tick of the session after 13:00 / 13:30 / 14:00 / 14:30 / 15:00. EOD-day closes with no firing tightening trigger (all 6 DORMANT) and no satisfied loosen precondition by the prompt's strict ≥0.70-blocked criterion (zero such blocks today; the n=15 min_confidence loosen leg is reserved for the Day-10 ~2026-05-04 holistic-stack-refinement review per the disciplined venue). Per the prompt's cost-of-override doctrine — 7 cumulative overrides imposing ~50.5 pp notional total tightening — the disciplined HOLD is the action: the day closed POSITIVE (+₹1,945.50, +0.195%) on a ~46% full-fill book with strategy demonstrably engaged in defensive trail-stop work, so neither tightening (no risk firing) nor loosening (no precondition met today) is warranted on this final tick."
+  ]
+}

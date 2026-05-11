@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-08 11:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 998108.07,
+    "cash": 338728.07,
+    "deployed_pct": 66.06,
+    "holdings_count": 14,
+    "positions_count": 0,
+    "daily_pnl": 1280.70
+  },
+  "findings": [
+    "State delta vs 11:00 is NIL: zero new fills, zero new exits in the last 30 min. Holdings stable at 14, cash unchanged ₹338,728.07, total ₹998,108.07, deployment 66.06% (cost basis). The 10:50–10:53 admission cluster (TITAGARH exit + POLYCAB/SRF admits) was followed by a quiet 30-min window — characteristic strategy-layer pacing post-burst, not a paused regime.",
+    "Distress trigger 0/3 fires. Composite shape healthy: max position PNBHOUSING 7.89% (12.11 pp under 20% cap), largest sector cluster BFSI/NBFC 14.90% n=3 (20.10 pp under 35% cap), 8 distinct sector buckets across 14 names (BFSI/NBFC, Specialty Chem, Defense+Rail, Pharma, Gold-ETF, FMCG, Cables, IT). No oversized name, no tiny-everything anti-pattern (13 of 14 in 3.78%–7.89% band; only CAMS 2.02% sub-3%, prior session legacy).",
+    "Deployment 66.06% sits 16.06 pp ABOVE the 50% chronic-under-deployment threshold — the 09:30 idle-capital observation remains decisively resolved. BHARATFORG BUY 25 @ ₹2,015 OPEN since 10:17:15 is now ~73 min stale (+30 min vs 11:00 tick). On fill, deployment lifts to 71.10% with 8.90 pp buffer to 80% cap. Order-state ageing is strategy/broker reconciliation scope, NOT risk-config bite-able.",
+    "Daily P&L +₹1,280.70 (+0.128% of total) unchanged from 11:00: ADANIPORTS +₹1,185.90 (09:12:50, +2.32%) + TITAGARH +₹94.80 (10:51:54, +0.31%). Full 3% daily-loss buffer (₹29,943.24) intact. Two clean profit-take fires this session re-validate base SL geometry (2% default, 0.5%–5% bounds) — narrowing default_sl_pct or raising min_sl_pct would friction a twice-validated profit-lock pattern with no firing distress signal.",
+    "Signal acceptance surface fully open at base. FIVE admits today cleared base floor 0.50 (PIDILITIND 0.72 / LUPIN 0.72 / WOCKPHARMA 0.68 / POLYCAB 0.70 / SRF 0.62) plus 1 OPEN (BHARATFORG 0.68). Zero risk-config blocks at any layer cumulative through 9+ sessions. Lowest-conf accepted today is SRF 0.62 — 12 bps above base floor. Floors empirically non-binding; tightening min_confidence would eat a freshly engaged admission cadence with no firing trigger.",
+    "Sector composition: BFSI/NBFC 14.90% (PNBHOUSING+ABCAPITAL+CAMS, n=3) / Specialty Chem 13.68% (NAVINFLUOR+PIDILITIND+SRF, n=3) / Defense+Rail 9.89% (HAL+GRSE, n=2) / Pharma 9.31% (LUPIN+WOCKPHARMA, n=2) / Gold-ETF 5.01% / FMCG 4.93% / Cables 4.56% / IT 3.78%. Largest cluster sits 20.10 pp under 35% cap. Specialty Chem n=3 has 21.32 pp cap buffer at 13.68% — no firing trigger; pre-armed for 4th-name watch.",
+    "BHARATFORG OPEN ~73 min stale — strategy-layer/broker scope. Risk-config has no traction on order-state ageing; even on retroactive fill, deployment 71.10% sits 8.90 pp under 80% cap. HFCL stale-order ~49.2 hr OPEN since 2026-05-06 10:16:40 — integrity check pattern continues (strategy/reconciliation scope); even retroactive fill puts deployment at 73.55% (6.45 pp under cap).",
+    "Macro backdrop unchanged from 09:00 premarket (Iran/US tensions, PSU bank earnings cluster SBIN/BANKBARODA/BANKINDIA). Book is well-shaped for the scenario already: Defense+Rail 9.89% as Iran-tension tailwind, Gold-ETF 5.01% as risk-off bid, FMCG/Pharma as defensive ballast, BFSI cluster is housing-finance/NBFC/registrar (sympathy-beta only, NOT direct PSU-bank earnings beta). Pre-emptive tighten on a forecast that hasn't fired manufactures friction without trigger."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty {}. No tighten, no loosen. 27th consecutive HOLD tick; all-at-base posture from 2026-05-05 16:00 EOD reset stable through ~67.5 hr. Loosen direction is undefined by spec (every relax dimension at base floor: min_confidence cannot drop below 0.50, max_position_pct cannot exceed 0.20, max_deployed_pct cannot exceed 0.80, daily_loss_limit_pct cannot exceed base in loose direction; default_sl_pct/min_sl_pct/max_sl_pct/min_risk_reward all at base). Tighten direction has zero firing signal: 0/3 distress fires, deployment 66.06% (rising on BHARATFORG fill), max position 7.89%, largest sector 14.90%, daily P&L positive +0.128%, base SL geometry twice-validated by clean profit-takes this session, signal-acceptance surface fully open with 5-of-5 admits cleared and zero high-conf blocks. Any tighten now would friction a freshly engaged admission cadence with no firing trigger. Changelog entry added to risk_config.yaml documenting HOLD rationale and pre-armed Day-14 12:00 watch items."
+  ]
+}

@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-04-28 13:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995592.64,
+    "cash": 549175.24,
+    "deployed_pct": 0.4484,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "daily_pnl": -5964.24
+  },
+  "portfolio_detail": {
+    "snapshot_basis": "live DB read at 13:30 tick (paper_holdings + paper_cash + trades WHERE DATE(timestamp)=DATE('now') AND mode='PAPER'); state bit-identical to 12:30 / 13:00 — zero new trades since COALINDIA BUY at 12:13:31.",
+    "holdings_value_at_cost": 446417.40,
+    "realized_pnl_today": -5964.24,
+    "deployed_pct_at_cost": 0.4484,
+    "holdings": [
+      {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+      {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.00, "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+      {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.00, "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+      {"symbol": "NTPC", "qty": 125, "avg_price": 404.50, "value": 50562.50, "pct_of_capital": 0.0508, "sector": "Power"},
+      {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.10, "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold-ETF"},
+      {"symbol": "POWERGRID", "qty": 150, "avg_price": 320.50, "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+      {"symbol": "COALINDIA", "qty": 100, "avg_price": 469.00, "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining/Coal"}
+    ],
+    "open_orders_value": 130105.00,
+    "open_orders_count": 3,
+    "open_orders": [
+      {"symbol": "TATAPOWER", "qty": 110, "price": 443.00, "value": 48730.00, "sector": "Power", "submitted": "2026-04-27 10:13:02", "age_at_tick": "27h17m", "day_stale": true},
+      {"symbol": "HINDZINC", "qty": 75, "price": 612.00, "value": 45900.00, "sector": "Metals", "submitted": "2026-04-27 10:42:57", "age_at_tick": "26h47m", "day_stale": true},
+      {"symbol": "PHARMABEES", "qty": 1500, "price": 23.65, "value": 35475.00, "sector": "Pharma-ETF", "submitted": "2026-04-27 12:14:55", "age_at_tick": "25h15m", "day_stale": true}
+    ],
+    "projected_deployed_pct_on_full_fill": 0.5791,
+    "sector_exposure_at_cost": {
+      "FMCG": {"pct": 0.1206, "names": ["NESTLEIND"], "buffer_to_cap_pp": 0.0994},
+      "Power": {"pct": 0.0991, "names": ["NTPC", "POWERGRID"], "buffer_to_cap_pp": 0.1209},
+      "BFSI": {"pct": 0.0791, "names": ["PNBHOUSING"], "buffer_to_cap_pp": 0.1409},
+      "Pharma": {"pct": 0.0522, "names": ["SUNPHARMA"], "buffer_to_cap_pp": 0.1678},
+      "Gold-ETF": {"pct": 0.0503, "names": ["GOLDBEES"], "buffer_to_cap_pp": 0.1697},
+      "Mining/Coal": {"pct": 0.0471, "names": ["COALINDIA"], "buffer_to_cap_pp": 0.1729}
+    },
+    "sector_exposure_on_full_fill": {
+      "Power": {"pct": 0.1481, "names": ["NTPC", "POWERGRID", "TATAPOWER"], "buffer_to_cap_pp": 0.0719},
+      "FMCG": {"pct": 0.1206, "names": ["NESTLEIND"], "buffer_to_cap_pp": 0.0994},
+      "Pharma": {"pct": 0.0879, "names": ["SUNPHARMA", "PHARMABEES"], "buffer_to_cap_pp": 0.1321},
+      "BFSI": {"pct": 0.0791, "names": ["PNBHOUSING"], "buffer_to_cap_pp": 0.1409},
+      "Gold-ETF": {"pct": 0.0503, "names": ["GOLDBEES"], "buffer_to_cap_pp": 0.1697},
+      "Mining/Coal": {"pct": 0.0471, "names": ["COALINDIA"], "buffer_to_cap_pp": 0.1729},
+      "Metals": {"pct": 0.0461, "names": ["HINDZINC"], "buffer_to_cap_pp": 0.1739}
+    },
+    "thematic_psu_energy_at_cost": {"pct": 0.1462, "names": ["NTPC", "POWERGRID", "COALINDIA"], "rationale": "Coal India supplies coal to NTPC; PSU thermal value chain — high operational correlation despite Mining vs Power sector classification"},
+    "thematic_psu_energy_on_full_fill": {"pct": 0.1952, "names": ["NTPC", "POWERGRID", "TATAPOWER", "COALINDIA"], "buffer_to_22pct_pp": 0.0248, "rationale": "If TATAPOWER fills, full PSU/utility-energy thematic reaches 19.52% of capital — 2.48 pp buffer to the 22% sector cap (TATAPOWER is private not PSU, so this is a thematic-correlation read, not a strict-sector read)"},
+    "largest_position": {"symbol": "NESTLEIND", "pct_at_cost": 0.1206, "buffer_to_cap_pp": 0.0294},
+    "trades_today": [
+      {"time": "11:16:10", "symbol": "HINDUNILVR", "action": "CLOSE/SELL", "qty": 20, "pnl": -1099.20, "sector": "FMCG"},
+      {"time": "11:44:10", "symbol": "TORNTPOWER", "action": "CLOSE/SELL", "qty": 28, "pnl": -1349.04, "sector": "Power"},
+      {"time": "11:44:18", "symbol": "MAHABANK", "action": "CLOSE/SELL", "qty": 1200, "pnl": -3516.00, "sector": "BFSI"},
+      {"time": "12:13:31", "symbol": "COALINDIA", "action": "BUY", "qty": 100, "fill_price": 469.00, "sector": "Mining/Coal"}
+    ],
+    "daily_pnl_pct_of_capital": -0.0060,
+    "buffer_to_3pct_loss_gate_inr": 23903.54,
+    "buffer_to_1pct_findings_threshold_inr": 3991.69,
+    "strategy_silence_minutes_since_last_trade": 77
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.22
+  },
+  "delta_since_1300": {
+    "holdings_changes": "NONE — holdings count holds at 7 (same names, same qty, same avg). No fills, no SELLs, no new BUYs in the 13:00 → 13:30 window.",
+    "cash_change_inr": 0.00,
+    "deployed_pct_change": "0.4484 → 0.4484 (unchanged).",
+    "realized_pnl_today_change": 0.00,
+    "open_orders_changes": "NONE — same 3 carryover orders (TATAPOWER, HINDZINC, PHARMABEES). All advanced 30 min in age (now 27h17m / 26h47m / 25h15m). All remain day-stale.",
+    "trades_change": "ZERO new trades in the 13:00 → 13:30 window. Strategy silence extends from 46 min (at 13:00) to 77 min (at 13:30).",
+    "summary": "Quiet tick #2. State frozen from 12:30 across two consecutive 30-min windows. No trigger conditions advanced or fired."
+  },
+  "findings": [
+    "QUIET TICK #2: zero trades in the 13:00 → 13:30 window. Strategy has been silent for ~77 minutes since the COALINDIA BUY at 12:13:31. State is bit-identical to the 12:30 and 13:00 snapshots: holdings, cash, OPEN orders, sector exposures, and realized P&L unchanged.",
+    "DAY-STALE OPEN ORDERS PERSIST AND DEEPEN: TATAPOWER (27h17m), HINDZINC (26h47m), PHARMABEES (25h15m) — all 3 carryover orders advanced another 30 min without fill, cancel, or reprice. Now 77 min into a clean cancel/reprice window the strategy has elected silence. This remains a soft order-hygiene drag, not a risk-elevation trigger; appropriate concern of the strategy layer (system_prompt rule 8 / order hygiene). Carry-forward Trigger (f) from 13:00 still arms for 14:30 escalation.",
+    "Realized P&L today: -₹5,964.24 (-0.60% of capital). Buffer to 3% daily loss gate ₹23,903.54 (4.0x); buffer to -1% findings threshold ₹3,991.69 (1.67x). Unchanged from 12:30 and 13:00.",
+    "Deployment at cost: 44.84% — 20.16 pp inside the 0.65 max_deployed_pct cap. Projected on full carryover fill: 57.91% — 7.09 pp inside cap. Admission window remains comfortably open.",
+    "Sector concentration broad: FMCG 12.06%, Power 9.91%, BFSI 7.91%, Pharma 5.22%, Gold-ETF 5.03%, Mining/Coal 4.71%. Six distinct sectors. Largest single sector (FMCG) sits 9.94 pp inside cap. On full carryover fill: Power 14.81%, still 7.19 pp inside cap. No sector approaches the 22% cap.",
+    "PSU/utility-energy thematic exposure at cost remains at 14.62% (NTPC + POWERGRID + COALINDIA). On full TATAPOWER fill: 19.52% with 2.48 pp buffer to the 22% sector cap. No new admissions in this thematic since 12:30 — Trigger (a) NOT FIRED.",
+    "Position sizing: NESTLEIND remains largest at 12.06% (2.94 pp buffer to 0.15 cap). Other 6 names range 4.71% to 7.91%. No single name approaches per-name cap.",
+    "All 7 risk overrides remain materially tighter than base config and binding-but-not-breached. Post-rotation portfolio profile holds: deployment well inside cap, broad sector diversification, no single-name dominance, modest realized loss inside buffer, strategy demonstrating SELL-before-BUY discipline earlier in the session.",
+    "Disciplined call: NO override change. None of the 13:00 carry-forward spec-hard triggers (a)-(g) have fired in the 13:00 → 13:30 window. A second consecutive quiet tick with no state change cannot motivate a state change in the override file. Tightening on a quiet tick would be theatrical and would punish exactly the disciplined-pause behavior the framework wants to reward.",
+    "Risk level LOW (unchanged). Composite distress meta-trigger dormant: realized P&L well inside 3% gate, no single-name distress, strategy silence (77 min) within normal pacing — the Day-2 'extended silence' regime was 24h+, this is well below. Carry-forward triggers re-armed unchanged for 14:00 tick: (a) if strategy admits a 2ND new BUY in PSU/utility-energy thematic by 14:00, OR thematic exposure crosses 22% on full fill — fire min_confidence 0.65 → 0.67 AND consider max_sector_pct 0.22 → 0.20 (latter creates grandfathered breach on Power on full fill — step carefully); (b) if a NEW BUY lands in BFSI specifically — fire min_confidence 0.65 → 0.67; (c) if MAHABANK / TORNTPOWER / HINDUNILVR are re-bought (already-recycled names within 24h) — fire min_confidence 0.65 → 0.67 AND log explicit cluster-recycle flag; (d) if realized loss extends past -1% (₹9,956 — additional ₹3,992 needed) — fire daily_loss_limit_pct 0.03 → 0.025; (e) if TATAPOWER fills AND a 2nd new BUY lands the same window — fire max_deployed_pct 0.65 → 0.62 to re-tighten admission cadence; (f) if all 3 day-stale OPEN orders remain OPEN at 14:30 with no cancel/reprice activity AND zero further strategy trades through 14:30, escalate order-hygiene observability into a system_prompt feedback note (not a numeric lever); (g) if strategy resumes BUYing AT THE SAME CADENCE as Day-1/Day-4 (≥3 BUYs within a 60-minute window) — fire max_deployed_pct 0.65 → 0.62 AND min_confidence 0.65 → 0.67; (h) NEW: if strategy silence extends past 3 hours (i.e., still no trade by 15:13) WITH any one of the 3 OPEN orders crossing 28h-stale — escalate to soft observability log of compounded behavioral drag (not a numeric lever — silence + stale orders is a strategy-layer concern)."
+  ],
+  "actions_taken": []
+}

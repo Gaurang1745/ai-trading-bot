@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-04-22 13:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 714040.0,
+    "deployed_pct": 28.60,
+    "holdings_count": 4,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Holdings (4 filled CNC): MAHABANK 1200 @ ₹81.5 (₹97,800 / 9.78% of capital), PNBHOUSING 80 @ ₹984.0 (₹78,720 / 7.87%), GOLDBEES 400 @ ₹125.1 (₹50,040 / 5.00%), TORNTPOWER 36 @ ₹1650.0 (₹59,400 / 5.94% — NEW fill since 12:30). Filled deployment ₹2,85,960 (28.60%); cash ₹7,14,040 (71.40%). No intraday positions (paper_positions empty). No sells today ⇒ realized daily P&L = ₹0.",
+    "OPEN orders (3 pending): NESTLEIND 50 @ ₹1415 (₹70,750 / 7.08%), AUBANK 70 @ ₹1050 (₹73,500 / 7.35%), AUBANK 56 @ ₹1047 (₹58,632 / 5.86% — NEW since 12:30). Combined pending = ₹2,02,882 (20.29% of capital). If all fill: deployment → ₹4,88,842 (48.88%) with ~₹5.11L cash remaining. Still inside the 80% max_deployed_pct ceiling with margin.",
+    "KEY PATTERN THIS TICK — single-name stacking under the new cap: AUBANK now has TWO OPEN BUY lots totalling 126 shares × ~₹1048.5 = ₹1,32,132 / 13.21% of capital — sitting just under the 15% per-name cap that was set 30 minutes ago at 12:30. Interpretation: the 12:30 max_position_pct tightening is working as a hard ceiling (no breach) but is not decelerating the pattern of accumulating BFSI names — the strategy layer sized a second lot right up to the new ceiling.",
+    "Sector concentration (up vs 12:30): BFSI filled = MAHABANK + PNBHOUSING = ₹1,76,520 / 17.65% of capital (61.7% of filled deployment). Projected BFSI on full fill = ₹1,76,520 + AUBANK ₹1,32,132 = ₹3,08,652 / 30.87% of capital and ~63% of the deployed book. That is up from the 25% projection at 12:30 — the concentration trajectory is still widening tick-over-tick.",
+    "Correlated-exposure map: MAHABANK (PSU bank) + PNBHOUSING (housing NBFC) + AUBANK (private bank, pending) all co-move on the rate cycle, credit policy, banking asset-quality, and system-liquidity drivers — effectively one macro factor. Diversifiers present/incoming: GOLDBEES (gold ETF, typically a BFSI-stress hedge, 5.00%), TORNTPOWER (power utility, filled, uncorrelated 5.94%), NESTLEIND (FMCG, pending, uncorrelated 7.08%). Non-BFSI book is improving, but BFSI tilt is still growing faster in absolute rupees.",
+    "Position sizing: largest single filled name is MAHABANK at 9.78% (~65% of the 15% per-name cap). Largest pending is AUBANK combined at 13.21% (88% of cap). No current breach. If any further AUBANK add were attempted it would be blocked by the 15% cap set at 12:30.",
+    "Daily-loss exposure: realized P&L = ₹0 today (all transactions are BUYs; no sells/closures). Unrealized P&L ~₹0 on entries (fills are intraday-fresh; DB holds no live quotes). The 3% daily-loss limit (₹30,000) is not engaged; drawdown-reduce (10%) and drawdown-halt (15%) are inapplicable.",
+    "Deployment level: 28.60% filled, up to 48.88% on full OPEN fill. Well inside the 80% max_deployed_pct ceiling — no deployment-cap pressure.",
+    "Active overrides entering this tick: min_confidence = 0.55 (strategy, 2026-04-20), max_position_pct = 0.15 (risk_monitor, 2026-04-22 12:30).",
+    "Risk level held at MEDIUM (unchanged from 12:30) — no guardrail breach, no loss, plenty of cash — but the concentration trajectory is still widening and the strategy is sizing new lots right up to the freshly tightened per-name ceiling, which warrants a second (complementary) lever this tick rather than another per-name tightening."
+  ],
+  "actions_taken": [
+    "Raised min_confidence from 0.55 to 0.60 in /home/ubuntu/trading/ai-trading-bot/src/agents/risk_config.yaml. Rationale: max_position_pct (the 12:30 lever) bounds HOW LARGE a new entry can be, but does not bound WHETHER a marginal-conviction entry qualifies at all — and the post-12:30 pattern shows the strategy layer filling right up to the new ceiling rather than pulling back. min_confidence is the complementary gate: it raises the bar on qualification. Non-punitive: already-accepted OPEN orders (NESTLEIND, AUBANK x2) are unaffected, and Day-1 history shows today's conviction distribution clears 0.60 for legitimate signal.",
+    "Retained max_position_pct = 0.15 set at 12:30. Working as a hard ceiling (AUBANK pending 13.21% is the tightest test and is compliant); no reason to tighten further this tick — the new lever should act first.",
+    "Did NOT tighten max_deployed_pct (0.80): projected deployment on full fill is 48.88%, still well inside ceiling with ~₹2.5L+ headroom. Tightening now would be preemptive.",
+    "Did NOT tighten daily_loss_limit_pct (0.03) or drawdown thresholds (10% / 15%): realized P&L is ₹0 and no drawdown has materialized. Tightening loss gates with zero losses is noise.",
+    "Did NOT tighten default_sl_pct (0.02) or min_risk_reward (1.5): no evidence that exits or R:R quality are the risk vector — the vector is concentration/correlation, and min_confidence addresses it at the qualification layer. Avoid piling restrictions on uncorrelated axes."
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-05-06 13:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": -5029.27
+  },
+  "findings": [
+    "Two pre-SL exits at 12:53 deepened daily realized P&L from -₹3,072.77 → -₹5,029.27 (-0.31% → -0.50%). BANDHANBNK 240@close = -₹816.00 at 12:53:21 (~-1.6% on the 5.02% slot); M&M 25@close = -₹1,140.50 at 12:53:55 (~-1.4% on the 8.23% slot). Both match the morning's MARUTI/BHEL/SOBHA discretionary pre-SL pattern. Daily-loss utilization 16.76% of the 3% gate — 83.24% of buffer remaining. Trajectory deepening (-0.10% → -0.16% → -0.31% → -0.50% across 09:30/11:00/11:30/13:00 ticks ≈ 0.10%/30min) but utilization still well within tolerance.",
+    "Holdings 13 → 11. BFSI/Lending broader cluster contracted from 19.91% n=4 → 14.92% n=3 (PNBHOUSING 7.90% + ABCAPITAL 5.00% + CAMS 2.02%); strict-lending read drops further to 12.90% n=2. Auto OEM bucket removed entirely with M&M exit. Defense unchanged: HAL 5.05% + GRSE 4.86% = 9.91% n=2. 9 distinct sectors (10 if HFCL Telecom fills). 20.08 pp buffer on the broader BFSI read vs 35% cap.",
+    "Filled deployment dropped 66.72% → 53.57% (-13.15 pp) via the two simultaneous 12:53 closes freeing ~₹130k cost basis with no immediate redeploy in the half-hour. Full-fill projection 61.61% if HFCL fills (still 18.39 pp under base 80% cap). HFCL BUY 600@133.5 ₹80,100 OPEN since 10:16:40 → 164+ min unfilled, explicitly strategy-layer cancel-or-fill scope, not risk-config arbitration. Filled 53.57% is borderline but remains in the >50% active-trader band — not the chronic under-deployment shape, given continuous fill/exit activity all session.",
+    "Position sizing band 2.02%-7.90% (PNBHOUSING 7.90% largest with 12.10 pp headroom to 20% cap). CAMS 2.02% remains the lone sub-3% slot — a single toe-in-water entry alongside 10 properly-sized 3.79-7.90% positions. The prompt's 'all positions tiny → bot hedging against itself' anti-pattern requires the WHOLE book to be sub-3%; 1-of-11 is not that pattern. CAMS sizing reads as deliberate slot-budgeting given HFCL ₹80,100 was committed.",
+    "Today's close tally 5L:1W (MARUTI -₹1,007.12 + BHEL -₹713.70 + SOBHA -₹1,425.20 + BANDHANBNK -₹816.00 + M&M -₹1,140.50 vs CHOLAHLDNG +₹73.25 = -₹5,029.27 net). All 5 losses are discretionary pre-SL exits at -1.0 to -1.6% slot drawdown — strategy exercising loss discipline at the strategy layer, not SL fires breaking through guardrails. This is the active-trader thesis executing cleanly within base-config gates.",
+    "Signal acceptance healthy: 190 guardrail entries today = 182 valid + 8 blocked. The 8 blocks decompose as 4 conf=0.0 malformed-payload sentinels (09:13:43, 09:43:34, 10:17:10, 12:18:27) + 4 correct CNC short-sell rule enforcements on just-closed positions (09:43:30 BHEL, 10:46:40 + 10:47:00 CHOLAHLDNG, 12:53:43 BANDHANBNK). Zero real high-confidence (≥0.70) admits filtered. Base-config min_confidence 0.50 floor remains empirically non-binding for 9+ trading days.",
+    "Composite distress 0/3: no sector concentration breach (max BFSI broader 14.92% vs 35%-style cap), no daily-loss escalation (16.76% utilization), no oversized position (max 7.90% vs 20%)."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty (override count 0 unchanged). No tighten, no loosen. (1) Nothing to loosen: overrides have been empty since 2026-05-05 16:00 EOD reset; every lever at base (the floor). The CAMS admit at 12:18:53 further validates that base-config gates are correctly admitting legitimate signal even at small slot sizing. (2) Nothing to tighten: every lever has comfortable buffer to base — BFSI broader 14.92% vs 35% (20.08 pp headroom; CONTRACTED with BANDHANBNK exit), max position 7.90% vs 20% (12.10 pp), filled deployment 53.57% vs 80% (26.43 pp; 61.61% full-fill projection still 18.39 pp under), daily-loss utilization 16.76% (83.24% of buffer remaining). The 5L:1W close-tally and -0.50% daily P&L reflect strategy executing discretionary pre-SL exits within base gates — not a breakdown warranting tighter overrides. Tightening daily_loss_limit_pct on 16.76% utilization would be reactionary and would block legitimate signal. HFCL 164-min non-fill is strategy-layer cancel/reprice scope, not risk-config. Pre-armed watch items for 13:30: (a) HFCL fill resolution (164+ min, increasingly stale at strategy layer); (b) daily P&L crossing -1.0% (~-₹10k) — reassess loss-gate; (c) filled deployment dropping below 50% with no fresh redeploys — reassess under-deployment posture; (d) 5th BFSI name OR 3rd Defense name → reassess cluster cap; (e) second sub-3% admit — pattern check on slot sizing; (f) any new admit at conf <0.55 — conf floor re-arming check."
+  ]
+}

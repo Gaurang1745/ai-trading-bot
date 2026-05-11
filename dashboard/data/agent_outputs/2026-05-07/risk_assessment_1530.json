@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-07 15:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Day-13 15:30 EOD tick (NSE close). State byte-identical to the 15:00 tick: 11 holdings (cost basis Rs 534,000), cash Rs 462,827.37, total Rs 996,827.37, filled deployment 53.57%. No fills, no closes, no fresh REJECTs in the 15:00->15:30 window.",
+    "Holdings composition unchanged: PNBHOUSING 7.90% / GOLDBEES 5.02% / ADANIPORTS 5.12% / HAL 5.05% / NAVINFLUOR 4.85% / TITAGARH 5.04% / ABCAPITAL 5.00% / MARICO 4.94% / COFORGE 3.79% / GRSE 4.86% / CAMS 2.02%. paper_positions table empty (zero intraday at EOD).",
+    "Admission dormancy now ~26.6 hr since the M&M CLOSE at 2026-05-06 12:53:55 — Day-13 closes with no fresh fills and no fresh closes (a full session of zero portfolio activity).",
+    "Today's trades table closes the day with the same 3 REJECTED price=0.0 SELL sentinels (TITAGARH 10:44:55, COFORGE 11:48:27, GOLDBEES 13:47:34) — payload-shape issue at the strategy layer, NOT a risk-config lever. 3 of 11 holdings hit by this pattern across the session.",
+    "Composite distress 0/3 unchanged at EOD: BFSI 14.92% (n=3 PNBHOUSING+ABCAPITAL+CAMS) and Defense+Rail 14.95% (n=3 HAL+GRSE+TITAGARH) both ~20 pp under the 35% sector cap; max position PNBHOUSING 7.90% sits 12.10 pp under the 20% cap; deployment 53.57% sits 26.43 pp under the 80% cap. 7+ distinct sector buckets across 11 names.",
+    "Position sizing healthy at EOD: range 2.02%-7.90%, 9 of 11 names in the 3.79%-7.90% band, only CAMS sub-3% — NOT the all-tiny hedge-against-self anti-pattern.",
+    "Daily P&L closes at exactly 0.0 — zero realized gain/loss for the entire Day-13 session. Full 3% daily-loss buffer (Rs 29,904) intact. Daily-loss-limit lever has no firing trigger to react to.",
+    "Signal acceptance: zero high-conf (>=0.70) risk-config BLOCKs across all of Day-13. Cumulative session block count = 1 (the 11:16:59 HFCL phantom-position integrity catch — strategy/broker reconciliation scope, NOT a risk_config.yaml lever). Conf and R:R floors empirically non-binding through 9+ sessions; no evidence overrides are eating legitimate signal.",
+    "SL geometry validated for the session: 4 intra-Day-13 SL-trail bursts (11:16-11:17, 12:45-12:47, 13:15-13:16, 13:46-13:47) plus a default-SL fallback admit produced 130+ cumulative zero-block MODIFY validations on the profit-locking pattern (PNBHOUSING SL 1035, ADANIPORTS 1735, NAVINFLUOR 6960, COFORGE 1260). Three consecutive 30-min slices (14:30, 15:00, 15:30) with no SL-trail activity — strategy management layer paused into and through the EOD close. Base SL band is correctly calibrated.",
+    "Idle-capital check at EOD: deployment 53.57% ends the day at the lower edge of the active-trader band but ABOVE the 50% chronic-under-deployment trigger — un-fired. Even if a tomorrow-session close-without-redeploy crosses 50%, every relax lever is already floored at base (min_confidence 0.50, max_position_pct 0.20, max_deployed_pct 0.80) — chronic-under-deployment lever has no relax direction available. The bind is strategy-side admission cadence, not risk_config.yaml.",
+    "HFCL stale OPEN order now ~29.2 hr (from 2026-05-06 10:16:40) — closes Day-13 still OPEN; reconciliation scope, no risk-config response. Even a retroactive fill would put deployment at ~61.6%, still 18.4 pp under the 80% cap.",
+    "Composite HIGH meta-trigger 0/3 at EOD: book P&L 0.0 (not below -0.5%); no single-name distress data; strategy demonstrably engaged at the SL-management layer earlier in the session (130+ MODIFYs) though admission-dormant for the full day. No EOD auto square-off / close-out activity — paper_positions empty all session means nothing to square off."
+  ],
+  "actions_taken": [
+    "HOLD — no override changes. overrides block remains empty (override count 0 unchanged); 21st consecutive HOLD tick; all-at-base posture from the 2026-05-05 16:00 EOD reset now ~47.5 hr stable across a full Day-12 session and a full Day-13 session. Tightening at EOD has no firing distress trigger to react to (composite 0/3, daily P&L 0.0, max position 7.90% vs 20% cap, deployment 53.57% vs 80% cap, zero high-conf blocks); loosening is undefined since base = floor on every lever. Day-13 closes with the asymmetric posture intact: management-active (130+ SL MODIFYs validated at base), admission-dormant (~26.6 hr clean of fresh fills/closes). Changelog entry appended."
+  ]
+}

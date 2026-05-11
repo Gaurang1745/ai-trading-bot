@@ -1,0 +1,31 @@
+{
+  "date": "2026-05-04",
+  "agent": "strategy_review",
+  "session": "EOD",
+  "changes": [
+    {
+      "id": 1,
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 11 — BINARY-EVENT DISCIPLINE (inverse rule for new entries)",
+      "what": "Added two clauses: (a) event-trade entries require min confidence ≥ 0.70 AND (b) AT MOST one event-trade per session. Cited today's failure mode: BAJAJ-AUTO conf 0.62 -₹570 + EXIDEIND conf 0.68 -₹1,434 = -₹2,004 combined from two same-day binary-event entries.",
+      "why": "Day-10 produced two losing event-trade entries, both at sub-0.70 conviction, into the same May 6 board-meeting calendar. Both lost: BAJAJ-AUTO exited at -1% on intraday wobble 62 min later (Rule 15 violation), EXIDEIND SL-stopped 90 min after entry. Combined -₹2,004. The rule already permits event-trades but didn't enforce a conviction floor or per-session count cap. Two correlated event-trades in 3 hours fired the same risk twice with no diversification benefit.",
+      "expected_impact": "Should suppress sub-0.70 binary-event entries entirely (would have blocked BAJAJ-AUTO today) and prevent stacking event-trades on the same calendar day (would have blocked the second of BAJAJ-AUTO+EXIDEIND). Net opportunity cost is small — these are inherently asymmetric-tail trades, and forcing higher conviction + only-one-per-session keeps the risk-budget consumption controlled. Does NOT block legitimate non-event swing entries."
+    },
+    {
+      "id": 2,
+      "file": "src/ai/system_prompt.py",
+      "section": "Trailing SL Mandate (c) TRAIL-GAP DISCIPLINE",
+      "what": "Tightened required trail-gap from 0.5% → 1.0% below LTP for longs (1.0% above LTP for shorts). Added Day-10 failure modes (BANDHANBNK 200→207.78 with CMP ~207, gap collapsed to ~0.4%; BAJFINANCE 944→950 with CMP 949.55) as concrete examples.",
+      "why": "Two separate forced exits today both ran the same playbook — strategy trailed SL into territory where the gap to CMP was <0.5%, then panicked when CMP drifted onto SL ('Stored SL is above CMP'). BANDHANBNK locked +₹2,878 (lucky outcome) and BAJFINANCE locked marginal +₹199 — the trail itself caused both exits, not the chart action. Win outcomes obscured the design failure. The 0.5% rule is too tight for normal NSE intraday noise (typical 1-2% intra-name swings); 1% is the calibrated tolerance.",
+      "expected_impact": "Strategy should stop trailing SL into the noise band. Positions get more room to run to actual targets rather than being mechanically stopped at +2-4%. Same-name same-day re-entries (today: BANDHANBNK SELL 211.51 → BUY 209 within 90 min, a Rule-14 borderline-violation born of a flawed trail-gap exit) should disappear because the upstream cause is removed."
+    },
+    {
+      "id": 3,
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides block",
+      "what": "Removed 2 overrides (max_sector_pct and max_deployed_pct), loosened 1 (min_confidence 0.60 → 0.55). Final override set: min_confidence 0.55, max_position_pct 0.15, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.045. Sector cap and deployment cap now revert to base config (0.35 and 0.80).",
+      "why": "All three were non-binding all session — sector cap 0.28 vs actual largest sector BFSI 12.88% (15+ pp buffer); deployment cap 0.75 vs actual 46.73% (28+ pp buffer); confidence floor 0.60 vs strategy's organic 0.62-0.70 floor. Their original justifications (cluster-stack incidents from 04-25/04-27, MAHABANK SL blow-up from 04-22) have not recurred. The strategy is now self-disciplined without these brakes. Keeping non-biting overrides only generates drift between the system_prompt placeholders (which interpolate base values) and what guardrails actually enforce.",
+      "expected_impact": "More headroom for legitimate sector-rotation plays and higher deployment when conviction supports it (current 47% is below the 50% target). Lower confidence floor lets the strategy admit one more notch of experimental signal at 0.55+. Kept SL-width and position-size overrides intact because today's event-trade losses validate keeping per-name risk tight."
+    }
+  ]
+}

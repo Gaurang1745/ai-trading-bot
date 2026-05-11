@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-04-24 11:30:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 996562.25,
+    "cash": 324460.30,
+    "deployed_pct": 67.44,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": -3393.60
+  },
+  "snapshot_ref": {
+    "snapshot_id": 25,
+    "snapshot_timestamp": "2026-04-24 11:13:46",
+    "cumulative_pnl": -3437.75,
+    "daily_pnl_pct": -0.34
+  },
+  "concentration": {
+    "by_sector_pct_of_total": {
+      "BFSI": 35.88,
+      "FMCG": 16.77,
+      "Power": 5.01,
+      "Pharma": 4.82,
+      "GoldETF": 4.97
+    },
+    "by_sector_pct_of_deployed": {
+      "BFSI": 53.20,
+      "FMCG": 24.87,
+      "Power": 7.43,
+      "Pharma": 7.15,
+      "GoldETF": 7.37
+    },
+    "top_positions_pct_of_total": {
+      "AUBANK": 18.51,
+      "NESTLEIND": 12.10,
+      "MAHABANK": 9.16,
+      "PNBHOUSING": 8.20
+    },
+    "largest_single_name_drag_pct": -6.64,
+    "largest_single_name_drag_symbol": "MAHABANK"
+  },
+  "realized_today": {
+    "TORNTPOWER_SELL_36": 1834.20,
+    "ADANIPOWER_SELL_230": -409.40,
+    "net_realized": 1424.80
+  },
+  "findings": [
+    "Deployment 67.44% — 2.56 pp UNDER the 0.70 cap, first tick this session the cap is not binding. Cash ₹324,460 is available for admission if quality gates are met.",
+    "AUBANK 18.51% of total (grandfathered MTM drift above 0.15 per-name cap since Day 1). No new AUBANK admission today; drift is mark-to-market, a tighter cap cannot retract.",
+    "BFSI still the dominant cluster at 35.88% of total (53.20% of deployed) — buffer to the 37% min_confidence-tightening trigger is 1.12 pp. Not firing this tick.",
+    "MAHABANK drag extended -6.42% (10:43) → -6.64% (11:13), +22 bps worsening in 30 min. Below the 11:00 min_sl_pct fire line (-6%) but above the pre-specified next-fire threshold (-7%). Hard stop ₹75.00 still intact (LTP ₹76.09, ~1.4% to stop).",
+    "Daily P&L -₹3,393.60 (-0.34% of portfolio). Well within the -1% findings-trigger buffer (₹6,572 headroom) and the -3% daily loss gate (buffer ~₹26,500). Day opened +₹2,062 and has marked down through morning session.",
+    "Strategy activity is REAL this session: 2 SELLs (TORNTPOWER +₹1,834, ADANIPOWER -₹409, net +₹1,424.80 realized) after 44h of silence. Positive structural signal — the admission-surface opening is earned by active trimming, not passive drift.",
+    "Composite HIGH meta-trigger is 1-of-3 firing: (i) strategy silent NO, (ii) MAHABANK <-5% YES, (iii) book <-0.5% NO (-0.34%). Risk level held at MEDIUM.",
+    "FMCG secondary cluster at 16.77% (NESTLEIND 12.10% + HINDUNILVR 4.67%). Below any trigger threshold; watching but not actionable.",
+    "Pending order book is empty — no in-flight OPEN orders to gate."
+  ],
+  "actions_taken": [],
+  "hold_rationale": "No numeric overrides changed this tick. (1) min_sl_pct was just tightened 30 min ago (11:00, 0.005 → 0.01) on MAHABANK's -6.42% breach — stacking a second SL-floor lever now without a firing trigger would be decorative. (2) MAHABANK at -6.64% is 36 bps shy of the pre-specified -7% next-fire threshold; disciplined call is to wait for the confirmed further extension. (3) max_deployed_pct=0.70 just STOPPED binding for the first time this session via the two SELLs — re-closing the admission window now would undo the beneficial regime change (SELL → freed cash → quality-gated BUY) we want to reward. (4) Book is DOWN intraday (-0.34%) but still positive-buffer vs daily_loss_limit_pct — tightening 0.03 → 0.025 on a -0.34% book is theatrical. (5) BFSI 35.88% remains inside the 37% min_confidence-raise trigger; no new BFSI admissions today. (6) AUBANK 18.51% is grandfathered drift — tighter max_position_pct cap cannot retract mark-to-market.",
+  "watch_triggers_next_tick": {
+    "if_MAHABANK_pnl_pct_le_-7.00": "Consider tightening max_sl_pct 0.04 → 0.03 AND/OR elevating to HIGH risk level if book also <-0.5%.",
+    "if_BFSI_pct_of_total_ge_37.0": "Raise min_confidence 0.60 → 0.65.",
+    "if_book_daily_pnl_pct_le_-1.0": "Tighten daily_loss_limit_pct 0.03 → 0.025.",
+    "if_deployed_pct_back_above_0.70_via_new_BUY": "Reassess — the 0.70 cap should rebind; if it does not, investigate strategy-layer bypass.",
+    "if_strategy_submits_new_BFSI_entry": "Fire min_confidence 0.60 → 0.65 even if BFSI not yet at 37%, to prevent cluster re-inflation."
+  },
+  "config_state": {
+    "active_overrides": {
+      "min_confidence": 0.60,
+      "max_position_pct": 0.15,
+      "max_deployed_pct": 0.70,
+      "default_sl_pct": 0.015,
+      "min_sl_pct": 0.01,
+      "max_sl_pct": 0.04
+    },
+    "last_override_change": "2026-04-24 11:00:00 (min_sl_pct 0.005 → 0.01)"
+  }
+}

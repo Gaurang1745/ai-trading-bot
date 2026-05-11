@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-04-30 15:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 587249.89,
+    "deployed_pct": 41.12,
+    "deployed_pct_full_fill": 45.76,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": 1945.50
+  },
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 17.64,
+    "Pharma": 8.77,
+    "Oil_Gas_Mining": 9.70,
+    "Gold_ETF": 5.02,
+    "Shipping": 4.64
+  },
+  "findings": [
+    "Holdings/cash/open-orders snapshot byte-identical to 14:30: 8 holdings, 1 OPEN GESHIP, cash ₹587,249.89, filled deployment 41.12%, full-fill 45.76%. No new BUY/SELL/CLOSE trades since the 12:12 BAJFINANCE submit (FILLED 13:50, no exits since).",
+    "STRATEGY NOT IDLE: 14:41 guardrail_log shows 7 events (6 MODIFY + 1 BLOCKED) — strategy raised stop-losses ABOVE entry on 3 holdings (PNBHOUSING SL 984→1032 locking +4.9%, SUNPHARMA 1734→1788 locking +3.1%, COALINDIA 469→478.5 locking +2.0%). This is real defensive risk-reduction work that caps downside on the day's profitable positions even on a tomorrow gap-down.",
+    "GESHIP correction: the OPEN order is CNC LIMIT (trigger ₹1490 / limit ₹1542), NOT MIS — prior 14:00/14:30 changelogs' 'MIS squareoff' framing was technically incorrect. CNC LIMIT orders persist past 15:00 until filled, cancelled, or session-end. Pending ~228 min by 15:00.",
+    "FULL-DAY GUARDRAIL AUDIT: 102 total events, 6 BLOCKED — 2 operational (10:44:58 MODIFY-GLENMARK 26-sec race after exit; 10:45:06 CNC short-sell routing error on 110 qty TATAPOWER), 2 malformed conf=0.0 (11:12:13, 14:41:47), 2 mid-tier conf-floor blocks at 0.62 and 0.60 (11:12:43 and 13:43:02).",
+    "By the prompt's explicit 'high-confidence (>= 0.70) entries being blocked' criterion, today shows ZERO such cases — ONGC 0.72 was the only ≥0.70 signal of the day and was ADMITTED. The 0.60/0.62 blocks are sub-high-conf-but-above-base — they are Day-10 review evidence, not tick-actionable loosen signal.",
+    "All 6 tightening triggers from the 14:30 RE-ARM spec evaluate DORMANT: no 4th BFSI name (count holds at 3), BFSI 17.64% on full-fill (4.36 pp under 22% cap), Pharma 8.77% with 2 names (5.23 pp under 14% threshold), today's ≥3.5% SL admission count holds at 1, admit-exit-60min pattern still n=1 (CHENNPETRO marginally outside strict 60-min window), sub-1.5 R:R admission still n=1 (BAJFINANCE 1.41 — no new BUY since 12:12 to escalate).",
+    "Loosen path (h) max_deployed_pct 0.65 → 0.70 closes the day FAILED: high-conf (≥0.70) admissions today = 1 (ONGC 0.72; threshold ≥2); deployment full-fill 45.76% sits 9.24 pp below 55% threshold AND cap is non-binding by 19.24 pp. The 14:00/14:30 hypothesis that this leg would close the day unfilled has been confirmed.",
+    "Loosen path (i) min_confidence 0.65 → 0.60 has its n≥15 sample precondition MET (cumulative 6W/9L = 40%, net -₹2,565.81), but is held for the Day-10 (~2026-05-04) holistic-stack-refinement review. Tactical fire is rejected because: (a) prompt's own ≥0.70-blocked criterion not triggered; (b) confidence-band overlap (winners 0.65-0.75, losers 0.65-0.72) shows no clean statistical case; (c) the 09:00 sector loosen was REVOKED 12:30 same-day on BFSI re-stacking — proven precedent that tactical loosens can backfire; (d) CHENNPETRO's 0.65-floor admit→62-min-exit (-₹115.20) and BAJFINANCE 1.41 R:R admit are fresh whipsaw evidence that 0.65 itself is producing marginal-conviction patterns.",
+    "Loosen path (g) max_sector_pct 0.22 → 0.28 dormant: BFSI 17.64% sits 4.64 pp ABOVE the 13% sustained-low precondition.",
+    "Realized P&L today +₹1,945.50 (+0.195%) — POSITIVE session despite n=15 cumulative net being -₹2,565.81; today's NESTLEIND +₹2,298.40 single-trade alone offset 4 of today's loss-makers. Composite distress meta-trigger 0/3 supports LOW risk classification.",
+    "DAY-9 PREMARKET WATCH: (1) GESHIP CNC LIMIT pending 228 min — was ₹1542 limit too tight? n=1 stale-OPEN, not yet a pattern. (2) BAJFINANCE FILLED 13:50 with R:R 1.41 is the first overnight-hold below the 1.5 floor — tomorrow's gap will produce the first n=1 outcome data on the sub-1.5 R:R-admission distribution. (3) Today's 6 BLOCKED breakdown shows the strategy emits malformed (conf=0.0) signals and routes incorrectly (CNC short-sell, MODIFY-no-position) — Day-10 strategy-side hardening item, not a risk-monitor parameter call."
+  ],
+  "actions_taken": [
+    "HOLD all 7 overrides (min_confidence 0.65, max_position_pct 0.15, max_deployed_pct 0.65, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.035, max_sector_pct 0.22). Fifth consecutive HOLD tick (after 13:00 / 13:30 / 14:00 / 14:30) — no firing trigger means no new tightening; no satisfied loosen precondition by the prompt's strict criterion (no ≥0.70 blocks) and Day-10 milestone is the disciplined venue for the n=15 min_confidence review, so no loosening. Per the prompt's cost-of-override doctrine, the disciplined HOLD is the action."
+  ]
+}

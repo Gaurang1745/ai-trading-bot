@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-05-07 13:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "16th consecutive HOLD tick. Overrides block has been empty since the 2026-05-05 16:00 EOD reset (~45 hr stable through a complete Day-12 session and Day-13's first 4 hours). Every lever sits at base config: daily_loss_limit_pct 0.03, drawdown_reduce_pct 0.10, drawdown_halt_pct 0.15, default_sl_pct 0.02, min_sl_pct 0.005, max_sl_pct 0.05, min_confidence 0.50, min_risk_reward 1.5, max_position_pct 0.20, max_deployed_pct 0.80.",
+    "Composite distress 0/3: BFSI cluster (PNBHOUSING 7.90% + ABCAPITAL 5.00% + CAMS 2.02%) = 14.92% vs 35% cap (20.08 pp buffer). Defense+Rail cluster (HAL 5.05% + GRSE 4.86% + TITAGARH 5.04%) = 14.95% vs 35% (20.05 pp). Max single position PNBHOUSING 7.90% vs 20% cap (12.10 pp). Filled deployment 53.57% vs 80% cap (26.43 pp).",
+    "Healthy diversification: 7+ distinct sector buckets across 11 names (BFSI/NBFC, Defense+Rail, Gold-ETF, Logistics, Specialty-Chem, FMCG, IT-Services). Position-size range 2.02%-7.90%; 9 of 11 names in the 3.79%-7.90% band. Only one sub-3% slot (CAMS 2.02%, 1-of-11) — not the 'all positions tiny / hedging-against-self' anti-pattern.",
+    "Daily P&L: 0.0 realized today, full 3% buffer (~Rs 29,904) available. The only two trades printed today are both REJECTED orders at price=0.0 (TITAGARH SELL 60 @ 0.0 at 10:44:55, COFORGE SELL 30 @ 0.0 at 11:48:27) — malformed-payload sentinels caught at order-validation, NOT risk-config gate strikes against high-confidence admits. No new admits, rejects, fills, or closes in the 12:30→13:00 window.",
+    "Signal acceptance: zero high-confidence (>=0.70) admits blocked at the risk-config layer today. Confidence and R:R floors empirically non-binding through 9+ sessions. NEW THIS TICK — a 32-entry SL-trail validation burst at 12:45:14-12:47:10 (~116-second window, all is_valid=1, zero blocks); cumulative Day-13 guardrail tally now 252 entries with exactly 1 cumulative block (the 11:16:59 HFCL phantom-position integrity catch — strategy/broker reconciliation scope, not a risk_config.yaml lever). Risk-config-layer blocks today remain at ZERO — the 32 fresh validations admitted CLEANLY at base SL geometry, which is direct evidence that base is correctly calibrated, not over-cautious.",
+    "Idle-capital observation: deployment 53.57% sits at the lower edge of the active-trader band but ABOVE the 50% chronic-under-deployment trigger. The 24-hour symbolic mark of zero new fills/closes was crossed within this window — last fill remains M&M CLOSE at 2026-05-06 12:53:55 (~24.1 hr stale). However, max_deployed_pct is a CAP not a floor — the 26.43 pp slack to 0.80 is admission space the strategy is already free to use; the bind is on strategy-side admission cadence, not on risk_config.yaml. Every relax dimension is already floored (min_confidence at base 0.50, max_position_pct at base 0.20, max_deployed_pct at base 0.80) — nothing to LOOSEN here because base is the floor by spec.",
+    "HFCL stale-order watch: BUY 600@133.5 Rs 80,100 (MIS LIMIT) still OPEN in paper_orders since 2026-05-06 10:16:40 (~26.7 hr). Position-existence integrity check fired correctly today at 11:16:59 when the strategy attempted to trail an SL on the phantom HFCL position. Reconciliation/strategy-layer scope. Even a retroactive fill projects 61.61% deployment, still 18.39 pp under the 80% cap — no risk-config response required."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty (override count 0 unchanged). No tighten, no loosen. 16th consecutive HOLD. Tightening is unjustified (composite distress 0/3, daily P&L 0.0, signal acceptance fully open, base SL band freshly re-validated by a 32-entry zero-block burst at 12:45-12:47). Loosening is undefined (every lever already at base, which is the floor by spec). Appended changelog entry to risk_config.yaml documenting the decision and the watch items pre-armed for the 13:30 tick."
+  ]
+}

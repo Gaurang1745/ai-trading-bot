@@ -1,0 +1,56 @@
+{
+  "timestamp": "2026-04-22 15:30:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 517080.0,
+    "deployed_pct": 0.4829,
+    "deployed_pct_projected_on_open_fill": 0.7856,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 0.0,
+    "open_orders_count": 5,
+    "open_orders_notional": 302664.5
+  },
+  "exposure_breakdown": {
+    "filled_cost_basis": 482920.0,
+    "bfsi_filled_pct": 0.2290,
+    "bfsi_projected_pct_of_capital": 0.3612,
+    "bfsi_projected_pct_of_deployed": 0.4597,
+    "aubank_single_name_projected_pct": 0.1846,
+    "power_cluster_projected_pct": 0.1592,
+    "power_cluster_name_count": 3,
+    "fmcg_projected_pct": 0.1675,
+    "fmcg_cluster_name_count": 2,
+    "gold_etf_pct": 0.0500,
+    "pharma_pct": 0.0477,
+    "top3_cluster_pct_of_capital_projected": 0.6879,
+    "top3_cluster_pct_of_deployed_projected": 0.8756
+  },
+  "findings": [
+    "Session-close snapshot (15:30 IST = Indian equity market close). State UNCHANGED vs 15:00 tick: 8 filled CNC holdings (₹4,82,920 / 48.29% deployed), 5 OPEN orders (₹3,02,664.50 / 30.27% of capital), projected full-fill deployment 78.56%. Zero new admissions in the 15:00→15:30 window — marks 60 consecutive minutes of zero new-entry activity since the 14:30 max_deployed_pct=0.75 override was installed.",
+    "The 5 OPEN orders resolve in the closing auction: NESTLEIND 50 @ ₹1415, AUBANK 70 @ ₹1050, AUBANK 56 @ ₹1047, NTPC 125 @ ₹404.5, ADANIPOWER 230 @ ₹214. Fill outcomes determine whether tomorrow opens at 48.29% deployment (all rejected), 78.56% (all filled), or anywhere in between. This is the principal EOD uncertainty — risk_monitor cannot influence it but it reshapes tomorrow's admissible capacity.",
+    "Dominant risk vector remains BFSI concentration: 22.90% of capital filled (MAHABANK 9.78% + PNBHOUSING 7.87% + AUBANK 5.25%), climbing to 36.12% (~46% of deployed) if the 2 AUBANK OPEN lots fill. Three rate-sensitive names (2 banks + 1 housing finance) will tend to co-move on rate-cycle news. No in-session activity has altered this profile since 14:30.",
+    "AUBANK aggregate projected 18.46% on full fill = grandfathered breach of the 0.15 max_position_pct cap (two OPEN lots admitted pre-13:00 tightening, no retroactive cancellation). Self-limiting: the cap blocks any further AUBANK add. This is the single largest single-name risk carried into overnight.",
+    "Power cluster (3 names, 15.92% projected): TORNTPOWER (filled, 5.94%) + NTPC (OPEN, 5.06%) + ADANIPOWER (OPEN, 4.92%). NTPC + ADANIPOWER are tightly correlated on thermal-power economics (PSU thermal + private IPP). FMCG cluster (2 names, 16.75% projected): NESTLEIND (12.01% aggregate including OPEN lot) + HINDUNILVR (4.74%). Top-3 macro clusters (BFSI + FMCG + Power) = 68.79% of capital / 87.56% of deployed on full fill.",
+    "Day 1 realized P&L = ₹0 (13 BUY trades today, 0 SELLs — entire book is pure accumulation with no closures). Daily loss limit (0.03), drawdown-reduce (0.10), drawdown-halt (0.15) all inactive. Unrealized P&L not observable from the local DB (no live-quote column in paper_holdings).",
+    "Cash cushion ₹5,17,080 (51.71% of capital). Post-reservation available dry powder if all 5 OPEN orders fill = ₹2,14,415.50 (21.44%); if all 5 OPEN orders reject = ₹5,17,080 (51.71%). Either outcome leaves meaningful headroom for tomorrow's premarket reassessment.",
+    "Overnight/gap risk profile: 100% of today's activity is CNC (delivery), no intraday unwinds booked (paper_positions empty). Book carries two sector clusters (BFSI dominant, Power emerging) and one concentrated name (AUBANK) into the overnight session. No stop-loss orders are visible on the filled holdings in the queried tables — gap-down buffer is the cash cushion, not automated SL triggers.",
+    "Active overrides at session close: min_confidence = 0.60 (risk_monitor 13:00), max_position_pct = 0.15 (risk_monitor 12:30), max_deployed_pct = 0.75 (risk_monitor 14:30). All three are binding and demonstrably halting admissions (60 min of zero new entries). The stacked framework is doing its job; remaining risk is carried (concentration, overnight gap), not incremental.",
+    "Risk level MEDIUM (unchanged from 15:00). HIGH/CRITICAL not warranted because: (a) no realized loss, (b) zero admission velocity for 60 min, (c) all per-name and deployment caps are binding on new entries, (d) cash cushion meaningful under either OPEN-book outcome. LOW not warranted because projected concentration profile (BFSI 36%, AUBANK 18.46%, 3-name Power cluster) is structurally carried into overnight with no intraday unwinds."
+  ],
+  "actions_taken": [
+    "No changes to risk_config.yaml. Same rationale as 15:00: with market at close and zero admissions in the 15:00→15:30 window, adding a 4th lever at 15:30 would over-constrain a stabilized state. The 14:30 framework is fully gating; no tick-over-tick deterioration to respond to, and session-end means no new signals will be evaluated today regardless.",
+    "Did NOT tighten daily_loss_limit_pct (0.03 → 0.02) at session close: realized P&L is ₹0, there is no loss telemetry to calibrate a tighter gate against. Tomorrow's premarket brief will recalibrate once overnight quote data surfaces unrealized P&L.",
+    "Did NOT tighten default_sl_pct / min_sl_pct / max_sl_pct: stop-loss parameters affect NEW SL orders, not the already-held CNC book. No observed SL orders on current holdings to adjust. If overnight gap risk is the concern, the cleaner lever is at premarket (re-enter sizing discipline), not mid-session SL-parameter tweaks.",
+    "Did NOT tighten min_risk_reward (1.5) or further raise min_confidence (0.60 → 0.65): signal-quality axes are not the live risk vector (concentration is), and raising them further at EOD risks starving tomorrow's open without addressing carried concentration.",
+    "Did NOT further lower max_position_pct (0.15 → 0.12) or max_deployed_pct (0.75 → 0.70): trigger conditions for further tightening (new stacking attempt, BFSI re-inflection, 4th Power or 3rd FMCG name, velocity re-acceleration) did not fire this window. The 14:30/13:00/12:30 stack is already binding."
+  ],
+  "watch_next_session": [
+    "Overnight close-auction resolution of the 5 OPEN orders. If all fill, tomorrow opens at 78.56% deployment with 21.44% cash — near the max_deployed_pct ceiling and with minimal admission headroom. If all reject, tomorrow opens at 48.29% with 51.71% cash — meaningful rebuild capacity. Mixed outcome = somewhere between.",
+    "Overnight gap on AUBANK (largest single-name projected exposure, 18.46%) and on the BFSI trio. A coordinated BFSI gap-down is the fastest path from MEDIUM to HIGH without any new trade activity.",
+    "Any overnight news on power/utility sector (tariff orders, DISCOM payments, coal pricing) that would compound the 3-name Power cluster (15.92% of capital).",
+    "Tomorrow's premarket brief should reassess whether to (a) relax the 14:30 max_deployed_pct=0.75 override if OPEN orders were rejected (restoring admission headroom), or (b) retain/deepen it if OPEN orders filled and concentration profile hardened.",
+    "First SELL event tomorrow will surface realized P&L for the first time — re-evaluate daily_loss_limit_pct once there is actual loss/gain telemetry to calibrate against."
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "date": "2026-04-23",
+  "agent": "strategy_reviewer",
+  "review_type": "daily_post_market",
+  "changes": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "scope": "hot_effect_override",
+      "what": "Added max_sl_pct: 0.04 to the overrides.risk block (with a 2026-04-23 16:00 changelog entry explaining the rationale).",
+      "why": "MAHABANK's original entry SL of 73.00 (10.43% below entry 81.50) is the single largest P&L drag today — per-position risk on that trade = 9.78% position size × 10.43% SL distance = 1.02% of portfolio at risk on ONE name, roughly 2x a prudent 0.5% per-name budget. The base max_sl_pct of 0.06 would allow the same pattern on future admissions. Tightening the override to 0.04 caps NEW-entry SLs at 4% and, combined with max_position_pct=0.15, bounds per-name risk at 0.60% worst-case. Complements the 15:00 default_sl_pct=0.015 override (default_sl_pct guides the recommended SL; max_sl_pct is the hard ceiling).",
+      "expected_impact": "Any new CNC/MIS admission from tomorrow onward cannot reproduce the wide-SL-on-large-position shape. Existing 10 holdings are grandfathered (non-punitive, no forced MODIFYs). Engages immediately via GuardrailEngine hot-reload."
+    },
+    {
+      "file": "config/config.yaml",
+      "scope": "durable_base",
+      "what": "Lowered trading.risk.max_sl_pct from 0.06 to 0.05 (with an inline comment referencing the Day-2 MAHABANK rationale).",
+      "why": "Promote a slightly-less-aggressive version of the 0.04 override to the base so that even if the override is reverted, the SL ceiling cannot revert to the old 6% that enabled the MAHABANK 10.4% SL. Base 0.05 + override 0.04 means the effective cap is 0.04 today, and 0.05 after any override cleanup.",
+      "expected_impact": "Takes effect on next bot restart (system prompt rebuilds with MAX_SL_PCT=5% instead of 6%). Cognitive effect: Claude's prompt now advertises a 5% ceiling rather than 6%, aligning the narrative SL discipline with the hardened guardrail."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "scope": "prompt_prose",
+      "what": "Added a PER-POSITION RISK BUDGET bullet under section 5 RISK MANAGEMENT stating that (size% × SL%) must not exceed 0.5% of portfolio per name, with concrete 10%/5% size examples.",
+      "why": "Today's MAHABANK exposure is a textbook violation: 9.78% size × 10.43% SL = 1.02% single-name risk. The prompt previously discussed max_sl and max_position_pct in isolation; it never surfaced the compound constraint. Making it a first-class rule prevents 'high conviction, big size, wide SL' from being internally justifiable.",
+      "expected_impact": "Future entries should co-scale size and SL. A high-conviction pick with large size will now rationalize a tighter SL; a stock that genuinely needs a wider SL will get a proportionally smaller position."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "scope": "prompt_prose",
+      "what": "Rewrote the MODIFY rules section to add: (a) explicit scope note that MODIFY applies only to FILLED positions/holdings — not pending OPEN orders — referencing the exact guardrail rejection string; (b) a 'tighten is measured against the stored SL' clarification; (c) an explicit ban on no-op MODIFY (same new_stop_loss and new_target as stored values); (d) a TRAILING SL MANDATE spelling out the +2% breakeven and +4% trail rules with a formula for the trail level.",
+      "why": "Three separate behaviors observed today need correction. (1) ADANIPOWER had 3 guardrail blocks at 10:46 — Claude tried to MODIFY a pending-not-filled order; the guardrail correctly required a position/holding. The prompt didn't tell Claude that MODIFY semantics require a fill. (2) Claude emitted ~10 MODIFY decisions every 30-min tick × 33 ticks = ~330 MODIFY actions, but trades.stop_loss values are unchanged from the original entries because most new_stop_loss values either (a) matched the stored value (no-op), or (b) were LOWER than the stored value (loosening; silently filtered by the CNC guardrail path which treats current_sl=0). The no-op pattern is a visible waste of decision slots and doesn't advance risk management. (3) TORNTPOWER at +5.27% EOD should have triggered breakeven SL trailing; Claude's latest MODIFY proposed 1620 (below entry 1650) which is LOOSER, not tighter — a direct contradiction of the trailing-SL intent. The mandate gives Claude a concrete formula to emit the CORRECT new_stop_loss rather than guessing.",
+      "expected_impact": "(1) No more ADANIPOWER-style MODIFY rejections on pending orders — Claude should now wait for fill or use a different action on pending orders. (2) MODIFY activity becomes more meaningful — same-value re-emissions drop, freeing decision bandwidth for genuine adjustments. (3) Winners at +2%/+4% unrealized should actually see SL walk up to breakeven and trail, instead of the current pattern where Claude proposes LOOSER SLs that the guardrail silently accepts but never materially improves the book."
+    }
+  ],
+  "recommendations_for_engineering": [
+    "CRITICAL SYSTEM BUG: MODIFY actions on CNC holdings appear to not persist to trades.stop_loss. Evidence: Claude emitted hundreds of MODIFY decisions across 33 TRADING_DECISION calls today, many with new_stop_loss values different from the stored value, and paper_broker.modify_sl_target() has code to UPDATE trades SET stop_loss=? when the fallback CNC path runs. Yet trades.stop_loss for all 13 records is still at the original entry SL. Please verify (a) that execution_engine.execute_order is actually being invoked for action='MODIFY' decisions from the orchestrator, and (b) that paper_broker.modify_sl_target is taking the fallback-CNC branch and the UPDATE is committing. This is why the bot appears 'stuck' re-emitting the same MODIFYs every tick — it's reading SL=0 in the portfolio snapshot and thinking no SLs exist.",
+    "portfolio_snapshots.stop_loss column reads 0 for all CNC holdings because the snapshot generator reads SL from paper_positions (which only has MIS entries) rather than from trades.stop_loss. Claude sees '0' in the context feed and interprets it as 'no SL set', which is why every tick emits MODIFY for every position. Fix the snapshot to source CNC stop_loss from the latest COMPLETE BUY trade for that symbol.",
+    "Claude is consistently emitting new_stop_loss values BELOW entry on profitable CNC positions (e.g., TORNTPOWER 1620 vs entry 1650 at +5.3% unrealized). The guardrail's CNC path treats current_sl=0 so these LOOSENING requests pass validation. Either (a) the guardrail should read current_sl from trades.stop_loss for CNC holdings and enforce tighten-only against that, or (b) the snapshot fix above will surface the real SL to Claude and the prompt's new 'tighten is measured against stored SL' language will prevent the pattern.",
+    "Trailing SL automation from trailing_sl.breakeven_at_pct and trail_start_pct in config.yaml is not wiring up for CNC holdings (paper_broker.modify_sl_target comment confirms: 'CNC holdings don't carry an SL column; tracked in trades'). The system relies on Claude to emit the MODIFYs manually. Given the MODIFY-persistence bug above, the system is effectively running with ZERO working SLs on CNC holdings — a significant risk surface for live trading. Prioritize wiring automated trailing on the engine side in parallel with the prompt mandate, so it's belt-and-suspenders rather than Claude-only."
+  ]
+}

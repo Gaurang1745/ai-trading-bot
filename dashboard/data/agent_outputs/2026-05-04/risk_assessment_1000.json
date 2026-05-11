@@ -1,0 +1,98 @@
+{
+  "timestamp": "2026-05-04 10:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 489989.89,
+    "deployed_pct": 50.88,
+    "holdings_count": 10,
+    "positions_count": 0,
+    "daily_pnl": 0
+  },
+  "current_overrides": {
+    "risk.min_confidence": 0.60,
+    "risk.max_position_pct": 0.15,
+    "risk.max_deployed_pct": 0.75,
+    "risk.default_sl_pct": 0.015,
+    "risk.min_sl_pct": 0.01,
+    "risk.max_sl_pct": 0.045,
+    "trading.max_sector_pct": 0.28
+  },
+  "todays_admissions": [
+    {
+      "symbol": "ADANIPORTS",
+      "fill_time": "2026-05-04 09:42:39",
+      "type": "fresh BUY",
+      "qty": 30,
+      "price": 1700.0,
+      "stop_loss": 1655.0,
+      "target": 1790.0,
+      "confidence": 0.70,
+      "sl_distance_pct": 2.65,
+      "risk_reward": 2.0,
+      "position_pct_capital": 5.11,
+      "sector": "Ports/Infrastructure (NEW sector)"
+    },
+    {
+      "symbol": "GESHIP",
+      "fill_time": "2026-05-04 09:50:00",
+      "type": "carry-over LIMIT (submitted 2026-04-30 11:12, 5 sessions stale)",
+      "qty": 30,
+      "price": 1542.0,
+      "stop_loss": 1490.0,
+      "target": 1645.0,
+      "confidence": 0.65,
+      "sl_distance_pct": 3.37,
+      "risk_reward": 1.98,
+      "position_pct_capital": 4.64,
+      "sector": "Shipping (NEW sector)"
+    }
+  ],
+  "todays_sl_modifies": [
+    "PNBHOUSING: 984 → 1032 (+4.88% above entry, locking profit)",
+    "SUNPHARMA: 1734 → 1788 → 1793.3 → 1795.85 (+3.57% above entry)",
+    "COALINDIA: 469 → 472 → 476 → 475 (+1.28% above entry)",
+    "BANDHANBNK: 200 → 201 (+0.50% above entry)"
+  ],
+  "sector_exposure_cost_basis": {
+    "BFSI": {"pct": 17.64, "names": ["PNBHOUSING 7.89%", "BANDHANBNK 5.01%", "BAJFINANCE 4.73%"], "cap_buffer_pp": 10.36},
+    "Pharma": {"pct": 8.77, "names": ["SUNPHARMA 5.21%", "PHARMABEES 3.56%"], "cap_buffer_pp": 19.23},
+    "Energy_OilGas_Mining": {"pct": 9.70, "names": ["ONGC 5.00%", "COALINDIA 4.70%"], "cap_buffer_pp": 18.30},
+    "Gold_ETF": {"pct": 5.02, "names": ["GOLDBEES 5.02%"], "cap_buffer_pp": 22.98},
+    "Ports_Infrastructure": {"pct": 5.11, "names": ["ADANIPORTS 5.11%"], "cap_buffer_pp": 22.89, "note": "NEW sector today"},
+    "Shipping": {"pct": 4.64, "names": ["GESHIP 4.64%"], "cap_buffer_pp": 23.36, "note": "NEW sector via 04-30 LIMIT carry-over fill"}
+  },
+  "findings": [
+    "Day-10 10:00 tick — 45 min into NSE session. First meaningful state delta of the day vs 09:30/09:00 byte-identical premarket: 2 admissions land in the 09:30→10:00 window plus a 12-MODIFY trail-stop wave on profitable holdings. Deployment 41.12% → 50.88% (+9.76 pp). 10 holdings, 6 distinct sectors, ₹997,434.89 total, ₹489,989.89 cash, 0 paper_positions, ₹0 realized P&L.",
+    "ADANIPORTS BUY 30 @ ₹1700 FILLED 09:42:39 — fresh today, conf=0.70 (exactly at high-conf threshold), R:R = 2.0, SL distance 2.65%, position 5.11% capital. The FIRST high-conf admission against the holistically-loosened stack — its outcome distribution is the cleanest empirical test of whether the Day-10 refinement is correctly calibrated. Sector Ports/Infrastructure (new, single name).",
+    "GESHIP BUY 30 @ ₹1542 FILLED 09:50:00 — the 04-30 11:12 CNC LIMIT carry-over (5 sessions stale at submission, flagged as watch item across 04-30 EOD / 09:00 / 09:30 entries) finally filled cleanly at limit price. Conf=0.65 (below 0.70 high-conf threshold but above loosened 0.60 floor), R:R = 1.98, SL distance 3.37%, position 4.64% capital. Sector Shipping (new, single name). Resolves the carry-over watch item; outcome distribution feeds Day-10+ entry-execution-discipline review on stale-LIMIT behavior.",
+    "Trail-stop discipline ACTIVE: 12 valid SL MODIFYs at 09:10 and 09:42 across PNBHOUSING (+4.88% above entry), SUNPHARMA (+3.57%), COALINDIA (+1.28%), BANDHANBNK (+0.50%) — all locking paper profit ABOVE entry. Real risk-reduction work captured in per-holding SL state, not the override stack; downside on these 4 holdings is materially capped even on an intraday gap-down.",
+    "Sector concentration HEALTHY and broadening: 4 → 6 distinct sectors today, BFSI count holds at 3 names (17.64%, unchanged from 09:30), no new BFSI add, no Pharma growth, no 4-name sector cluster anywhere. Every sector holds 10+ pp buffer to the loosened 28% cap; the 0.28 cap is non-binding by 10.36 pp on the largest sector (BFSI). ADANIPORTS and GESHIP add diversification, not concentration.",
+    "Position sizing HEALTHY: largest PNBHOUSING 7.89% (7.11 pp under 15% cap), today's admissions both well under cap (5.11% / 4.64%), no position sub-3% suggesting hedging-against-itself. The 0.15 cap is non-binding.",
+    "Deployment 50.88% with cap 0.75 non-binding by 24.12 pp — capital is moving, no longer chronically under-deployed. The +9.76 pp intraday move validates that the loosened stack is being USED (signal supply, not parameter friction, was the prior bottleneck — and signal supply showed up today). 9.12 pp short of the leg (k) loosen-fire threshold of 60%.",
+    "Daily loss gate entirely non-binding: ₹0 realized P&L, base 0.075 cap = ₹74,807 of intraday loss before halt — full headroom. Composite distress meta-trigger 0/3.",
+    "Signal acceptance EVIDENCE-FAVORABLE: zero guardrail BLOCK rows today; 19 valid guardrail entries through 10:00, all MODIFY/BUY validations with only 'locking in profit' warnings. The min_confidence 0.65 → 0.60 loosen has NOT yet been empirically tested with a fresh same-day signal in the 0.60-0.65 mid-band — GESHIP at 0.65 was 04-30-submitted, not today-emitted. Track for the rest of session whether strategy emits a fresh 0.60-0.65 signal.",
+    "BAJFINANCE R:R = 1.41 remains the lone sub-1.5 R:R admission cumulative (n=1) — today's two admissions (ADANIPORTS 2.0 / GESHIP 1.98) are both clean above the 1.5 floor. Seed-trigger (g) (min_risk_reward 1.5 → 1.55) stays armed but DORMANT today."
+  ],
+  "trigger_walk": {
+    "tighten": {
+      "(a) 4th BFSI name": "DORMANT — count holds at 3, neither admission BFSI",
+      "(b) BFSI > 22% on full-fill": "DORMANT — 17.64%, 10.36 pp under loosened cap",
+      "(c) 3rd Pharma OR Pharma > 14%": "DORMANT — still 2 Pharma names at 8.77%",
+      "(d) 4-name sector cluster": "DORMANT — no sector exceeds 3 names",
+      "(e) 3rd ≥3.5% SL admission today": "DORMANT — today's SL distances 2.65% / 3.37%, neither breaches 3.5% threshold, count=0",
+      "(f) admit-then-exit-within-60-min n=2": "DORMANT — zero exits today; trail-stop wave is MODIFY, not exit",
+      "(g) 2nd sub-1.5 R:R admission cumulative": "DORMANT (ARMED) — both today's admissions clean (2.0 / 1.98); cumulative still n=1",
+      "(h) realized daily P&L < -₹15,000": "DORMANT — ₹0 realized",
+      "(i) any new admission > 12% capital": "DORMANT — largest today 5.11%, 6.89 pp under threshold"
+    },
+    "loosen": {
+      "(j) default_sl_pct 0.015 → 0.020": "PROGRESSING — 0 conf-floor BLOCKs through 10:00, need EOD confirmation + ≥1 today-admitted name profitable at EOD",
+      "(k) max_deployed_pct 0.75 → 0.80": "ARMED, NOT YET FIRED — 1/2 high-conf admissions (ADANIPORTS 0.70; GESHIP 0.65 below 0.70 threshold), deployment 50.88/60% (9.12 pp short); fires on next admission ≥0.70 conf and ≥₹91k full-fill",
+      "(l) max_position_pct 0.15 → 0.18": "DORMANT — needs deployment > 65% sustained 2+ days; 50.88% one-day reading"
+    }
+  },
+  "actions_taken": [
+    "HOLD all 7 overrides at current loosened state (min_confidence 0.60, max_position_pct 0.15, max_deployed_pct 0.75, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.045, max_sector_pct 0.28). Did NOT tighten: zero tighten legs fire and the 09:30→10:00 evidence is constructive — 2 admissions at clean R:R (2.0 / 1.98), conf at or above the loosened 0.60 floor, no whipsaw, no daily P&L drag, broadening sector diversification (8 → 10 holdings, 4 → 6 sectors), 12 trail-stop MODIFYs locking profit on 4 pre-existing holdings, zero guardrail BLOCK rows. Re-tightening on this evidence would be perversely backward — the loosened stack is producing exactly the kind of activity it was loosened to admit. Did NOT loosen further: no loosen leg has all preconditions met at minute 45 of session. Leg (k) (max_deployed_pct 0.75 → 0.80) is the closest at 1/2 high-conf admissions + 50.88/60% deployment — properly armed, fires cleanly on a 2nd ≥0.70-conf admission lifting deployment past 60%. Premature loosening would skip the validation gate. Disciplined no-action — let the session continue producing evidence at the proper pace, re-evaluate at 10:30."
+  ]
+}

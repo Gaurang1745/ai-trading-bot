@@ -1,0 +1,30 @@
+{
+  "timestamp": "2026-05-06 11:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000209.07,
+    "cash": 350619.07,
+    "deployed_pct": 64.94,
+    "holdings_count": 12,
+    "positions_count": 0,
+    "daily_pnl": -1647.57
+  },
+  "findings": [
+    "Overrides block has been empty since 2026-05-05 16:00 EOD strategy_review reset — already at base on every lever (daily_loss_limit_pct 0.03, default_sl_pct 0.02, min_sl_pct 0.005, max_sl_pct 0.05, min_confidence 0.50, min_risk_reward 1.5, max_position_pct 0.20, max_deployed_pct 0.80). Loosening floor is reached.",
+    "State delta vs 10:30: CHOLAHLDNG closed at 10:46:12 (+₹73.25, 4.33% slot freed), COFORGE BUY 30@1259 ₹37,770 filled at 10:46:22 (3.78%, taking the rotation slot). Holdings 12 unchanged in count; one BFSI name (CHOLAHLDNG) rotated out, one IT Services name (COFORGE) rotated in. Active rotation, not idle.",
+    "HFCL BUY 600@133.5 ₹80,100 still OPEN since 10:16:40 (~45 min unfilled). Cash committed but unfilled.",
+    "Cost basis ₹649,590 on 12 filled holdings. Cash ₹350,619.07. Total ₹1,000,209.07. Deployment 64.94% on filled (72.95% projection if HFCL fills) — well in the 50-80% active-trader sweet spot, 15.06 pp headroom to base 80% cap.",
+    "BFSI/Lending cluster contracted then re-balanced: PNBHOUSING 7.87% + BANDHANBNK 5.02% + ABCAPITAL 4.98% = 17.87% n=3 (was 22.19% n=4 at 10:30 with CHOLAHLDNG; CHOLAHLDNG rotation released 4.33%). 17.13 pp buffer to base 35% cap.",
+    "Position sizing band 3.78%-8.22%: M&M 8.22% largest (11.78 pp headroom to base 20%), COFORGE 3.78% smallest (above the sub-3% hedging-against-itself floor). No oversized or token-sized positions.",
+    "Sector spread 10 distinct buckets: BFSI cluster (n=3) + Auto OEM (M&M) + Realty (SOBHA) + Ports/Infra (ADANIPORTS) + Defense/Aerospace (HAL) + Rail/Capgoods (TITAGARH) + Gold ETF (GOLDBEES) + FMCG (MARICO) + Specialty Chem (NAVINFLUOR) + IT Services (COFORGE). Adds to 11 if HFCL Telecom fills.",
+    "Daily realized P&L -₹1,647.57 (-0.16%): MARUTI -₹1,007.12 + BHEL -₹713.70 + CHOLAHLDNG +₹73.25. Buffer to base 3% gate ~₹28,358 (5.5% utilization). 94.5% of buffer remaining.",
+    "Signal acceptance healthy: only 'BLOCKED on confidence' entries today (09:13:43, 09:43:34, 10:17:10) are conf=0.0 malformed-payload sentinels, not real high-conf signals being filtered. The two CNC short-sell blocks (10:46:40, 10:47:00) are correct rule enforcement on a non-existent CHOLAHLDNG holding post-close, not over-cautious gating.",
+    "Composite distress legs 0/3 — no sector concentration breach, no daily-loss escalation, no oversized position."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty. Override count 0 unchanged. No tighten, no loosen.",
+    "Nothing to loosen: every lever is already at base (the floor); the 2026-05-05 16:00 EOD strategy_review explicitly emptied the overrides block on the thesis that the override stack had become rationalized inaction (14 risk-monitor HOLDs in one day on an empirically non-binding lever) and that thesis has not been refuted in the 19 hours since.",
+    "Nothing to tighten: every lever has comfortable buffer to base — BFSI 17.87% vs 35% (17.13 pp), max position 8.22% vs 20% (11.78 pp), deployment 64.94% vs 80% (15.06 pp), daily loss -0.16% vs 3% (94.5% of buffer remaining). The 5-BUY burst at 10:16-10:17 plus the CHOLAHLDNG→COFORGE rotation at 10:46 is the active-trader thesis executing cleanly against base-config gates; tightening here would be friction against legitimate strategy execution.",
+    "Pre-armed watch items for 11:30: (a) HFCL fill (~45 min OPEN) → deployment to ~73%, still under base 80% cap; (b) any 4th BFSI fill → cluster could approach 22-25%, still under 35%; (c) HFCL non-fill extending past 60 min would suggest order may need reassessment but is not a risk-config trigger."
+  ]
+}

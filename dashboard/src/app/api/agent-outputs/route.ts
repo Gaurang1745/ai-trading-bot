@@ -6,10 +6,12 @@ export const dynamic = "force-dynamic";
 
 const OUTPUTS_ROOT =
   process.env.TRADING_AGENT_OUTPUTS_PATH ||
-  path.resolve(
-    __dirname,
-    "../../../../../ai-trading-bot/src/agents/outputs"
-  );
+  (process.env.VERCEL
+    ? path.resolve(process.cwd(), "data/agent_outputs")
+    : path.resolve(
+        __dirname,
+        "../../../../../ai-trading-bot/src/agents/outputs"
+      ));
 
 /**
  * GET /api/agent-outputs           -> list dates

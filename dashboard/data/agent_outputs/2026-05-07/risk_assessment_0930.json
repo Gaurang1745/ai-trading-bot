@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-05-07 09:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Overrides block has been empty since the 2026-05-05 16:00 EOD reset (~41.5 hr stable). Every guardrail at base — no parameter is biting any cap, so there is nothing to loosen (base is the floor by spec).",
+    "Sector concentration well within base: BFSI 14.92% vs 35% cap (20.08 pp buffer, n=3 PNBHOUSING+ABCAPITAL+CAMS), Defense+Rail 14.96% vs 35% (20.04 pp, n=3 HAL+GRSE+TITAGARH). 9-10 distinct sector buckets across 11 holdings.",
+    "Position sizing healthy: range 2.02%-7.90%, max PNBHOUSING 7.90% vs 20% cap (12.10 pp headroom). 10 of 11 names sit between 3.79% and 7.90% — consistent sizing, not the all-tiny hedge-against-self anti-pattern (CAMS 2.02% is the lone sub-3% slot, 1-of-11).",
+    "Deployment 53.57% vs 80% cap (26.43 pp headroom). At the lower edge of healthy but not yet chronic under-deployment — the under-deployment trigger (sub-50% with no fresh redeploys) is pre-armed but not yet firing; would re-arm if Day-13 prints fills only on the sell side.",
+    "Daily P&L freshly reset at midnight: 0.0 realized, 0 guardrail entries, full 3% buffer available. Yesterday closed -Rs 5,029.27 / -0.50% — context anchor, not fresh draw. Tightening loss-gate on a 0% utilization counter would be reactionary and block legitimate signal.",
+    "Signal acceptance: empty admission stream in the 09:00-09:30 window (zero new BUY/SELL admits, zero blocks) means no high-confidence (>=0.70) entries to evaluate. Conf and R:R floors empirically non-binding through 9+ sessions; nothing to relax further since already at base.",
+    "Zero portfolio activity since M&M CLOSE at 2026-05-06 12:53:55 (~20.6 hr) — through Day-12 PM session, overnight, premarket, and Day-13 opening 30 minutes. Pre-armed SL trails (PNBHOUSING 1040 / ADANIPORTS 1735 / HAL 4600 / NAVINFLUOR 6960 / COFORGE 1265) did not fire on the open.",
+    "Stale HFCL BUY 600@133.5 (Rs 80,100 MIS LIMIT) still OPEN in paper_orders since 2026-05-06 10:16:40 (~23.2 hr) — DB-write reconciliation lag, MIS auto-cancel almost certainly fired by 15:20 IST on 05-06 without DB sync. Strategy/broker-layer scope, not risk-config; both possible outcomes (auto-cancel reconciles -> 53.57%, retroactive fill -> 61.61%) sit comfortably under the 80% cap.",
+    "Composite HIGH-meta-trigger 0/3: book at 0.0 daily, no single-name distress, no admission-surface friction. 9th consecutive HOLD tick — every override that was reverted on 05-05 16:00 has stayed validly reverted through a complete Day-12 session and the Day-13 open."
+  ],
+  "actions_taken": [
+    "HOLD — no parameter changes. Overrides block remains empty (size 0). All guardrails at base values. 9th consecutive HOLD tick. Decision rationale: nothing to loosen (already at base, the spec floor); nothing to tighten (composite distress 0/3, sector concentration 14.92%/14.96% vs 35% cap, max position 7.90% vs 20% cap, deployment 53.57% vs 80% cap, daily P&L 0.0, no high-conf blocks). Pre-armed watch items remain dormant: HFCL DB reconcile, sector cluster expansion (5th BFSI / 4th Defense+Rail), conf-floor re-arm trigger (admit <0.55), loss-gate trigger (realized P&L < -1.0%), under-deployment trigger (sub-50% with no redeploys), and the spec-hard high-conf-block trigger."
+  ]
+}

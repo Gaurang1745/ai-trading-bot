@@ -1,0 +1,47 @@
+{
+  "date": "2026-05-06",
+  "agent": "strategy_review",
+  "session": "EOD",
+  "changes": [
+    {
+      "id": 1,
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 17 — PRE-SL EXIT DISCIPLINE — DO NOT FRONT-RUN YOUR OWN STOP-LOSS (NEW)",
+      "what": "Added new Rule 17 immediately after Rule 16 (within the _TEMPLATE string, before its closing triple-quote). Rule explicitly forbids EXIT rationales of the form 'CMP is close to SL — likely to trigger soon' on HELD positions (carry or current-session) when the entry thesis remains intact. Mandates HOLD as the default in the [-1%, SL] band, MODIFY-tighten-SL as the alternative middle-ground, and EXIT only when a fact NEW to the position has materialized POST-ENTRY (sector-wide reversal, fresh negative news, regulator action issued today, structural breakdown of the entry thesis). Calls out specific anti-rationales seen today by quoted phrase ('better to exit at -X% than get stopped at -Y%', 'CMP just above stored SL', 'Q4 was good but stock is fading', 'exit on sector strength before SL fires'). Cites all 5 Day-12 prior failure modes by name with explicit P&L numbers and reasoning quotes (MARUTI -₹1,007, BHEL -₹713, SOBHA -₹1,425, BANDHANBNK -₹816, M&M -₹1,140 = -₹5,101 combined). Includes the asymmetry-math observation: replacing a -2% SL fire with a -1.5% market exit saves 0.5% on the worst case and surrenders 100% of the recovery tail.",
+      "why": "Five of six daily exits today fit this pattern. Combined cost was -₹5,101 — the worst single-day realized loss in the 12-session experiment to date. Each exit reasoning explicitly cited proximity-to-SL as the trigger; none cited new post-entry information; in 4 of the 5 cases the strategy's own reasoning acknowledged the entry thesis was still intact (e.g., SOBHA: 'Q4 was actually GOOD, PAT +124% YoY' immediately preceding the -2.7% exit). The SL placements at entry were defensible (-2% to -4% from entry, within risk-budget); the executions converted controlled-maximum-loss-with-recovery-option into guaranteed-near-maximum-loss-with-zero-option. Rule 15 (SAME-SESSION ROUND-TRIP DISCIPLINE) addresses the same-session subset of this failure mode but explicitly limits scope to 'EXIT a position you BOUGHT in the same session' — Day-12's evidence is dominated by carry-position exits where the entry was 1+ sessions ago and Rule 15 does not cover. Rule 17 closes that gap. Today's M&M was a same-session round-trip but its exit reasoning fits the proximity-to-SL pattern, not the Rule 15 'new fact post-entry' pattern; Rule 17 covers it from the other angle. Override-side fixes were considered and rejected — the day's losses were all inside the lane the engine permits (0 real strategy blocks of the 8 total — all 8 were noise: 4 conf=0.0 malformed payloads and 4 short-sell-after-CLOSE artefacts). The decision being mis-made is by the LLM at exit time, so the fix belongs in the prompt where the exit reasoning is generated.",
+      "expected_impact": "Forward-looking on next bot restart (system_prompt is built at boot from config.yaml + _TEMPLATE). No immediate behavioral change today. Day-13 watch metrics: (i) of all CLOSE/SELL transactions on carry positions, what fraction cite a post-entry NEW fact vs proximity-to-SL? Target: ≤30% are proximity-to-SL exits (vs today's 83% — 5 of 6). (ii) Average realized loss per carry-position close: should DECREASE (paradoxically) as the strategy lets SLs fire at -2 to -4% rather than panic-closing at -1 to -3% — because more positions will recover before hitting SL at all, and the ones that do hit SL hit at the calibrated maximum, not at noise-level pre-emption. (iii) Total realized P&L for the next 5 sessions vs the prior 5 — premise is the strategy's admit-side is healthy (Day-11 fix produced 9 admits across 8 cycles today, +₹8,664 unrealized lift) and the exit-side fix alone should flip session realized P&L from negative to flat-or-positive."
+    }
+  ],
+  "non_changes_with_rationale": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "decision": "NO CHANGE — overrides block remains empty {}",
+      "rationale": "Today's losses were all inside the guardrail lane. 0 real strategy blocks; the 8 BLOCKED rows in guardrail_log were 100% noise (4 conf=0.0 malformed payloads, 4 short-sell-after-CLOSE artefacts). The 5 pre-SL exit closes that drove today's -₹5,029 realized loss had defensible entry-time SLs (-2% to -4%) that would have done their job had they been allowed to fire. Voluntary market-closes cannot be blocked by override constraints; only by prompt instructions about when to issue them. Risk monitor's 14-tick day with 7 trailing HOLDs correctly reflects that nothing is binding."
+    },
+    {
+      "file": "config/config.yaml",
+      "decision": "NO CHANGE — base parameters unchanged",
+      "rationale": "min_sl_pct (0.005), max_sl_pct (0.05), default_sl_pct (0.02), max_position_pct (0.20), max_sector_pct (0.35), max_deployed_pct (0.80), min_confidence (0.50), min_risk_reward (1.5), daily_loss_limit_pct (0.075) are all working as intended. None bound today (largest position 8.2% vs 20%, largest sector ~15% vs 35%, deployment 73% vs 80%). Today's loss profile is not caused by any of them being too lax."
+    }
+  ],
+  "summary_metrics": {
+    "trades_today": 20,
+    "new_buys_today": 9,
+    "closes_today": 6,
+    "wins": 1,
+    "losses": 5,
+    "total_realized_pnl": -5028.97,
+    "session_unrealized_lift_estimate": 8664,
+    "session_net_change_pct": 0.36,
+    "eod_deployment_pct": 73,
+    "decision_cycles_estimated": 13,
+    "cycles_with_admits": 8,
+    "admit_rate_estimate": 0.62,
+    "guardrail_blocks_real": 0,
+    "guardrail_blocks_noise": 8,
+    "override_count_eod_pre_review": 0,
+    "override_count_post_review": 0,
+    "files_modified": 1,
+    "individual_changes": 1
+  }
+}
