@@ -1,0 +1,101 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [et_markets 2026-04-27 04:02] Vedanta demerger: When will the four new stocks list on BSE, NSE? Here’s what recent demergers indicate
+1. [et_markets 2026-04-27 03:57] US Stock Market: Wall Street rally faces crucial test this week as big tech earnings and Fed decision loom
+2. [livemint 2026-04-27 03:56] Paytm share price crashes 8% after RBI cancels Paytm Payments Bank License — Should you buy, sell or hold?
+3. [et_markets 2026-04-27 03:55] Sensex rises over 400 points, Nifty tops 24,000 as Iran sends peace proposal to US. What lies ahead?
+4. [et_markets 2026-04-27 03:55] Silver dips Rs 1,400, gold at Rs 1.52 lakh as stalled Iran talks, rising oil prices raise rate hike fears. Key levels for today
+5. [livemint 2026-04-27 03:53] Sun Pharma share price rises 5% on acquisition of US-based Organon. What should investors do?
+6. [livemint 2026-04-27 03:52] IDFC First Bank share price jumps 3% after Q4 results 2026: Is the stock worth buying? Here's what brokerages say
+7. [et_markets 2026-04-27 03:50] Wipro share buyback: Here’s why retail investors should participate
+8. [livemint 2026-04-27 03:49] IndusInd Bank share price jumps 6% after Q4 results. Should you buy, sell or hold the stock?
+9. [livemint 2026-04-27 03:48] Reliance Industries shares fall after Q4 results. Should you buy, sell or hold?
+10. [et_markets 2026-04-27 03:46] Global Market Update: Market cap of South Korean-listed firms surpasses $4.08 trillion for 1st time
+11. [et_markets 2026-04-27 03:43] Bluechip safety no more? Infosys knocked out of India's top 10 valuable companies list after losing Rs 2 lakh crore
+12. [et_markets 2026-04-27 03:39] Goldman hikes oil-price outlook as Hormuz shock intensifies
+13. [et_markets 2026-04-27 03:35] Sun Pharma shares jump over 4% after firm announces $12 billion Organon acquisition
+14. [livemint 2026-04-27 03:35] Silver prices fall in India as strong dollar, rising oil prices, and Fed rate fears pressure metals
+15. [livemint 2026-04-27 03:34] Gold rate volatile on MCX due to profit booking amid elevated crude oil prices; focus remains on potential US-Iran talks
+16. [et_markets 2026-04-27 03:30] Paytm shares crash 8% as RBI cancels Paytm Payments Bank’s banking licence. What next?
+17. [et_markets 2026-04-27 03:30] Should you buy the dip? Strategist Anand James shares his weekly stock strategy
+18. [et_markets 2026-04-27 03:30] AI drives global IT spending to $6.31 trillion, but Indian IT firms face a margin squeeze, warns Gartner
+19. [et_markets 2026-04-27 03:22] Firstsource Solutions among 5 stocks close crossing below VWAP
+20. [et_markets 2026-04-27 03:14] IDFC First Bank shares jump over 3% as Q4 net profit rises 5%, NII up 16% to Rs 5,677 crore
+21. [livemint 2026-04-27 03:06] OnEMI Technology Solutions IPO: Price band set at ₹162-171 per share; check issue detail, key dates, more
+22. [livemint 2026-04-27 02:55] Q4 results 2026: Coal India to Varun Beverages among companies to declare Q4 results today; check full list here
+23. [livemint 2026-04-27 02:49] Stock market today: Gift Nifty signals gap-up opening; India VIX, oil to gold, silver rates — 8 stocks to buy or sell
+24. [et_markets 2026-04-27 02:45] Adani Green among 5 stocks closing above VWAP
+25. [et_markets 2026-04-27 02:44] Bharti Airtel Share Price Live Updates: ET Awards: Bharti Airtel CEO Shashwat Sharma on company’s resilience and growth through industry upheavals
+26. [et_markets 2026-04-27 02:38] Adani Ports SEZ Share Price Live Updates: Adani Ports SEZ posts robust monthly returns
+27. [et_markets 2026-04-27 02:38] ITC Share Price Live Updates: ITC shows promising monthly returns
+28. [et_markets 2026-04-27 02:38] NTPC Share Price Live Updates: NTPC achieves notable monthly returns
+29. [et_markets 2026-04-27 02:37] Asian Paints Share Price Live Updates: Asian Paints showcases remarkable monthly returns
+30. [et_markets 2026-04-27 02:37] Axis Bank Share Price Live Updates: Axis Bank's monthly performance shines
+31. [et_markets 2026-04-27 02:37] Tata Motors PV Share Price Live Updates: Tata Motors PV's monthly performance impresses investors
+32. [et_markets 2026-04-27 02:37] Grasim Inds Share Price Live Updates: Grasim Industries posts impressive monthly returns
+33. [et_markets 2026-04-27 02:37] Bajaj Auto Share Price Live Updates: Bajaj Auto's Monthly Return Highlights
+34. [et_markets 2026-04-27 02:37] Jio Financial Services Share Price Live Updates: Vedanta demerger: When will the four new stocks list on BSE, NSE? Here’s what recent demergers indicate
+35. [et_markets 2026-04-27 02:36] Bajaj Finserv Share Price Live Updates: Bajaj Finserv's monthly returns indicate positive momentum
+36. [et_markets 2026-04-27 02:36] Wipro Share Price Live Updates: Wipro delivers robust monthly returns
+37. [et_markets 2026-04-27 02:36] IndusInd Bank Share Price Live Updates: IndusInd Bank's stock shows impressive growth
+38. [et_markets 2026-04-27 02:36] ICICI Bank Share Price Live Updates: ICICI Bank shows strong monthly performance
+39. [et_markets 2026-04-27 02:36] Adani Ent Share Price Live Updates: Adani Enterprises shows impressive monthly returns
+40. [et_markets 2026-04-27 02:36] SBI Share Price Live Updates: SBI shows strong monthly performance
+41. [livemint 2026-04-27 02:36] Sensex, Nifty 50 | Stock Market LIVE: Sensex gains 400 points, Nifty holds 24,000; Axis Bank, RIL declines
+42. [et_markets 2026-04-27 02:35] Tata Steel Share Price Live Updates: Tata Steel shows impressive monthly returns
+43. [et_markets 2026-04-27 02:35] UPL Share Price Live Updates: UPL sees a 1.76% increase over the last month
+44. [et_markets 2026-04-27 02:35] Maruti Suzuki Share Price Live Updates: Maruti Suzuki achieves notable monthly returns
+45. [et_markets 2026-04-27 02:35] Eicher Motors Share Price Live Updates: Eicher Motors reports a 3.5% return over the month
+46. [et_markets 2026-04-27 02:34] HDFC Bank Share Price Live Updates: HDFC Bank's Performance in the Last Month
+47. [et_markets 2026-04-27 02:34] Hero MotoCorp Share Price Live Updates: Hero MotoCorp experiences a decline in returns
+48. [et_markets 2026-04-27 02:34] JSW Steel Share Price Live Updates: JSW Steel shows impressive monthly returns
+49. [et_markets 2026-04-27 02:34] Dr Reddys Share Price Live Updates: Dr. Reddy's Laboratories shows promising returns
+50. [et_markets 2026-04-27 02:34] ONGC Share Price Live Updates: ONGC's monthly performance shines with 6.25% returns
+51. [et_markets 2026-04-27 02:33] Nestle India Share Price Live Updates: Nestle India achieves significant monthly performance
+52. [et_markets 2026-04-27 02:33] Coal India Share Price Live Updates: Coal India delivers solid monthly performance
+53. [et_markets 2026-04-27 02:33] BPCL Share Price Live Updates: BPCL's robust monthly return
+54. [et_markets 2026-04-27 02:33] Cipla Share Price Live Updates: Cipla's growth trajectory continues
+55. [et_markets 2026-04-27 02:33] Sun Pharma Share Price Live Updates: Sun Pharma's returns reflect a challenging month
+56. [et_markets 2026-04-27 02:32] Tech Mahindra Share Price Live Updates: Tech Mahindra's stock faces a setback
+57. [et_markets 2026-04-27 02:32] L&T Share Price Live Updates: L&T's stock performance reflects 14.15% growth
+58. [et_markets 2026-04-27 02:32] LTIMindtree Share Price Live Updates: LTIMindtree shows steady performance
+59. [et_markets 2026-04-27 02:32] HCL Tech Share Price Live Updates: HCL Tech reports a significant monthly return decline.
+60. [livemint 2026-04-27 02:30] Expert view: Can Nifty 50 hit 27000? Ventura's Vinit Bolinjkar on Nifty target, top stocks to buy and more
+61. [livemint 2026-04-27 02:13] Raja Venkatraman, MarketSmith recommend four stocks for 27 April
+62. [livemint 2026-04-27 02:02] Nifty 50, Sensex prediction today: Check how Indian stock market is expected to trade on 27 April
+63. [livemint 2026-04-27 01:42] Goldman Hikes Oil Price Forecasts on ‘Extreme’ Inventory Draws
+64. [livemint 2026-04-27 01:39] Buy or sell: Gift Nifty up, Vaishali Parekh recommends three stocks to buy today
+65. [livemint 2026-04-27 01:36] Asian markets today: Nikkei 225, Kospi hit record highs despite US-Iran talks uncertainty
+66. [livemint 2026-04-27 01:33] From Gift Nifty, crude oil price to Nasdaq, Nikkei rally: 8 key things that changed for Indian stock market over weekend
+67. [livemint 2026-04-27 01:30] Stocks to buy for short term: From PVR INOX to JSW Energy- Anand Rathi's Jigar Patel recommends 3 shares
+68. [livemint 2026-04-27 00:58] Breakout stocks to buy or sell: Sumeet Bagadia recommends five shares to buy today — 27 April 2026
+69. [livemint 2026-04-27 00:58] Gold Gains on Iran Talks Optimism With Fed Outlook in Focus
+70. [livemint 2026-04-27 00:31] AI Boom Drowns Out War Fears to Fuel Asia’s Great Market Divide
+71. [livemint 2026-04-27 00:30] Why Shriram Finance’s FY27 growth ambitions face headwinds
+72. [livemint 2026-04-27 00:30] What lies behind the April crash in futures and options
+73. [livemint 2026-04-27 00:30] Stocks to trade: Raja Venkatraman recommends 3 stocks for 27 April
+74. [livemint 2026-04-27 00:30] Stock recommendations for 27 April from MarketSmith India
+75. [livemint 2026-04-27 00:15] Most of the worst is already priced in, says Old Bridge MF’s Kenneth Andrade
+76. [livemint 2026-04-26 23:19] Oil Rises as Hormuz Stays Shut for Third Month After Talks Stall
+77. [livemint 2026-04-26 23:13] Gold Declines as Attempts to Restart US-Iran Peace Talks Falter
+78. [livemint 2026-04-26 23:13] Gold Slips as Attempts to Restart US-Iran Peace Talks Falter
+79. [livemint 2026-04-26 23:02] Japans record bull run under threat as Mideast war clouds earnings season
+80. [livemint 2026-04-26 13:02] Wall St Week Ahead-Soaring US stocks face pivotal week of tech-led earnings, Fed meeting
+81. [livemint 2026-04-26 10:22] Why should investors approach a 'buy on dips' strategy amid earnings season? Explained
+82. [livemint 2026-04-26 10:13] TCS vs Infosys vs Wipro vs HCL Tech vs Tech Mahindra: Which IT stock to buy after Q4 results 2026?

@@ -6,7 +6,9 @@ export const dynamic = "force-dynamic";
 
 const LOG_ROOT =
   process.env.TRADING_LOG_PATH ||
-  path.resolve(__dirname, "../../../../../ai-trading-bot/logs");
+  (process.env.VERCEL
+    ? path.resolve(process.cwd(), "data/logs")
+    : path.resolve(__dirname, "../../../../../ai-trading-bot/logs"));
 
 /**
  * GET /api/ai-logs           -> list all available dates with AI call dirs

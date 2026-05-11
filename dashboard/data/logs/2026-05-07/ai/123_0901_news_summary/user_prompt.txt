@@ -1,0 +1,102 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [livemint 2026-05-07 03:23] Stock market today: Gift Nifty hints muted start; US-Iran war, India VIX to gold, silver rates — 8 stocks to buy or sell
+1. [livemint 2026-05-07 03:16] Stocks to buy for short term: From RVNL to Eternal- Amol Athawale of Kotak Securities suggests 3 shares
+2. [et_markets 2026-05-07 03:07] Yes Bank among 6 stocks flashing bullish signals, indicating possible uptrend
+3. [livemint 2026-05-07 03:02] Q4 results 2026: BSE to Bharat Forge among companies to declare Q4 results today
+4. [et_markets 2026-05-07 03:01] SBI among 7 Nifty stocks showing bullish RSI upswing
+5. [et_markets 2026-05-07 02:55] Axis Bank Share Price Live Updates: Axis Bank's trading session summary
+6. [et_markets 2026-05-07 02:50] SBI Share Price Live Updates: SBI's beta value highlights its market responsiveness
+7. [et_markets 2026-05-07 02:46] Hero MotoCorp Share Price Live Updates: Hero MotoCorp's beta signifies its investment profile
+8. [et_markets 2026-05-07 02:43] Power Grid Share Price Live Updates: Power Grid's six-month beta reflects stability
+9. [et_markets 2026-05-07 02:43] L&T Share Price Live Updates: L&T's beta reveals stock performance dynamics
+10. [et_markets 2026-05-07 02:42] Apollo Hospital Share Price Live Updates: Apollo Hospital's beta analysis
+11. [et_markets 2026-05-07 02:42] BPCL Share Price Live Updates: BPCL's beta reflects market sensitivity
+12. [et_markets 2026-05-07 02:30] Dollar on defensive as markets hope for best on Middle East
+13. [livemint 2026-05-07 02:30] Powering the future: Four ancillary stocks driving India’s energy infrastructure boom
+14. [livemint 2026-05-07 02:30] Sensex, Nifty 50 | Stock Market LIVE: Gift Nifty signals flat start for Indian market; Nasdaq, Nikkei hit record high
+15. [et_markets 2026-05-07 02:20] Oil Price Today (May 7): Crude oil reclaims $100, snaps two-day losing streak. Here’s why
+16. [livemint 2026-05-07 02:19] Raja Venkatraman, MarketSmith recommend five stocks for 7 May
+17. [et_markets 2026-05-07 01:59] Positive Breakout: These 10 stocks cross above their 200 DMAs
+18. [livemint 2026-05-07 01:58] Nifty 50, Sensex prediction today: Check how Indian stock market is expected to trade on 7 May
+19. [et_markets 2026-05-07 01:57] Sensex Today | Nifty 50 | Stock Market Live Updates: GIFT Nifty signals a negative start; Asian shares trade higher
+20. [livemint 2026-05-07 01:56] Buy or sell: Gift Nifty signals muted start, Vaishali Parekh recommends three stocks to buy today — 7 May 2026
+21. [et_markets 2026-05-07 01:55] Stocks to buy in 2026 for long term: M&M, Marico among 5 stocks that could give 10-20% return
+22. [et_markets 2026-05-07 01:54] Did you get OnEMI Technology IPO allotment? The GMP ahead of listing is the best in last few months
+23. [et_markets 2026-05-07 01:50] Gold steady as markets focus on potential US-Iran peace deal
+24. [livemint 2026-05-07 01:50] Asian markets today: Japan's Nikkei surges over 4% to hit 62,000 for first time on US-Iran peace deal hopes
+25. [et_markets 2026-05-07 01:49] Oil prices rise about $1 as investors weigh Middle East peace prospects
+26. [livemint 2026-05-07 01:37] From Gift Nifty, AMD stock to Nasdaq, Nikkei rally: 7 key things that changed for Indian stock market overnight
+27. [livemint 2026-05-07 01:31] Japanese Stocks Jump on US-Iran Deal Hopes, Tech Gains
+28. [livemint 2026-05-07 01:13] Breakout stocks to buy or sell: Sumeet Bagadia recommends five shares to buy today — 7 May 2026
+29. [et_markets 2026-05-07 01:03] Global Market Today: Asian stocks rise with optimism over Iran deal
+30. [livemint 2026-05-07 00:59] $100 oil could be here to stay, whatever happens with the peace deal
+31. [et_markets 2026-05-07 00:57] Rising costs, EV push may pressure Hero MotoCorp margins despite strong Q4
+32. [livemint 2026-05-07 00:54] Gold Holds Hefty Gain as US-Iran Truce Hopes Ease Inflation Fear
+33. [et_markets 2026-05-07 00:49] Bulls return to D-Street as falling oil prices ease geopolitical jitters
+34. [et_markets 2026-05-07 00:43] RBI may have to bear forex risk to boost foreign money inflows
+35. [et_markets 2026-05-07 00:38] 10-year bond rallies most in four weeks on Iran deal bets
+36. [et_markets 2026-05-07 00:35] Canara Bank invites bids for Rs 509 crore loan of Rajesh Exports
+37. [et_markets 2026-05-07 00:31] Dalal Street set for negative opening as GIFT Nifty indicates weak start
+38. [et_markets 2026-05-07 00:31] Stocks in news: BSE, Britannia, Paytm, Meesho, RIL
+39. [livemint 2026-05-07 00:30] Stocks to trade: Raja Venkatraman recommends three stocks for 7 May
+40. [livemint 2026-05-07 00:30] Stock recommendations for 7 May from MarketSmith India
+41. [et_markets 2026-05-07 00:28] Satin Creditcare plans $20 million bond issue
+42. [et_markets 2026-05-07 00:24] Firms fixing workflows before deploying agentic AI tools: Prativa Mohapatra, Adobe India
+43. [et_markets 2026-05-07 00:16] Rupee surges 67 paise in steepest one-day gain in a month
+44. [et_markets 2026-05-07 00:11] Companies look to shrink issue sizes to get IPOs pass through
+45. [et_markets 2026-05-07 00:07] RBI introduces specific turnover thresholds for money changers
+46. [et_markets 2026-05-07 00:02] South Korea and Taiwan close in on India's m-cap
+47. [livemint 2026-05-06 23:28] Taiwan’s $286 Billion Pension Fund Trims Its Dollar Exposure
+48. [et_markets 2026-05-06 20:34] Bajaj Auto posts record quarterly profit of Rs 2,746 crore on volume surge
+49. [et_markets 2026-05-06 20:27] US market today: Warner Bros Discovery's streaming growth accelerates on global HBO Max push
+50. [livemint 2026-05-06 20:04] Foreign Demand for Treasury Debt Is Stalling, Trade Group Says
+51. [et_markets 2026-05-06 20:02] US stocks today: S&P 500 and Nasdaq notch records; AMD results spark AI stock rally
+52. [livemint 2026-05-06 19:44] Dollar slips on hopes of US-Iran deal; yen rises amid intervention buzz
+53. [livemint 2026-05-06 18:36] Canadian dollar dips as oil price drop crimps rate cut bets
+54. [livemint 2026-05-06 17:39] Brokers' forum seeks RBI relaxation on proprietary trade funding curbs
+55. [livemint 2026-05-06 17:37] AMD shares jump over 21% to record high after strong Q1 earnings, upbeat outlook
+56. [livemint 2026-05-06 17:07] Walt Disney stock rallies nearly 8% after first quarter earnings surpass Wall Street expectations
+57. [et_markets 2026-05-06 16:52] SpaceX IPO gives Elon Musk sweeping power, curbs shareholder rights
+58. [et_markets 2026-05-06 16:36] RBI issues revised norms for entities dealing in forex
+59. [livemint 2026-05-06 16:26] Nifty, Sensex climb 1% on US-Iran deal hopes, but investors stay cautious
+60. [et_markets 2026-05-06 15:55] US market today: Apollo surpasses $1 trillion in AUM, beats profit estimates
+61. [et_markets 2026-05-06 15:53] Ahead of Market: 10 things that will decide stock market action on Thursday
+62. [et_markets 2026-05-06 15:44] Market Trading Guide: Buy Hindustan Zinc and Vedanta on Thursday for gains up to 9%
+63. [livemint 2026-05-06 15:37] NSE says enough shareholder participation for IPO even if valuation tops ₹5 tn
+64. [et_markets 2026-05-06 15:30] Paytm Q4 Results: Co turns to black, logs profit of Rs 184 crore vs loss a year ago
+65. [livemint 2026-05-06 15:19] Paytm Q4 results: Net profit swings to ₹183 crore profit in March quarter; revenue rises 18.4%
+66. [et_markets 2026-05-06 15:10] US stocks today: Disney earnings beat estimates as new CEO outlines growth strategy
+67. [et_markets 2026-05-06 14:54] AMD shares jump 13% as AI chip demand lifts strong results
+68. [et_markets 2026-05-06 14:36] Bajaj Auto announces Rs 5,633 crore share buyback via tender route, sets price at Rs 12,000 apiece
+69. [et_markets 2026-05-06 14:26] MochaTrade raises funding to offer global access to US perpetual futures
+70. [livemint 2026-05-06 14:22] Dividend stocks: Shree Cement announces ₹70 final dividend for FY26 along with Q4 results
+71. [et_markets 2026-05-06 14:15] Brigade Enterprises reports FY26 net profit at Rs 725 cr, approves 1:3 bonus issue
+72. [et_markets 2026-05-06 14:13] Home First Finance profit surges 43% on strong AUM growth
+73. [et_markets 2026-05-06 14:10] Shree Cement profit dips as costs rise and demand outlook weakens
+74. [livemint 2026-05-06 13:59] Wall Street climbs on hopes of potential US-Iran peace deal, AI enthusiasm; AMD soars 19%, Super Micro jumps 14.2%
+75. [et_markets 2026-05-06 13:52] 6 midcap stocks post 50%+ EBITDA growth in March '26 quarter
+76. [et_markets 2026-05-06 13:41] Individual investors sold Rs 13,000 crore worth stocks, but Zerodha clients kept buying: Nithin Kamath
+77. [et_markets 2026-05-06 13:38] Why Gulf NRIs are turning to Indian equities as real estate sees an exit
+78. [livemint 2026-05-06 13:22] Bajaj Auto announces ₹5,633 crore share buyback at ₹12,000 apiece. Details here
+79. [livemint 2026-05-06 13:15] Bajaj Auto Q4 Results: Net profit rises 34% YoY to ₹2,746 crore; ₹150 final dividend announced
+80. [livemint 2026-05-06 12:28] US stock market today: Dow, S&P 500, Nasdaq futures jump on rising US-Iran peace hopes; AMD soars 18%
+81. [livemint 2026-05-06 10:30] Maharatna PSU Power Grid Corporation of India sets board meeting date to declare Q4 results 2026
+82. [livemint 2026-05-06 10:14] Top Gainers & Losers on May 6: Coforge, Vodafone Idea, HFCL, BPCL, Tata Motors, IndiGo among top gainers
+83. [livemint 2026-05-06 09:51] MCX tech glitch: Zerodha flags order issues across brokers, advises caution for commodity trading

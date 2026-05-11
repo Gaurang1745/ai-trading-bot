@@ -1,0 +1,101 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [livemint 2026-05-05 03:26] Stocks to buy for short term: From Crompton Greaves to Polycab- Experts suggest 6 stock picks for next 1-2 weeks
+1. [livemint 2026-05-05 03:15] Stock market today: Gift Nifty hints gap-down start; US-Iran war, oil to gold, silver rates — 8 stocks to buy or sell
+2. [et_markets 2026-05-05 03:03] Ather Energy shares in focus after Q4 net loss narrows to Rs 100 crore, sharp jump in revenue
+3. [livemint 2026-05-05 03:00] OnEMI Technology Solutions IPO Day 3: Issue subscribed 60% so far. Check GMP, review, key details. Apply or skip?
+4. [livemint 2026-05-05 02:58] Sensex, Nifty 50 | Stock Market LIVE: Gift Nifty signals weak start for Indian market; Election results, oil prices eyed
+5. [et_markets 2026-05-05 02:56] Bharat Heavy Electricals and 4 other stocks witness 5-year swing high breakout
+6. [et_markets 2026-05-05 02:50] Dr. Lal Pathlabs among 5 stocks showing bullish RSI upswing
+7. [et_markets 2026-05-05 02:29] Jhunjhunwala-backed Bagmane REIT IPO opens today. Check GMP, subscription, price band and other details
+8. [livemint 2026-05-05 02:29] Q4 results 2026: L&T to Hero Motocorp among companies to declare Q4 results today
+9. [livemint 2026-05-05 02:25] Shares to buy or sell: Chandan Taparia of Motilal Oswal recommends three stocks to buy today - 5 May 2026
+10. [et_markets 2026-05-05 02:24] Jhunjhunwala trust backs Bagmane Prime Office REIT ahead of Rs 3,405 crore IPO
+11. [et_markets 2026-05-05 02:21] Recode Studios IPO opens today. GMP among key things to know before subscription
+12. [et_markets 2026-05-05 02:18] Amba Auto IPO heads for market debut today. Check GMP ahead of listing
+13. [livemint 2026-05-05 02:12] Raja Venkatraman, MarketSmith recommend five stocks for 5 May
+14. [et_markets 2026-05-05 02:10] Sensex Today | Nifty 50 | Stock Market Live Updates: GIFT Nifty signals a muted start; Asian shares trade mixed
+15. [et_markets 2026-05-05 02:06] Positive Breakout: These 14 stocks cross above their 200 DMAs
+16. [et_markets 2026-05-05 02:04] Oil Price Today (May 5): Crude oil falls but holds above $110 as Iran war tensions persist. What are experts saying?
+17. [et_markets 2026-05-05 01:57] Stocks to buy in 2026 for long term: Sona BLW, Atul among top 5 stocks that could give 10-20% return
+18. [livemint 2026-05-05 01:52] Nifty 50, Sensex prediction today: Check how Indian stock market is expected to trade on 5 May
+19. [et_markets 2026-05-05 01:50] Gold steady as investors weigh Middle East risks, stalled US–Iran peace talks
+20. [et_markets 2026-05-05 01:48] Yen steady, dollar firms on Middle East war fears
+21. [livemint 2026-05-05 01:41] Buy or sell: Gift Nifty signals gap-down start, Vaishali Parekh recommends three stocks to buy today — 5 May 2026
+22. [livemint 2026-05-05 01:34] From Gift Nifty, assembly election results to oil prices: 8 key things that changed for Indian stock market overnight
+23. [et_markets 2026-05-05 01:19] GIFT Nifty trades slightly lower, signals cautious opening for D-Street
+24. [et_markets 2026-05-05 01:14] Oil eases on signs US is loosening Iranian closure of Strait of Hormuz
+25. [et_markets 2026-05-05 01:11] Stocks in news: Tata Technologies, L&T, M&M, RIL, Manappuram Finance
+26. [et_markets 2026-05-05 01:08] Global Market Today: Asian shares mixed as Iran tensions flare up again
+27. [livemint 2026-05-05 01:06] Breakout stocks to buy or sell: Sumeet Bagadia recommends five shares to buy today — 5 May 2026
+28. [et_markets 2026-05-05 01:04] Jindal Stainless guides 7-9% volume growth
+29. [et_markets 2026-05-05 00:58] Adani Cement eyes measured growth, defers ambitious FY28 targets
+30. [livemint 2026-05-05 00:52] Bond yields are rising. Why that could end the stock market’s rally.
+31. [et_markets 2026-05-05 00:48] Sebi seeks to align securitisation framework with RBI regulations
+32. [et_markets 2026-05-05 00:45] IndusInd's ex-CFO files Rs 70-cr suit over wrongful termination
+33. [et_markets 2026-05-05 00:40] Federal Bank eyes long-term value creation from SCB Card portfolio acquisition
+34. [et_markets 2026-05-05 00:33] Ambuja Cements Q4 net profit surges 37%
+35. [livemint 2026-05-05 00:30] Stock recommendations for 5 May from MarketSmith India
+36. [livemint 2026-05-05 00:30] Stocks to trade: Raja Venkatraman recommends three stocks for 5 May
+37. [et_markets 2026-05-05 00:28] Citibank onboards Raj Rathi to head M&A operations in India
+38. [et_markets 2026-05-05 00:22] NCLAT dismisses Vedanta's plea against Adani's Jaiprakash bid
+39. [et_markets 2026-05-05 00:17] Regulators against bankers, insurers trading in commodities: Tuhin Kanta Pandey
+40. [et_markets 2026-05-05 00:12] Retail direct equity bets fall, MF holdings rise to new high
+41. [et_markets 2026-05-05 00:07] Stocks of 'Bengal' companies raise a cheer after BJP victory
+42. [et_markets 2026-05-05 00:01] Sun TV slides 5.4% to Rs 572 after DMK loss
+43. [et_markets 2026-05-04 20:05] US stocks today: US stocks fall from record high on Middle East worries
+44. [et_markets 2026-05-04 19:48] John Williams says Fed policy well positioned for economic risks, uncertainty
+45. [livemint 2026-05-04 19:35] US yields climb as Iran conflict pushes up crude oil prices
+46. [livemint 2026-05-04 19:25] Dollar higher as US-Iran conflict keeps risk appetite muted
+47. [et_markets 2026-05-04 19:03] RBI flags false loan waiver claims by some, warns of legal action
+48. [et_markets 2026-05-04 18:10] US stocks today: Amazon opens up logistics network to other businesses in challenge to UPS, FedEx
+49. [livemint 2026-05-04 17:30] Dynacons Systems shares to be in focus on Tuesday as company bags ₹751 crore private cloud order from RBI
+50. [livemint 2026-05-04 16:49] Gold, silver rates today: Comex gold drops $134/oz; silver tumbles $4/oz on oil-led inflation fears, firm US dollar
+51. [et_markets 2026-05-04 16:37] Adani Ports, Tata Motors and Siemens Energy witness block deal action on Monday
+52. [et_markets 2026-05-04 15:29] Ahead of Market: 10 things that will decide stock market action on Tuesday
+53. [livemint 2026-05-04 15:13] GameStop shares drop 6.5% after ambitious $55.5 billion bid for eBay
+54. [et_markets 2026-05-04 15:03] Market Trading Guide: 5 stock ideas for gains up to 11% on Tuesday
+55. [et_markets 2026-05-04 14:08] Aditya Birla Capital Q4 Results: Net profit rises 31% at Rs 1,129 crore
+56. [livemint 2026-05-04 13:52] Wall Street drops as Middle East tensions escalate, Tyson Foods dips 2.2%, eBay jumps 5.6%
+57. [livemint 2026-05-04 13:48] Small-cap stock under ₹50 hits upper circuit for 13th straight session, declares ₹500 crore fundraise move
+58. [et_markets 2026-05-04 13:33] US stocks today: S&P 500, Dow tick lower as US-Iran tensions unsettle investors
+59. [et_markets 2026-05-04 13:33] Tata Chemicals Q4 results: Cons loss widens YoY to Rs 2,132 crore on exceptional items; revenue drops 2%
+60. [et_markets 2026-05-04 13:22] CSB Bank Q4 profit rises 6% on lower provisions, growth steady
+61. [et_markets 2026-05-04 13:16] Tata Technologies Q4 Results: Cons PAT rises 8% YoY to Rs 204 crore, revenue rises 22%
+62. [et_markets 2026-05-04 12:50] Sanjay H Parekh bets big on Reliance, private banks, and domestic plays amid global uncertainty
+63. [et_markets 2026-05-04 12:43] Thalapathy government? Why Vijay's historic rise in India's industrial powerhouse state matters for stock market
+64. [livemint 2026-05-04 12:37] US stock market today: Dow, S&P 500 futures slip as renewed Middle East tensions lift oil prices
+65. [et_markets 2026-05-04 12:27] Bajaj Auto and 4 other stocks hit a 52-week high, rally up to 40% in a month
+66. [et_markets 2026-05-04 12:14] US Stock Market Today | Dow Jones | Nasdaq Highlights: US stocks fall from record highs amid Middle East jitters
+67. [et_markets 2026-05-04 12:12] Why the RBI is weighing a rare 2013-crisis playbook to arrest rupee slide to record lows?
+68. [et_markets 2026-05-04 12:04] Sebi proposes changes to SDI rules to facilitate growth in listed securitisation market
+69. [et_markets 2026-05-04 12:01] NSE launches Electronic Gold Receipts to formalise India’s gold market; successfully dematerialises 1 kg gold bar
+70. [et_markets 2026-05-04 11:38] Earnings Boom: 10 stocks with over 100% profit growth in Q4FY26
+71. [livemint 2026-05-04 11:19] TVK poised for Tamil Nadu win: What Thalapathy Vijay’s victory could mean for companies operating in the state
+72. [livemint 2026-05-04 11:16] Manappuram Finance Q4 Results: Firm swings to black with ₹405 crore profit, announces ₹0.50 dividend
+73. [livemint 2026-05-04 11:09] Gold, silver rates today nosedive up to 5% as crude oil price soars after escalation in the US-Iran war
+74. [livemint 2026-05-04 11:09] Crude oil jumps over 5% as US-Iran tensions flare again; Brent crude climbs past $114
+75. [livemint 2026-05-04 11:04] Rupee falls 39 paise to end at all-time low of 95.23 against US dollar — What's plaguing the domestic currency?
+76. [livemint 2026-05-04 10:10] Top Gainers & Losers on May 4: Meesho, Vedanta, HFCL, BHEL, Cemindia Projects, Anant Raj among top gainers
+77. [livemint 2026-05-04 09:41] FPI outflows persist in equities; primary market sees continued interest
+78. [livemint 2026-05-04 09:36] BSE SME stock rebounds after announcement of H2 results 2026
+79. [livemint 2026-05-04 09:28] Gold, silver prices outlook: Where are bullion prices headed this month?
+80. [livemint 2026-05-04 09:27] Bank Nifty falls 8% in 2026 so far: Is this correction a buying opportunity?
+81. [livemint 2026-05-04 09:19] Aditya Birla Capital Q4 Results: Profit rises 31% YoY to ₹1,129 crore
+82. [livemint 2026-05-04 09:04] Ambuja Cement Q4 results: Net profit rises 78% YoY to ₹1,830 crore; ₹2 per share dividend announced
