@@ -127,6 +127,10 @@ export default function Dashboard() {
           <Link href="/logs" style={{ color: "var(--foreground)", textDecoration: "underline" }}>
             Browse AI logs →
           </Link>
+          &nbsp;&middot;&nbsp;
+          <Link href="/about" style={{ color: "var(--foreground)", textDecoration: "underline" }}>
+            About this project →
+          </Link>
         </p>
         {error && (
           <p style={{ color: "var(--negative)", fontSize: "0.8rem" }}>{error}</p>
