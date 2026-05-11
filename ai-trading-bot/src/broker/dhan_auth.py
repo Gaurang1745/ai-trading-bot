@@ -96,6 +96,13 @@ class DhanAuth:
         """
         Unconditionally call Dhan's token endpoint and cache the new token.
         Use this from a scheduled daily job.
+
+        Retries once on `Invalid TOTP` to absorb the 30-second TOTP window
+        boundary race: if the bot generates a code right at the end of one
+        window but the request lands in Dhan's clock during the next, the
+        codes won't match. Observed in production on 2026-05-07 06:30:00,
+        which collapsed the entire trading day. Retry advances past the
+        boundary and re-issues with a fresh code.
         """
         if not self._can_refresh():
             raise RuntimeError(
@@ -109,45 +116,81 @@ class DhanAuth:
                 "pyotp not installed. Run: pip install pyotp"
             )
 
-        totp = pyotp.TOTP(self.totp_secret).now()
-        logger.info("DhanAuth: requesting fresh access token via TOTP...")
+        import time
 
-        try:
-            r = requests.post(
-                _AUTH_URL,
-                params={
-                    "dhanClientId": self.client_id,
-                    "pin": self.pin,
-                    "totp": totp,
-                },
-                timeout=20,
-            )
-        except Exception as e:
-            raise RuntimeError(f"DhanAuth: HTTP error calling token endpoint: {e}")
+        last_payload = None
+        for attempt in (1, 2):
+            if attempt == 2:
+                # Sleep until ~3s into the next 30-sec TOTP window so the
+                # regenerated code is unambiguously aligned with Dhan's
+                # validation window.
+                now = time.time()
+                next_window_start = ((int(now) // 30) + 1) * 30
+                sleep_s = (next_window_start + 3) - now
+                logger.warning(
+                    f"DhanAuth: retrying TOTP refresh after {sleep_s:.1f}s "
+                    f"to clear window boundary..."
+                )
+                time.sleep(sleep_s)
 
-        if r.status_code != 200:
-            raise RuntimeError(
-                f"DhanAuth: token endpoint returned {r.status_code}: "
-                f"{r.text[:300]}"
-            )
-
-        try:
-            payload = r.json()
-        except Exception:
-            raise RuntimeError(
-                f"DhanAuth: non-JSON response from token endpoint: {r.text[:300]}"
+            totp = pyotp.TOTP(self.totp_secret).now()
+            logger.info(
+                f"DhanAuth: requesting fresh access token via TOTP "
+                f"(attempt {attempt}/2)..."
             )
 
-        if "accessToken" not in payload:
-            raise RuntimeError(
-                f"DhanAuth: unexpected response (no accessToken): {payload}"
-            )
+            try:
+                r = requests.post(
+                    _AUTH_URL,
+                    params={
+                        "dhanClientId": self.client_id,
+                        "pin": self.pin,
+                        "totp": totp,
+                    },
+                    timeout=20,
+                )
+            except Exception as e:
+                raise RuntimeError(
+                    f"DhanAuth: HTTP error calling token endpoint: {e}"
+                )
 
-        self._cached = payload
-        self._save_cache(payload)
-        expiry = payload.get("expiryTime", "unknown")
-        logger.info(f"DhanAuth: new token obtained, expires {expiry}")
-        return payload["accessToken"]
+            if r.status_code != 200:
+                raise RuntimeError(
+                    f"DhanAuth: token endpoint returned {r.status_code}: "
+                    f"{r.text[:300]}"
+                )
+
+            try:
+                payload = r.json()
+            except Exception:
+                raise RuntimeError(
+                    f"DhanAuth: non-JSON response from token endpoint: "
+                    f"{r.text[:300]}"
+                )
+
+            if "accessToken" in payload:
+                self._cached = payload
+                self._save_cache(payload)
+                expiry = payload.get("expiryTime", "unknown")
+                logger.info(
+                    f"DhanAuth: new token obtained, expires {expiry}"
+                )
+                return payload["accessToken"]
+
+            # Not in success path. Decide whether to retry.
+            last_payload = payload
+            msg = str(payload.get("message", "")).upper()
+            if attempt == 1 and "TOTP" in msg:
+                # Window-boundary race — retry once.
+                continue
+
+            # Either a non-retryable error, or we're out of attempts.
+            break
+
+        raise RuntimeError(
+            f"DhanAuth: unexpected response (no accessToken) "
+            f"after {attempt} attempt(s): {last_payload}"
+        )
 
     # ─── INTERNALS ───
 
