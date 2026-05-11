@@ -1,14 +1,16 @@
 # AI Trading Bot
 
 An autonomous equity-trading experiment on Indian markets (NSE/BSE), with **Claude
-Opus 4.7** making every trading decision and a Next.js dashboard streaming the
-live state to anyone watching.
+Opus 4.7** making every trading decision and a Next.js dashboard exposing every
+trade, prompt, and decision the bot made.
 
-> **Live dashboard:** http://3.6.210.176:3000
+> **Live archive dashboard:** **https://ai-trading-bot-archive.vercel.app**
 >
-> Anyone can open the URL — no login. The dashboard auto-refreshes every 15 s
-> and shows Today's Trades, Active Positions, full Trade History, agent
-> activity, every LLM call, and daily performance.
+> The experiment ran 2026-04-22 → 2026-05-11 (14 trading sessions) and is now
+> concluded. The dashboard is frozen on the final state and serves the full
+> archive — `/` is a project showcase, `/dashboard` has every trade and
+> snapshot, `/logs` lets you browse every Sonnet, Opus, and Haiku call (system
+> prompt, user prompt, response, metadata).
 
 ---
 
@@ -62,11 +64,12 @@ prompts, and execution interfaces would be identical in a live-trading run.
    │   SQLite WAL DB (trades, snapshots, llm_calls, paper_*)         │
    └──────────────────────────────────┬──────────────────────────────┘
                                       │  reads (read-only)
-                       ┌──────────────▼──────────────┐
-                       │  dashboard/  (Next.js 16)   │
-                       │  Live state, no auth, port  │
-                       │  3000 → http://3.6.210.176  │
-                       └──────────────────────────────┘
+                       ┌─────────────────────────────────┐
+                       │  dashboard/  (Next.js 16)       │
+                       │  ai-trading-bot-archive         │
+                       │     .vercel.app                 │
+                       │  Frozen post-experiment archive │
+                       └─────────────────────────────────┘
 ```
 
 Two top-level packages, one git repo:
@@ -79,17 +82,23 @@ Two top-level packages, one git repo:
 
 ---
 
-## How It Runs
+## How It Ran
 
-Both components run as systemd services on a single Ubuntu 22.04 EC2 instance:
+During the live phase, both components ran as systemd services on a single
+Ubuntu 22.04 EC2 instance (ap-south-1):
 
 | Service | Process | Restart policy |
 |---|---|---|
 | `trading-bot.service` | `python main.py` (APScheduler stays in foreground) | `Restart=always` |
 | `trading-dashboard.service` | `npm start` (`next start` on port 3000) | `Restart=always` |
 
-The bot doesn't poll — every action is APScheduler-cron-triggered, so the
-process is mostly idle between events.
+The bot didn't poll — every action was APScheduler-cron-triggered, so the
+process was mostly idle between events.
+
+**Post-experiment**, the EC2 is terminated. The dashboard now serves from
+Vercel (https://ai-trading-bot-archive.vercel.app) against a frozen snapshot
+of the SQLite DB and the per-call AI logs, both committed to the
+`experiment-archive` and `vercel-deploy` branches of this repo.
 
 ### Tech stack
 
@@ -152,13 +161,31 @@ and on disk:
 
 ---
 
-## Status
+## Status — concluded
 
-The experiment has been live since **2026-04-22**. The bot has been trading
-across Wed–Fri of the first week and is currently mid-experiment.
+The experiment ran **2026-04-22 → 2026-05-11** (14 trading sessions) and is
+now concluded. All paper positions were closed at last-known LTPs as part of
+the wind-down.
 
-For the latest realized P&L, current holdings, and any open issues, **see the
-live dashboard** — it's the source of truth.
+**Final numbers**
+
+| | |
+|---|---|
+| **Sessions traded** | 14 |
+| **Trades** | 160 |
+| **Closed positions** | 30 |
+| **Win rate** | 36.4% (11W / 19L) |
+| **Realized P&L** | −₹26,666 |
+| **Final portfolio value** | ₹9,73,335 (started ₹10,00,000) |
+| **Cumulative** | **−₹22,846 / −2.28%** |
+| **AI spend (lifetime)** | $170.85 |
+| **LLM calls** | 784 (Opus + Sonnet + Haiku) |
+| **Agent runs** | 955 |
+| **Guardrail events** | 2,519 |
+
+See **https://ai-trading-bot-archive.vercel.app** for the full archive:
+project showcase on `/`, frozen dashboard on `/dashboard`, and the complete
+per-call AI log browser on `/logs`.
 
 ---
 
