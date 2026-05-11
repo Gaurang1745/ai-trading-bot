@@ -1,0 +1,94 @@
+{
+  "date": "2026-04-30",
+  "agent": "strategy_review_daily",
+  "changes": [
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides.risk.min_confidence",
+      "from": 0.65,
+      "to": 0.60,
+      "rationale": "Day-11 blocked 2 entries at conf 0.62 and 0.60; admitted entries cluster 0.65-0.72 (strategy hugs floor). Cumulative 11d net -₹2,566 dominated by single MAHABANK -₹3,516; ex-outlier +₹950 — core process roughly breakeven, earns room to test mid-conviction band. Day-11 risk_assessment_1530.json explicitly noted n=15 sample precondition met; deferred only by risk_monitor's Day-10 disciplined-venue rule, which the strategy review may bypass.",
+      "scope": "hot — risk_config.yaml hot-reloaded by GuardrailEngine",
+      "revert_trigger": "If win rate over Days 12-16 falls below 35% OR cumulative drawdown breaches 1% of capital from this point, revert to 0.65."
+    },
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides.risk.max_deployed_pct",
+      "from": 0.65,
+      "to": 0.75,
+      "rationale": "Today's full-fill deployment 45.76% sat 19.24 pp under the 0.65 cap — cap is non-binding. Loosening to 0.75 unlocks zero immediate admission capacity but removes the psychological ceiling and brings overrides closer to the 0.80 base. Capital under-utilization is the dominant opportunity cost.",
+      "scope": "hot — risk_config.yaml hot-reloaded",
+      "revert_trigger": "If deployment trends above 70% with concurrent loss streak (3+ consecutive negative-P&L days), tighten back to 0.65."
+    },
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides.risk.max_sl_pct",
+      "from": 0.035,
+      "to": 0.045,
+      "rationale": "CHENNPETRO entry 09:42 hit 'WARNING: SL too wide (4.0%). Max 4%' — the bot's intended 4% SL on a 5%-of-capital ATH breakout was a rational risk-budget choice (4% × 5% = 0.20% portfolio, well under 0.5% per-name cap). 3.5% override was artificially tight. 4.5% is closer to the 5% base while still preserving the post-Day-2 MAHABANK lesson that 6%+ SLs are unacceptable.",
+      "scope": "hot — risk_config.yaml hot-reloaded",
+      "revert_trigger": "If a position with SL > 3.5% gets stopped out and contributes > 0.3% of portfolio loss, escalate review."
+    },
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides.trading.max_sector_pct",
+      "from": 0.22,
+      "to": 0.28,
+      "rationale": "Risk_monitor itself trial-loosened 0.22 → 0.28 at 09:00 today and revoked at 12:30 on a clean BFSI-restacking trigger (PNBHOUSING+BANDHANBNK+BAJFINANCE = 17.64%). Strategy-side review reinstates 0.28 because (a) BFSI's 17.64% is well clear of any cluster-stacking limit, (b) thematic plays (energy: ONGC/CHENNPETRO/GESHIP today) need room to express, (c) 0.22 vs 0.35 base was a 13 pp tightening that has been compounding for multiple days. 0.28 is the right middle ground.",
+      "scope": "hot — risk_config.yaml hot-reloaded",
+      "revert_trigger": "If a single sector concentrates above 25% AND that sector underperforms the index over the next 3 days, snap back to 0.22."
+    },
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE — rule 12 subsection (d) STATE-VERIFICATION ARITHMETIC",
+      "from": "absent",
+      "to": "added — explicit numeric verification before invoking 'SL above/below CMP' as exit rationale",
+      "rationale": "NESTLEIND CLOSE 11:12 reasoning was numerically wrong ('SL 1442 ABOVE CMP 1449.10' but 1442 < 1449.10). Outcome was lucky +₹2,298 winner; reasoning was a perception error that should not be repeated.",
+      "scope": "next bot restart (system prompt built at boot)",
+      "revert_trigger": "n/a — prompt clarity addition, no downside"
+    },
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE — new rule 15 SAME-SESSION ROUND-TRIP DISCIPLINE",
+      "from": "absent",
+      "to": "added — exits within the same session as entry must cite post-entry-materialized facts, not pre-existing overhangs",
+      "rationale": "CHENNPETRO whipsaw 09:42 BUY → 10:44 SELL on overhangs that were public BEFORE entry. -3.7% intraday fade was within the 4% SL absorption budget. Either entry should have been NO_ACTION or position should have run to its real SL. Rule 13 already covers governance-overhang variant; today's data shows the failure mode generalizes.",
+      "scope": "next bot restart",
+      "revert_trigger": "n/a — discipline rule, no downside"
+    },
+    {
+      "timestamp": "2026-04-30 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "_TEMPLATE — new rule 16 R:R-EXECUTION CONSISTENCY",
+      "from": "absent",
+      "to": "added — claimed R:R in reasoning must equal R:R implied by submitted stop_loss and target; final-step arithmetic check before emitting",
+      "rationale": "BAJFINANCE BUY 12:12 reasoning self-corrected mid-paragraph from R:R 1.4 → 1.6 'by adjusting target to 990' but submitted target was 985 (R:R 1.41) — sub-floor admission to overnight book. Guardrails check executed numbers, not prose.",
+      "scope": "next bot restart",
+      "revert_trigger": "n/a — discipline rule, no downside"
+    }
+  ],
+  "metadata": {
+    "review_inputs": {
+      "trades_today": 13,
+      "closes_today": 5,
+      "wins": 2,
+      "losses": 3,
+      "total_pnl_today": 1945.5,
+      "deployment_pct_full_fill": 45.76,
+      "cumulative_11d_net_pnl": -2565.81,
+      "cumulative_11d_win_rate": 0.40,
+      "ex_outlier_cumulative_pnl": 950.19
+    },
+    "sources": [
+      "data/trading_bot.db (trades, paper_holdings, daily_summaries, guardrail_log)",
+      "src/agents/outputs/2026-04-30/risk_assessment_1530.json"
+    ],
+    "next_review_window": "2026-05-01 EOD (Day-12) — verify loosen impact"
+  }
+}

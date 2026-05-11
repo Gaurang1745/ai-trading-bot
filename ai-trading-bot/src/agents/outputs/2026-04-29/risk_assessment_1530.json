@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-04-29 15:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995489.39,
+    "cash": 549634.49,
+    "deployed_pct": 0.4479,
+    "deployed_pct_full_fill_projection": 0.4961,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": -103.25,
+    "cumulative_pnl": -4510.61,
+    "cumulative_pnl_pct": -0.0045
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+    {"symbol": "GOLDBEES", "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "BANDHANBNK", "value": 50000.00, "pct_of_capital": 0.0502, "sector": "BFSI"},
+    {"symbol": "POWERGRID", "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+    {"symbol": "COALINDIA", "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"}
+  ],
+  "open_orders": [
+    {"symbol": "GLENMARK", "qty": 20, "price": 2400.0, "value": 48000.0, "confidence": 0.65, "sl_pct": 0.044, "sector": "Pharma", "submitted": "09:10:58", "age_min": 379}
+  ],
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1206,
+    "Pharma": 0.1005,
+    "Gold": 0.0503,
+    "Power": 0.0483,
+    "Mining": 0.0471
+  },
+  "guardrail_buffers": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1206 largest, buffer 2.94 pp",
+    "max_sector_pct (0.22)": "BFSI 0.1293 largest (full-fill), buffer 9.07 pp",
+    "max_deployed_pct (0.65)": "full-fill 0.4961, buffer 15.39 pp",
+    "daily_loss_limit_pct (0.04)": "daily P&L -103.25, buffer ~₹39,897 to circuit breaker, ~₹14,897 to next-tighten pre-fire trigger -15K",
+    "max_sl_pct (0.04)": "no new entries this tick",
+    "min_confidence (0.65)": "no new entries this tick"
+  },
+  "tick_delta_vs_1500": {
+    "trades_since_1500": 0,
+    "fills_since_1500": 0,
+    "decisions_detail": "ZERO strategy decisions in the 15:00→15:30 close window. Last activity remains the 14:42:17/14:42:27 paired HINDZINC + NTPC CLOSEs. Book state is byte-identical to the 15:00 snapshot — same 7 holdings, same cash, same single OPEN order (GLENMARK). Market-close tick.",
+    "cash_delta": 0.0,
+    "holdings_delta": 0,
+    "open_orders_delta": 0,
+    "daily_pnl_delta": 0.0,
+    "summary": "Quiescent close. Strategy made its last move at 14:42 and went silent for the remaining 48 minutes into 15:30 IST market close. No fills, no new decisions, no parameter pressure."
+  },
+  "findings": [
+    "EOD QUIESCENCE: zero strategy activity in the 15:00→15:30 close window. The 14:42 paired SELL→CLOSEs were the final decisions of Day-7. Book closes the day in the loosened state established by those exits — deployment 44.79% / full-fill 49.61%, cash ₹549,634 (55.21%), 7 holdings spanning 6 sectors with no concentration breach.",
+    "Daily realized P&L closes Day-7 at -₹103.25 (-0.01% of capital) — first non-zero P&L day of the experiment, but magnitudes are rounding noise. ~387x buffer to the ₹40K circuit-breaker remains intact at EOD.",
+    "Cumulative book P&L closes Day-7 at -₹4,510.61 (-0.45% of capital). The Day-6 panic-exit damage (-₹5,964 realized) continues to dominate; Day-7 added a marginal -₹103.25 of realized loss but no new structural failures.",
+    "Behavioral health vs Day-6 contrast: Day-7 saw 2 disciplined CLOSEs (one win +₹171.75, one loss -₹275.00, net -₹103.25, 60x smaller than Day-6's panic sweep) and 1 disciplined add (BANDHANBNK 12:44, 5.02% sizing, 0.68 confidence). Position-management cadence is healthy and the asymmetric loss-aversion pattern that drove Day-6 did not recur today.",
+    "Single-name and sector distribution closes the day well-diversified: NESTLEIND 12.06% largest position (2.94 pp buffer to 15% cap); BFSI 12.93% largest sector at full-fill (9.07 pp buffer to 22% cap). All 6 sectors comfortably within caps.",
+    "GLENMARK OPEN order ages out the day at 6h19m+ (submitted 09:10:58 at ₹2400 limit, sl_pct 0.044). Order survived through close without a fill — flagged for Day-7 EOD review as a stale-order observation. Strategy layer owns the cancel/MODIFY/carry decision; risk_monitor logs the ageing only.",
+    "All Day-7 risk_monitor ticks (09:00 → 15:30, 14 snapshots) closed with zero parameter changes. The full override stack from prior days (min_confidence 0.65, max_position_pct 0.15, max_deployed_pct 0.65, max_sector_pct 0.22, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.04, daily_loss_limit_pct 0.04) carried through the entire session without firing any pre-armed trigger. The override stack functioned as intended: it bracketed the strategy's behavior without forcing any rejection or cancellation, and the strategy operated cleanly within the perimeter."
+  ],
+  "actions_taken": [],
+  "actions_considered_but_not_taken": [
+    "Tighten max_deployed_pct (0.65 → 0.60): NOT FIRED. Pre-fire trigger needed full-fill > 62%; closes at 49.61% (12.39 pp under trigger). Tightening on a quiescent EOD book with substantial slack would be friction without signal.",
+    "Tighten daily_loss_limit_pct (0.04 → 0.03): NOT FIRED. Pre-fire trigger needed daily P&L worse than -₹15K; closes at -₹103.25 (₹14,897 buffer to fire trigger, ₹39,897 to circuit breaker). EOD loss-gate tightening on a -0.01% day would be theatrical.",
+    "Tighten max_sector_pct (0.22 → 0.20): NOT FIRED. Pre-fire trigger needed any sector full-fill > 17%; largest closes at BFSI 12.93% (4.07 pp pre-fire buffer, unchanged through the close).",
+    "Tighten max_sl_pct (0.04 → 0.035): NOT FIRED. Pre-fire trigger needed a 3rd ceiling-hugging entry today; zero new entries in the 15:00→15:30 window. Lever DISARMS at session close — re-arm requires Day-8 evidence.",
+    "Tighten min_confidence (0.65 → 0.68): NOT FIRED. Zero new entries this tick. Closed-trade sample n=10 (4W/6L, win-rate 40%) still too thin for confidence-vs-outcome statistical inference. Will re-evaluate at the Day-7 EOD/Day-8 premarket review with ≥10-day cumulative threshold not yet met (Day-7 closes the 7-day window; need 3+ more days).",
+    "Tighten max_position_pct (0.15 → 0.12): NOT FIRED. NESTLEIND 12.06% largest closes the day with 2.94 pp buffer; no firing trigger. The 15% cap is grandfathered above the largest position — tighter cap cannot retract.",
+    "EOD posture: hold all overrides. Day-7 was a healthy strategy-active day where the override stack worked as designed (perimeter without rejection); changing parameters at the close on a quiescent, well-behaved book would punish the desired behavior pattern. Override review belongs in the Day-7 EOD strategy-agent review (post-15:30) where realized-vs-expected trade outcomes can be assessed against the override stack as a unit, not in a 15:30 risk_monitor tick."
+  ],
+  "armed_triggers_for_day8_premarket": [
+    "max_sl_pct 0.04 → 0.035 — fires if Day-8 admits an entry at sl_pct ≥ 0.04 within the first hour AND if Day-7 close-out includes GLENMARK fill at sl_pct 0.044 (i.e., 2 ceiling-hugging entries in close proximity). Carries over the Day-7 09:30 / 14:30 pattern.",
+    "daily_loss_limit_pct 0.04 → 0.03 — re-arm at premarket only if Day-8 opens with overnight gap-down on holdings (especially MAHABANK-style single-name carriers) such that Day-8 mark-to-market loss exceeds -₹15K within first 30 min. Day-7 close at -0.01% gives no carry-over signal.",
+    "min_confidence 0.65 → 0.68 — re-evaluate at the Day-10 boundary (3 more sessions needed) with closed-trade sample n≥15 for first plausible confidence-vs-outcome inference. Premature to fire on n=10.",
+    "max_sector_pct 0.22 → 0.20 — fires if Day-8 admits a 2nd Pharma name beyond GLENMARK (carrying SUNPHARMA + GLENMARK already at 10.05% Pharma full-fill; a 3rd Pharma add would risk crossing 17% pre-fire threshold). Watch Pharma cluster emergence specifically.",
+    "GLENMARK stale-order disposition — strategy layer owes a Day-8 premarket cancel-or-carry decision. If carried into Day-8 still OPEN, age-out hits 24h+ at 09:11 — escalate to behavioral observation in the Day-8 09:00 risk_monitor tick.",
+    "Cumulative-P&L watch — Day-7 closes at -0.45%. If Day-8 takes the cumulative line below -1.0% (i.e., a Day-8 realized hit > -₹5,500), the daily_loss_limit_pct lever should fire at the -1% threshold rather than the -₹15K daily threshold."
+  ],
+  "rationale": "EOD market-close tick. Zero activity in the 15:00→15:30 window — book closes Day-7 in the loosened state established by the 14:42 paired CLOSEs. Day-7 closes well-behaved across every risk dimension: deployment 44.79% (15+ pp under cap), all sectors under cap with healthy buffers, daily P&L -₹103.25 (negligible), no panic-exit pattern, no concentration breach. The override stack carried through 7 trading days and 14 ticks today without firing — it is functioning as a perimeter, not a binder. The disciplined EOD response is to hold all parameters and let the strategy-agent's post-market Day-7 review own the override-stack-vs-outcome assessment. No parameter changed, so no changelog entry written."
+}

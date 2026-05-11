@@ -1,0 +1,161 @@
+{
+  "date": "2026-04-29",
+  "review_type": "daily",
+  "trades_analyzed": 4,
+  "summary": {
+    "wins": 1,
+    "losses": 1,
+    "total_pnl": -103.25,
+    "win_rate": 0.5,
+    "avg_win": 171.75,
+    "avg_loss": -275.0,
+    "closes_today": [
+      {
+        "symbol": "HINDZINC",
+        "entry": 612.0,
+        "exit": 614.29,
+        "sl_at_exit": 615.0,
+        "qty": 75,
+        "pnl": 171.75,
+        "pnl_pct": 0.374,
+        "hold_calendar_days": 2,
+        "hold_trading_sessions": 3,
+        "exit_trigger": "rule_15d_approaching_sl + rule_11_ex_dividend",
+        "trigger_valid": true,
+        "notes": "Trailed SL had been raised to 615 with LTP at 613.55 (i.e. SL above LTP — broker stop should have already fired); ex-dividend on 2026-04-30 would mechanically reset price by ~Rs 11/share. Defensive exit before mechanical drop captured small win."
+      },
+      {
+        "symbol": "NTPC",
+        "entry": 404.5,
+        "exit": 402.30,
+        "sl_at_exit": 401.0,
+        "qty": 125,
+        "pnl": -275.0,
+        "pnl_pct": -0.544,
+        "hold_calendar_days": 7,
+        "hold_trading_sessions": 6,
+        "exit_trigger": "rule_15d_approaching_sl",
+        "trigger_valid": true,
+        "notes": "LTP 402.7 with SL 401 = 0.42% to trigger; Fed event risk cited. Exit at -0.5% saved ~₹162 vs SL fire at -0.86%. BUT the underlying issue is the trade itself: target was 414 (only +2.3% above entry, ~1.5x ATR), held 6 trading sessions for ~zero return."
+      }
+    ],
+    "new_entries_today": [
+      {
+        "symbol": "GLENMARK",
+        "entry": 2400.0,
+        "qty": 20,
+        "size_pct": 4.8,
+        "sl": 2295.0,
+        "sl_pct": 4.375,
+        "target": 2580.0,
+        "target_pct": 7.5,
+        "confidence": 0.65,
+        "rr": 1.71,
+        "status": "OPEN",
+        "guardrail_warning": "SL too wide (4.4%). Max 4%. — admitted as warning, not blocked"
+      },
+      {
+        "symbol": "BANDHANBNK",
+        "entry": 200.0,
+        "qty": 250,
+        "size_pct": 5.0,
+        "sl": 195.0,
+        "sl_pct": 2.5,
+        "target": 218.0,
+        "target_pct": 9.0,
+        "confidence": 0.68,
+        "rr": 3.6,
+        "status": "FILLED",
+        "guardrail_warning": "Original SL proposal 191 = 4.5% triggered 'SL too wide' warning at 12:44:17; bot adjusted to 195 = 2.5% on the actual placed order"
+      }
+    ],
+    "guardrail_blocks": 4,
+    "guardrail_block_summary": "All 4 blocks were on confidence-below-floor (override min_confidence=0.65). Two of those (10:13:22, 10:44:31) ALSO carried 'SL too wide' warnings (4.6% and 4.3%). The other two (11:41:52, 14:12:05) had no SL/target specified, falling back to defaults. The min_confidence override is doing its job — 4 marginal trades correctly rejected at the door.",
+    "guardrail_warnings_count_estimate": 7,
+    "lifetime_stats_through_today": {
+      "total_closes": 10,
+      "lifetime_wins": 4,
+      "lifetime_losses": 6,
+      "lifetime_win_rate": 0.4,
+      "lifetime_avg_win": 750.81,
+      "lifetime_avg_loss": -1252.44,
+      "lifetime_realized_pnl": -4511.31,
+      "portfolio_value": 1006064.99,
+      "portfolio_pct_change": 0.61,
+      "trading_days_elapsed": 7
+    },
+    "open_holdings_at_eod": [
+      {"symbol": "PNBHOUSING", "entry": 984.0, "qty": 80, "stored_sl": 1048.0, "sl_above_entry_pct": 6.5, "days_held": 7},
+      {"symbol": "GOLDBEES", "entry": 125.1, "qty": 400, "stored_sl": 119.0, "sl_above_entry_pct": -4.88, "days_held": 7},
+      {"symbol": "NESTLEIND", "entry_avg": 1412.94, "qty": 85, "stored_sl": 1450.0, "sl_above_entry_pct": 2.62, "days_held": 7},
+      {"symbol": "SUNPHARMA", "entry": 1734.0, "qty": 30, "stored_sl": 1760.0, "sl_above_entry_pct": 1.5, "days_held": 2},
+      {"symbol": "POWERGRID", "entry": 320.5, "qty": 150, "stored_sl": 318.0, "sl_above_entry_pct": -0.78, "days_held": 2},
+      {"symbol": "COALINDIA", "entry": 469.0, "qty": 100, "stored_sl": 475.0, "sl_above_entry_pct": 1.28, "days_held": 1},
+      {"symbol": "BANDHANBNK", "entry": 200.0, "qty": 250, "stored_sl": 195.0, "sl_above_entry_pct": -2.5, "days_held": 0},
+      {"symbol": "GLENMARK", "entry": 2400.0, "qty": 20, "stored_sl": 2295.0, "sl_above_entry_pct": -4.375, "days_held": 0, "note": "still OPEN order, not yet filled"}
+    ],
+    "deployed_capital_eod_pct_estimate": 49.4
+  },
+  "patterns_found": [
+    "BOTH OF TODAY'S EXITS WERE RULE-15(d) COMPLIANT (approaching-SL discretionary exit). HINDZINC SL had been trailed to 615 with LTP at 613.55 (effectively already past trigger); NTPC LTP 402.70 was 0.42% from SL 401. Net exit-decision quality on today's down-tick is materially better than Day-6 (3/3 panic exits = -₹4,865 preventable). The new rule 15 added 2026-04-28 EOD appears to be biting: zero panic exits today on a session that closed -0.10%.",
+    "MAX_SL_PCT CEILING BREACHED ON ENTRY (GLENMARK 4.4% > 4% override). The trade went through with a guardrail WARNING, not a BLOCK. Reasoning text explicitly cited per-position-risk math (5% × 4.4% = 0.22% within budget) as justification — i.e., Claude is interpreting the SL ceiling as flexible if other risk math passes. The SL ceiling and per-position risk are SEPARATE constraints; clearing one does not unlock the other. The engine emits only a warning here, so the discipline must come from the prompt layer.",
+    "STALE-CNC FAILURE MODE (NTPC). Entry Day-1 (2026-04-22) at ₹404.5 with target ₹414 (+2.3%) and SL ₹401 (-0.9%). R:R 1:2.71 cleared the gate, but the absolute target distance was only ~1.5x daily ATR on NTPC — i.e., one normal session of volatility could deliver the entire upside, which makes a 6-session capital lock-up structurally questionable. Trade drifted +0.9% (Day-3) → -0.5% (Day-7) with NO interim thesis-review tick before today's approaching-SL exit. The R:R-only entry filter does not catch tight-target-tight-SL trades that lock capital against marginal upside. Net loss was small (-₹275) but the opportunity cost (6 trading sessions of ₹50K of capital) was the real cost.",
+    "MIN_CONFIDENCE OVERRIDE IS WORKING AS INTENDED — 4 confidence-blocked attempts today at 0.60-0.62, all sub-floor (override at 0.65). Two of the 4 also had SL>4% — i.e., the strategy layer was attempting to admit low-conviction high-stop-distance trades that the override correctly rejected. No evidence the floor is filtering out winners — the rejected attempts pair low confidence with poor SL discipline.",
+    "TRAILING-SL OSCILLATION ON HOLDINGS (existing rule 14(c) violations continuing). Tracking PNBHOUSING SL across today: 1028.02 → 1015.0 (DOWN!) → 1028.66 → 1033.9 → 1035.0 → 1034.83 (DOWN) → 1030.0 (DOWN) → 1039.68 → 1045.0 → 1040.56 (DOWN) → 1045.12 → 1048.0 → 1040.0 (DOWN) → 1048.0. Multiple non-monotonic moves over the session — per existing rule 14(c) 'Trailing SL is a monotonic-up process for longs; any value lower than last tick's is either noise or a mis-read of stored state.' Engine appears to ACCEPT loosenings (no rejection logged), so the rule is purely behavioral. Today the issue did not cost realized P&L (PNBHOUSING did not stop out) but creates ongoing decision-log noise and weakens the trail-SL guarantee.",
+    "GLENMARK HAS NOT YET FILLED (LIMIT 2400) — first session as OPEN. With SL set 4.4% wide and a >4% ceiling breach, this is the position to watch as EOD-1: the decision next tick should be an EXPLICIT review of whether to (a) cancel and re-emit at a tighter SL, (b) let the LIMIT expire, or (c) accept the breach and move on. Silence on a >cap admission past the next session is the failure mode.",
+    "POWERGRID HAS NOT BEEN MODIFY'd ALL DAY despite being on the book 2 sessions. SL still at 318 (entry 320.5, -0.78% below entry). On a session where every other holding was MODIFY-trailed, POWERGRID got zero attention — likely because of conservative interpretation of utility-name volatility, but the decision should be EXPLICIT (HOLD with reasoning), not silent."
+  ],
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Strengthened rule 5 SL-range language. Removed permissive '(for conviction plays with wider stops)' qualifier that gave the bot interpretive license to exceed MAX_SL_PCT for high-conviction entries. Replaced with explicit 'HARD CEILING — no exceptions' framing; explicit statement that per-position-risk math and SL ceiling are STACKED (not substitutable) constraints; explicit acknowledgment that the engine emits only a WARNING (not a BLOCK) on >max SL — which is engine permissiveness, not rule flexibility. Cited GLENMARK 2026-04-29 as the failure mode.",
+      "why": "GLENMARK BUY at 09:10:58 was admitted at SL 4.4% = breach of the 4% max_sl_pct override. The bot's own reasoning explicitly justified the breach via per-position-risk math: '5% × 4.4% = 0.22% portfolio risk within budget'. That justification is incorrect — the SL ceiling is an independent constraint, not a function of position size. Engine emits a warning rather than blocking, so the only place to enforce this is the prompt. Without this fix, every future high-conviction setup with marginal SL sizing will repeat the same logic.",
+      "expected_impact": "Future entries with proposed SL > MAX_SL_PCT should either (a) shrink position size and tighten SL, (b) widen SL and route as a smaller-tactical setup, or (c) be NO_ACTION. GLENMARK's specific failure pattern (4.4% SL with per-position-risk math 'within budget') should not recur. Verification: count of >max_sl_pct admissions in next 5 sessions should be 0 (currently 1 admission in 7 sessions; the rule before today's tightening already covered the case but didn't bite, the additional explicitness should close the gap)."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added new HARD CONSTRAINT rule 16: STALE-CNC POSITION REVIEW. Three legs: (a) any held CNC position ≥ 5 sessions AND not within 30% of its entry→target distance must surface an explicit thesis-review verdict — catalyst still pending (justified hold), catalyst played out without price response (default EXIT), or unreviewed (force review now); (b) positions held > MAX_CNC_HOLD_DAYS must EXIT next tick regardless of pnl, unless a fresh catalyst materially extends the thesis; (c) companion ENTRY rule — swing entries with absolute target distance < ~4% should be sized small (≤ 3% capital) or rewritten as MIS, since multi-day capital lock-up against single-session-volatility upside is opportunity cost. Cited NTPC 2026-04-22→2026-04-29 as the failure pattern.",
+      "why": "NTPC was held over 6 trading sessions (7 calendar days) for a 2.3% absolute target (only ~1.5x daily ATR). The trade's R:R 1:2.71 cleared min_risk_reward 1.5 but the absolute target was structurally too tight: it could be hit OR missed within a single session of normal volatility, making the 7-day hold dead-money exposure. Today's exit at -₹275 was a small loss, but the underlying problem — locking capital against marginal upside — is the root, not the exit timing. The R:R filter alone does not catch this pattern.",
+      "expected_impact": "Three behaviors should surface: (1) thesis-review entries on 5+ session holdings (PNBHOUSING / NESTLEIND / GOLDBEES are at 6 trading sessions today, well past the trigger, so first review tick should fire next session); (2) preemptive exit on positions whose catalyst has played out without price response, before they mature into approaching-SL exits; (3) tighter sizing or rejection of swing entries with sub-4% targets. Verification metrics: (a) average hold duration of EXIT-at-loss positions should drop from 6 (NTPC) toward 3-5 sessions; (b) count of entries with target < 4% should drop materially or be paired with size ≤ 3%."
+    }
+  ],
+  "changes_NOT_made_with_rationale": [
+    {
+      "candidate": "Tighten max_sl_pct override from 0.04 to 0.035",
+      "reason_skipped": "The 0.04 cap is correctly set; the failure today was that the engine emits a WARNING not a BLOCK on >max SL, allowing GLENMARK 4.4% through. Tightening the value to 0.035 doesn't change the warning-vs-block behavior; the breach mechanism is identical. The right fix is at the prompt layer (done in change #1), not the numeric layer. Promote to a BLOCK at the engine layer would require code change to GuardrailEngine, out of scope for prompt/config tuning."
+    },
+    {
+      "candidate": "Tighten min_confidence from 0.65 to 0.68",
+      "reason_skipped": "The 0.65 floor blocked 4 attempts today (all 0.60-0.62) — performing as designed and not starving signal. Today's filled entries cleared 0.65 (GLENMARK) and 0.68 (BANDHANBNK), with BANDHANBNK at the higher conviction also having materially better SL discipline (2.5% vs 4.4%). At lifetime n=10 closes, the win-rate split by confidence is too small for statistical inference (winners spread 0.65-0.75; losers spread 0.65-0.72, no clean gradient). Holding the floor."
+    },
+    {
+      "candidate": "Promote overrides to base config.yaml",
+      "reason_skipped": "Day 7 of 180 — still under the 10-day promotion threshold set in the 2026-04-28 EOD review. Override stack is operating correctly: max_position_pct=0.15 binding (today's entries at ~5% well within), max_sector_pct=0.22 non-binding (no breach), max_deployed_pct=0.65 non-binding (deployment ~49.4%), daily_loss_limit_pct=0.04 non-binding (today -0.01%). Listed in recommendations for the next weekly/EOD review once Day-10 milestone passes."
+    },
+    {
+      "candidate": "Add new numeric param 'max_oscillations_per_position_per_session'",
+      "reason_skipped": "Engine doesn't currently support this. PNBHOUSING showed 4+ oscillations (SL going down then back up) today. Existing prompt rule 14(c) already covers the behavioral case ('do NOT oscillate; trailing SL is monotonic-up') but the engine accepts loosenings without rejection. Behavior fix is the existing prompt rule — if pattern persists past the next 3-5 sessions, escalate to a code-level reject-if-loosening enforcement in GuardrailEngine."
+    },
+    {
+      "candidate": "Tighten max_position_pct from 0.15 to 0.12",
+      "reason_skipped": "Today's entries were sized 4.8% (GLENMARK) and 5.0% (BANDHANBNK) — both well within the 15% cap, both following the prompt's '5% size for confidence near 0.65' guidance. No firing trigger; tightening the cap would be theatrical."
+    },
+    {
+      "candidate": "Lower max_cnc_hold_days from 15 to 10",
+      "reason_skipped": "New rule 16 leg (a) (5-session thesis review) and leg (b) (>15-session hard EXIT) provide structural pressure to cull stale positions before they hit max_hold_days. Tightening the numeric cap simultaneously would compound a behavioral fix with a numeric one — wait one cycle to see if rule 16 alone resolves the stale-carry pattern before stacking. PNBHOUSING / NESTLEIND / GOLDBEES are at day 7 today, so rule 16's 5-session review will surface them next tick — if the strategy correctly reviews and either holds-with-fresh-thesis or trims, we have evidence. If they all silently roll past day 10 with no review, escalate to numeric tightening then."
+    },
+    {
+      "candidate": "Add daily_loss_limit_pct to track unrealized + realized intraday rather than session-end realized",
+      "reason_skipped": "Already does this per the engine — daily_loss_limit_pct gates against (realized + unrealized). No change needed."
+    }
+  ],
+  "recommendations": [
+    "PROMOTE OVERRIDES TO BASE CONFIG at Day 10 milestone (2026-05-04 estimated, accounting for weekends). Specifically: max_sl_pct=0.04, max_position_pct=0.15, max_deployed_pct=0.65, max_sector_pct=0.22, min_sl_pct=0.01, default_sl_pct=0.015, daily_loss_limit_pct=0.04, min_confidence=0.65 — all live for ≥7 sessions without binding-for-bad-reason. The current override stack is technical debt; base config has known-stale values.",
+    "INVESTIGATE TRAIL-SL OSCILLATION at engine level. Today's PNBHOUSING SL trail showed 4+ DOWN-moves (1028→1015, 1035→1034, 1045→1040, 1048→1040). The current engine appears to accept SL loosenings; the system_prompt rule 14(c) is purely behavioral. A simple engine fix: reject any MODIFY where new_stop_loss < current_stop_loss for a long position (and the converse for short). Behavior matches stated SL-only-tightens rule. Code is in src/agents/guardrails.py.",
+    "PROMOTE max_sl_pct FROM WARNING TO BLOCK at engine level. Today's GLENMARK admission with 4.4% SL > 4% cap is the prototype failure mode; the prose fix in change #1 is necessary but the structural fix is engine-side. The current warning-only behavior on max_sl_pct effectively makes the cap advisory.",
+    "TAG CLOSED TRADES WITH EXIT-TRIGGER TYPE for statistical analysis. Yesterday's review recommended this; recommend again. Lifetime stats split by trigger would help distinguish '15(a) binary event' / '15(d) approaching SL' / '15(c) market-wide' / 'panic' exits. Today's 2 closes were both 15(d), and they performed reasonably (1 win, 1 small loss). Need ~30+ closes with tags for inference, but start collecting now.",
+    "ADD A POSITION-AGE FIELD TO THE EXISTING-POSITIONS DATA FEED so the rule-16 trigger (≥5 sessions) is unambiguous. Without it, Claude has to compute days-held from the entry timestamp every tick, which adds prompt tokens and is error-prone.",
+    "MEASURE DECISION-CYCLE CHURN PER SYMBOL. Today's MODIFY-storm pattern (PNBHOUSING 14 SL changes in a single session, NESTLEIND 13 changes, etc.) suggests excessive churn. If the same SL value is set repeatedly (e.g., 1438 → 1438 → 1438), the bot is re-emitting MODIFYs that the engine should treat as no-ops. A 'no-op MODIFY filter' at the engine level would clean up the decision log without changing any behavior.",
+    "TARGET-VS-VOLATILITY ENTRY RULE. Rule 16's companion entry rule mentions <4% absolute target should size small or be MIS. A more rigorous version: target_distance / 14d_ATR ≥ 2.0 for any swing entry. NTPC's 2.3% target was ~1.5x daily ATR — i.e., the upside was reachable in a single normal session, making the multi-session hold structurally questionable. Adding ATR to the entry-data feed would let this be enforced cleanly."
+  ]
+}

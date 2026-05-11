@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-05-05 14:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 516981.64,
+    "deployed_pct": 48.40,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "Day-11 14:30 tick (~255 min into NSE session, ~65 min until close, at the canonical MIS-no-new cutoff, 30 min after the 14:00 min_confidence revert 0.52→base 0.50). Override count 2 (down from 3 at 13:30): default_sl_pct 0.015 + min_sl_pct 0.01 remain.",
+    "State delta vs 14:00: ZERO new trades — admit-side book freeze now ~197 min since the 11:13:45 BHEL/NAVINFLUOR/SOBHA cluster. Holdings unchanged at 9, cash unchanged ₹516,981.64, cost basis unchanged ₹484,875, total ₹1,001,856.64, deployment 48.40% unchanged, day P&L +₹909.20 unchanged.",
+    "Strategy NOT idle: guardrail_log shows 7 valid entries at 14:09:52-14:10:08 (is_valid=1, errors_json=[], no trade_id) — pattern matches another trail-stop MODIFY check sweep on existing winners (continuation of the 12:42-12:43 / 13:12-13:13 / 13:41-13:42 cadence on PNBHOUSING +4.6% locked / ADANIPORTS +0.9% locked). Defensive engagement on winners is active; admit-side quietness is selective, not blocked.",
+    "Composite distress 0/3 — no leg fires. BFSI cluster only n=2 (PNBHOUSING 7.86% + BANDHANBNK 5.01% = 12.87%) with 22.13 pp buffer to base 0.35 sector cap; remaining 7 sectors single-name (Gold ETF, Ports, Auto OEM, Defense, Capital Goods, Realty, Specialty Chem) — diversified across 8 distinct sectors.",
+    "Position sizing healthy: max PNBHOUSING 7.86% well under base 0.20 cap (12.14 pp buffer); other 8 names band 4.82-5.51% — none sub-3% (no hedging-against-itself shape).",
+    "Day P&L positive +₹909.20 (GESHIP -₹589.80 + PHARMABEES +₹510.00 + ANANTRAJ +₹989.00, all carry-closes); ~₹30,965 buffer to base -3% daily loss limit.",
+    "Deployment 48.40% — under-deployment trigger from 09:00/10:00 (33.48%) is materially resolved; 31.6 pp headroom to base 80% cap; healthy not over-deployed. With min_confidence now at base 0.50, the conf floor lever is removed from the under-deployment causation chain entirely.",
+    "min_confidence at base 0.50 since 14:00 — no high-confidence (>=0.70) entries can be blocked by an override that no longer exists. Signal-acceptance check is moot for the conf floor going forward.",
+    "14:00 test framework for next move on SL trio: (a) a real sub-0.50 admit arrival — STRUCTURALLY IMPOSSIBLE at base 0.50 floor (any admit at conf 0.50+ passes; no BLOCK can fire), so this signal can't generate evidence; (b) a today-admit closing one way to feed exit data into the SL-discipline thesis — UNFIRED, today's 3 admits (BHEL conf 0.68 / NAVINFLUOR conf 0.70 / SOBHA conf 0.68) remain intraday-pending; today's only closes are the 3 carry-closes from 09:43-10:12. Neither test signal has produced new evidence.",
+    "05-04 SL-discipline thesis remains the load-bearing argument for the 2 remaining overrides and is empirically unrefuted: GESHIP CARRY -1.27% on entry, BAJAJ-AUTO -0.55%, EXIDEIND -2.5% all sat within the tightened SL geometry; loosening the trio without fresh same-day-admit exit data would discard the thesis on speculation. Today's 3 admits intraday-pending, so no challenge data for either direction.",
+    "Yellow flag from 05-04 (today-admit ledger 0W/2L: BAJAJ-AUTO + EXIDEIND, both SL-discipline events) remains technically unresolved — today's 3 admits are CNC and may carry into tomorrow without resolving the ledger this session. Past MIS-no-new cutoff, probability of a today-admit close before EOD is decreasing."
+  ],
+  "actions_taken": [
+    "HOLD both remaining overrides unchanged: default_sl_pct 0.015, min_sl_pct 0.01. Override count 2 unchanged. No revert, no tighten.",
+    "Did NOT loosen SL trio: the 14:00 commitment was to revert if (a) a sub-0.50 admit arrived (structurally impossible at base) or (b) a today-admit closed one way. Neither signal fired in the 14:00→14:30 window. Reverting without fresh exit data on tightened SL geometry would prematurely discard the unrefuted 05-04 SL-discipline thesis.",
+    "Did NOT tighten anything: zero distress legs fire — 8 distinct sectors with BFSI n=2 only and 22+ pp buffer; day P&L positive +₹909.20 with ~₹31k buffer to base -3%; max position 7.86% well under base 0.20; deployment healthy 48.40% (not over-deployed); no n≥3 sector cluster; positions in healthy 4.82-7.86% band (no sub-3% hedging-against-itself); 0 real BLOCKED on confidence in 8+ trading days.",
+    "Reassess at 15:00: with admit-side past MIS-no-new cutoff and today's 3 admits still intraday-pending CNC, the SL-trio test signal is unlikely to fire before EOD. EOD reassessment will likely default to carrying both SL overrides into tomorrow on the unrefuted 05-04 thesis, with a fresh test window opening when today's 3 admits resolve."
+  ]
+}

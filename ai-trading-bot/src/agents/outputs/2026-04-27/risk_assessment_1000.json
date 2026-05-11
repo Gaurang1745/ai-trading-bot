@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-04-27 10:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000559.58,
+    "cash": 508227.18,
+    "deployed_pct": 0.4921,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "daily_pnl": -865.92
+  },
+  "sector_breakdown_pct_of_capital": {
+    "BFSI": 0.1764,
+    "FMCG": 0.1674,
+    "Power_PSU": 0.0505,
+    "Gold_ETF": 0.0500,
+    "Pharma": 0.0477
+  },
+  "single_name_breakdown_pct_of_capital": {
+    "NESTLEIND": 0.1200,
+    "MAHABANK": 0.0977,
+    "PNBHOUSING": 0.0787,
+    "NTPC": 0.0505,
+    "GOLDBEES": 0.0500,
+    "GRANULES": 0.0477,
+    "HINDUNILVR": 0.0474
+  },
+  "active_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.70,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.30,
+    "daily_loss_limit_pct_base": 0.03
+  },
+  "tick_over_tick_delta_vs_0930": {
+    "holdings_count": "8 → 7 (AUBANK exited)",
+    "cash": "324,460.30 → 508,227.18 (+183,766.88)",
+    "deployed_pct": "0.6760 → 0.4921 (-18.39 pp)",
+    "trades_today": "0 → 2 (AUBANK SELL 176 + CLOSE row at 09:31:56)",
+    "daily_pnl": "0.00 → -865.92 (binary-event trim cost: -0.087% of book)",
+    "BFSI_sector": "0.3606 → 0.1764 (-18.42 pp; grandfathered breach RESOLVED)",
+    "largest_single_name": "AUBANK 18.44% → NESTLEIND 12.00% (per-name cap breach RESOLVED)",
+    "interpretation": "STRUCTURAL REGIME CHANGE. The strategy layer fired rule-11 (binary-event discipline) at 09:31:56 — just 2 minutes post-open — and completely exited AUBANK (176 shares @ ₹1,049.05 avg, sold for net -₹865.92 / -0.47% on the lot). This single trade resolves THREE grandfathered breaches simultaneously: (i) AUBANK 18.44% > 0.15 per-name cap, (ii) BFSI 36.06% > 0.30 sector cap, (iii) elevated deployment 67.60% (now well inside 70% cap). The Apr 25 weekly-review thesis ('rule 11 + 0.30 sector cap should mechanically force a BFSI trim within 1-2 sessions') has now executed in session 2 of 2 — on the deadline tick, but executed."
+  },
+  "findings": [
+    "BINARY EVENT NEUTRALIZED: AUBANK Q4 FY26 results scheduled today is now an EX-EXPOSURE event for the book. The 09:31:56 SELL closed the entire 176-share position before any results print, eliminating the asymmetric MTM exposure flagged at 09:00/09:30 (the -5%/-10% post-event scenarios that would have cost ₹9,232 / ₹18,463 are now zero-bound). Cost of discipline: -₹865.92 (-0.087% of book) — a small price for eliminating a binary outcome on 18.44% of capital. The execution validates that rule-11 is internalized at the strategy layer.",
+    "BFSI sector concentration: 17.64% (₹176,520 — MAHABANK 9.77% + PNBHOUSING 7.87%). 12.36 pp BUFFER below the 0.30 max_sector_pct override (was a 6.06 pp BREACH at 09:30). Sector cap is no longer binding against current exposure; it now functions as a forward back-pressure ring — admission of any new BFSI BUY is permitted up to ~₹123,470 incremental before the cap re-binds. SBI Cards Q4 today remains a Tier-2 sympathy event, but exposure is now 49% lower than it was at premarket.",
+    "Largest single-name: NESTLEIND 12.00% (₹120,099.90) — 3.00 pp BUFFER below the 0.15 per-name cap. No grandfathered breach remains. The per-name discipline is fully respected book-wide. NESTLEIND remains the largest mark surface for general consumption-results sympathy this week (DMart, Varun Beverages, HUL all reporting), but no direct event today.",
+    "Deployment: 49.21% (₹492,332.40 / ₹1,000,559.58) — 20.79 pp BUFFER below the 0.70 max_deployed_pct cap (was 2.40 pp at 09:30). Admission surface has expanded from ~₹24,034 of headroom to ~₹207,724. The 0.70 cap is non-binding by a comfortable margin, and the strategy layer has earned a clean window for quality-gated reuptake should opportunities present.",
+    "Cash buffer: ₹508,227.18 (50.79% of book) — increased ₹183,767 from the AUBANK SELL inflow. This is the largest cash reserve since Day-1 inception and provides: (i) absorbs ~5% of book MTM drawdown without forced liquidation, (ii) opportunistic-add capacity post any market dislocation, (iii) structural buffer well above any historical session reading.",
+    "Daily P&L: -₹865.92 (-0.087% of book) — the lone trade today was the AUBANK exit. Buffer to base 3% loss gate: ₹29,150 remaining (still ~97% of full budget). Buffer to internal -1% findings trigger: ₹9,140. All P&L-based loss gates remain dormant by a wide margin.",
+    "FMCG concentration: 16.74% (NESTLEIND 12.00% + HINDUNILVR 4.74%) — unchanged from 09:30. HINDUNILVR week-of-Apr-28 results still pending (T+1 to T+5); secondary binary event in book within 5 sessions but bounded at 4.74%. Sector cap (30%) has 13.26 pp of headroom against FMCG.",
+    "Strategy SELL discipline now confirmed across two distinct contexts: (a) Day-3 cluster trim (TORNTPOWER, ADANIPOWER) — Power-cluster size management, (b) Day-6 binary-event pre-emption (AUBANK) — rule-11 internalization. This is the second consecutive session with a clean SELL execution and the first session where the trim matched the pre-specified weekly-review thesis. Pattern is becoming structural, not ad-hoc.",
+    "Trigger-D composite CRITICAL meta-condition: now UNREACHABLE intraday for AUBANK. Component (ii) 'AUBANK ≤ -7%' cannot fire on a closed position. The post-event distress-regime trigger is effectively retired for this binary-event window. Other CRITICAL pathways remain dormant: book P&L is +/-0.1%, strategy is not silent (just executed at 09:31).",
+    "Position-size hierarchy (largest to smallest, all sub-cap): NESTLEIND 12.00% → MAHABANK 9.77% → PNBHOUSING 7.87% → NTPC 5.05% → GOLDBEES 5.00% → GRANULES 4.77% → HINDUNILVR 4.74%. Concentration index (sum-of-squares of weights): much improved — the 18.44% AUBANK weight had outsize influence on top-of-book risk; with it gone the distribution is materially flatter."
+  ],
+  "actions_taken": [
+    "NO numeric override changes this tick. Disciplined hold consistent with the established surgical-fire pattern. The book has just executed the right structural correction (BFSI trim via AUBANK exit) — tightening overrides now would punish the strategy layer for the very behavior that the prior 5 sessions of override-stacking were designed to mechanically force. The sector cap (0.30) and per-name cap (0.15) are now non-binding because the strategy listened to them, not because they were too loose.",
+    "All seven existing overrides held: min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.70, default_sl_pct=0.015, min_sl_pct=0.01, max_sl_pct=0.04, max_sector_pct=0.30. Each remains a forward back-pressure ring against future re-stacking — non-binding on current exposure but binding on hypothetical re-admissions: BFSI re-add capped at ₹123K incremental, single-name cap at ₹150K, deployment cap at ₹207K headroom, SL band [1.0%, 4.0%] gates new-entry per-name risk to ≤0.60% of book.",
+    "Risk level DOWNGRADED from HIGH (09:30) to LOW. All three drivers of the HIGH rating at premarket have been resolved or neutralized: (i) AUBANK binary exposure → exited, (ii) BFSI 36.06% > 30% sector cap → 17.64%, (iii) AUBANK 18.44% > 15% per-name cap → 0%. Book is now structurally cleaner than at any point since Day-1 inception. Daily P&L is benign (-0.087%), cash buffer is the largest of the dataset (50.79%), and admission surface is open with comfortable margins on every override."
+  ],
+  "pre_armed_triggers_intraday": [
+    "TRIGGER A (PnL-based, primary): If book daily P&L ≤ -1.00% (₹-10,006) at any tick → FIRE daily_loss_limit_pct 0.03 → 0.025. Currently at -0.087% (-₹866). Buffer ₹9,140 to fire.",
+    "TRIGGER B (RETIRED for AUBANK): The AUBANK adverse post-event trigger is no longer applicable — position is closed. Pre-arm rolls forward as a generic 'next BFSI binary-event trigger' if a new BFSI position is admitted (none currently in flight).",
+    "TRIGGER C (BFSI re-stacking): If strategy admits a NEW BFSI BUY within 60 min that pushes BFSI above 25% via mark + entry → FIRE max_sector_pct 0.30 → 0.25. Validates that the SELL→BUY recycle isn't being abused to re-stack the cluster the override just successfully unwound.",
+    "TRIGGER D (composite HIGH→CRITICAL meta): With AUBANK closed, the binary-event leg of the composite is retired. Generic distress meta now requires: (i) book P&L ≤ -1.5% AND (ii) any single-name ≤ -7% AND (iii) strategy silent ≥60 min after first sub-threshold breach → ELEVATE risk_level CRITICAL + FIRE daily_loss_limit_pct 0.03 → 0.020 + max_position_pct 0.15 → 0.12.",
+    "TRIGGER E (sector-cap validation): If strategy attempts a BFSI BUY today, observe whether guardrail rejects above 30% (or whether projected BFSI on fill stays below). With BFSI at 17.64% the cap won't bind on a single small admission — confirm sizing logic respects forward back-pressure.",
+    "TRIGGER F (NEW, complacency watch): Cash buffer at 50.79% is structurally high. If strategy admits 3+ new BUYs in a 60-min window taking deployment back above 65% → flag in next risk_assessment as a re-stacking pattern (NOT a numeric tightening trigger; an observation feed for the next strategy_review). The post-trim SELL→BUY window can be a rebound trap.",
+    "TRIGGER G (NEW, MAHABANK extension watch): MAHABANK was the prior-session pain trade (-5% to -6% range). With AUBANK gone, MAHABANK becomes the next single-name vector to monitor. If MAHABANK marks below ₹76.61 (pnl_pct ≤ -6.00% on the 1200-share lot) → re-assess whether the 0.04 max_sl_pct ceiling is too loose for the next admission queue (potential lever: 0.04 → 0.035)."
+  ],
+  "did_not_fire_with_reasons": [
+    "daily_loss_limit_pct (0.03 → 0.025): book at -0.087% daily P&L; ₹29,150 buffer to base loss gate, ₹9,140 buffer to internal -1% trigger. The AUBANK exit cost is a deliberate, expected outcome of binary-event discipline — not a P&L-distress signal. Pre-armed as Trigger A.",
+    "min_confidence (0.60 → 0.65): closed-trade sample is now 3 (TORNTPOWER win 0.68, ADANIPOWER loss 0.66, AUBANK loss 0.??). Confidence still has no signal at n=3. Same hold rationale as 09:00/09:30/Apr 25 weekly review.",
+    "max_position_pct (0.15 → 0.12): no name is now above the 0.15 cap (largest is NESTLEIND 12.00%). Tightening to 0.12 would still leave NESTLEIND grandfathered — pointless on a book where the cap is non-binding by 3 pp. Pre-armed within Trigger D as a distress-regime stack.",
+    "max_deployed_pct (0.70 → 0.65): deployment at 49.21%, the cap has 20.79 pp of buffer. Tightening here is purely decorative — no admission is approaching even 60%. Punishes the strategy for the right behavior (the trim that just opened this buffer).",
+    "max_sector_pct (0.30 → 0.25): BFSI at 17.64%, cap has 12.36 pp of buffer. Tightening to 0.25 is theatrical given current exposure — only useful if BFSI starts re-stacking, which is conditional on a new BFSI BUY not yet attempted. Pre-armed as Trigger C.",
+    "default_sl_pct (0.015 → 0.012) / max_sl_pct (0.04 → 0.035) / min_sl_pct (0.01 → 0.015): SL band already tight at [1.0%, 4.0%]; worst-case new-entry per-name risk 0.60% at max sizing. No firing trigger on SL discipline; new-admission queue is empty. Pre-armed within Trigger G for MAHABANK extension scenario.",
+    "Risk level NOT held at HIGH: the three drivers of the 09:00/09:30 HIGH rating (AUBANK binary, BFSI breach, single-name breach) are all resolved. Holding at HIGH for inertia would be dishonest signaling — the structural risk profile is materially improved and the level should reflect that."
+  ],
+  "next_check": "2026-04-27 10:30 (mid-session snapshot — observe whether strategy attempts any post-AUBANK-exit re-deployment, whether SBI Cards results spill into MAHABANK/PNBHOUSING, MAHABANK trajectory vs the -6% Trigger G line, and whether the elevated cash buffer is being re-deployed into quality entries or held as buffer)"
+}

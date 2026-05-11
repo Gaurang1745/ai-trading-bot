@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-11 12:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000958.76,
+    "cash": 551257.76,
+    "deployed_pct": 44.93,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 2816.67
+  },
+  "findings": [
+    "Distress check 0/3: max position GOLDBEES 5.00% (cap 20%, 15 pp buffer); max sector FMCG 11.85% n=3 (cap 35%, 23 pp buffer); deployment 44.93% (cap 80%, 35 pp buffer).",
+    "Sector diversification healthy: 9 distinct buckets across 11 names (FMCG 11.85%, Gold-ETF 5.00%, Healthcare/Hospitals 4.85%, Capital Goods 4.75%, Cables 4.55%, Auto 4.30%, Specialty Chem 3.90%, IT 3.77%, Pharma 1.96%). Defensive/quality ballast (FMCG+Gold+Healthcare+Pharma) at 23.66%.",
+    "Position sizing balanced: 9 of 11 names in 3.77%-5.00% primary cluster; 2 sub-3% outliers (DABUR 1.95%, LAURUSLABS 1.96%) at 18% of names — well below the >85% tiny-everything anti-pattern. No oversized concentration.",
+    "Daily P&L positive: realized +₹2,816.67 (3W/4L from 7 exits), live MTM total +₹4,290.46 (+0.43%). All 4 losing exits inside 5% max-SL bound (-2.84% to -3.18%). Daily-loss buffer ~₹32,945 above -3% gate.",
+    "Signal acceptance unimpaired: APOLLOHOSP admit (11:44, 3rd admit today) cleared base 0.50 confidence floor without friction. Of 24 BLOCKED guardrail rows today, all are mechanical (conf=0.0 full-exit sentinels + MODIFY-on-closed-positions). ZERO real high-confidence entries blocked by config.",
+    "Deployment at 44.93% is slightly under 50% but defensible: book froze 11:44-12:30 inside the 12:00-13:00 NSE lunch-lull window; today's 3 admits + 7 exits in 195 min is active-rotation pace. RE-DEPLOYMENT watch armed for tick 1/2 — escalate only if 13:00 post-lunch still shows zero admits + <50% deployment.",
+    "Pharma sleeve thinned to n=1 (LAURUSLABS only at 1.96%) post WOCKPHARMA exit. Idiosyncratic single-name read-across risk for DRREDDY/CIPLA earnings on 5/12; bucket weight is the smallest in book so impact bounded. Strategy admit (not config tighten) is the appropriate response if it bites.",
+    "Overrides have been at {} (all-at-base) for ~140.5 hr / 5.85 days since the 2026-05-05 EOD reset. 43rd consecutive HOLD tick. No prior override to revert; the floor is already in place."
+  ],
+  "actions_taken": [
+    "HOLD — no parameter changes. Overrides block remains empty ({}); already at base config floor, so LOOSEN is not applicable. TIGHTEN not justified: distress 0/3, daily P&L positive, no high-confidence signals blocked, SL geometry validated by 4 losing exits inside the 5% bound, sector concentration well under caps. Appended changelog entry to /home/ubuntu/trading/ai-trading-bot/src/agents/risk_config.yaml documenting the HOLD rationale and pre-armed watch items for the 13:00 post-lunch tick (RE-DEPLOYMENT 2-tick stall, FMCG sleeve >15%, sub-0.55 conf admit, ≥0.70 BLOCK, -1.0% realized P&L, 12% single-position, 75% deployment, 5/12 CPI + Pharma earnings read-across)."
+  ]
+}

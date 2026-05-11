@@ -1,0 +1,97 @@
+{
+  "date": "2026-04-28",
+  "agent": "strategy_post_market_review",
+  "changes": [
+    {
+      "id": 1,
+      "timestamp": "2026-04-28T16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "change_type": "prose_addition",
+      "section": "HARD CONSTRAINTS rule 15 (new)",
+      "title": "PANIC-EXIT DISCIPLINE — DO NOT SELL INTO RED WITHOUT A REAL TRIGGER",
+      "summary": "Defines 4 valid triggers (binary event / thesis broken / market-wide risk-off / approaching SL) for any discretionary EXIT on a position trading at a loss but above its SL. Disqualifies narrative-style reasons ('rotation stalled', 'overhang', 'intraday rejection', 'capital preservation'). Recommends MODIFY-tighten-SL as the default tool when reduced exposure is desired without a clean trigger.",
+      "evidence": {
+        "session": "2026-04-28",
+        "loss_attributable": -4865.04,
+        "as_pct_of_today_realized": 0.816,
+        "specific_trades": [
+          {"symbol": "TORNTPOWER", "entry": 1810.0, "sl": 1775.0, "exit": 1761.82, "pnl": -1349.04, "panic_exit": true, "reason_text": "Stock down -2.7% from entry 1810, now at 1754. Intraday rejection pattern... After +39% April rally, MarketsMOJO downgraded to Hold...", "trigger_check": "exit was AT-OR-PAST SL trigger (1761.82 < 1775); broker stop should already have fired"},
+          {"symbol": "MAHABANK", "entry": 81.50, "sl": 76.50, "exit": 78.57, "pnl": -3516.00, "panic_exit": true, "reason_text": "PSU Bank index down -1.57% today, MAHABANK at -3.5% loss... Rs 7,500 cr equity raise overhang creates dilution risk. PSU bank rotation has stalled.", "trigger_check": "neither overhang nor sector rotation are post-entry information; both publicly known on Day-1; SL still 2.55 pp away"},
+          {"symbol": "HINDUNILVR", "entry": 2372.0, "sl": 2295.0, "exit": 2317.04, "pnl": -1099.20, "panic_exit": false, "reason_text": "Down -2.2% with Q4 results in T+2 (Apr 30) — Street expectations weak", "trigger_check": "valid rule 11 binary event trigger; defensible under (a) although HOLD-tightened-SL was equally valid since position was 4.7% < 5% rule-11 threshold"}
+        ]
+      },
+      "expected_impact": "Reduce avg-loss-per-close from current -₹1,448 lifetime / -₹1,988 today toward the SL-defined worst-case (typically 1.5-4% of position size with current SL band). Asymmetric loss-aversion (cut losers / hold winners) should resolve to symmetric SL discipline."
+    },
+    {
+      "id": 2,
+      "timestamp": "2026-04-28T16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "change_type": "prose_extension",
+      "section": "HARD CONSTRAINTS rule 12",
+      "title": "EXIT IS FINAL — NO SECOND ORDER ON A CLOSED CNC POSITION (extended)",
+      "summary": "Extended Rule 12 from 'NO MODIFY ON CLOSED POSITIONS' to 'NO SECOND ORDER ON A CLOSED CNC POSITION' to also forbid a fresh CNC SELL on a SELL-to-zero symbol. Added explicit pointer that CNC SELL with zero holdings = guardrail rejection per SEBI rule 3. Bearish post-exit views require an explicit MIS short with same-day square-off, written as such.",
+      "evidence": {
+        "session": "2026-04-28",
+        "blocked_orders_count": 3,
+        "blocked_orders": [
+          {"timestamp": "2026-04-28T11:44:28", "symbol": "TORNTPOWER", "qty": 28, "product": "CNC", "side": "SELL", "block_reason": "Cannot short-sell in CNC. Holdings: 0, Order qty: 28", "missing_fields": ["stop_loss", "target"]},
+          {"timestamp": "2026-04-28T11:44:34", "symbol": "MAHABANK", "qty": 1200, "product": "CNC", "side": "SELL", "block_reason": "Cannot short-sell in CNC. Holdings: 0, Order qty: 1200", "missing_fields": ["stop_loss", "target"]},
+          {"timestamp": "2026-04-28T11:44:44", "symbol": "TORNTPOWER", "qty": 28, "product": "CNC", "side": "SELL", "block_reason": "Cannot short-sell in CNC. Holdings: 0, Order qty: 28", "missing_fields": ["stop_loss", "target"]}
+        ],
+        "context": "All 3 blocked SELLs occurred WITHIN MINUTES of the same symbols' SELL-to-zero exits at 11:44:10 / 11:44:18 / 11:44:18. Missing stop_loss/target indicates stale-holdings read, not deliberate bearish flip. Prior Rule 12 only addressed MODIFY-after-EXIT (Day-3 failure mode); the same structural error in fresh-SELL syntax was not explicitly covered."
+      },
+      "expected_impact": "Zero CNC short-sell guardrail rejections on subsequent down-days. Decision-tick cycles freed for legitimate position management."
+    },
+    {
+      "id": 3,
+      "timestamp": "2026-04-28T16:00:00",
+      "file": "src/agents/risk_config.yaml",
+      "change_type": "numeric_override_added",
+      "section": "overrides.risk",
+      "title": "daily_loss_limit_pct override 0.075 → 0.04",
+      "summary": "Tightened the session-level circuit-breaker from base 7.5% to 4% via the hot-reload override path. Effective immediately for the next decision tick.",
+      "evidence": {
+        "base_value": 0.075,
+        "override_value": 0.04,
+        "base_value_inr": -75000,
+        "override_value_inr": -40000,
+        "session_loss_distribution": {
+          "day_2_2026_04_24": 0.001425,
+          "day_5_2026_04_27": 0.000131,
+          "day_6_2026_04_28": -0.005964,
+          "max_single_day_loss_pct": -0.005964,
+          "headroom_at_base": 12.6,
+          "headroom_at_override": 6.71
+        },
+        "rationale": "Base 7.5% would tolerate -₹75K of session-day loss before circuit-breaking — disproportionate to actual session-loss distribution (max -0.6%). 4% = -₹40K still gives 6.7x today's worst headroom but creates a real circuit at a level worth pausing for. Overrides only tighten; base config unchanged."
+      },
+      "expected_impact": "On a future bad day where realized+unrealized loss approaches 4%, the system outputs NO_ACTION on all decisions, preventing further panic-exit cascades. Doesn't bind on today's pattern but creates a meaningful backstop."
+    }
+  ],
+  "changes_NOT_made_with_rationale": [
+    {
+      "candidate": "Tighten min_confidence from 0.65 to 0.68",
+      "reason_skipped": "Today's losers spanned 0.65 (HINDUNILVR) and 0.70 (TORNTPOWER, MAHABANK). Confidence has no signal at n=8 closed trades (3W/5L). Rotating this lever risks starving legitimate signal without addressing the actual failure mode (exit discipline, not entry quality). Today's COALINDIA BUY at 0.65 was clean and well-reasoned."
+    },
+    {
+      "candidate": "Tighten max_position_pct from 0.15 to 0.10",
+      "reason_skipped": "MAHABANK's grandfathered 9.78% × 6.13% SL distance = 0.60% per-name risk is the worst-case in the book and matches the current ceiling. Today's exits FREED 14.6 pp of deployment, so position-size is not the binding constraint — the failure was on the EXIT side."
+    },
+    {
+      "candidate": "Tighten max_deployed_pct from 0.65 to 0.55",
+      "reason_skipped": "Post-exit deployment is now 44.6%, well below the 65% cap. Tightening on a freed book would block legitimate entries (today's COALINDIA BUY would have been admitted under either threshold) without addressing the actual Day-6 failure mode."
+    },
+    {
+      "candidate": "Promote overrides to base config.yaml",
+      "reason_skipped": "Overrides have only 4 trading days of evidence. Promotion criterion should be ≥10 days plus statistical confirmation. Listed in recommendations for the next weekly review."
+    },
+    {
+      "candidate": "Add new numeric param 'max_discretionary_exits_per_day'",
+      "reason_skipped": "Engine doesn't currently support this param. Would require code change to GuardrailEngine. The behavioral fix at the prompt layer (rule 15) is sufficient for now; if pattern recurs, escalate to a code-level guardrail in a future review."
+    },
+    {
+      "candidate": "Tighten max_sector_pct from 0.22 to 0.20",
+      "reason_skipped": "Today's exits dropped Power-sector exposure (TORNTPOWER closed). Energy/PSU is now: NTPC 5.05% + POWERGRID 4.81% + COALINDIA 4.69% + GOLDBEES 5.00% = ~19.5% — comfortable buffer to 22% cap. No firing trigger."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-04-22 12:30:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 773440.0,
+    "deployed_pct": 22.66,
+    "holdings_count": 3,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Holdings unchanged from 12:00 tick: MAHABANK 1200 @ ₹81.5 (₹97,800 / 9.78% of capital), PNBHOUSING 80 @ ₹984.0 (₹78,720 / 7.87%), GOLDBEES 400 @ ₹125.1 (₹50,040 / 5.00%). Filled deployment ₹2,26,560 (22.66%); cash ₹7,73,440 (77.34%). No intraday positions, no sells, no realized P&L today.",
+    "NEW since 12:00: two BUY orders are OPEN (unfilled) in today's trades table — NESTLEIND 50 @ ₹1415 (₹70,750 / 7.08% of capital) and AUBANK 70 @ ₹1050 (₹73,500 / 7.35%). If both fill, deployment rises to ₹3,70,810 (37.08%) with ~₹6.29L cash remaining. Both remain well inside the 20% per-name cap individually.",
+    "Sector concentration (primary concern this tick): currently financials = MAHABANK (PSU bank) + PNBHOUSING (housing NBFC) = 17.65% of total capital, 77.9% of the deployed book. If the OPEN AUBANK (private bank) BUY fills, BFSI exposure climbs to ₹2,50,020 — 25.00% of total capital and ~67.4% of the expected deployed book at 37% deployment. That is a visible pattern of the strategy layer stacking correlated rate-sensitive financials across three ticks.",
+    "Correlated exposures: MAHABANK + AUBANK + PNBHOUSING would all move on the same drivers — rate cycle, credit policy, banking asset-quality news. GOLDBEES (₹50,040, 5.00%) continues to act as a natural hedge (gold typically benefits on financial-sector stress or INR weakness). NESTLEIND (FMCG, if fills) is uncorrelated to BFSI and would improve sectoral balance — but does not offset the banking tilt by itself.",
+    "Deployment level: 22.66% actual, up to 37.08% if both OPEN orders fill. Both well inside the 80% max_deployed_pct ceiling — plenty of dry powder, no deployment-cap risk.",
+    "Position sizing: largest single name is MAHABANK at 9.78%, i.e. ~half of the 20% per-name cap. After OPEN fills, the largest would still be MAHABANK at 9.78%. No single-name concentration breach.",
+    "Daily loss: ₹0 realized. Fills are intraday-fresh so unrealized P&L also ~₹0 on entries (no live quotes in DB). The 3% daily-loss limit (₹30,000) is not engaged; drawdown-reduce (10%) and drawdown-halt (15%) are inapplicable.",
+    "Active overrides at start of tick: min_confidence = 0.55 (strategy, 2026-04-20). Retained — the three filled entries today cleared it and it is not suppressing legitimate signal.",
+    "Risk level assessed as MEDIUM (vs LOW at 12:00) because of the concentration trajectory: three of the last five BUY tickets issued today are in BFSI (MAHABANK filled, PNBHOUSING filled, AUBANK open), which is a sectoral tilt the strategy layer appears to be reinforcing. No current guardrail breach — this is a preventive classification, not an incident."
+  ],
+  "actions_taken": [
+    "Tightened max_position_pct from 0.20 to 0.15 in /home/ubuntu/trading/ai-trading-bot/src/agents/risk_config.yaml. Rationale: caps compound single-name risk while the strategy continues to add correlated BFSI names. Non-punitive — every current holding (max 9.78%) and every OPEN order (max 7.35%) remains comfortably inside the new cap, so no liquidation or cancellation is forced; only sizing of future entries is constrained. Direct per-sector caps are not a parameter the current config exposes, so a tighter per-name ceiling is the closest lever to the actual risk vector.",
+    "Retained min_confidence = 0.55 override from strategy agent (2026-04-20). No risk-side reason to revisit this tick.",
+    "Did NOT tighten max_deployed_pct (0.80), daily_loss_limit_pct (0.03), or drawdown thresholds: deployment is still 22.66% with massive headroom, daily P&L is flat, and drawdown is zero — tightening any of those now would be a preemptive overreach with no matching risk signal."
+  ]
+}

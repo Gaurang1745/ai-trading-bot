@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-04-22 11:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 1000000.0,
+    "deployed_pct": 0.0,
+    "holdings_count": 0,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Portfolio state unchanged for the fifth consecutive tick (09:00 → 09:30 → 10:00 → 10:30 → 11:00): ₹10,00,000 entirely in cash, zero rows in paper_holdings, zero rows in paper_positions, and zero paper trades in the trades table for today. Ninety minutes into the session with a completely empty tape.",
+    "Sector concentration: N/A — no holdings exist, so sector-concentration risk is structurally zero.",
+    "Correlated exposures: N/A — with no positions open, there is nothing to correlate.",
+    "Deployment level: 0% deployed vs 100% cash. Trivially below the 80% max_deployed_pct ceiling and the 20% max_position_pct per-name cap.",
+    "Daily loss: ₹0 realized and ₹0 unrealized. The 3% daily-loss limit (₹30,000) is not remotely engaged; drawdown-reduce (10%) and drawdown-halt (15%) thresholds are inapplicable.",
+    "Position sizing: N/A — no single-name exposure exists.",
+    "Active override: min_confidence = 0.55 (raised from base 0.50 by the strategy agent on 2026-04-20 22:10). The override remains appropriate; another 30 minutes of inactivity provides no new evidence to revisit it.",
+    "Observation: five consecutive no-activity ticks now confirm this is a sustained non-entry regime, not a momentary gap. The absence of fills is a strategy/signal-generation issue, not a risk-exposure issue — risk monitoring has no lever that would improve it. Further tightening of min_confidence or position caps would only further suppress entries from a strategy layer that is already producing none, worsening the symptom without reducing measurable risk."
+  ],
+  "actions_taken": [
+    "No guardrail changes made. With zero market exposure, zero intraday P&L, and still no trade activity 90 minutes into the session, there is no new risk signal to act on. The existing 0.55 min_confidence override is retained as-is; any additional tightening would constrain the strategy agent below a viable operating point without reducing any measurable risk."
+  ]
+}

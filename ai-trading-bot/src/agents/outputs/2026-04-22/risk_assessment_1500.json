@@ -1,0 +1,49 @@
+{
+  "timestamp": "2026-04-22 15:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 1000000.0,
+    "cash": 517080.0,
+    "deployed_pct": 0.4829,
+    "deployed_pct_projected_on_open_fill": 0.7856,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 0.0,
+    "open_orders_count": 5,
+    "open_orders_notional": 302665.0
+  },
+  "exposure_breakdown": {
+    "filled_cost_basis": 482920.0,
+    "bfsi_projected_pct_of_capital": 0.3612,
+    "bfsi_projected_pct_of_deployed": 0.4597,
+    "aubank_single_name_projected_pct": 0.1846,
+    "power_cluster_projected_pct": 0.1592,
+    "power_cluster_name_count": 3,
+    "fmcg_projected_pct": 0.1675,
+    "gold_etf_pct": 0.0500,
+    "pharma_pct": 0.0477
+  },
+  "findings": [
+    "Deployment plateaued: projected-on-fill deployment is 78.56% (filled 48.29% + OPEN 30.27%), unchanged vs the 14:30 tick. Zero new OPEN orders admitted in the 14:30->15:00 window - the stacked overrides (max_deployed_pct 0.75, min_confidence 0.60, max_position_pct 0.15) are fully gating admissions, since 0.7856 > 0.75 leaves no headroom for new entries.",
+    "BFSI concentration is the dominant risk vector: MAHABANK (9.78%) + PNBHOUSING (7.87%) + AUBANK filled (5.25%) + AUBANK pending lot 1 (7.35%) + AUBANK pending lot 2 (5.86%) = 36.12% of total capital and 45.97% of projected deployed book on full OPEN-book fill. Three of the five BFSI positions share rate-sensitivity (two banks + one housing finance), so they will tend to co-move on rate-cycle news.",
+    "AUBANK single-name exposure projected at 18.46% of capital on full fill, which exceeds the current 0.15 max_position_pct override. This is a grandfathered overweight: the two AUBANK BUY OPENs (70 @ 1050 and 56 @ 1047) were admitted on an earlier tick and the 12:30 / 13:00 tightenings did not retroactively cancel in-flight orders. No action forced - but any further AUBANK add would (correctly) be rejected by the current cap.",
+    "Power/Utilities cluster has emerged with 3 names: TORNTPOWER filled (5.94%) + NTPC pending (5.06%) + ADANIPOWER pending (4.92%) = 15.92% of capital. None individually near the per-name cap, but the 3-name cluster structure mirrors the earlier BFSI stacking pattern and warrants ongoing observation.",
+    "FMCG cluster: NESTLEIND filled (4.94%) + NESTLEIND pending (7.08%) + HINDUNILVR filled (4.74%) = 16.75% of capital. Two-name defensive cluster - lower correlation concern than BFSI/Power but still a concentration data point.",
+    "Realized daily P&L is 0.00 (all 13 today's trades are BUYs; no sells recorded). Daily-loss-limit guardrails have not been stressed and remain noise to tighten at this hour.",
+    "Position sizing on individual filled holdings is inside caps: largest filled name is MAHABANK at 9.78% of capital (below 0.15 cap). The AUBANK overweight is a cumulative-across-lots artifact, not a single-order breach.",
+    "Cash cushion of 51.7% remains healthy in absolute terms, but only ~21.4% of capital is admissible for new entries under the 0.75 deployment cap once OPEN orders fill (100% - 78.56% = 21.44% headroom if none land; 0% if all do)."
+  ],
+  "actions_taken": [
+    "No changes to risk_config.yaml. Current overrides (max_deployed_pct 0.75, min_confidence 0.60, max_position_pct 0.15) are fully halting admissions - zero new OPEN orders in the 14:30->15:00 window vs 2 new admits in the prior 14:00->14:30 window. The 14:30 tightening was 30 min ago; layering another lever this soon would be overcorrection against a stabilized state with no tick-over-tick deterioration.",
+    "Did NOT further lower max_position_pct (0.15 -> 0.12): the trigger for that lever is an active stacking pattern (as seen 13:00 with second AUBANK lot). No such pattern has repeated since - no new AUBANK / BFSI adds admitted. The AUBANK overweight is grandfathered and any new attempt is already blocked by the existing 0.15 cap in combination with the deployment cap.",
+    "Did NOT tighten daily_loss_limit_pct (0.03 -> 0.02): realized P&L is 0.00. Tightening a loss gate with no loss to gate is noise, same rationale as 14:30.",
+    "Did NOT tighten min_risk_reward (1.5): R:R quality is not the live risk vector. Concentration, not signal quality, is what today's pattern has stressed.",
+    "Did NOT raise min_confidence further (0.60 -> 0.65): the 0.60 threshold set at 13:00 is already contributing to the admissions halt. Raising further would risk starving the strategy layer on tomorrow's open without addressing today's actual vector (already-admitted concentration)."
+  ],
+  "watch_next_tick": [
+    "Whether any of the 5 OPEN orders fill or get cancelled - either outcome changes deployment headroom and admits the next tick's decisions.",
+    "Any attempt to admit a NEW BFSI name (would indicate the strategy layer is routing around AUBANK rather than reducing BFSI weight) - if observed, consider lowering max_position_pct further or adding a sector-aware cap.",
+    "Any 4th Power/Utilities name attempt - would escalate the Power cluster from concentration concern to dominant-cluster concern and warrant a sector-aware tightening beyond what single-name caps can express.",
+    "First realized-loss event (any sell with pnl < 0) - re-evaluate daily_loss_limit_pct once there is actual loss telemetry to calibrate against."
+  ]
+}

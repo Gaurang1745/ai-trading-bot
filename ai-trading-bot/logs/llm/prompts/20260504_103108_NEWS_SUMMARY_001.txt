@@ -1,0 +1,101 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [et_markets 2026-05-04 04:55] Equitas Small Finance Bank shares rally 7% on 5-fold jump in Q4 profit to Rs 213 crore
+1. [livemint 2026-05-04 04:51] Nifty may oscillate between 23,500 and 24,500 this week, likely to remain range-bound in near term
+2. [livemint 2026-05-04 04:32] This drone maker stock rallies 17% to 52-week high on strong Q4 results. Do you own?
+3. [livemint 2026-05-04 04:22] Sensex jumps 1,000 points; investors earn ₹6L Cr: Election result trends, other factors behind market rally explained
+4. [et_markets 2026-05-04 04:21] Zen Technologies shares tumble 11% after Q4 profit plunges 69% YoY
+5. [et_markets 2026-05-04 04:19] US Stock Market | Oil shock risk builds beneath AI-driven market euphoria
+6. [et_markets 2026-05-04 04:17] DMart shares fall 4% after Q4 results. What are Goldman Sachs, Morgan Stanley, others saying?
+7. [livemint 2026-05-04 04:15] Ola Electric share price jumps over 3% as April registrations climb 20% MoM
+8. [et_markets 2026-05-04 04:14] Unfazed by 670X P/E, retail investors add Eternal on dips for 2nd quarter as stock trades 30% off peak
+9. [livemint 2026-05-04 04:06] Crude oil price steadies amid US-Iran war uncertainty. Where's it headed in near term?
+10. [et_markets 2026-05-04 04:05] Kotak Mahindra Bank shares tank 5% after Q4 results. What Morgan Stanley, Nomura, other brokerages are saying
+11. [et_markets 2026-05-04 04:02] Investing vs Gambling: Warren Buffett warns of ‘casino-like’ markets as speculation surges
+12. [livemint 2026-05-04 04:00] Gold, silver prices today: Check retail rates of 24K, 22K gold, 999 silver on 4 May in Delhi, Mumbai, Kolkata, others
+13. [et_markets 2026-05-04 03:58] Sensex surges 750 pts, Nifty above 24,150. State election trends among 4 factors behind rally
+14. [livemint 2026-05-04 03:56] What do the election results of 2026 mean for the Indian stock market? Explained
+15. [et_markets 2026-05-04 03:54] Gold, silver prices open flat as traders assess Iran war, peace talks, crude oil-led inflation worries. Should you buy today?
+16. [et_markets 2026-05-04 03:51] Vodafone Idea shares in focus after govt cuts AGR dues by 27%. Time to buy?
+17. [et_markets 2026-05-04 03:48] US Stock Market | Earnings, jobs data to test record US stock rally amid rising oil prices
+18. [livemint 2026-05-04 03:48] Vodafone Idea share price jumps 10% after AGR relief; Should you buy the telecom stock?
+19. [livemint 2026-05-04 03:41] Gold rate declines on MCX amid persisting inflation worries; US-Iran talks remain in focus
+20. [livemint 2026-05-04 03:36] Rupee opens 4 paise lower at 94.95 against US dollar
+21. [et_markets 2026-05-04 03:34] US Stock Market | Stay Invested or Exit? Market recovery clouds ‘Sell in May’ playbook
+22. [et_markets 2026-05-04 03:30] Nifty’s 2 pillars now facing structural headwinds: Ravi Dharamshi's warning on IT & consumption
+23. [livemint 2026-05-04 03:30] Distributors skirt SIF certification norms as talent shortage bites
+24. [et_markets 2026-05-04 03:21] MTAR Technologies and three other stocks hit 5-year swing high breakout
+25. [livemint 2026-05-04 03:19] Emerging-Market Stocks Rise to Record High on Tech Boost
+26. [livemint 2026-05-04 03:14] Aluminum Gains as Trump Vows to Maintain Naval Blockade on Iran
+27. [livemint 2026-05-04 03:07] OnEMI Technology Solutions IPO Day 2: Issue subscribed 24% so far. GMP, review, other key details. Should you apply?
+28. [et_markets 2026-05-04 03:05] Adani Ports SEZ Share Price Live Updates: Adani Ports SEZ's last trading session
+29. [et_markets 2026-05-04 03:05] HUL Share Price Live Updates: HUL Surpasses 100-Day Simple Moving Average with Strong Gains
+30. [et_markets 2026-05-04 03:04] Asian Paints Share Price Live Updates: Asian Paints Market Update
+31. [et_markets 2026-05-04 03:04] Infosys Share Price Live Updates: Infosys wraps up trading at Rs 1181.8
+32. [et_markets 2026-05-04 03:03] Axis Bank Share Price Live Updates: Axis Bank's stock price update
+33. [et_markets 2026-05-04 03:03] ICICI Bank Share Price Live Updates: ICICI Bank's Previous Day Closing Price
+34. [et_markets 2026-05-04 03:02] HDFC Bank Share Price Live Updates: HDFC Bank's Trading Summary
+35. [et_markets 2026-05-04 03:02] Bajaj Finance Share Price Live Updates: Bajaj Finance's Closing Price Overview
+36. [et_markets 2026-05-04 03:01] CDSL shares dip over 3% after Q4 net profit tanks 20% to Rs 80 crore, margins under pressure
+37. [et_markets 2026-05-04 03:01] Maruti Suzuki Share Price Live Updates: Maruti Suzuki's Previous Day Closing Price
+38. [et_markets 2026-05-04 03:01] NTPC Share Price Live Updates: NTPC Stock Closing Price
+39. [et_markets 2026-05-04 03:00] Tata Motors PV Share Price Live Updates: Tata Motors PV closes at Rs 341.55
+40. [et_markets 2026-05-04 03:00] UPL Share Price Live Updates: UPL's closing price report
+41. [et_markets 2026-05-04 02:59] Bajaj Finserv Share Price Live Updates: Bajaj Finserv's closing price update
+42. [et_markets 2026-05-04 02:59] Jio Financial Services Share Price Live Updates: Jio Financial Services records a gain in today's trading
+43. [et_markets 2026-05-04 02:58] IndusInd Bank Share Price Live Updates: IndusInd Bank Trading Performance
+44. [et_markets 2026-05-04 02:58] UltraTech Cem Share Price Live Updates: UltraTech Cement Price Movement
+45. [et_markets 2026-05-04 02:57] Adani Ent Share Price Live Updates: Adani Enterprises Trading Summary
+46. [et_markets 2026-05-04 02:57] Wipro Share Price Live Updates: Wipro's Monthly Return Overview
+47. [et_markets 2026-05-04 02:57] Tata Steel Share Price Live Updates: Tata Steel's Daily Closing Figures
+48. [et_markets 2026-05-04 02:55] Sun Pharma Share Price Live Updates: Sun Pharma's previous close stands at Rs 1808.3
+49. [et_markets 2026-05-04 02:55] Titan Company Share Price Live Updates: Titan Company wraps up trading at Rs 4385.2
+50. [et_markets 2026-05-04 02:54] Cemindia Projects among 5 stocks that closed above VWAP
+51. [livemint 2026-05-04 02:54] Stocks to buy for short term: From Jio Financial to Hero MotoCorp - Jigar Patel of Anand Rathi recommends 3 shares
+52. [et_markets 2026-05-04 02:53] Divis Labs Share Price Live Updates: Divis Labs stock price analysis
+53. [et_markets 2026-05-04 02:53] M&M Share Price Live Updates: M&M's Trading Day Summary
+54. [et_markets 2026-05-04 02:53] HCL Tech Share Price Live Updates: HCL Tech's Closing Price Analysis
+55. [et_markets 2026-05-04 02:52] Tata Consumer Share Price Live Updates: Tata Consumer's previous close recorded at Rs 1144.6
+56. [et_markets 2026-05-04 02:52] Bharti Airtel Share Price Live Updates: Bharti Airtel's Stock Performance Recap
+57. [et_markets 2026-05-04 02:51] Hindalco Share Price Live Updates: Hindalco's Previous Day Close
+58. [et_markets 2026-05-04 02:51] Coal India Share Price Live Updates: Coal India Closing Price
+59. [et_markets 2026-05-04 02:51] Hero MotoCorp Share Price Live Updates: Hero MotoCorp's Trading Performance
+60. [et_markets 2026-05-04 02:51] Kotak Bank Share Price Live Updates: Kotak Bank's Price Movement
+61. [et_markets 2026-05-04 02:50] Nestle India Share Price Live Updates: Nestle India finishes at Rs 1458.6
+62. [et_markets 2026-05-04 02:50] RIL Share Price Live Updates: RIL's Price Movement Below 20-Day SMA Indicates Weakness
+63. [et_markets 2026-05-04 02:49] IIFL Finance among 4 stocks showing bullish RSI upswing
+64. [et_markets 2026-05-04 02:49] Power Grid Share Price Live Updates: Power Grid's previous day close at Rs 318.35
+65. [livemint 2026-05-04 02:40] Q4 results 2026: BHEL to Ambuja Cements among companies to declare Q4 results today; check full list here
+66. [livemint 2026-05-04 02:36] Stock market today: Gift Nifty signals gap-up start; election results, India VIX to Q4 results — 7 stocks to buy or sell
+67. [livemint 2026-05-04 02:30] Sensex, Nifty 50 | Stock Market LIVE: Sensex jumps over 700 pts, Nifty 50 above 24,200; Auto, banks, realty stocks lead
+68. [livemint 2026-05-04 02:14] Raja Venkatraman, MarketSmith recommend five stocks for 4 May
+69. [livemint 2026-05-04 01:56] Emerging Assets Climb on Iran’s New Proposal in Thin Trading
+70. [livemint 2026-05-04 01:55] Nifty 50, Sensex prediction today: Check how Indian stock market is expected to trade on 4 May
+71. [livemint 2026-05-04 01:45] Buy or sell: Gift Nifty signals gap-up opening, Vaishali Parekh recommends three stocks to buy today — 4 May 2026
+72. [livemint 2026-05-04 01:35] From Gift Nifty, Kospi, Nasdaq rally to crude oil prices: 8 key things that changed for Indian stock market over weekend
+73. [livemint 2026-05-04 01:28] Australian shares fall in broad-based losses, NAB slips on missing earnings estimate
+74. [livemint 2026-05-04 01:01] Breakout stocks to buy or sell: Sumeet Bagadia recommends five shares to buy today — 4 May 2026
+75. [livemint 2026-05-04 00:33] Yen steady as intervention fears linger with Japan shut for holidays
+76. [livemint 2026-05-04 00:31] Stock recommendations for 4 May from MarketSmith India
+77. [livemint 2026-05-04 00:30] RBI’s forex gamble may steady the rupee but weigh on investor sentiment
+78. [livemint 2026-05-04 00:30] Kotak Mahindra Bank needs to catch up with its peers in cost efficiency
+79. [livemint 2026-05-04 00:30] Stocks to trade: Raja Venkatraman recommends 3 stocks for 4 May
+80. [livemint 2026-05-04 00:20] Nifty bulls eye 500-point rally on peace hopes and Bengal buzz
+81. [livemint 2026-05-03 23:02] Oil Edges Lower as Trump Says US Will Help Vessels Exit Strait
+82. [livemint 2026-05-03 19:27] Treasury Market on Watch for Shift in Yellen-Era Debt Playbook

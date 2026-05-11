@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-04-29 09:30:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 1003531.74,
+    "cash": 503275.24,
+    "deployed_pct": 49.06,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 7939.10
+  },
+  "findings": [
+    "Deployment healthy on filled book (49.06% of NAV vs 0.65 override cap, 15.94 pp buffer), but PROJECTED 62.23% on full open-book fill (3 OPEN orders pending = ₹132,205 = 13.18% of NAV: TATAPOWER 110@443 + PHARMABEES 1500@23.65 + GLENMARK 20@2400). Buffer to 0.65 cap shrinks to 2.77 pp on full fill — tight but compliant.",
+    "POWER CLUSTER RE-EMERGENCE: NTPC 5.04% (held) + POWERGRID 4.79% (held) + TATAPOWER 4.86% (OPEN since Day-5) = 3-name Power cluster at 14.69% of capital on full fill. Echoes the Day-1 cluster (TORNTPOWER+NTPC+ADANIPOWER) that originally drove the 0.75/0.70 deployed-cap chain. TATAPOWER specifically was last actively SOLD on Day-3 — buy-back-what-you-just-sold pattern flagged on Day-5 12:00 is replaying.",
+    "PHARMA STACKING: SUNPHARMA 5.18% (held) + GLENMARK 4.78% (OPEN, submitted 09:10:58 today) + PHARMABEES 3.54% (OPEN since Day-5) = 3-name Pharma stack at 13.50% of capital on full fill. The Day-5 12:14 SUNPHARMA+PHARMABEES dual-admission pattern is being extended on Day-7 morning, just one session after the Day-6 panic-exit disaster — same defensive sector being re-loaded.",
+    "Position sizing healthy: NESTLEIND 11.97% is largest, 3.03 pp buffer to 0.15 cap. All other holdings <8%. No single-name concentration risk.",
+    "Sector caps all binding with buffer (0.22 max_sector_pct override): Power 14.69% / 7.31 pp buffer; Pharma 13.50% / 8.50 pp buffer; FMCG 11.97% / 10.03 pp buffer; Mining-Metals 9.25% (COALINDIA + HINDZINC); BFSI 7.84% (PNBHOUSING only — Day-1 stacking has fully decongested). DEFENSIVE TILT: FMCG + Pharma + Gold + Power utilities = ~32-37% of capital on fill, an explicit risk-off posture.",
+    "Daily P&L POSITIVE (+₹7,939.10 = +0.79% of NAV) at the 09:11 snapshot — book opened Day-7 with strong morning marks, particularly PNBHOUSING +6.19% / NESTLEIND +2.27% / SUNPHARMA +1.27% / NTPC +1.24%. Cumulative P&L back in the green at +₹3,531.74 after Day-6's -₹5,964 realized hit. No firing of daily_loss_limit_pct trigger (book positive, not negative).",
+    "ADMISSION CADENCE WATCH: Day-7 morning has only ONE new BUY submission (GLENMARK at 09:10:58). The other two OPEN orders (TATAPOWER, PHARMABEES) are Day-5 carryovers. So Day-7's NEW admission is just 4.78% of NAV in 30 min — moderate, not the 4-BUY-in-60-min cadence of Day-5 that triggered the 0.65 deployed-cap fire. Strategy appears more measured post-Day-6 panic-exit review.",
+    "TELEMETRY GAP: HINDZINC (75 @ ₹612 = ₹45,900 = 4.57% of capital) is present in paper_holdings but MISSING from the latest portfolio_snapshot's holdings_json (snapshot 58 at 09:11:24 lists only 7 of 8 holdings). Cash reconciliation: ₹549,175 (snapshot) − ₹503,275 (current) = ₹45,900 = HINDZINC's exact cost, suggesting the holding was reflected post-snapshot. SL coverage for HINDZINC is not visible in snapshot for risk-monitor verification — flag to strategy layer for SL audit at next decision tick.",
+    "Pre-armed trigger inventory for 10:00 risk_assessment: (A) If 4th NEW BUY admitted by 10:00 AND projected deployment > 65% on full fill → tighten max_deployed_pct 0.65 → 0.62 (cap below projected, force grandfather of in-flight). (B) If TATAPOWER OPEN fills AND a 4th Power-sector name is then admitted → tighten max_sector_pct 0.22 → 0.20 (would create binding ring on Power 14.69% with 5.31 pp buffer). (C) If GLENMARK + PHARMABEES both fill within next 30 min AND a 4th Pharma name is admitted → tighten max_sector_pct 0.22 → 0.20 (mirror trigger B for Pharma). (D) If MAHABANK-style single-name distress emerges (any holding < -5%) → arm default_sl_pct/min_sl_pct review. (E) If daily P&L flips to < -0.5% AND strategy admits a new BUY → tighten daily_loss_limit_pct 0.04 → 0.035 (the 0.04 override was sized at Day-6 EOD against the worst observed -0.60% session; a -0.5% live mark recurring is inside that envelope but warrants step-down)."
+  ],
+  "actions_taken": [
+    "NO override changes this tick. Rationale: (i) all guardrails binding with measurable buffer (deployment 2.77 pp on fill, sector 7.31+ pp on largest cluster, position 3.03 pp on largest name); (ii) book is POSITIVE on day (+0.79%) and cumulative (+₹3,531.74) — no loss-vector firing; (iii) Day-6 EOD review explicitly chose to address the panic-exit failure mode at the PROMPT layer (rules 12 + 15) rather than via numeric tightening, and Day-7 has shown ZERO panic-exit behavior so far — that posture remains correct; (iv) no pre-armed trigger from Day-6 EOD fires this tick; (v) admission cadence on Day-7 morning is 1 NEW BUY (GLENMARK) — moderate, not the Day-5 stacking pattern that triggered the original 0.65 fire. Decoratively tightening on a healthy, positive, recently-de-risked book at 09:30 of Day-7 would friction the strategy without addressing any live risk vector. The Power and Pharma cluster re-emergence patterns are noted for OBSERVATION and pre-armed for action at the 10:00 tick if the patterns extend (see findings entry on trigger inventory)."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "timestamp": "2026-05-07 09:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Day-13 09:00 premarket open. Portfolio carries forward UNCHANGED from 2026-05-06 15:30 EOD: 11 holdings (PNBHOUSING/GOLDBEES/ADANIPORTS/HAL/NAVINFLUOR/TITAGARH/ABCAPITAL/MARICO/COFORGE/GRSE/CAMS), cash Rs 462,827.37, cost basis Rs 534,000, total Rs 996,827.37, filled deployment 53.57%. No new trades since M&M CLOSE at 2026-05-06 12:53:55 (~20 hours of zero fills/closes through the bell and overnight).",
+    "Daily P&L gauge resets at midnight per spec; today opens at 0.0 realized (premarket, 0 trades, 0 guardrail entries). Yesterday's -Rs 5,029.27 / -0.50% close carries only as context anchor, not as fresh daily-loss draw. Buffer to base 3% gate: full ~Rs 29,905 (100% of buffer available).",
+    "Composite distress 0/3: (a) sector concentration — BFSI broader (PNBHOUSING 7.90% + ABCAPITAL 5.00% + CAMS 2.02%) = 14.92% vs 35% cap (20.08 pp buffer); broadest cluster Defense+Rail (HAL 5.05% + GRSE 4.86% + TITAGARH 5.05%) = 14.95% vs 35% cap (20.05 pp buffer); 9-10 distinct sector buckets across the 11 names. (b) max single position — PNBHOUSING 7.90% vs 20% cap (12.10 pp headroom). (c) daily-loss — 0.0% utilization, 100% of buffer remaining.",
+    "Position sizing healthy and consistent: range 2.02%-7.90%; 9 of 11 holdings cluster tightly in 4.85%-7.90%; CAMS 2.02% remains the lone sub-3% slot (1-of-11) — explicitly NOT the 'all positions tiny -> bot hedging against itself' anti-pattern, which requires the WHOLE book to be sub-3%.",
+    "Deployment 53.57% filled sits comfortably in the >50% active-trader band (26.43 pp headroom to 80% cap). Full-fill projection if the stale HFCL Rs 80,100 OPEN order somehow filled would be 61.61% — still 18.39 pp under cap. Not chronically under-deployed: yesterday saw active strategy-layer engagement (4 SL-trail bursts at 13:14 / 13:45 / 14:13 / 14:46 = 59 MODIFY validations, all is_valid=1).",
+    "Signal acceptance healthy: zero high-confidence (>=0.70) admits filtered yesterday; conf floor empirically non-binding for 9+ trading days; R:R floor non-binding all of Day-12. Yesterday's 8 blocks were 4 malformed-payload conf=0.0 sentinels + 4 correct CNC short-sell rule enforcements on just-closed positions — none were legitimate signal denied.",
+    "All 10 risk levers at base since the 2026-05-05 16:00 EOD reset (now ~41 hours of zero override binding through a complete Day-12 trading session). Loosening floor is reached by spec — overrides cannot relax below base.",
+    "Stale HFCL BUY 600@133.5 Rs 80,100 (MIS LIMIT) still showing OPEN in paper_orders since 2026-05-06 10:16:40 (~22.7 hr). Same DB-write lag flagged in yesterday's 15:00 / 15:30 ticks: MIS intraday auto-cancel at ~15:15-15:20 IST on 05-06 likely fired without DB reconciliation. Resolution is strategy-layer / paper-broker (cancel-or-reconcile), not risk-config scope; both possible outcomes (auto-cancel resolves -> 53.57% deployed, or DB reconciles fill -> 61.61%) sit comfortably under the 80% cap."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty. Override count 0 unchanged. No tighten, no loosen. 8th consecutive HOLD tick following yesterday's 12:30 / 13:00 / 13:30 / 14:00 / 14:30 / 15:00 / 15:30. Day-13 premarket carries the all-at-base posture into the open.",
+    "Did NOT tighten daily_loss_limit_pct (0.03 -> 0.025): book opens at 0.0 utilization (gauge reset), 100% of buffer available. Tightening on a fresh daily gauge would be reactionary and would block legitimate signal.",
+    "Did NOT tighten max_position_pct (0.20 -> 0.15): largest position PNBHOUSING 7.90% has 12.10 pp headroom to base cap; no firing trigger.",
+    "Did NOT tighten max_deployed_pct (0.80 -> 0.70): filled deployment 53.57% sits 26.43 pp under base; full-fill projection 61.61% still 18.39 pp under base. No firing trigger; pre-emptive tightening would friction the active-trader thesis.",
+    "Did NOT tighten min_confidence (0.50 -> 0.55): zero high-confidence (>=0.70) admits filtered yesterday; conf floor empirically non-binding 9+ trading days. No firing trigger; raising the floor would lose legitimate signal.",
+    "Did NOT raise min_sl_pct or alter SL-band (default 0.02 / min 0.005 / max 0.05): the four SL-trail bursts yesterday (59 MODIFY validations, zero blocks, fresh peaks on PNBHOUSING SL 1040 / ADANIPORTS SL 1735) confirm base SL geometry correctly admits progressively-deepening profit-locking trails. No firing trigger.",
+    "Did NOT loosen any lever: every lever is already at base (the floor by spec). Loosening below base is not permitted.",
+    "Pre-armed Day-13 watch items for the 09:30 tick: (a) HFCL DB reconciliation — auto-cancel resolution releases Rs 80,100 reserved cash; (b) any opening-bell SL fire on the quadruple-trailed profit-locking SLs (PNBHOUSING 1040, ADANIPORTS 1735, HAL 4600, NAVINFLUOR 6960, COFORGE 1265) — converts paper gains to realized at the open and shifts cash/deployment composition; (c) any new BUY admit at conf <0.55 -> conf-floor re-arming check; (d) any 5th BFSI name OR 4th Defense+Rail name admit -> sector cluster reassessment; (e) realized P&L crossing -1.0% / 33% utilization -> reassess loss-gate posture; (f) deployment dropping below 50% with no fresh redeploys -> reassess under-deployment posture."
+  ]
+}

@@ -1,0 +1,1365 @@
+call_type: TRADING_DECISION
+
+PRIORITY: First walk through the EXISTING POSITIONS section and issue a HOLD / MODIFY / EXIT decision for each. Only then consider new BUY/SELL entries. Use MODIFY (with new_stop_loss / new_target) to trail SLs or adjust targets instead of EXIT+re-entry.
+
+======================================================
+EXPERIMENT STATUS
+======================================================
+Day 10 of 180 | Trading days remaining: 123
+Phase: NORMAL
+
+======================================================
+MARKET OVERVIEW
+======================================================
+Timestamp: 2026-04-29 13:12:12 IST
+Market Status: OPEN
+
+--- INDICES ---
+NIFTY 50           24327.20 (+1.38%)  | Day range: 24059.95 - 24334.70
+BANK NIFTY         56109.20 (+1.28%)  | Day range: 55332.20 - 56178.75
+NIFTY IT           29387.10 (+1.48%)  | Day range: 29034.30 - 29486.80
+NIFTY PHARMA       23282.10 (+0.54%)  | Day range: 23188.30 - 23386.15
+NIFTY AUTO         26381.10 (+2.29%)  | Day range: 25935.45 - 26484.80
+NIFTY METAL        13102.60 (+0.43%)  | Day range: 12871.40 - 13112.45
+NIFTY REALTY         814.90 (+2.65%)  | Day range: 796.00 - 817.30
+NIFTY ENERGY       41309.65 (+0.78%)  | Day range: 40990.05 - 41423.35
+NIFTY PSU BANK      8779.40 (+1.34%)  | Day range: 8644.55 - 8789.50
+INDIA VIX             16.98 (-5.93%)  | Day range: 16.75 - 18.05
+
+--- MACRO CONTEXT ---
+FII today: +0 Cr (net_buy)
+DII today: +0 Cr (net_buy)
+USD/INR: 0.00 (+0.00%)
+Crude Oil: 0.00 (+0.00%)
+Gold: 0 (+0.00%)
+India VIX: 16.99 (-5.87%)
+
+--- GLOBAL CUES ---
+US S&P 500: 7138.80 (-0.49%)
+Dow Jones: 49141.93 (-0.05%)
+Nasdaq: 24663.80 (-0.90%)
+SGX Nifty: 0.00 (+0.00%)
+
+======================================================
+PORTFOLIO STATE
+======================================================
+Capital: INR 1,008,367
+Cash available: INR 503,275
+Deployed: INR 505,092 (50%)
+Max deployable (80% rule): INR 806,694
+Remaining deployable: INR 301,602
+
+--- TODAY'S P&L ---
+Realized P&L:    INR +0
+Unrealized P&L:  INR +12,750
+Total P&L:       INR +12,750 (+1.26%)
+Daily loss limit: INR 75,628 | Remaining: INR 75,628
+Trades today: 2
+
+--- CUMULATIVE P&L (experiment to date) ---
+Total realized P&L: INR +8,367 (+0.84% of starting capital)
+Current portfolio value: INR 1,008,367
+Starting capital: INR 1,000,000
+Overall return: +0.84%
+
+--- CNC HOLDINGS (delivery / swing trades) ---
+Symbol       Qty   Avg Cost      CMP      P&L   P&L %  Days       SL
+PNBHOUSING    80     984.00     0.00     6400    8.1%     0  1045.12
+GOLDBEES     400     125.10     0.00    -1300   -2.6%     0   119.00
+NESTLEIND     85    1412.94     0.00     4383    3.6%     0  1445.00
+NTPC         125     404.50     0.00      256    0.5%     0   401.00
+SUNPHARMA     30    1734.00     0.00      834    1.6%     0  1745.00
+POWERGRID    150     320.50     0.00      225    0.5%     0   319.00
+COALINDIA    100     469.00     0.00     1465    3.1%     0   475.00
+HINDZINC      75     612.00     0.00      480    1.1%     0   615.00
+
+--- MIS POSITIONS (intraday) ---
+  NONE
+
+======================================================
+YOUR WATCHLIST SELECTIONS (from Market Pulse)
+======================================================
+You requested deep data on these stocks. Your reasoning at selection time:
+PNBHOUSING: "Currently held at +8.0% unrealized gain. Need full data to assess whether to trail stop-loss to protect gains or target extension levels. Housing finance sector benefiting from rate stability."
+GOLDBEES: "Currently held at -2.5% unrealized loss. Gold ETF held as macro hedge against oil/geopolitical risk. With Iran de-escalation hopes today, need to reassess if thesis is weakening — may need to reduce or exit."
+NESTLEIND: "Currently held at +3.5% unrealized gain. Defensive FMCG play. Need to check if stop-loss should be trailed to breakeven given decent profit. HUL Q4 preview context relevant."
+NTPC: "Currently held at +0.5% unrealized gain. Power sector showing mixed signals — NTPCGREEN down 5.4% while JPPOWER up 4%. Need full data to decide hold vs exit given thin gain and sector weakness in green energy."
+SUNPHARMA: "Currently held at +1.5% unrealized gain. High volume surge (5.3x) today — institutional activity. Pharma sector up 0.5%. Need full data to assess whether to add or trail stop."
+BANDHANBNK: "68% YoY profit jump, NPA improvement, stock near 52-week high with 11.7% gain today on 1.5x volume. Strong fundamental catalyst — was on watchlist, now actionable for swing entry if technical setup confirms."
+ONGC: "Up 6.84% today on oil price tailwind ($111 Brent). Near 52-week high. Upstream energy benefits directly from elevated crude. Low vol ratio (0.3x) suggests conviction holders not selling — potential breakout."
+INDUSINDBK: "High volume surge (3.5x) with +2.36% gain. Banking sector strong (+1.27%). Need full data to assess whether this is a clean entry opportunity for a swing trade."
+MARUTI: "Q4 revenue up 28.2%, record sales, stock +4-5% post results. Auto sector leading today (+2.35%). Jefferies, Goldman coverage positive. Strong fundamental catalyst for swing entry."
+VEDL: "Last day to buy for demerger record date (May 1). Demerger creates 4 new listed entities — structural value unlock catalyst. Q4 results today with expected 20-25% revenue growth. High-conviction catalyst but demerger-specific risk."
+TECHM: "IT sector up 1.47% with rupee at 94.2 providing export tailwind. TECHM +4.59% leading IT sector. Need full data to assess whether the IT sector bounce has legs or is a dead-cat bounce given Wipro -2.83% yesterday."
+COALINDIA: "Up 6.95% with low volume ratio (0.5x) suggesting price-led move on energy theme. Beneficiary of elevated energy prices. Coal India is a cash-rich PSU with high dividend yield — defensive income play."
+GRSE: "Q4 profit +24% YoY, shares up ~10-16% today. Defence/shipbuilding sector with strong order book. Was on previous watchlist — need full data to see if entry is still viable after the gap-up or if it's extended."
+BAJFINANCE: "Q4 results today — expected strong earnings growth. Was on watchlist. NBFC sector with institutional interest. Need to check whether post-results move offers a setup or if expectations are already priced in."
+ITC: "Up 4.02% on strong volume. FMCG defensive play with high dividend yield. ITC has been benefiting from rural demand recovery. Sector leader in FMCG today."
+BHARTIARTL: "Telecom sector rallying — BHARTIARTL +3.55%, IDEA +7%. Bharti benefits from rupee weakness (international revenues) and is a quality large-cap in a recovering sector. Was on previous watchlist."
+RELIANCE: "Up 3.61% — benefits from oil at $111 via O2C segment and Jio telecom. Largest index weight, institutional bellwether. Relief rally on Iran de-escalation could extend if oil stabilizes."
+CEATLTD: "145% jump in Q4 net profit, revenue up 23%, dividend of Rs 35. Gapped up 7.8% at open. Auto ancillary beneficiary of auto sector strength. Strong fundamental catalyst — need full data to assess entry."
+IIFL: "High volume surge (4.1x) with +3.23% gain. Financial services sector showing strength. Need full data to assess if this is institutional accumulation ahead of a rerating."
+M&MFIN: "Massive volume surge (7.4x) with only +1.34% price gain — classic institutional accumulation pattern where volume far exceeds price move. Rural NBFC — could be a high-conviction entry if thesis confirms."
+HINDZINC: "Currently held — need updated data for position management"
+POWERGRID: "Currently held — need updated data for position management"
+
+======================================================
+DEEP DIVE: STOCK DATA
+======================================================
+
+--- STOCK 1: PNBHOUSING (NSE) ---
+Your selection reason: "Currently held at +8.0% unrealized gain. Need full data to assess whether to trail stop-loss to protect gains or target extension levels. Housing finance sector benefiting from rate stability."
+
+Price Data:
+  CMP: INR 1061.50 | Day change: +1.38% (+INR 14.50)
+  Today OHLC: 1044.90 / 1063.00 / 1034.35 / 1061.50
+  52-week range: INR 729.60 - INR 1141.90
+  Avg daily volume (20d): INR 259.11 Cr | Today: INR 0.00 Cr (1.0x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     981.50  1011.70   981.00  1007.75   173.64
+  2026-04-22     979.10  1001.30   978.00   990.25   389.82
+  2026-04-21     949.50  1007.00   943.90   979.10  1953.76
+  2026-04-20     923.30   933.80   899.15   906.75   138.37
+  2026-04-17     894.00   927.90   889.00   923.70   196.71
+  2026-04-16     874.20   906.50   871.05   893.80   173.54
+  2026-04-15     852.05   878.55   852.05   866.55   127.18
+  2026-04-13     855.00   857.70   836.20   846.65    67.67
+  2026-04-10     865.00   884.25   859.90   864.75    34.91
+  2026-04-09     873.30   873.30   852.40   862.95    60.53
+  2026-04-08     834.90   885.45   834.90   873.30    92.22
+  2026-04-07     814.05   820.15   804.70   817.00    34.46
+  2026-04-06     781.00   819.25   775.95   817.35    68.05
+  2026-04-02     775.00   787.50   754.30   784.40    84.07
+  2026-04-01     786.85   795.75   773.70   780.05    98.07
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15   1047.90  1050.10  1036.45  1040.15     0.53
+  09:30   1040.10  1043.50  1036.70  1038.85     0.36
+  09:45   1039.00  1039.05  1034.35  1035.70     0.40
+  10:00   1035.80  1044.70  1035.40  1044.15     0.39
+  10:15   1044.30  1047.70  1042.05  1046.00     0.85
+  10:30   1045.85  1050.80  1045.10  1050.35     0.41
+  10:45   1050.70  1057.00  1049.80  1053.70     0.74
+  11:00   1053.75  1057.15  1053.70  1055.95     0.51
+  11:15   1055.80  1062.00  1054.70  1061.85     0.83
+  11:30   1061.80  1062.00  1057.00  1061.10     0.49
+  11:45   1060.60  1061.70  1060.00  1061.10     0.24
+  12:00   1061.00  1063.00  1060.00  1062.00     0.50
+  12:15   1061.90  1062.00  1055.50  1057.70     0.35
+  12:30   1057.70  1060.90  1057.30  1058.35     0.28
+  12:45   1058.35  1062.45  1057.60  1061.50     0.34
+  13:00   1061.60  1061.60  1060.00  1060.00     0.01
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     19.5400
+  SMA 20:          INR 854.99 (price )
+  SMA 50:          INR 832.75 (price )
+  SMA 200:          INR 885.11 (price )
+  EMA 9:              INR 932.51
+  VWAP (today):       INR 1052.01
+  Bollinger Bands:    Upper=INR 1005.06 | Mid=INR 854.99 | Lower=INR 704.93
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 989.85
+  Resistance 1: INR 1001.70
+  Resistance 2: INR 1013.15
+  Support 1:    INR 978.40
+  Support 2:    INR 966.55
+
+Sector Context: Financial Services
+
+
+--- STOCK 2: GOLDBEES (NSE) ---
+Your selection reason: "Currently held at -2.5% unrealized loss. Gold ETF held as macro hedge against oil/geopolitical risk. With Iran de-escalation hopes today, need to reassess if thesis is weakening — may need to reduce or exit."
+
+Price Data:
+  CMP: INR 121.95 | Day change: -1.85% (INR -2.30)
+  Today OHLC: 122.66 / 122.81 / 121.66 / 121.95
+  52-week range: INR 76.36 - INR 148.14
+  Avg daily volume (20d): INR 516.60 Cr | Today: INR 0.00 Cr (0.4x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     124.27   124.50   123.76   124.08   287.22
+  2026-04-22     124.99   125.18   124.47   124.99   279.19
+  2026-04-21     125.10   125.77   124.95   125.22   267.66
+  2026-04-20     125.18   125.25   124.31   125.00   410.30
+  2026-04-17     125.26   125.26   124.23   124.80   504.26
+  2026-04-16     125.32   126.47   125.32   125.61   369.84
+  2026-04-15     125.75   126.00   124.89   125.06   674.53
+  2026-04-13     123.44   124.35   122.73   123.76   847.34
+  2026-04-10     123.52   124.38   122.87   123.49   398.19
+  2026-04-09     122.97   123.48   122.20   123.21   447.33
+  2026-04-08     125.18   125.68   123.75   124.39   684.76
+  2026-04-07     122.23   122.26   120.80   121.78   442.41
+  2026-04-06     120.89   123.01   120.32   122.81   519.26
+  2026-04-02     123.13   123.30   119.00   120.58   705.64
+  2026-04-01     125.62   125.62   123.02   123.37   732.38
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    122.14   122.58   122.14   122.48    15.68
+  09:30    122.49   122.69   122.48   122.68     9.22
+  09:45    122.67   122.70   122.55   122.64     6.44
+  10:00    122.64   122.80   122.63   122.72     6.43
+  10:15    122.72   122.79   122.66   122.71     6.59
+  10:30    122.71   122.81   122.56   122.60     5.80
+  10:45    122.60   122.68   122.56   122.64     3.82
+  11:00    122.64   122.64   122.50   122.62     3.86
+  11:15    122.62   122.72   122.50   122.52     6.61
+  11:30    122.51   122.66   122.37   122.46     8.67
+  11:45    122.45   122.46   122.25   122.35     5.74
+  12:00    122.35   122.38   122.25   122.33     9.80
+  12:15    122.33   122.35   122.15   122.29     9.84
+  12:30    122.30   122.32   122.05   122.11     8.26
+  12:45    122.11   122.15   121.85   121.95    12.67
+  13:00    121.96   121.96   121.93   121.94     0.11
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     0.4300
+  SMA 20:          INR 122.12 (price )
+  SMA 50:          INR 126.26 (price )
+  SMA 200:          INR 106.20 (price )
+  EMA 9:              INR 124.41
+  VWAP (today):       INR 122.43
+  Bollinger Bands:    Upper=INR 129.57 | Mid=INR 122.12 | Lower=INR 114.67
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 124.88
+  Resistance 1: INR 125.29
+  Resistance 2: INR 125.59
+  Support 1:    INR 124.58
+  Support 2:    INR 124.17
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-20: Hammer
+  - 2026-04-22: Doji
+
+
+--- STOCK 3: NESTLEIND (NSE) ---
+Your selection reason: "Currently held at +3.5% unrealized gain. Defensive FMCG play. Need to check if stop-loss should be trailed to breakeven given decent profit. HUL Q4 preview context relevant."
+
+Price Data:
+  CMP: INR 1462.50 | Day change: +3.19% (+INR 45.20)
+  Today OHLC: 1445.00 / 1465.50 / 1436.10 / 1462.50
+  52-week range: INR 1084.70 - INR 1437.90
+  Avg daily volume (20d): INR 346.91 Cr | Today: INR 0.00 Cr (0.7x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23    1388.90  1415.00  1382.10  1410.50   417.95
+  2026-04-22    1391.00  1425.20  1386.00  1395.80  1078.04
+  2026-04-21    1298.10  1396.00  1286.80  1379.90  1322.84
+  2026-04-20    1294.00  1294.30  1274.60  1286.40   148.75
+  2026-04-17    1258.10  1292.00  1252.80  1285.60   256.37
+  2026-04-16    1255.10  1261.90  1246.50  1257.40   141.59
+  2026-04-15    1235.00  1259.90  1232.30  1256.60   155.38
+  2026-04-13    1239.30  1246.80  1222.10  1226.10   165.14
+  2026-04-10    1230.80  1252.30  1229.10  1249.30   169.69
+  2026-04-09    1209.50  1230.10  1206.40  1228.70   154.65
+  2026-04-08    1238.00  1250.60  1209.30  1213.70   198.88
+  2026-04-07    1204.40  1225.40  1194.20  1222.80   175.43
+  2026-04-06    1190.00  1218.80  1179.00  1216.00   177.65
+  2026-04-02    1173.30  1200.00  1159.40  1191.30   161.76
+  2026-04-01    1174.80  1191.60  1167.10  1180.80   216.84
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15   1443.10  1452.80  1441.80  1452.20     2.10
+  09:30   1452.40  1456.00  1450.00  1455.50     1.49
+  09:45   1455.80  1456.00  1453.30  1455.30     0.79
+  10:00   1455.30  1456.50  1452.20  1453.80     0.86
+  10:15   1453.80  1454.10  1450.00  1452.70     0.75
+  10:30   1453.40  1454.00  1448.70  1450.80     0.85
+  10:45   1450.80  1451.00  1447.80  1449.10     0.89
+  11:00   1449.10  1449.30  1446.70  1448.80     2.89
+  11:15   1448.80  1451.00  1448.00  1449.80     0.46
+  11:30   1449.80  1454.50  1449.50  1454.40     0.58
+  11:45   1454.40  1460.60  1453.10  1459.60     0.91
+  12:00   1459.60  1463.50  1459.40  1462.60     0.95
+  12:15   1462.60  1465.50  1458.00  1458.50     1.42
+  12:30   1458.50  1461.00  1458.20  1459.30     0.41
+  12:45   1459.40  1463.00  1459.40  1462.50     0.47
+  13:00   1462.40  1462.40  1462.20  1462.20     0.01
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     23.7300
+  SMA 20:          INR 1246.15 (price )
+  SMA 50:          INR 1258.15 (price )
+  SMA 200:          INR 1234.91 (price )
+  EMA 9:              INR 1322.99
+  VWAP (today):       INR 1453.30
+  Bollinger Bands:    Upper=INR 1388.37 | Mid=INR 1246.15 | Lower=INR 1103.93
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 1402.33
+  Resistance 1: INR 1418.67
+  Resistance 2: INR 1441.53
+  Support 1:    INR 1379.47
+  Support 2:    INR 1363.13
+
+Sector Context: FMCG
+
+
+--- STOCK 4: NTPC (NSE) ---
+Your selection reason: "Currently held at +0.5% unrealized gain. Power sector showing mixed signals — NTPCGREEN down 5.4% while JPPOWER up 4%. Need full data to decide hold vs exit given thin gain and sector weakness in green energy."
+
+Price Data:
+  CMP: INR 406.55 | Day change: -0.89% (INR -3.65)
+  Today OHLC: 409.50 / 410.00 / 402.30 / 406.55
+  52-week range: INR 315.55 - INR 414.40
+  Avg daily volume (20d): INR 546.78 Cr | Today: INR 0.00 Cr (1.0x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     404.00   405.90   400.40   402.25   367.85
+  2026-04-22     398.00   407.25   393.20   405.40   665.31
+  2026-04-21     398.60   402.70   395.70   396.20   376.14
+  2026-04-20     393.00   400.85   390.65   398.00   393.83
+  2026-04-17     393.00   396.25   388.45   393.60   603.02
+  2026-04-16     397.00   397.25   387.80   390.80   386.77
+  2026-04-15     390.25   393.95   387.10   392.60   303.18
+  2026-04-13     374.35   388.00   374.35   386.25   588.65
+  2026-04-10     381.20   384.45   372.05   380.15   568.47
+  2026-04-09     376.95   384.20   376.50   378.65   700.64
+  2026-04-08     373.50   375.55   368.25   374.15   729.27
+  2026-04-07     364.85   369.80   362.25   368.85   464.90
+  2026-04-06     358.80   366.75   355.70   366.10   422.26
+  2026-04-02     359.95   361.30   352.00   359.65   595.28
+  2026-04-01     381.30   381.90   361.45   364.65   563.37
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    406.80   408.15   402.30   404.50     6.04
+  09:30    404.40   407.00   403.95   406.90     3.35
+  09:45    406.95   407.00   405.50   406.60     3.02
+  10:00    406.65   408.00   406.50   407.65     2.06
+  10:15    407.70   408.30   407.50   407.90     1.64
+  10:30    407.95   409.70   407.90   409.35     3.45
+  10:45    409.20   410.00   409.00   409.15     2.34
+  11:00    409.05   409.15   407.10   407.45     2.27
+  11:15    407.45   407.70   406.25   407.35     1.88
+  11:30    407.40   407.65   406.90   407.45     1.77
+  11:45    407.45   408.10   407.30   407.75     2.10
+  12:00    407.75   408.00   406.70   406.75     1.93
+  12:15    406.75   406.90   405.80   406.15     1.83
+  12:30    406.15   406.90   405.90   405.90     1.34
+  12:45    406.05   406.90   405.90   406.55     2.45
+  13:00    406.60   406.60   406.50   406.60     0.01
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     2.6600
+  SMA 20:          INR 381.50 (price )
+  SMA 50:          INR 377.64 (price )
+  SMA 200:          INR 346.13 (price )
+  EMA 9:              INR 394.14
+  VWAP (today):       INR 406.95
+  Bollinger Bands:    Upper=INR 407.46 | Mid=INR 381.50 | Lower=INR 355.53
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 401.95
+  Resistance 1: INR 410.70
+  Resistance 2: INR 416.00
+  Support 1:    INR 396.65
+  Support 2:    INR 387.90
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-17: Doji
+
+Sector Context: Energy
+
+
+--- STOCK 5: SUNPHARMA (NSE) ---
+Your selection reason: "Currently held at +1.5% unrealized gain. High volume surge (5.3x) today — institutional activity. Pharma sector up 0.5%. Need full data to assess whether to add or trail stop."
+
+Price Data:
+  CMP: INR 1761.30 | Day change: +1.60% (+INR 27.80)
+  Today OHLC: 1756.00 / 1764.70 / 1750.00 / 1761.30
+  52-week range: INR 1548.00 - INR 1851.20
+  Avg daily volume (20d): INR 890.56 Cr | Today: INR 0.00 Cr (5.3x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23    1669.00  1713.00  1661.20  1680.10   545.22
+  2026-04-22    1665.20  1673.90  1652.40  1669.80   362.27
+  2026-04-21    1667.20  1682.90  1659.90  1665.20   604.72
+  2026-04-20    1680.00  1680.00  1665.00  1668.60   306.11
+  2026-04-17    1696.90  1696.90  1670.50  1675.50   527.19
+  2026-04-16    1713.90  1713.90  1666.60  1693.10   764.03
+  2026-04-15    1675.00  1699.20  1657.70  1696.60   638.00
+  2026-04-13    1654.90  1668.70  1640.10  1652.20   619.74
+  2026-04-10    1699.20  1700.00  1630.40  1654.90  1338.74
+  2026-04-09    1702.70  1730.90  1702.70  1717.10   562.55
+  2026-04-08    1730.00  1749.20  1685.50  1714.60   833.27
+  2026-04-07    1689.80  1723.90  1681.30  1718.00   424.58
+  2026-04-06    1684.30  1699.00  1654.90  1694.60   598.82
+  2026-04-02    1665.00  1700.00  1620.00  1693.60   666.91
+  2026-04-01    1762.10  1788.00  1713.20  1728.50   561.01
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15   1756.00  1764.70  1753.70  1758.50     7.46
+  09:30   1758.70  1760.20  1756.30  1758.90     3.00
+  09:45   1758.90  1759.40  1753.00  1755.60     5.73
+  10:00   1755.70  1757.00  1750.60  1751.60     1.33
+  10:15   1751.60  1756.00  1750.60  1755.10     3.02
+  10:30   1754.90  1756.00  1752.90  1754.10     1.72
+  10:45   1754.10  1756.80  1752.30  1756.00     4.39
+  11:00   1756.00  1758.40  1755.70  1757.60     5.77
+  11:15   1757.50  1758.00  1754.70  1755.10     2.56
+  11:30   1755.10  1757.30  1754.50  1755.90     1.98
+  11:45   1756.00  1756.10  1753.90  1755.00     1.31
+  12:00   1755.00  1755.30  1750.00  1753.50    12.36
+  12:15   1753.40  1756.00  1753.10  1754.20     0.74
+  12:30   1754.20  1755.00  1751.70  1754.00     1.29
+  12:45   1754.10  1761.90  1753.10  1761.30    15.28
+  13:00   1761.30  1761.70  1760.80  1761.50     0.03
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bearish_crossover
+  MACD Histogram:     -3.1600
+  SMA 20:          INR 1709.01 (price )
+  SMA 50:          INR 1735.59 (price )
+  SMA 200:          INR 1697.23 (price )
+  EMA 9:              INR 1681.20
+  VWAP (today):       INR 1756.26
+  Bollinger Bands:    Upper=INR 1793.82 | Mid=INR 1709.01 | Lower=INR 1624.21
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 1665.37
+  Resistance 1: INR 1678.33
+  Resistance 2: INR 1686.87
+  Support 1:    INR 1656.83
+  Support 2:    INR 1643.87
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-21: Doji
+
+Sector Context: Pharma
+
+
+--- STOCK 6: COALINDIA (NSE) ---
+Your selection reason: "Up 6.95% with low volume ratio (0.5x) suggesting price-led move on energy theme. Beneficiary of elevated energy prices. Coal India is a cash-rich PSU with high dividend yield — defensive income play."
+
+Price Data:
+  CMP: INR 483.95 | Day change: +6.95% (+INR 31.45)
+  Today OHLC: 469.85 / 485.70 / 464.05 / 483.95
+  52-week range: INR 368.65 - INR 476.00
+  Avg daily volume (20d): INR 615.04 Cr | Today: INR 0.00 Cr (0.5x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     444.25   451.50   442.65   450.65   405.10
+  2026-04-22     443.80   447.75   442.50   444.15   310.55
+  2026-04-21     442.30   445.30   441.90   443.15   236.49
+  2026-04-20     438.60   443.70   433.30   441.75   357.41
+  2026-04-17     432.80   440.15   430.50   438.75   470.92
+  2026-04-16     436.50   436.95   430.50   432.75   509.63
+  2026-04-15     439.00   439.00   431.40   435.80   442.31
+  2026-04-13     435.00   439.50   431.50   435.10   813.74
+  2026-04-10     455.00   459.60   427.50   434.10  1285.18
+  2026-04-09     449.25   456.20   447.85   454.10   429.96
+  2026-04-08     464.00   464.00   447.00   449.25   927.86
+  2026-04-07     458.05   463.80   455.30   463.00   523.97
+  2026-04-06     449.30   461.45   447.40   459.55   570.01
+  2026-04-02     448.40   453.30   440.50   449.35   301.11
+  2026-04-01     464.00   464.85   446.80   449.40   672.32
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    472.55   472.80   464.05   465.60     9.32
+  09:30    465.75   468.00   464.25   467.80     4.45
+  09:45    467.95   470.45   467.95   470.15     4.28
+  10:00    470.15   471.75   469.00   471.00     5.21
+  10:15    471.00   472.35   470.60   470.70     3.93
+  10:30    470.70   481.80   470.55   481.70    25.36
+  10:45    481.70   485.70   480.30   482.25    22.22
+  11:00    482.30   484.35   481.60   482.75    18.89
+  11:15    482.85   483.00   480.60   480.95     6.44
+  11:30    480.95   482.80   480.80   481.70     9.86
+  11:45    481.80   483.65   481.00   482.95     7.86
+  12:00    483.00   483.90   482.05   482.30     3.44
+  12:15    482.50   484.00   482.25   483.80     4.41
+  12:30    483.65   484.90   482.85   484.25     9.64
+  12:45    484.25   484.35   483.05   483.95     2.01
+  13:00    484.00   484.50   483.95   484.30     0.63
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bearish_crossover
+  MACD Histogram:     -0.4600
+  SMA 20:          INR 445.87 (price )
+  SMA 50:          INR 440.84 (price )
+  SMA 200:          INR 404.33 (price )
+  EMA 9:              INR 443.97
+  VWAP (today):       INR 479.14
+  Bollinger Bands:    Upper=INR 462.25 | Mid=INR 445.87 | Lower=INR 429.49
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 444.80
+  Resistance 1: INR 447.10
+  Resistance 2: INR 450.05
+  Support 1:    INR 441.85
+  Support 2:    INR 439.55
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-21: Shooting Star
+  - 2026-04-22: Doji
+
+Sector Context: Metal
+
+
+--- STOCK 7: BAJFINANCE (NSE) ---
+Your selection reason: "Q4 results today — expected strong earnings growth. Was on watchlist. NBFC sector with institutional interest. Need to check whether post-results move offers a setup or if expectations are already priced in."
+
+Price Data:
+  CMP: INR 934.35 | Day change: +1.36% (+INR 12.55)
+  Today OHLC: 925.00 / 937.00 / 916.60 / 934.35
+  52-week range: INR 787.90 - INR 1102.50
+  Avg daily volume (20d): INR 947.66 Cr | Today: INR 0.00 Cr (0.8x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     926.10   929.85   909.35   918.35   839.70
+  2026-04-22     938.00   946.35   930.15   934.75   538.33
+  2026-04-21     919.50   945.95   919.00   938.85   630.34
+  2026-04-20     908.25   920.90   898.00   917.75   567.55
+  2026-04-17     902.15   910.45   895.80   908.25   548.15
+  2026-04-16     919.00   932.60   904.00   905.90  1069.44
+  2026-04-15     925.00   925.00   911.10   913.15   545.63
+  2026-04-13     896.15   905.90   881.10   898.95   963.97
+  2026-04-10     915.75   927.30   912.30   924.55   877.54
+  2026-04-09     902.00   913.40   891.40   903.25   854.28
+  2026-04-08     890.00   926.00   881.00   915.05  1265.16
+  2026-04-07     848.00   862.80   844.45   855.10   989.27
+  2026-04-06     828.90   853.00   814.25   850.85  1063.95
+  2026-04-02     809.00   830.05   792.45   826.85   753.56
+  2026-04-01     832.80   842.05   814.80   817.30  1233.63
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    921.10   924.70   918.00   921.60     2.98
+  09:30    921.15   922.65   918.20   919.25     1.45
+  09:45    919.35   923.60   919.05   923.40     1.65
+  10:00    923.25   928.55   922.80   927.75     2.83
+  10:15    927.80   930.65   927.50   930.05     1.89
+  10:30    929.80   934.05   929.05   933.00     2.85
+  10:45    933.35   933.60   930.45   930.85     1.32
+  11:00    931.00   933.30   929.10   930.60     5.25
+  11:15    930.70   931.50   927.00   927.60     1.96
+  11:30    927.60   930.05   925.60   929.20     1.56
+  11:45    929.20   929.85   927.75   929.30     0.74
+  12:00    929.55   931.30   928.40   930.50     2.58
+  12:15    930.50   934.50   930.45   932.65     1.50
+  12:30    933.15   937.00   933.05   936.00     2.54
+  12:45    936.00   936.80   933.30   934.35     1.47
+  13:00    934.00   934.45   933.95   934.45     0.03
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     9.3100
+  SMA 20:          INR 880.93 (price )
+  SMA 50:          INR 926.79 (price )
+  SMA 200:          INR 961.74 (price )
+  EMA 9:              INR 914.16
+  VWAP (today):       INR 929.00
+  Bollinger Bands:    Upper=INR 967.21 | Mid=INR 880.93 | Lower=INR 794.65
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 937.08
+  Resistance 1: INR 944.02
+  Resistance 2: INR 953.28
+  Support 1:    INR 927.82
+  Support 2:    INR 920.88
+
+Sector Context: Financial_Services
+
+
+--- STOCK 8: ITC (NSE) ---
+Your selection reason: "Up 4.02% on strong volume. FMCG defensive play with high dividend yield. ITC has been benefiting from rural demand recovery. Sector leader in FMCG today."
+
+Price Data:
+  CMP: INR 316.05 | Day change: +4.02% (+INR 12.20)
+  Today OHLC: 305.10 / 316.40 / 305.10 / 316.05
+  52-week range: INR 287.00 - INR 444.20
+  Avg daily volume (20d): INR 638.09 Cr | Today: INR 0.00 Cr (0.7x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     304.00   306.35   303.25   305.30   326.73
+  2026-04-22     310.00   310.55   305.10   305.50   748.49
+  2026-04-21     305.00   311.10   304.55   309.65   755.91
+  2026-04-20     307.00   307.95   304.45   305.00   412.98
+  2026-04-17     303.85   309.95   303.85   306.80  1077.21
+  2026-04-16     302.95   305.35   301.85   303.40   500.98
+  2026-04-15     300.70   304.00   300.55   302.05   564.88
+  2026-04-13     300.00   301.45   298.10   298.65   493.43
+  2026-04-10     303.00   305.40   302.60   304.25   539.87
+  2026-04-09     301.50   304.40   301.25   303.00   536.05
+  2026-04-08     303.90   304.60   301.55   302.45   674.77
+  2026-04-07     294.15   299.00   292.75   298.45   804.73
+  2026-04-06     293.00   295.35   290.25   294.85   532.12
+  2026-04-02     290.25   293.65   288.40   292.85   529.55
+  2026-04-01     293.00   294.45   290.90   291.70   542.69
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    306.40   312.55   306.40   311.60    30.14
+  09:30    311.60   312.65   310.40   312.00    28.47
+  09:45    312.15   312.50   311.30   311.75    13.45
+  10:00    311.75   312.90   311.65   311.90    14.31
+  10:15    311.90   312.50   311.20   311.55     8.46
+  10:30    311.60   312.05   311.35   311.45     6.18
+  10:45    311.40   312.90   311.05   312.75    10.55
+  11:00    312.85   314.10   312.50   313.55    13.13
+  11:15    313.60   313.70   313.20   313.55     4.56
+  11:30    313.55   314.75   313.55   314.35    12.53
+  11:45    314.35   315.10   313.80   314.70    11.78
+  12:00    314.70   314.95   313.55   313.80     9.39
+  12:15    313.75   314.65   313.75   314.30     9.17
+  12:30    314.40   314.40   313.75   314.00     4.68
+  12:45    314.00   316.40   313.90   316.05    18.02
+  13:00    316.20   316.20   315.85   316.00     0.57
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     1.7200
+  SMA 20:          INR 299.19 (price )
+  SMA 50:          INR 308.51 (price )
+  SMA 200:          INR 373.69 (price )
+  EMA 9:              INR 304.40
+  VWAP (today):       INR 312.67
+  Bollinger Bands:    Upper=INR 311.63 | Mid=INR 299.19 | Lower=INR 286.74
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 307.05
+  Resistance 1: INR 309.00
+  Resistance 2: INR 312.50
+  Support 1:    INR 303.55
+  Support 2:    INR 301.60
+
+Sector Context: FMCG
+
+
+--- STOCK 9: BHARTIARTL (NSE) ---
+Your selection reason: "Telecom sector rallying — BHARTIARTL +3.55%, IDEA +7%. Bharti benefits from rupee weakness (international revenues) and is a quality large-cap in a recovering sector. Was on previous watchlist."
+
+Price Data:
+  CMP: INR 1884.80 | Day change: +3.55% (+INR 64.70)
+  Today OHLC: 1848.00 / 1900.40 / 1845.40 / 1884.80
+  52-week range: INR 1746.90 - INR 2174.50
+  Avg daily volume (20d): INR 1949.06 Cr | Today: INR 0.00 Cr (0.4x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23    1821.80  1846.00  1812.10  1841.20  1379.05
+  2026-04-22    1850.20  1857.90  1825.30  1829.00  1040.16
+  2026-04-21    1830.00  1868.90  1830.00  1855.00  1945.04
+  2026-04-20    1865.00  1865.00  1839.20  1846.10  1706.47
+  2026-04-17    1837.10  1851.40  1829.70  1846.90  1356.51
+  2026-04-16    1863.50  1864.90  1823.20  1840.60  2921.26
+  2026-04-15    1880.50  1890.90  1853.60  1855.70  2050.38
+  2026-04-13    1838.00  1893.70  1838.00  1870.90  1940.49
+  2026-04-10    1868.00  1874.60  1859.90  1870.00  1095.44
+  2026-04-09    1869.90  1869.90  1846.10  1859.40  1880.42
+  2026-04-08    1864.00  1871.50  1840.20  1861.60  2157.15
+  2026-04-07    1788.10  1840.00  1772.00  1830.30  1840.85
+  2026-04-06    1812.10  1814.30  1763.40  1792.80  1467.14
+  2026-04-02    1765.00  1799.40  1746.90  1789.70  1943.09
+  2026-04-01    1811.00  1817.30  1776.50  1781.90  1905.68
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15   1861.50  1875.00  1855.20  1864.80     4.27
+  09:30   1865.30  1873.60  1860.40  1873.50     1.69
+  09:45   1873.50  1875.00  1871.30  1872.70     1.41
+  10:00   1873.00  1881.00  1873.00  1880.80     1.77
+  10:15   1880.80  1898.00  1880.50  1897.20     3.33
+  10:30   1897.00  1900.40  1890.80  1892.00     5.95
+  10:45   1892.30  1895.00  1890.70  1891.90     1.77
+  11:00   1891.80  1893.00  1887.30  1891.90     1.50
+  11:15   1891.90  1892.20  1882.00  1882.90     1.36
+  11:30   1882.90  1888.80  1881.60  1887.90     1.61
+  11:45   1887.90  1892.00  1887.50  1888.50     2.33
+  12:00   1888.50  1888.90  1882.50  1884.60     1.53
+  12:15   1884.60  1889.90  1884.50  1887.60     2.62
+  12:30   1887.60  1890.20  1885.20  1885.80     1.82
+  12:45   1885.90  1887.40  1883.70  1884.80     1.50
+  13:00   1884.80  1885.40  1884.70  1885.20     0.17
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     4.7700
+  SMA 20:          INR 1831.52 (price )
+  SMA 50:          INR 1885.55 (price )
+  SMA 200:          INR 1969.60 (price )
+  EMA 9:              INR 1843.18
+  VWAP (today):       INR 1884.52
+  Bollinger Bands:    Upper=INR 1889.66 | Mid=INR 1831.52 | Lower=INR 1773.37
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 1837.40
+  Resistance 1: INR 1849.50
+  Resistance 2: INR 1870.00
+  Support 1:    INR 1816.90
+  Support 2:    INR 1804.80
+
+Sector Context: Telecommunication
+
+
+--- STOCK 10: RELIANCE (NSE) ---
+Your selection reason: "Up 3.61% — benefits from oil at $111 via O2C segment and Jio telecom. Largest index weight, institutional bellwether. Relief rally on Iran de-escalation could extend if oil stabilizes."
+
+Price Data:
+  CMP: INR 1415.10 | Day change: +3.61% (+INR 49.30)
+  Today OHLC: 1392.00 / 1427.70 / 1391.30 / 1415.10
+  52-week range: INR 1267.00 - INR 1611.80
+  Avg daily volume (20d): INR 2924.60 Cr | Today: INR 0.00 Cr (1.2x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23    1346.00  1355.50  1340.70  1343.40  2201.17
+  2026-04-22    1350.30  1366.00  1349.10  1362.10  1297.53
+  2026-04-21    1359.00  1369.80  1350.10  1353.30  3693.65
+  2026-04-20    1363.20  1373.00  1352.80  1363.30  1856.10
+  2026-04-17    1340.00  1368.40  1340.00  1365.00  1893.13
+  2026-04-16    1352.00  1353.80  1330.00  1343.30  4058.25
+  2026-04-15    1337.00  1347.00  1334.20  1344.10  2058.33
+  2026-04-13    1321.20  1327.60  1310.00  1315.10  3781.34
+  2026-04-10    1337.00  1352.30  1331.50  1350.20  2614.59
+  2026-04-09    1346.00  1350.00  1326.30  1330.00  2756.48
+  2026-04-08    1349.00  1350.60  1326.20  1347.80  2940.57
+  2026-04-07    1295.00  1308.30  1291.00  1304.60  3703.62
+  2026-04-06    1359.00  1359.00  1290.00  1304.70  3819.49
+  2026-04-02    1357.00  1358.20  1328.00  1350.50  2873.87
+  2026-04-01    1384.20  1384.40  1362.90  1369.20  1972.28
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15   1400.90  1409.50  1398.10  1401.00    17.94
+  09:30   1401.20  1406.90  1400.90  1405.00    10.80
+  09:45   1405.10  1406.70  1403.40  1405.90     4.47
+  10:00   1405.90  1412.30  1405.60  1411.30    15.49
+  10:15   1411.30  1427.70  1410.40  1424.90    19.58
+  10:30   1425.30  1427.50  1420.00  1420.30     8.16
+  10:45   1420.50  1422.50  1419.60  1422.50    10.67
+  11:00   1422.00  1423.70  1421.80  1423.10     5.95
+  11:15   1423.20  1423.20  1417.60  1420.20    10.48
+  11:30   1420.50  1422.50  1420.00  1420.30     4.58
+  11:45   1420.50  1422.50  1419.40  1420.60     4.84
+  12:00   1420.20  1422.90  1419.60  1420.90     8.08
+  12:15   1420.90  1422.30  1419.10  1420.20     9.08
+  12:30   1420.60  1422.30  1415.70  1417.10    11.22
+  12:45   1417.00  1417.40  1413.50  1415.10     7.62
+  13:00   1415.30  1415.30  1414.40  1414.80     0.27
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     3.6900
+  SMA 20:          INR 1353.57 (price )
+  SMA 50:          INR 1389.18 (price )
+  SMA 200:          INR 1438.34 (price )
+  EMA 9:              INR 1350.80
+  VWAP (today):       INR 1415.60
+  Bollinger Bands:    Upper=INR 1413.09 | Mid=INR 1353.57 | Lower=INR 1294.04
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 1359.07
+  Resistance 1: INR 1369.03
+  Resistance 2: INR 1375.97
+  Support 1:    INR 1352.13
+  Support 2:    INR 1342.17
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-17: Bullish Engulfing
+  - 2026-04-20: Doji
+  - 2026-04-22: Bullish Engulfing
+
+Sector Context: Energy
+
+
+--- STOCK 11: CEATLTD (NSE) ---
+Your selection reason: "145% jump in Q4 net profit, revenue up 23%, dividend of Rs 35. Gapped up 7.8% at open. Auto ancillary beneficiary of auto sector strength. Strong fundamental catalyst — need full data to assess entry."
+
+Price Data:
+  CMP: INR 3676.00 | Day change: +3.98% (+INR 140.80)
+  Today OHLC: 3810.00 / 3949.90 / 3672.20 / 3676.00
+  52-week range: INR 2984.50 - INR 4438.00
+  Avg daily volume (20d): INR 34.37 Cr | Today: INR 0.00 Cr (1.0x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23    3779.90  3779.90  3700.60  3706.60    13.86
+  2026-04-22    3790.00  3848.70  3774.00  3788.70    30.27
+  2026-04-21    3837.40  3879.00  3789.00  3800.50    30.37
+  2026-04-20    3718.90  3820.00  3675.60  3799.40    53.78
+  2026-04-17    3699.00  3789.00  3671.00  3716.10    33.13
+  2026-04-16    3662.00  3720.00  3611.10  3697.50    36.60
+  2026-04-15    3699.00  3710.20  3617.00  3625.30    26.73
+  2026-04-13    3517.80  3614.20  3514.30  3575.10    27.97
+  2026-04-10    3565.40  3662.00  3550.00  3637.60    35.95
+  2026-04-09    3540.00  3584.90  3476.40  3544.00    40.44
+  2026-04-08    3581.70  3618.10  3511.00  3541.80    40.19
+  2026-04-07    3345.50  3405.30  3302.50  3393.00    38.90
+  2026-04-06    3370.00  3380.00  3300.00  3347.10    29.66
+  2026-04-02    3326.00  3385.00  3266.00  3368.30    20.67
+  2026-04-01    3390.00  3400.00  3328.30  3385.80    21.89
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15   3810.50  3909.00  3776.30  3793.60     4.10
+  09:30   3791.90  3949.90  3767.40  3922.70     4.34
+  09:45   3918.00  3942.00  3801.00  3831.50     2.97
+  10:00   3828.20  3848.00  3781.00  3788.40     1.37
+  10:15   3786.00  3810.80  3780.10  3795.20     0.91
+  10:30   3794.80  3795.40  3740.60  3751.60     1.00
+  10:45   3751.60  3764.30  3718.00  3729.10     0.80
+  11:00   3727.10  3735.00  3717.40  3730.50     0.41
+  11:15   3730.60  3732.20  3711.00  3713.40     0.43
+  11:30   3713.40  3734.00  3713.40  3717.00     0.33
+  11:45   3717.00  3724.90  3705.00  3717.50     0.27
+  12:00   3718.00  3734.40  3715.00  3722.00     0.33
+  12:15   3722.00  3736.80  3716.30  3719.10     0.34
+  12:30   3718.40  3718.50  3672.20  3681.10     0.79
+  12:45   3682.00  3687.00  3675.00  3676.00     0.14
+  13:00   3676.10  3679.60  3676.00  3679.20     0.02
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     36.0900
+  SMA 20:          INR 3550.97 (price )
+  SMA 50:          INR 3624.89 (price )
+  SMA 200:          INR 3645.99 (price )
+  EMA 9:              INR 3695.10
+  VWAP (today):       INR 3814.80
+  Bollinger Bands:    Upper=INR 3877.84 | Mid=INR 3550.97 | Lower=INR 3224.10
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 3803.80
+  Resistance 1: INR 3833.60
+  Resistance 2: INR 3878.50
+  Support 1:    INR 3758.90
+  Support 2:    INR 3729.10
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-22: Doji
+  - 2026-04-23: Bearish Marubozu
+
+Sector Context: Automobile and Auto Components
+
+
+--- STOCK 12: IIFL (NSE) ---
+Your selection reason: "High volume surge (4.1x) with +3.23% gain. Financial services sector showing strength. Need full data to assess if this is institutional accumulation ahead of a rerating."
+
+Price Data:
+  CMP: INR 448.00 | Day change: +3.23% (+INR 14.00)
+  Today OHLC: 442.90 / 453.30 / 439.05 / 448.00
+  52-week range: INR 334.85 - INR 675.00
+  Avg daily volume (20d): INR 97.31 Cr | Today: INR 0.00 Cr (4.1x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     467.00   468.75   417.00   420.05   340.52
+  2026-04-22     478.90   480.85   466.10   467.65    66.35
+  2026-04-21     470.00   478.95   467.45   476.40    38.38
+  2026-04-20     474.30   474.95   463.50   468.75    42.36
+  2026-04-17     466.95   478.05   464.40   473.35    46.38
+  2026-04-16     475.00   483.80   464.20   466.05    62.89
+  2026-04-15     460.00   474.00   455.10   469.25    66.00
+  2026-04-13     445.00   454.00   440.55   448.45    33.35
+  2026-04-10     448.00   457.00   445.00   455.45    56.51
+  2026-04-09     447.00   459.85   440.00   443.20    60.40
+  2026-04-08     448.00   452.40   440.00   446.90   170.72
+  2026-04-07     436.95   437.45   427.00   428.40    44.57
+  2026-04-06     438.50   441.30   427.50   439.95    74.68
+  2026-04-02     434.70   437.25   421.05   434.90    40.03
+  2026-04-01     438.00   448.20   434.25   437.75    48.89
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    444.40   444.75   439.05   441.15     1.50
+  09:30    441.45   444.30   441.05   442.15     1.00
+  09:45    442.00   449.00   441.85   447.15     1.88
+  10:00    447.75   452.45   447.10   449.40     2.83
+  10:15    449.25   452.20   448.00   450.80     3.55
+  10:30    450.85   453.30   448.65   449.80     2.61
+  10:45    450.15   452.20   449.20   449.80     1.13
+  11:00    450.00   450.45   449.00   449.85     0.47
+  11:15    449.90   449.90   445.80   448.50     1.30
+  11:30    448.50   449.80   447.60   448.30     0.82
+  11:45    448.50   450.45   448.05   450.00     0.62
+  12:00    449.40   450.40   448.05   449.40     0.54
+  12:15    449.50   451.00   448.85   449.55     1.30
+  12:30    449.95   450.80   449.00   449.45     1.20
+  12:45    450.00   450.00   447.00   448.00     0.61
+  13:00    448.20   448.20   448.00   448.20     0.00
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     1.7900
+  SMA 20:          INR 451.44 (price )
+  SMA 50:          INR 478.68 (price )
+  SMA 200:          INR 507.68 (price )
+  EMA 9:              INR 455.47
+  VWAP (today):       INR 448.53
+  Bollinger Bands:    Upper=INR 483.25 | Mid=INR 451.44 | Lower=INR 419.64
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 471.53
+  Resistance 1: INR 476.97
+  Resistance 2: INR 486.28
+  Support 1:    INR 462.22
+  Support 2:    INR 456.78
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-22: Bearish Engulfing
+  - 2026-04-23: Bearish Marubozu
+
+Sector Context: Financial_Services
+
+
+--- STOCK 13: M&MFIN (NSE) ---
+Your selection reason: "Massive volume surge (7.4x) with only +1.34% price gain — classic institutional accumulation pattern where volume far exceeds price move. Rural NBFC — could be a high-conviction entry if thesis confirms."
+
+Price Data:
+  CMP: INR 321.95 | Day change: +1.34% (+INR 4.25)
+  Today OHLC: 316.50 / 322.55 / 311.70 / 321.95
+  52-week range: INR 236.24 - INR 412.20
+  Avg daily volume (20d): INR 135.09 Cr | Today: INR 0.00 Cr (7.4x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     298.00   300.45   295.00   297.05    59.14
+  2026-04-22     305.95   307.45   299.60   300.25    56.39
+  2026-04-21     305.00   310.00   303.70   306.35    96.71
+  2026-04-20     300.95   306.10   296.25   303.60    77.37
+  2026-04-17     299.00   301.55   297.20   299.35    65.95
+  2026-04-16     301.20   305.75   294.00   297.30    79.08
+  2026-04-15     301.00   307.05   297.60   299.95    81.90
+  2026-04-13     297.80   298.20   288.75   296.85    51.26
+  2026-04-10     300.00   304.90   295.85   302.10    83.48
+  2026-04-09     296.70   302.85   291.15   296.10    77.45
+  2026-04-08     289.00   300.45   284.15   296.70   204.51
+  2026-04-07     282.20   286.00   272.65   277.50   128.54
+  2026-04-06     287.40   289.00   276.05   281.25   176.40
+  2026-04-02     284.10   287.05   276.05   285.15    61.61
+  2026-04-01     291.15   302.00   288.00   289.70    54.87
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     3.2800
+  SMA 20:          INR 296.62 (price )
+  SMA 50:          INR 335.43 (price )
+  SMA 200:          INR 315.80 (price )
+  EMA 9:              INR 299.56
+  VWAP (today):       INR 2330.10
+  Bollinger Bands:    Upper=INR 314.50 | Mid=INR 296.62 | Lower=INR 278.73
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   SELL at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 302.43
+  Resistance 1: INR 305.27
+  Resistance 2: INR 310.28
+  Support 1:    INR 297.42
+  Support 2:    INR 294.58
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-17: Doji
+
+Sector Context: Financial Services
+
+
+--- STOCK 14: HINDZINC (NSE) ---
+Your selection reason: "Currently held — need updated data for position management"
+
+Price Data:
+  CMP: INR 618.30 | Day change: -1.54% (INR -9.70)
+  Today OHLC: 616.10 / 621.90 / 606.10 / 618.30
+  52-week range: INR 398.00 - INR 733.00
+  Avg daily volume (20d): INR 408.00 Cr | Today: INR 0.00 Cr (3.2x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     605.00   605.00   590.70   592.10   284.47
+  2026-04-22     595.00   607.90   586.20   604.75   431.21
+  2026-04-21     594.00   596.75   587.30   588.50   201.49
+  2026-04-20     592.30   594.00   579.10   590.30   247.59
+  2026-04-17     595.00   595.00   581.30   592.30   178.05
+  2026-04-16     589.00   602.95   585.10   592.50   457.81
+  2026-04-15     582.30   593.95   574.20   580.50   449.91
+  2026-04-13     550.05   565.00   550.00   562.55   155.64
+  2026-04-10     565.20   568.00   557.00   564.60   221.45
+  2026-04-09     554.25   563.90   546.95   558.50   168.73
+  2026-04-08     560.30   568.35   552.75   559.35   386.19
+  2026-04-07     523.00   541.50   519.10   538.75   330.04
+  2026-04-06     515.75   527.50   514.55   526.05   261.15
+  2026-04-02     510.00   518.40   503.35   515.75   226.31
+  2026-04-01     520.00   530.95   516.55   524.45   325.56
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    614.05   614.70   606.10   608.80     6.91
+  09:30    608.80   612.00   608.30   612.00     3.75
+  09:45    611.75   614.40   610.00   614.20     3.68
+  10:00    614.40   614.65   612.85   614.05     1.82
+  10:15    614.00   616.00   613.15   614.10     1.66
+  10:30    614.00   615.25   613.50   615.20     1.04
+  10:45    615.00   616.40   613.95   616.15     1.43
+  11:00    616.15   621.90   615.75   620.55     3.16
+  11:15    620.55   621.40   617.40   619.25     2.86
+  11:30    619.45   621.05   619.15   620.50     1.45
+  11:45    620.50   620.55   618.50   619.30     1.18
+  12:00    619.30   619.75   618.50   618.55     0.97
+  12:15    618.55   619.40   615.15   616.95     2.17
+  12:30    617.00   617.65   615.10   616.50     3.33
+  12:45    616.50   620.10   616.50   618.30     2.68
+  13:00    618.30   618.70   618.25   618.45     0.09
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     8.0300
+  SMA 20:          INR 550.26 (price )
+  SMA 50:          INR 571.57 (price )
+  SMA 200:          INR 520.05 (price )
+  EMA 9:              INR 583.25
+  VWAP (today):       INR 614.99
+  Bollinger Bands:    Upper=INR 623.89 | Mid=INR 550.26 | Lower=INR 476.63
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 599.62
+  Resistance 1: INR 613.03
+  Resistance 2: INR 621.32
+  Support 1:    INR 591.33
+  Support 2:    INR 577.92
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-17: Hammer
+  - 2026-04-23: Bearish Marubozu
+  - 2026-04-23: Bearish Engulfing
+
+Sector Context: Metals & Mining
+
+
+--- STOCK 15: POWERGRID (NSE) ---
+Your selection reason: "Currently held — need updated data for position management"
+
+Price Data:
+  CMP: INR 322.00 | Day change: +0.34% (+INR 1.10)
+  Today OHLC: 320.10 / 322.25 / 318.25 / 322.00
+  52-week range: INR 250.00 - INR 324.95
+  Avg daily volume (20d): INR 465.19 Cr | Today: INR 0.00 Cr (0.7x)
+
+Daily Candles (last 15 sessions, newest first):
+  Date             Open     High      Low    Close  Vol(Cr)
+  2026-04-23     320.00   321.85   318.05   319.15   232.82
+  2026-04-22     319.75   322.00   316.00   319.75   227.42
+  2026-04-21     318.95   322.00   318.00   319.35   266.41
+  2026-04-20     319.00   323.05   315.55   319.70   350.24
+  2026-04-17     313.30   318.95   311.40   318.10   432.93
+  2026-04-16     315.00   317.00   310.50   312.25   671.66
+  2026-04-15     303.40   313.40   301.25   312.45   684.18
+  2026-04-13     299.95   302.35   297.65   300.35   471.00
+  2026-04-10     301.10   303.50   299.75   302.75   400.99
+  2026-04-09     295.45   300.70   293.85   298.10   525.99
+  2026-04-08     301.00   301.75   293.60   294.85   321.03
+  2026-04-07     292.50   296.25   291.00   295.40   275.27
+  2026-04-06     294.90   295.60   287.30   295.15   274.25
+  2026-04-02     290.20   292.00   283.50   289.95   499.36
+  2026-04-01     305.00   305.90   290.20   292.80   545.65
+
+Intraday 15-min Candles (today):
+  Time       Open     High      Low    Close   Vol(L)
+  09:15    320.25   320.30   318.25   319.80     8.34
+  09:30    319.60   320.60   319.55   320.40     3.23
+  09:45    320.40   321.00   320.30   320.80     3.45
+  10:00    320.75   321.70   320.75   321.40     2.14
+  10:15    321.40   322.00   321.10   321.50     2.56
+  10:30    321.50   322.20   321.25   321.95     2.75
+  10:45    321.90   322.25   321.50   322.00     4.90
+  11:00    322.00   322.00   321.10   321.10     1.44
+  11:15    321.15   321.50   320.55   321.40     2.75
+  11:30    321.45   321.70   321.05   321.30     1.93
+  11:45    321.35   322.00   321.05   321.95     2.49
+  12:00    322.00   322.25   321.85   322.10     4.57
+  12:15    322.10   322.20   321.00   321.05     4.28
+  12:30    321.05   322.15   321.00   322.05     4.50
+  12:45    322.05   322.15   321.70   322.00     2.85
+  13:00    322.00   322.00   321.85   321.90     0.06
+
+Technical Indicators:
+  RSI(14):            0.0
+  MACD(12,26,9):      Signal=bullish_crossover
+  MACD Histogram:     2.0200
+  SMA 20:          INR 303.89 (price )
+  SMA 50:          INR 300.35 (price )
+  SMA 200:          INR 284.46 (price )
+  EMA 9:              INR 313.96
+  VWAP (today):       INR 321.16
+  Bollinger Bands:    Upper=INR 324.63 | Mid=INR 303.89 | Lower=INR 283.15
+  ADX(14):            0.0
+  ATR(14):            INR 0.00
+  Supertrend(10,3):   BUY at INR 0.00
+
+Key Levels:
+  Pivot Point:  INR 319.25
+  Resistance 1: INR 322.50
+  Resistance 2: INR 325.25
+  Support 1:    INR 316.50
+  Support 2:    INR 313.25
+
+Candlestick Patterns Detected (last 5 sessions):
+  - 2026-04-20: Doji
+  - 2026-04-22: Doji
+
+Sector Context: Energy
+
+
+--- SUPPLEMENTARY RESEARCH (per-stock agent findings) ---
+
+[PNBHOUSING]
+  Sentiment: BULLISH (confidence modifier: +0.10)
+  News: Q4 FY26 results announced April 20, 2026: net profit up 19% YoY to Rs 656 cr, revenue up 8% to Rs 2,182 cr. AUM crossed Rs 90,000 cr milestone (13% YoY growth), GNPA improved to 0.93% (sub-1%). Final dividend of Rs 8/share recommended. Stock surged ~9% post-results to ~Rs 988. MOFSL assigned 'Buy' rating; quality grade upgraded.
+  Sector: Indian housing finance sector projected to grow 13-15% annually through FY26, driven by government initiatives. Affordable housing segment expanding 29-30%. However, increased competition from PSU banks and rising funding costs are pressuring NIMs industry-wide. JPMorgan initiated divergent ratings on the sector.
+  Peers: PNB Housing outperforming LIC Housing Finance, which JPMorgan flagged as losing market share with no clear immediate growth drivers. PNB Housing targets 18-20% loan growth toward Rs 1 lakh cr book; recently launched Singapore residential platform. Cleaner asset quality and stronger profitability trajectory than LIC HFL.
+  Red flags: NIMs narrowing due to sector-wide funding cost pressures and PSU bank competition, Leadership/cost concerns flagged by some analysts despite Q4 beat
+  Catalysts: Final dividend of Rs 8/share pending shareholder approval at AGM, Continued AUM growth toward Rs 1 lakh cr target, Affordable housing segment expansion
+
+[GOLDBEES]
+  Sentiment: NEUTRAL (confidence modifier: +0.00)
+  News: Nippon India ETF Gold BeES trading at ~Rs 123.94 as of April 24, 2026. AUM at Rs 54,127 cr. No company-specific news (passive ETF tracking domestic gold). Recent sharp gold price drop of ~Rs 22,300 noted in late April after a strong rally; prices stabilized April 28 amid US-Iran talks and Fed rate uncertainty.
+  Sector: Gold remains in a strong medium-term uptrend supported by US tariff-driven safe-haven demand (100% pharma tariff April 2 + 26% reciprocal tariff on Indian goods), central bank buying, and inflation concerns. JP Morgan/analyst targets push toward $5,000/oz by Q4 2026; some Indian forecasts suggest Rs 2 lakh/10g possible. Near-term bias bullish but with elevated volatility.
+  Peers: GOLDBEES is the most liquid gold ETF in India by AUM, tracking domestic physical gold prices. Performance largely matches other gold ETFs (HDFC Gold ETF, SBI Gold ETF) less expense ratio of 0.80%. No relative outperformance/underperformance vs peers since all track same underlying.
+  Red flags: Recent sharp pullback of ~Rs 22,300 indicates elevated volatility after parabolic rally, Risk of correction if US-Iran diplomacy progresses or Fed signals hawkishness, Higher crude oil prices and stronger USD could pressure gold in near term
+  Catalysts: Fed rate decision and dot-plot guidance, US-Iran negotiation outcome impacting safe-haven demand, Continued central bank gold accumulation, INR weakness amplifying domestic gold gains
+
+[NESTLEIND]
+  Sentiment: BULLISH (confidence modifier: +0.12)
+  News: Q4 FY26 results announced April 21, 2026: net profit jumped 27% YoY to Rs 1,111 cr, revenue up 23% to Rs 6,748 cr, EBITDA margin at 26.3%. Final dividend of Rs 5/share recommended (total FY26 dividend Rs 12 including Rs 7 interim). Record date July 10, 2026; payout July 30, 2026. Stock surged up to 8.6% intraday to hit 52-week high of Rs 1,396.
+  Sector: FMCG index surged 9.07% in April 2026, outpacing benchmark. HUL, Colgate, Emami, Dabur up 3-6%. Sector tailwinds from premiumization, quick commerce growth, and rural demand recovery. Margin compression remains an industry-wide challenge, though Nestle bucked the trend with 23% revenue and 27% PAT growth.
+  Peers: Nestle India significantly outperforming FMCG peers in Q4 FY26 - HUL, ITC, Britannia all faced margin squeeze and slower growth. Nestle's 23% revenue growth dwarfs typical low-double-digit FMCG peer growth. Strong execution on premiumization and pricing translated to superior earnings beat.
+  Red flags: Stock at 52-week high may face profit-booking, FMCG margin compression remains an industry headwind in case of input cost flare-ups
+  Catalysts: Final dividend of Rs 5/share with record date July 10, 2026, AGM and full-year FY26 commentary, Continued urban premiumization and rural recovery
+
+[NTPC]
+  Sentiment: BULLISH (confidence modifier: +0.08)
+  News: Stock at ~Rs 411 (April 27, 2026). NTPC Green Energy crossed 10 GW installed capacity after commissioning 1,255 MW Khavda-I Solar PV. Subsidiary THDC commissioned 4th 250 MW unit of Tehri Pumped Storage Plant (April 12, 2026), taking group capacity to 89,378 MW. MSCI upgraded ESG rating from B to BB (March 2026). Q4 FY26 results scheduled for May 15, 2026.
+  Sector: Power sector among April 2026's strongest performers - Tata Power +26%, NTPC +18% over 3 months, sector outperforming Nifty 50 by 10-25 ppt YTD. Hotter-than-normal summer driving peak demand toward 275-285 GW; analysts expect 8-12% YoY power demand growth. PowerGrid expected to post 10% YoY profit growth.
+  Peers: NTPC trades in line with sector momentum but lags Tata Power on stock performance (18% vs 26% in 3 months). NTPC's regulated equity model offers more earnings visibility than Tata Power; NTPC Green provides renewables optionality. Analyst consensus 12M target Rs 400-440 implies modest upside.
+  Red flags: 26% US reciprocal tariff (April 2, 2026) creates broad-market overhang affecting all Indian equities, Stock has run up 18% in 3 months, may consolidate before results
+  Catalysts: Q4 FY26 results scheduled for May 15, 2026 (consensus PAT Rs 5,000-5,600 cr), Expected FY26 dividend Rs 6-8/share (yield ~1.8%), Summer peak demand surge supporting Q1 FY27 outlook, NTPC Green capacity ramp toward broader renewables target
+
+[SUNPHARMA]
+  Sentiment: NEUTRAL (confidence modifier: -0.05)
+  News: Announced $11.75 bn all-cash acquisition of US-based Organon (April 27-28, 2026) at $14/share - largest biopharma deal of 2026 and one of biggest overseas Indian acquisitions. Deal lifts Sun's revenues to $12.4 bn, places it in top 25 global pharma and 7th-largest biosimilars player. Stock jumped 7% to ~Rs 1,766. Funded via $2-2.5 bn cash + $9.25-9.75 bn debt.
+  Sector: Indian pharma sector under pressure from Trump's April 2 tariff announcements: 100% tariff on patented drugs (most generic players exempt). Nifty Pharma fell 1.81% on tariff fears. Generic-heavy peers (Cipla, Lupin, Dr Reddy's) less exposed; Sun Pharma is the most exposed Indian player to innovative-drug tariffs (~20% of revenue from innovative).
+  Peers: Sun Pharma now the only Indian pharma with global top-25 scale post-Organon. Compared to Cipla (28-30% US sales) and Lupin (37% US revenue), Sun has higher specialty/innovative exposure and now significantly higher leverage. Deal differentiates Sun from peers but introduces execution and balance-sheet risks others don't carry.
+  Red flags: Net debt/EBITDA shifts from net cash to ~2.3x post-Organon - significant balance sheet transformation, Promoter Dilip Shanghvi himself called deal 'exciting yet anxious', Organon revenues expected to remain largely flat in 2026 - limited near-term accretion, Halol plant remains under FDA Official Action Indicated (OAI) status, Highest exposure among Indian pharma to US patented-drug tariffs (~15% effective on innovative portfolio per Jefferies), Integration and execution risks on cross-border deal of this scale
+  Catalysts: Organon deal close expected early 2027, Q4 FY26 results in coming weeks, Biosimilars portfolio expansion post-Organon, Potential Halol plant FDA resolution
+
+[COALINDIA]
+  Sentiment: BULLISH (confidence modifier: +0.05)
+  News: Q4 FY26 results April 27-28, 2026: Consolidated net profit Rs 10,839 cr (+11.15% YoY); Revenue Rs 46,490 cr (+5.75% YoY); EBITDA Rs 17,917 cr (+12% YoY). Final dividend Rs 5.25/share — total FY26 dividend Rs 26.75/share. Stock rallied ~4-5% post-results to a high of Rs 473.90, near 52-week high of Rs 476 (March 13). Q4 raw coal production +7.8% YoY to 241.75 MT, off-take +8% to 201.7 MT.
+  Sector: PSU energy basket holding up amid broader market rotation toward domestic growth/infra. Coal India dividend yield ~5.8-6% leads PSU dividend payers. India's coal demand resilient despite renewables push; e-auction volumes with premium pricing supporting NSR and margins. Analysts model 4% volume CAGR FY26-28E.
+  Peers: Coal India leads PSU dividend yields and has higher ROCE (~35-48%) and lower debt than most PSU peers. Q4 print stronger than Bharat Coking Coal (which crashed 6% on weak Q4). Earnings growth (+11%) reasonable vs NTPC's renewables capex story. Stock up 15% in last 6 months — outperforming most large-cap PSUs.
+  Red flags: FY26 full-year production 768 MT (-1.6% YoY) and offtake 744 MT (-2.0% YoY) — annual volume declines despite Q4 recovery, Long-term energy transition risk as renewables share grows, Revenue growth (+5.75%) modest vs cost inflation pressure
+  Catalysts: Rs 5.25 final dividend record date upcoming, Monthly production data release (May 1-2), FY27 production targets/guidance from management, Potential e-auction premium revisions
+
+[BAJFINANCE]
+  Sentiment: NEUTRAL (confidence modifier: +0.00)
+  News: Q4 FY26 results scheduled for today (April 29, 2026) — board meeting post-market. Pre-results: Stock at Rs 910.05 (down 1.25%); up ~15% in last month on results anticipation. Q4 operating data: New loans booked +20.5% YoY to 12.89M; AUM +22% YoY to ~Rs 5.10 lakh cr. Analyst PAT estimates Rs 4,500-4,900 cr (vs Q3 Rs 4,308 cr). Expected dividend Rs 42-48/share. Bajaj Housing Finance (subsidiary) reported Q4 PAT +14% on April 27.
+  Sector: NBFC sector at recovery inflection point in 2026. RBI rate cut cycle (25bps in Feb 2026, more expected) improving funding cost environment. NBFC credit grew 17% YoY in H1FY26 vs banking 12%. FY26 AUM growth forecast 12-18%. MFI stress peaking, vehicle finance demand recovering. Sector AUM crossing Rs 50 lakh cr.
+  Peers: Bajaj Finance is most valued NBFC with Rs 3.85 lakh cr AUM and 91M+ customers; AUM growth (+22%) outpaces sector (12-18% expected) and Cholamandalam (15-19%). Q3 NIM 9.8%, ahead of most peers. Bajaj Housing Finance set positive read-across with +14% Q4 PAT. Listed in RBI's upper-layer NBFC bracket.
+  Red flags: Stock has run up 15% in a month — high expectations priced in, risk of post-result correction, RBI proposed Rs 1 lakh cr asset-size threshold for upper-layer NBFCs increases regulatory scrutiny, Pre-results trading near recent highs — limited margin of safety, NIM compression risk if competitive pricing intensifies
+  Catalysts: Q4 FY26 PAT and dividend announcement post-market today, Management commentary on FY27 AUM growth guidance, Asset quality (GNPA/NNPA) trends — key watch item, RBI's next rate decision and impact on funding costs
+
+[ITC]
+  Sentiment: NEUTRAL (confidence modifier: -0.05)
+  News: Q4 FY26 results scheduled for May 5, 2026. Stock at ~Rs 418-424 in April 2026, well off 52-week high of Rs 528 (closer to 52-week low Rs 390). Sproutlife (Yoga Bar maker) became subsidiary effective April 1, 2026, expanding foods portfolio. Q3 FY26 saw FMCG revenue +11% led by Aashirvaad/Sunfeast/Bingo, but consolidated PAT fell ~6% on labour costs. ITC Hotels demerger already complete (listed Jan 2025). Dividend yield ~4.7-4.8%.
+  Sector: Nifty FMCG index down ~6% in CY26 — sector under pressure with selective rally. Nestle outperforming (+9% YTD); HUL, United Spirits, Emami, Dabur up 4-7%. Rural demand recovery uneven. Cigarette taxation has been stable in FY26 budget but brokerage estimates suggest a future hike could compress FY27/FY28E EPS by 12-13%.
+  Peers: ITC underperforming Nestle and HUL YTD. FMCG segment growth (+11%) lags Nestle's earnings momentum (+46% YoY in Q3). Trading at ~24x trailing P/E vs HUL/Nestle premium multiples. Analyst targets Rs 440-510 (12-month) — implies ~5-22% upside. Hold/Buy consensus.
+  Red flags: Q3 FY26 PAT fell 6% YoY on rising labour costs — margin pressure flagged, Cigarette tax hike risk could compress FY27/FY28 EPS by 12-13% per analyst estimates, FMCG sector index down 6% in CY26, Stock trading near 52-week lows; relative underperformance vs FMCG peers
+  Catalysts: Q4 FY26 results May 5, 2026, Final dividend announcement with Q4, Sproutlife/Yoga Bar integration into foods portfolio, FY27 cigarette volume growth commentary
+
+[BHARTIARTL]
+  Sentiment: BULLISH (confidence modifier: +0.10)
+  News: Q4 FY26 results scheduled for board meeting today (April 29, 2026); revenue est Rs 44,000-46,000 cr, PAT est Rs 3,000-3,600 cr, ARPU expected flat QoQ at Rs 259 (sector-leading), 4M wireless subscriber adds expected, 5G penetration ~45%. April 28: Google broke ground on $15B Vizag AI hub partnered with Nxtra by Airtel + AdaniConneX. April 21: 3,400+ 5G sites added in Maharashtra/Goa. Airtel raised select prepaid plans by 4-5% in April ahead of broader hike. Airtel Money received NBFC license from RBI Feb 13, 2026. Stock ~Rs 1,892 ahead of result.
+  Sector: Indian telecom in strong upcycle. Morgan Stanley/analysts expect 16-20% sector-wide tariff hike in 2026 (last hike was July 2024); operators already making subtle tweaks. Premiumisation, enterprise 5G, FWA rollout supporting structural ARPU growth (~12% CAGR FY25-28). Airtel and Jio stable; Vi continues to lose share. Tariff hike timing favors incumbents.
+  Peers: Airtel leads industry in ARPU at Rs 259 vs Jio Rs 213.7 vs Vi Rs 186. Strong subscriber-quality lead and 5G monetization more advanced than peers. Reliance Jio reported 268M 5G subs as of March 2026 (Jio still ahead in raw 5G base, but Airtel leads in monetization per user). Vi continuing to bleed share into Airtel.
+  Red flags: Stock has run hard YTD; result-day disappointment risk if PAT misses Rs 3,000-3,600 cr range, Capex intensity for 5G/AI infrastructure remains elevated
+  Catalysts: Q4 FY26 results announcement today (April 29, 2026) - board meeting, Sector-wide tariff hike of 16-20% expected in 2026, Airtel Money NBFC scale-up under fresh license, Vizag AI data centre hub buildout with Google, JM Financial sees up to 37% upside; target consensus Rs 1,800-2,100
+
+[RELIANCE]
+  Sentiment: NEUTRAL (confidence modifier: +0.00)
+  News: Q4 FY26 results announced April 24: consolidated PAT Rs 16,971 cr (-12.6% YoY), revenue Rs 2,98,621 cr. FY26 PAT Rs 95,610 cr (+18.3%) - first Indian company to cross $10B annual profit. Annual revenue Rs 11,75,919 cr (+9.8%), EBITDA Rs 2,07,911 cr (+13.4%, record). Final dividend Rs 6/share. Jio Q4 PAT Rs 7,935 cr (+13% YoY) on 268M 5G subs. Retail FY26 revenue >Rs 3.70 lakh cr, EBITDA >Rs 27,000 cr. Stock fell post-Q4 to ~Rs 1,376-1,389 on April 28 due to weak energy quarter; Goldman raised target to Rs 1,835 (Conviction Buy), Citi to Rs 1,805 (+17%).
+  Sector: O2C/refining segment under pressure from West Asia conflict (Iran-US) and reduced Russian crude discounts (~$1/bbl impact). Refining fundamentals supported by tight product markets through 2027. Telecom upcycle (tariff hike expected) supports Jio. Retail consumer demand resilient.
+  Peers: RIL is unique conglomerate (energy + telecom + retail + digital); no direct peer. Jio remains India's largest 5G operator by subs (268M) ahead of Airtel, but Airtel leads on ARPU (Rs 259 vs 213.7). Retail business outperforming traditional retail peers.
+  Red flags: Q4 PAT down 12.6% YoY - core energy weakness from West Asia conflict, Stock declined post-results despite full-year beat - sentiment weak near-term, Refining margin risk if Russian crude discount narrows
+  Catalysts: Jio Platforms IPO/listing path advancing toward mid-2026, Final dividend Rs 6/share pending AGM approval, Telecom tariff hike (16-20%) expected in 2026 to lift Jio earnings, Multiple brokerage upgrades post-results (Goldman, Citi), Retail business scaling: 387M registered customers, 1.93B transactions
+
+[CEATLTD]
+  Sentiment: BULLISH (confidence modifier: +0.10)
+  News: Q4 FY26 results announced (earnings call today April 29 at 4 PM IST): net profit MORE THAN DOUBLED to Rs 243 cr YoY; revenue up 23.3% to Rs 4,218 cr. FY26 revenue crossed Rs 15,000 cr; full-year PAT Rs 697 cr (highest ever). Camso (off-highway tyre) integration completed - boosting global mix. Market share gains in both replacement and OEM. Mgmt plans further 5% price hike in May-June to pass on raw material costs. Stock up 26% YoY, down ~2.4% in last month.
+  Sector: Indian tyre sector facing margin pressure from rising rubber and crude prices: RSS-4 grade rubber up 3% to Rs 22,800/100kg (Kottayam) and 6%+ globally to Rs 273/kg post Iran-US conflict escalation. Healthy domestic demand projected for FY27, but exports under pressure from geopolitical headwinds. All major tyre cos (MRF, Apollo, JK Tyre, CEAT) trading lower in last month on cost concerns.
+  Peers: CEAT's Q4 PAT doubling vs. industry under cost pressure shows operating leverage from international/Camso mix. CEAT outperformed MRF (+15% YoY, -8.3% 1M) and Apollo (+3.5% YoY, -6.5% 1M) on 1-year basis. Best-in-class profit growth in Q4 FY26 among listed tyre peers. Smaller scale than MRF but premium margin profile post-Camso.
+  Red flags: Raw material cost pressure (rubber +3-6%, crude elevated) compressing margins ahead, Export business exposed to West Asia conflict disruption, Stock down ~2.4% over last month suggests caution from peer-group cost concerns
+  Catalysts: Q4 FY26 results announcement and earnings call today (April 29, 4 PM IST), Planned 5% price hike in May-June to recover margins, Continued Camso integration synergies driving mix improvement, Domestic demand growth in FY27
+
+[IIFL]
+  Sentiment: BEARISH (confidence modifier: -0.15)
+  News: Board meeting TODAY (April 29, 2026) to approve Q4 FY26 results AND consider non-convertible securities fundraise for FY27; earnings call 5:00 PM IST. Major management change: Manish Mayank resigned as Business Head - Gold Loans; Mayank Sharma appointed (transitioned from Chief AI & Innovation Officer). April 24: stock closed at Rs 420.15 - DOWN 10.12% INTRADAY from prior close of Rs 467.45 - significant single-day decline ahead of result. Q3 FY26 PAT was Rs 168 cr; pre-provision operating profit Rs 1,075 cr (+101% YoY). Filed quarterly SEBI compliance certificate April 10.
+  Sector: Indian NBFC sector posting strong Q4 amid rising costs/geopolitical worries. RBI proposed Rs 1 lakh cr asset threshold for upper-layer NBFC classification. Gold loan NBFCs benefitting from elevated gold prices. Sector NIM under modest pressure (5-10 bps decline expected QoQ for housing finance peers).
+  Peers: IIFL trades at a discount to top-tier NBFCs (Bajaj Finance 31.9x P/E, Cholamandalam 24.3x, MMFS 17x). Stock down 6% over 6 months but up 36.6% YoY. Recovering from 2024 RBI gold-loan ban; portfolio re-set continues with gold loans leading recovery. Smaller scale and higher volatility than top NBFC peers.
+  Red flags: 10% intraday plunge on April 24 from Rs 467 to Rs 420 - unusual move ahead of results suggests negative information leakage or pre-result derisking, Senior leadership change in core Gold Loans business right before Q4 print, Pending NCD fundraise indicates continued capital/liquidity needs, History of 2024 RBI gold-loan business ban - regulatory overhang lingers
+  Catalysts: Q4 FY26 results today (April 29, 2026) and earnings call 5 PM IST, Board approval of NCD/non-convertible securities fundraise plan, Continued gold loan portfolio recovery post-RBI restriction normalization, Analyst target consensus Rs 482-562 for 2026 (above current ~Rs 420)
+
+[M&MFIN]
+  Sentiment: BULLISH (confidence modifier: +0.10)
+  News: Q4 FY26 results announced April 27: net profit JUMPED 106% YoY to Rs 940 cr (vs Rs 456 cr); Total Income Rs 5,560 cr (+14%). FY26 PAT Rs 2,861 cr (+27% YoY); FY26 Total Income Rs 21,087 cr (+14%). Dividend Rs 7.50/share (375%). NIM expanded ~100 bps YoY to 7.5%. AUM up 12% YoY, disbursements up 11% YoY in Q4 (annual disbursements +6%). Non-vehicle finance up 32%; LAP +41% YoY. Asset quality improved: Stage 3 at 3.4%, Stage 2 at 4.8%. Stock zoomed 11.3% to ~Rs 319.55 on April 27 post-result.
+  Sector: Indian NBFC upper-layer cohort (Bajaj Finance, MMFS, Chola, etc.) posting strong Q4 amid rising funding costs. RBI proposed scale-based regulatory threshold revision to Rs 1 lakh cr asset size for upper-layer classification. Rural/agri-finance sentiment improving with tractor and CV demand stabilizing. NIM pressure across some peers but MMFS bucking trend.
+  Peers: MMFS trading at attractive ~17x P/E vs. Bajaj Finance 31.9x and Cholamandalam 24.3x - significant valuation discount. NIM expansion of 100 bps YoY is best-in-class among large NBFCs. Asset quality improvement (Stage 3 down to 3.4%) closing gap with sector leaders. Anand Rathi Buy with Rs 396 target; average 12M target Rs 375 (vs Rs 319 current = ~17% upside).
+  Red flags: Mgmt has flagged near-term margin pressure risk as funding costs rise, Stock already up 11% post-result - much of positive surprise priced in, Vehicle finance core market exposed to rural cyclicality
+  Catalysts: Strong Q4 print (+106% PAT) and dividend Rs 7.50 pending AGM approval, NIM expansion to 7.5% creating earnings tailwind, Non-vehicle finance (LAP +41%) diversification strategy gaining scale, Multiple analyst Buy ratings with targets Rs 375-450
+
+[HINDZINC]
+  Sentiment: BULLISH (confidence modifier: +0.06)
+  News: Q4 FY26 results announced April 21, 2026: PAT +67.6% YoY to Rs 5,033 cr; revenue +43.75-49% YoY to Rs 12,692-13,544 cr. FY26 PAT Rs 13,832 cr (+33.6% YoY); FY26 revenue Rs 39,192 cr (+18.6% YoY). Board declared FY27 first interim dividend of Rs 11/share (550% on Rs 2 face value), total payout Rs 4,648 cr, record date April 30, 2026 (stock goes ex-dividend tomorrow). Cash and investments stand at Rs 13,846 cr.
+  Sector: Zinc/silver complex remains a tailwind: elevated LME zinc and silver prices drove Q4 results, with Vedanta (parent) Q4 FY26 release scheduled today April 29, 2026 - consensus expects APAT up to +174% YoY on the same LME tailwinds. Analysts caveat that a correction in LME zinc to $2,200-2,400/tonne could reduce PAT by 35-40%. Cost-of-production pressures are flagged due to supply constraints.
+  Peers: World's #2 integrated zinc-lead miner. Q4 commentary cites best-in-class cost structure. HINDZINC carries a net-cash balance sheet, contrasting with leveraged parent Vedanta. Stock rose 2.45% on results day, outperforming most diversified miners through April.
+  Red flags: Vedanta-linked encumbrance via Axis Trustee on 2.29% (9.70 cr shares) of HINDZINC tied to a Rs 5,000 cr NCD; a separate Vedanta share encumbrance on HINDZINC for a $125M ECB has also been disclosed, Vedanta promoter group leverage and historically high pledge level remain a structural overhang, Stock goes ex-dividend April 30, 2026 - mechanical ~Rs 11 price drop expected, PAT highly sensitive to LME zinc/silver prices - cycle correction risk, Rising cost of production cited by analysts despite record volumes
+  Catalysts: Record date April 30, 2026 for Rs 11 interim dividend, Vedanta Q4 FY26 results today April 29 - parent commentary on LME outlook, deleveraging, and demerger will spill over, FY27 production/cost guidance in upcoming investor calls
+
+[POWERGRID]
+  Sentiment: NEUTRAL (confidence modifier: +0.03)
+  News: Two independent directors (Shiv Tapasya Paswan, Rohit Vaswani) completed tenure on April 15, 2026. CMD Burra Vamsi Rama Mohan given additional charge as Director (Projects) for 3 months from April 1, 2026. Interest payment of Rs 416.4 cr made April 15 with no delays. Letter of intent received for a project on April 1, 2026. CMP ~Rs 321.25 (April 27); stock up ~5.55% over the last month.
+  Sector: Transmission sector backed by INR 9 trillion capex pipeline through 2032. India's peak power demand hit a record 256.11 GW on April 26, 2026 amid heatwave - structurally bullish for transmission utilization. Counterweight: FY26 sector ordering weakened sharply (16 schemes awarded vs 45 in FY25), described as temporary bandwidth constraints rather than demand collapse.
+  Peers: Peer Adani Energy Solutions Q4 FY26 showed strong revenue growth offset by margin compression and premium valuation. Adani Power up ~57% in 3 months; POWERGRID's 5.55% 1M gain trails the hotter private power names. POWERGRID remains the regulated-return defensive in the basket - earnings growth steady but capped by tariff structure.
+  Red flags: FY26 transmission scheme awards down sharply (16 vs 45 YoY) - near-term order-book momentum has slowed, Two independent directors exited April 15, 2026 - bench needs refreshing (tenure-driven, not adverse), CMD holding additional charge as Director (Projects) - temporary leadership concentration, Sector peers showing margin compression - regulated tariff structure caps upside
+  Catalysts: Q4 FY26 board meeting and final dividend recommendation expected May 18-19, 2026 (consensus revenue Rs 12,000-12,800 cr, PAT Rs 3,800-4,100 cr), Heatwave-driven record peak demand (256 GW April 26) supportive for utilization commentary, Multi-year T&D capex cycle continuing through 2032 (Rs 9 trillion sector pipeline)
+
+--- ETF SNAPSHOT ---
+ETF                   CMP   Change %       Volume
+--------------------------------------------------
+
+======================================================
+OPEN / PENDING ORDERS
+======================================================
+Working orders that have NOT yet filled. Before emitting a new BUY/SELL, check this list — do NOT stack a second same-direction order on a symbol that already appears here (see ORDER HYGIENE).
+  BUY   250x BANDHANBNK   CNC LIMIT @ limit INR 200.00  [OPEN, placed 357m ago]
+  BUY    20x GLENMARK     CNC LIMIT @ limit INR 2400.00  [OPEN, placed 571m ago]
+  BUY  1500x PHARMABEES   CNC LIMIT @ limit INR 23.65  [OPEN, placed 3267m ago]
+  BUY   110x TATAPOWER    CNC LIMIT @ limit INR 443.00  [OPEN, placed 3389m ago]
+
+======================================================
+EXISTING POSITION UPDATES
+======================================================
+Review each existing position and recommend: HOLD, TRAIL_SL, BOOK_PARTIAL, or EXIT.
+
+PNBHOUSING (CNC, held 0 days):
+  Entry: INR 984.00 | CMP: INR 1064.30 | P&L: +8.2%
+  Current SL: INR 1045.12 | Original target: INR 1110.00
+
+GOLDBEES (CNC, held 0 days):
+  Entry: INR 125.10 | CMP: INR 121.78 | P&L: -2.6%
+  Current SL: INR 119.00 | Original target: INR 135.00
+
+NESTLEIND (CNC, held 0 days):
+  Entry: INR 1412.94 | CMP: INR 1464.80 | P&L: +3.7%
+  Current SL: INR 1445.00 | Original target: INR 1500.00
+
+NTPC (CNC, held 0 days):
+  Entry: INR 404.50 | CMP: INR 406.55 | P&L: +0.5%
+  Current SL: INR 401.00 | Original target: INR 425.00
+
+SUNPHARMA (CNC, held 0 days):
+  Entry: INR 1734.00 | CMP: INR 1761.80 | P&L: +1.6%
+  Current SL: INR 1745.00 | Original target: INR 1810.00
+
+POWERGRID (CNC, held 0 days):
+  Entry: INR 320.50 | CMP: INR 322.00 | P&L: +0.5%
+  Current SL: INR 319.00 | Original target: INR 330.00
+
+COALINDIA (CNC, held 0 days):
+  Entry: INR 469.00 | CMP: INR 483.65 | P&L: +3.1%
+  Current SL: INR 475.00 | Original target: INR 495.00
+
+HINDZINC (CNC, held 0 days):
+  Entry: INR 612.00 | CMP: INR 618.55 | P&L: +1.1%
+  Current SL: INR 615.00 | Original target: INR 660.00
+
+======================================================
+PERFORMANCE CONTEXT (rolling 5-day summary)
+======================================================
+Total trades: 22 | Wins: 3 | Losses: 5
+Win rate: 14%
+Average win: INR 944 | Average loss: INR 1,448
+Profit factor: 0.4x
+Net P&L (5 days): INR -4,408
+Cumulative P&L (experiment): INR -4,408
+
+======================================================
+CURRENT TIME: 13:12 IST | MARKET CLOSES IN 2h 17m
+EXPERIMENT DAY: 10 of 180 | TRADING DAYS LEFT: 123
+======================================================
+
+Analyze all data above and provide your trading decisions in the required JSON format. Remember: quality over quantity. NO_ACTION is always valid. Capital preservation is priority #1.

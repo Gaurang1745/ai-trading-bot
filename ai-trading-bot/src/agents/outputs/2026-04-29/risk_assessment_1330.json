@@ -1,0 +1,82 @@
+{
+  "timestamp": "2026-04-29 13:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995592.64,
+    "cash": 503275.24,
+    "deployed_pct": 0.4945,
+    "deployed_pct_full_fill_projection": 0.5930,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 2,
+    "daily_pnl": 0.0,
+    "cumulative_pnl": -4407.36,
+    "cumulative_pnl_pct": -0.0044
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+    {"symbol": "NTPC", "value": 50562.50, "pct_of_capital": 0.0508, "sector": "Power"},
+    {"symbol": "GOLDBEES", "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "POWERGRID", "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+    {"symbol": "COALINDIA", "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"},
+    {"symbol": "HINDZINC", "value": 45900.00, "pct_of_capital": 0.0461, "sector": "Metals"}
+  ],
+  "open_orders": [
+    {"symbol": "GLENMARK", "qty": 20, "price": 2400.0, "value": 48000.0, "confidence": 0.65, "sl_pct": 0.044, "sector": "Pharma", "submitted": "09:10:58", "age_min": 259},
+    {"symbol": "BANDHANBNK", "qty": 250, "price": 200.0, "value": 50000.0, "confidence": 0.68, "sl_pct": 0.045, "sector": "BFSI", "submitted": "12:44:19", "age_min": 46}
+  ],
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1206,
+    "Pharma": 0.1005,
+    "Power": 0.0991,
+    "Mining_Metals": 0.0932,
+    "Gold": 0.0503
+  },
+  "guardrail_buffers": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1206, buffer 2.94 pp",
+    "max_sector_pct (0.22)": "BFSI 0.1293 largest (full-fill), buffer 9.07 pp",
+    "max_deployed_pct (0.65)": "full-fill 0.5930, buffer 5.70 pp",
+    "daily_loss_limit_pct (0.04)": "daily P&L 0.0, buffer ~₹40K",
+    "max_sl_pct (0.04)": "GLENMARK 0.044, BANDHANBNK 0.045 — both AT/just past ceiling, admitted at boundary",
+    "min_confidence (0.65)": "GLENMARK 0.65 (at floor), BANDHANBNK 0.68"
+  },
+  "tick_delta_vs_1300": {
+    "trades_since_1300": 0,
+    "fills_since_1300": 0,
+    "cash_delta": 0.0,
+    "holdings_delta": 0,
+    "open_orders_delta": 0,
+    "daily_pnl_delta": 0.0,
+    "summary": "No state change in the 30-minute window. Strategy layer silent (no new BUY/SELL/MODIFY since BANDHANBNK BUY at 12:44:19, 46 min ago). The two OPEN orders from earlier (GLENMARK 09:10, BANDHANBNK 12:44) remain pending. Cash, holdings, sector mix, deployment, and P&L are all identical to the 13:00 snapshot."
+  },
+  "findings": [
+    "Zero-delta tick: no fills, no new submissions, no SELLs in the 13:00→13:30 window. Book is in steady state.",
+    "Cash buffer healthy at 50.55% of capital (₹503,275). Filled deployment 49.45% / full-fill projection 59.30% — comfortable 5.70 pp buffer to 65% cap.",
+    "No single-name concentration breach: largest filled position NESTLEIND at 12.06% of capital, 2.94 pp buffer to 15% max_position_pct cap.",
+    "No sector concentration breach: largest sector BFSI 12.93% on full fill (PNBHOUSING+BANDHANBNK), 9.07 pp buffer to 22% max_sector_pct cap. All 6 sectors comfortably under cap.",
+    "Daily realized P&L = ₹0 (2 BUYs today, both still OPEN; 0 SELLs). No risk of daily_loss_limit_pct circuit breaker firing.",
+    "GLENMARK OPEN order is now 4h19m old — flagged for ageing observability. Submitted 09:10:58 at ₹2400 limit; if the limit is meaningfully off-market, the order may simply not fill today. Not a risk-monitor lever (cancellation is a strategy-layer call), but worth noting in case it remains stale into EOD.",
+    "FLAG (carried from 13:00, unchanged): Both today's SL widths (GLENMARK 4.4%, BANDHANBNK 4.5%) are at/just past the 4% max_sl_pct ceiling. Per-name worst-case risk ~0.22% of capital each (5% size × 4.4-4.5% SL), within 0.5% per-name budget. Trigger armed at 13:00 (3rd ceiling-hugging entry → fire max_sl_pct 0.04 → 0.035) remains armed but did not fire — no 3rd ceiling-hugging entry arrived this tick.",
+    "Cumulative book P&L -0.44% (₹-4,407.36) reflects Day-6 panic-exit damage. Book is healing via cash redeployment, not realization."
+  ],
+  "actions_taken": [],
+  "actions_considered_but_not_taken": [
+    "Tighten daily_loss_limit_pct (0.04 → 0.03): NOT FIRED. Book at 0.0 daily P&L, ~₹40K buffer to circuit breaker.",
+    "Tighten max_deployed_pct (0.65 → 0.60): NOT FIRED. Full-fill projection 59.30%, 5.70 pp buffer; tightening here would gate legitimate diversifying admissions on the freed Day-6 capacity without addressing any active failure mode.",
+    "Tighten max_sector_pct (0.22 → 0.20): NOT FIRED. Largest sector BFSI 12.93%, 9.07 pp buffer. No cluster emerging.",
+    "Tighten min_confidence (0.65 → 0.68): NOT FIRED. Both today's entries cleared the 0.65 floor; closed-trade sample (n=8: 3W/5L) still too small for confidence-vs-outcome signal. The Day-6 EOD review explicitly held this lever for the same reason.",
+    "Tighten max_position_pct (0.15 → 0.12): NOT FIRED. NESTLEIND 12.06% largest, 2.94 pp buffer.",
+    "Tighten max_sl_pct (0.04 → 0.035): NOT FIRED. The 13:00 trigger ('3rd ceiling-hugging entry this session → fire') did not fire — no 3rd ceiling-hugging entry; no entries at all in the 13:00→13:30 window. Lever remains ARMED for the rest of the session under the same condition."
+  ],
+  "armed_triggers_for_next_tick": [
+    "max_sl_pct 0.04 → 0.035 — fires if a 3rd entry today arrives with sl_pct ≥ 0.04 (the GLENMARK + BANDHANBNK boundary-hugging pattern repeating).",
+    "max_deployed_pct 0.65 → 0.60 — fires if full-fill projection climbs above 62% (currently 59.30%, 2.70 pp pre-fire buffer), to preserve a meaningful gap before the 65% binding cap.",
+    "max_sector_pct 0.22 → 0.20 — fires if any sector full-fill exposure exceeds 17% (largest currently BFSI 12.93%, 4.07 pp buffer).",
+    "daily_loss_limit_pct 0.04 → 0.03 — fires if daily realized P&L worsens past -₹15K (currently ₹0).",
+    "OPEN-order ageing watch — if GLENMARK remains OPEN at EOD without strategy cancelling/MODIFYing, log as a Day-1-style stale-order observation in the EOD review (not a risk_monitor lever)."
+  ],
+  "rationale": "Pure zero-delta tick. The 13:00 snapshot's healthy posture carries forward unchanged: deployment moderate, no concentration breaches, daily P&L flat, both today's entries cleared their gates. The override stack (min_confidence 0.65, max_position_pct 0.15, max_deployed_pct 0.65, max_sector_pct 0.22, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.04, daily_loss_limit_pct 0.04) is doing its work. With no new entries, no fills, and no P&L movement in the window, there is no firing trigger to act on — risk_monitor's discipline here is to NOT fire decoratively. Levers re-armed for the rest of the session as listed; no changelog entry written because no parameter was changed."
+}

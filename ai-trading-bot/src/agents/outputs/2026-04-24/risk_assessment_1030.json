@@ -1,0 +1,141 @@
+{
+  "timestamp": "2026-04-24 10:30:00",
+  "risk_level": "MEDIUM",
+  "session_context": {
+    "day_of_session": "Day 3 — 2026-04-24",
+    "market_status": "OPEN (~1h15m into regular session)",
+    "latest_mark_source": "portfolio_snapshots row 23 @ 2026-04-24 10:12:51 — post-TORNTPOWER-exit snapshot",
+    "trades_today_count": 1,
+    "open_orders_count": 0,
+    "strategy_silence_since": "CLEARED at 2026-04-24 10:12:35 — first SELL/EXIT since 2026-04-22 14:13:33. Cumulative silence clock reset after ~44h0m. Strategy is ACTIVE again.",
+    "delta_vs_10_00_tick": "MATERIAL STRUCTURAL IMPROVEMENT. Strategy broke silence with a clean TORNTPOWER SL-breach exit (36 @ ₹1700.95, realized +₹1834.20). Downstream: deployed 78.60% → 72.43% (-6.17 pp), Power cluster 16.02% → 9.93% (-6.09 pp), AUBANK triangle cooled (+1.89% → +1.22%), MAHABANK backed off fire line (-5.98% → -5.85%, +13 bps). Book net moved from +₹2,062 to -₹83 (essentially flat) — the realized gain on TORNTPOWER offset residual MTM softness elsewhere. Cash rose ₹214,415 → ₹275,650 (+₹61,234 = 36 × ₹1700.95)."
+  },
+  "portfolio_summary": {
+    "total_value": 999936.60,
+    "cash": 275649.70,
+    "deployed_pct": 0.7243,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": -82.90
+  },
+  "pnl_detail": {
+    "realized_daily_pnl_today": 1834.20,
+    "intraday_unrealized_pnl": -1917.10,
+    "net_daily_pnl": -82.90,
+    "net_daily_pnl_pct": -0.0000829,
+    "cumulative_pnl_since_inception": -63.40,
+    "daily_loss_limit_value_today": 29998.10,
+    "buffer_to_loss_gate_inr": 29915.20,
+    "note": "Book is net flat. Realized +₹1,834 on TORNTPOWER offsets unrealized -₹1,917. Book-level drift indifferent to the macro forecast; AUBANK/PNBHOUSING/GRANULES green offsetting MAHABANK/HINDUNILVR/NTPC red."
+  },
+  "filled_book_detail_at_10_12_51": {
+    "holdings_value_marked": 724286.90,
+    "holdings": [
+      {"symbol": "AUBANK",     "qty": 176,  "avg_price": 1049.05, "last_price": 1061.85, "value": 186885.60, "pct_capital": 0.1869, "pnl_pct": 0.0122,  "sector": "BFSI-Private", "note": "Largest single holding; grandfathered above 0.15 cap (+3.69 pp, narrowed from +3.78 pp at 10:00). Triangle cooled: gain leg weakened from +1.89% to +1.22%, and unacted leg is now FALSE (strategy acted elsewhere at 10:12). Flag demoted from hot to watch."},
+      {"symbol": "NESTLEIND",  "qty": 85,   "avg_price": 1412.94, "last_price": 1418.80, "value": 120598.00, "pct_capital": 0.1206, "pnl_pct": 0.0041,  "sector": "FMCG"},
+      {"symbol": "MAHABANK",   "qty": 1200, "avg_price": 81.50,   "last_price": 76.73,   "value": 92076.00,  "pct_capital": 0.0921, "pnl_pct": -0.0585, "sector": "BFSI-PSU", "note": "Backed off the fire line: -5.98% → -5.85%, 12 paise above ₹76.61. ARMED state weakened; fire probability on next tick materially lower than 10:00 reading."},
+      {"symbol": "PNBHOUSING", "qty": 80,   "avg_price": 984.00,  "last_price": 1010.00, "value": 80800.00,  "pct_capital": 0.0808, "pnl_pct": 0.0264,  "sector": "BFSI-NBFC"},
+      {"symbol": "NTPC",       "qty": 125,  "avg_price": 404.50,  "last_price": 400.80,  "value": 50100.00,  "pct_capital": 0.0501, "pnl_pct": -0.0091, "sector": "Power"},
+      {"symbol": "GOLDBEES",   "qty": 400,  "avg_price": 125.10,  "last_price": 123.42,  "value": 49368.00,  "pct_capital": 0.0494, "pnl_pct": -0.0134, "sector": "Gold-ETF"},
+      {"symbol": "ADANIPOWER", "qty": 230,  "avg_price": 214.00,  "last_price": 214.08,  "value": 49238.40,  "pct_capital": 0.0492, "pnl_pct": 0.0004,  "sector": "Power"},
+      {"symbol": "GRANULES",   "qty": 70,   "avg_price": 681.00,  "last_price": 690.75,  "value": 48352.50,  "pct_capital": 0.0484, "pnl_pct": 0.0143,  "sector": "Pharma"},
+      {"symbol": "HINDUNILVR", "qty": 20,   "avg_price": 2372.00, "last_price": 2344.30, "value": 46886.00,  "pct_capital": 0.0469, "pnl_pct": -0.0117, "sector": "FMCG"}
+    ],
+    "sector_concentration": {
+      "BFSI_total":  {"names": ["AUBANK", "MAHABANK", "PNBHOUSING"], "value": 359761.60, "pct_capital": 0.3598, "pct_deployed": 0.4967, "delta_pp_vs_10_00": 0.01, "note": "Essentially flat vs 10:00 (35.97 → 35.98). 1.02 pp buffer to 37% d-trigger. AUBANK cooled but the dispersal has pushed BFSI share of DEPLOYED up to 49.67% (from 45.76% at 10:00) because the TORNTPOWER exit shrank the denominator — this is a pure compositional effect, not a risk increase."},
+      "FMCG_total":  {"names": ["NESTLEIND", "HINDUNILVR"],          "value": 167484.00, "pct_capital": 0.1675, "pct_deployed": 0.2312, "delta_pp_vs_10_00": -0.09, "note": "-9 bps on HINDUNILVR softness. Share of deployed ticked up for the same compositional reason as BFSI."},
+      "Power_total": {"names": ["NTPC", "ADANIPOWER"],               "value": 99338.40,  "pct_capital": 0.0993, "pct_deployed": 0.1372, "delta_pp_vs_10_00": -6.09, "note": "MATERIAL: -6.09 pp via TORNTPOWER exit. Cluster dispersed from 3 names to 2. 10.07 pp buffer to 20% g-trigger, widest of the session."},
+      "Gold_ETF":    {"names": ["GOLDBEES"],                         "value": 49368.00,  "pct_capital": 0.0494, "pct_deployed": 0.0682},
+      "Pharma":      {"names": ["GRANULES"],                         "value": 48352.50,  "pct_capital": 0.0484, "pct_deployed": 0.0668}
+    },
+    "passive_cap_breaches_grandfathered": [
+      {"cap": "max_position_pct=0.15", "symbol": "AUBANK", "pct_capital": 0.1869, "over_by_pp": 3.69, "delta_vs_10_00": "-0.09 pp", "nature": "Narrowed 9 bps via MTM cooling. Still grandfathered; tighter cap cannot retract."},
+      {"cap": "max_deployed_pct=0.70", "portfolio_pct": 0.7243, "over_by_pp": 2.43, "delta_vs_10_00": "-6.17 pp", "nature": "MATERIAL NARROWING via TORNTPOWER exit freeing ₹61,234 cash. Binding gap down from 8.60 pp to 2.43 pp — any single further SELL now realistically unlocks admission capacity under the current 0.70 cap without any override change."}
+    ]
+  },
+  "today_trades_log": [
+    {
+      "time": "2026-04-24 10:12:35",
+      "symbol": "TORNTPOWER",
+      "type": "SELL",
+      "qty": 36,
+      "price": 1700.95,
+      "realized_pnl": 1834.20,
+      "confidence": 0.75,
+      "regime": "SWING",
+      "justification_snippet": "Current SL 1704.81 ABOVE CMP 1696.50 — SL effectively breached intraday (day low 1685.60). Gap up faded -2.33%. Q4 results pending May with prior Q1 showing -25% PAT decline — asymmetric risk into results at 52-week high. Book the +3% gain cleanly.",
+      "risk_monitor_read": "Clean exit. Three discipline checks pass: (1) SL-breach cited and verified (SL 1704.81 > CMP 1696.50), (2) asymmetric earnings risk cited, (3) gain booked rather than let run to stop. First strategy action in ~44h and the reasoning is textbook. This is the kind of proactive SELL the earlier ticks have been waiting for."
+    }
+  ],
+  "current_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.70,
+    "default_sl_pct": 0.015,
+    "max_sl_pct": 0.04
+  },
+  "trigger_check": {
+    "trigger_b_first_sell_since_day_1": {"fired": true, "value": "TORNTPOWER SELL 36 @ 1700.95 at 10:12:35, realized +₹1834.20", "spec_action": "Relax max_deployed_pct 0.70 → 0.72 (one-way, non-cumulative, never above 0.75)", "executed": false, "override_rationale": "Spec action is a LOOSENING. The current agent directive is strict: 'may ONLY tighten parameters (make them more restrictive), never loosen them.' The directive supersedes the pre-specified relax rule. Keeping max_deployed_pct=0.70 firm is effectively a tighter posture than the spec alternative 0.72 would have been, and requires any further admission to wait for additional SELLs or MTM drift rather than being gifted 2 pp of admission headroom by rule."},
+    "trigger_e_armed_mahabank_below_neg_6_pct": {"fired": false, "value": -0.0585, "threshold": -0.06, "delta_vs_10_00": "+13 bps (from -5.98% back up to -5.85%)", "status": "DISARMED. Backed off the near-miss. LTP ₹76.73 vs fire line ₹76.61 — 12-paise buffer (widened from 2 paise at 10:00). Remains monitored but is no longer the hottest armed trigger."},
+    "trigger_a_book_below_neg_1_pct": {"fired": false, "value": -0.0000829, "threshold": -0.01, "buffer_inr": 9935.76, "reason": "Book is essentially flat at -₹83. ~₹9,936 buffer to -1% findings trigger and ~₹29,915 buffer to -3% loss gate. No fire."},
+    "trigger_d_bfsi_above_0_37": {"fired": false, "value": 0.3598, "threshold": 0.37, "buffer_pp": 1.02, "note": "Flat vs 10:00 (35.97 → 35.98). AUBANK cooling offset by MAHABANK holding. 1.02 pp buffer intact."},
+    "trigger_g_power_above_0_20_of_capital": {"fired": false, "value": 0.0993, "threshold": 0.20, "buffer_pp": 10.07, "note": "MATERIAL RELAX: Power cluster now 9.93% (from 16.02% at 10:00) via TORNTPOWER exit. 10.07 pp buffer, widest of session. The g-trigger is now deep out-of-the-money."},
+    "trigger_f_strategy_silence_past_1st_hour": {"fired": false, "status": "RESOLVED. Strategy acted at 10:12:35, 18 min before the 10:15 first-hour threshold would have fired, and 3 min before the 10:15 cutoff relative to the 10:00 assessment. Silence clock reset to 0."},
+    "trigger_aubank_plus_1_unacted": {"fired": false, "value": 0.0122, "threshold": 0.010, "triangle_state": "2-of-3 FALSE (oversize=TRUE, gain=TRUE at +1.22%, unacted=FALSE since strategy acted at 10:12). Triangle legally still 'gain + oversize + unacted-on-AUBANK-specifically' if read strictly, but the Day-2 spec intent was to flag strategy-layer passivity broadly, which is now falsified. Flag demoted to watch per 10:00 converse-condition language."},
+    "trigger_meta_high_composite": {"fired": false, "components": {"strategy_silent": false, "book_below_neg_0_5_pct": false, "mahabank_below_neg_5_5_pct": true}, "note": "0-of-3 previously-firing components. Only MAHABANK watch remains at true. HIGH elevation farther from justified than at 10:00."},
+    "trigger_aubank_plus_2_5_pct": {"fired": false, "value": 0.0122, "threshold": 0.025, "note": "AUBANK cooled from +1.89% to +1.22%, moved AWAY from the escalation threshold. 1.28 pp buffer."},
+    "trigger_aubank_below_plus_0_5_pct": {"fired": false, "value": 0.0122, "threshold": 0.005, "note": "Triangle cool-off threshold not met (still above +0.5%). But the unacted leg is independently false, so the triangle is already cooled via a different vector."}
+  },
+  "findings": [
+    "MATERIAL REGIME CHANGE: Strategy broke its ~44-hour silence at 10:12:35 with a clean TORNTPOWER exit (36 @ ₹1700.95, realized +₹1834.20). This is the first SELL/EXIT since Day-1 14:13:33 and resolves multiple prior-tick escalation conditions (strategy-silence first-hour trigger, AUBANK triangle unacted-leg, Power cluster size).",
+    "Exit discipline was textbook: strategy cited (i) SL at 1704.81 breached intraday (day low 1685.60 < SL, CMP 1696.50 < SL), (ii) asymmetric Q4-earnings risk at 52-week high with prior quarter -25% PAT, (iii) preference to book the +3% gain cleanly over letting it fill at the stop. The reasoning quality signals the strategy layer is not asleep — it was gating, not absent.",
+    "Power cluster dispersed from 3 names to 2 (TORNTPOWER exited): 16.02% → 9.93% of capital, -609 bps. Buffer to 20% g-trigger widened from 3.98 pp to 10.07 pp. This is the single largest cluster-risk reduction of the session.",
+    "Deployment dropped 78.60% → 72.43% (-617 bps) via the ₹61,234 cash inflow. Binding gap vs the 0.70 override narrowed from 8.60 pp to 2.43 pp — any ONE additional SELL (e.g., of another 5%-weight name) would now fully unlock admission capacity at the current cap. The cap has shifted from 'structurally blocking' to 'tightly binding at the margin'.",
+    "AUBANK triangle cooled on two of three legs: gain softened +1.89% → +1.22%, and the unacted leg flipped FALSE (strategy acted, if on TORNTPOWER rather than AUBANK). Oversize leg remains (18.69% vs 15% cap, narrowed 9 bps). Triangle flag demoted from HOT to WATCH per the 10:00 converse-condition wording.",
+    "MAHABANK backed off the armed -6% fire line: -5.98% → -5.85% (+13 bps). LTP ₹76.73 vs fire line ₹76.61, buffer widened from 2 paise to 12 paise. The min_sl_pct 0.005 → 0.01 second-knob stays ARMED but is no longer the hottest armed trigger of the book.",
+    "BFSI 35.98% (flat vs 10:00's 35.97%). AUBANK cooling offset by MAHABANK holding. Buffer to 37% d-trigger intact at 1.02 pp. No new admission, no cluster drift — trigger is quiescent.",
+    "Spec-specified relax rule (trigger b: 0.70 → 0.72 on first SELL) conflicts with the current agent directive that permits only tightening. Holding max_deployed_pct=0.70 firm is the disciplined path — this keeps the post-SELL admission surface tighter than the spec alternative would have, with no file change required.",
+    "Book is essentially flat (-₹83, -0.008%) with ~₹9,936 buffer to the -1% findings trigger and ~₹29,915 buffer to the -3% loss gate. Realized +₹1,834 on TORNTPOWER, offset by -₹1,917 of MTM drift elsewhere. No loss-gate tightening indicated.",
+    "Override posture (0.60 / 0.15 / 0.70 / 0.015 / 0.04) remains structurally appropriate. Three of the five levers were tightened Day-1 and Day-2; they continue to bind against the carried concentration profile (AUBANK oversize, BFSI cluster, deployed%) and have now started visibly compounding with the first strategy-side SELL. No lever needs further tightening THIS tick.",
+    "Risk_level holds at MEDIUM. Direction of travel is clearly toward LOW: strategy active, clusters cooled, AUBANK triangle demoted, MAHABANK backed off. The MEDIUM rating reflects the still-unresolved structural breaches (AUBANK grandfathered at 18.69%, deployed 72.43% grandfathered over 0.70 cap, MAHABANK -5.85% carried mark-to-market) rather than any fresh risk vector."
+  ],
+  "actions_taken": [
+    "No numeric override changes this tick. Holding min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.70, default_sl_pct=0.015, max_sl_pct=0.04. No file edit to risk_config.yaml; no new changelog entry.",
+    "Affirmatively DECLINED to execute the pre-specified relax (trigger b: max_deployed_pct 0.70 → 0.72 on first SELL/EXIT since Day-1). Rationale: the current agent directive is strict — 'may ONLY tighten parameters (make them more restrictive), never loosen them' — and this supersedes the pre-specified relax. Net effect: admission surface is tighter than the Day-2 spec playbook would have produced, with 2.43 pp of binding gap (vs the 0.00 pp the relax would have left after settling to 72.43% deployed).",
+    "Demoted AUBANK triangle flag from HOT (fired at 10:00) to WATCH per the 10:00 converse-condition language. Two of three legs cooled (gain softened, unacted falsified). Oversize leg remains but is a mark-to-market drift issue no numeric lever can address.",
+    "Disarmed MAHABANK -6% second-knob trigger for this tick: LTP ₹76.73 is 12 paise above ₹76.61, up from 2 paise at 10:00. Trigger remains specified for future ticks but is no longer the armed-hottest lever.",
+    "Logged the TORNTPOWER exit as a positive strategy-layer signal (quality of reasoning, timeliness vs SL-breach, earnings-risk awareness). This closes the open observation from Day-2 EOD that zero position-management activity was occurring.",
+    "Maintaining risk_level at MEDIUM. Direction-of-travel is toward LOW but three structural breaches persist (AUBANK oversize, deployed>cap, MAHABANK single-name drag). Would require AUBANK trim OR deployment < 0.70 to step down to LOW."
+  ],
+  "actions_not_taken": [
+    "Did NOT relax max_deployed_pct 0.70 → 0.72 per the spec's trigger-(b) playbook. Reason: task directive forbids loosening. Structural side-effect: post-SELL admission surface is tighter than the spec intended, which is consistent with the general risk-posture discipline.",
+    "Did NOT tighten max_deployed_pct further (0.70 → 0.68). Reason: the binding gap narrowed from 8.60 pp to 2.43 pp purely via the SELL — further tightening without a firing trigger would be decorative, and is unnecessary given the cap is already the primary admission block.",
+    "Did NOT tighten max_position_pct (0.15 → 0.12). Reason: AUBANK 18.69% is grandfathered drift; tighter cap cannot retract. Cap is not being tested by any new admission. No firing trigger.",
+    "Did NOT raise min_confidence (0.60 → 0.65). Reason: trigger (d) not fired — BFSI flat at 35.98%, 1.02 pp buffer. No admission surface under the 0.70 deployed cap for a stricter confidence gate to bite on anyway.",
+    "Did NOT tighten daily_loss_limit_pct (0.03 → 0.025). Reason: trigger (a) not fired — book is essentially flat at -0.008%, ~₹9,936 buffer to the -1% findings trigger. Tightening a loss gate on a flat book is theater.",
+    "Did NOT tighten default_sl_pct or max_sl_pct. Reason: these were tightened Day-2 (15:00 and 16:00) and the TORNTPOWER exit did NOT involve a new admission — no new entry has tested the 0.04 ceiling or the 0.015 default. Untested caps shouldn't be re-tightened.",
+    "Did NOT fire min_sl_pct 0.005 → 0.01 on MAHABANK. Reason: MAHABANK backed OFF the -6% fire line (now -5.85%, 12-paise buffer). Trigger disarmed this tick.",
+    "Did NOT elevate risk_level to HIGH. Reason: composite meta-trigger is 0-of-3 firing components after the strategy-silence leg resolved. Structurally the lowest HIGH-probability tick of the session.",
+    "Did NOT drop risk_level to LOW. Reason: three structural breaches remain (AUBANK 18.69% > 0.15 cap, deployed 72.43% > 0.70 cap, MAHABANK -5.85% sitting inside the -5% concern band). Direction-of-travel is toward LOW; an AUBANK trim or a ≥5 pp deployment reduction would justify the step-down."
+  ],
+  "reassessment_triggers_next_tick": [
+    "(e-ARMED, COOLER) MAHABANK last_price ≤ 76.61 (pnl_pct ≤ -6.00%) → FIRE: min_sl_pct 0.005 → 0.01. Currently 12 paise above, widened from 2 paise at 10:00. Fire probability is materially lower than 10:00 reading.",
+    "(e-EXTREME) MAHABANK below -8.00% (₹74.98) → ADDITIONAL fire: risk_level to HIGH AND flag for strategy_reviewer same-tick intervention.",
+    "(a) Book mark below -1% (-₹9,999) → FIRE: daily_loss_limit_pct 0.03 → 0.025. Buffer ₹9,936.",
+    "(a-EXTREME) Book below -2% (-₹19,999) → ADDITIONAL fire: daily_loss_limit_pct 0.03 → 0.02 AND risk_level to HIGH.",
+    "(d) BFSI above 0.37 via mark OR new admission → FIRE: min_confidence 0.60 → 0.65. Currently 35.98%, 1.02 pp buffer.",
+    "(d-EXTREME) BFSI above 0.40 → ADDITIONAL fire: max_position_pct 0.15 → 0.12 AND risk_level to HIGH.",
+    "(g) Power cluster above 0.20 of capital via mark OR new admission → findings flag. Currently 9.93%, 10.07 pp buffer (widest of session).",
+    "(b-FOLLOW-ON) If strategy executes a SECOND SELL → note for future: the spec-relax path (0.70 → 0.72) would compound here, but the directive still forbids loosening. Flag that the override posture is now running materially tighter than the original spec intent, for human-reviewer awareness.",
+    "(c) New ADMISSION (BUY) at current deployment ≤ 72.43% is now possible if a further SELL reduces deployed below 70% first. If a new admission occurs, verify it passes cluster discipline (no 4th BFSI; no 3rd Power unless explicit justification) and clears min_confidence=0.60, max_position_pct=0.15, max_sl_pct=0.04.",
+    "(AUBANK trim) Any AUBANK SELL (partial or full) → risk_level candidate for LOW step-down. The single largest structural breach would resolve.",
+    "(AUBANK-reheat) AUBANK above +2.5% AND still no SELL → flag re-heats (triangle becomes 2-of-3 or 3-of-3 depending on duration of new-silence clock).",
+    "(IndusInd event) IndusInd Q4 print at 5:00 PM IST. If miss → likely negative BFSI spill to AUBANK/PNBHOUSING → trigger (d) fire-probability rises for 16:00/EOD tick.",
+    "(meta-ARMED) If any tick shows ALL of: (i) strategy silent again for >2h, (ii) book below -0.5%, (iii) MAHABANK below -5.5% → ELEVATE risk_level to HIGH. Currently 0-of-3; needs regime to re-deteriorate to matter."
+  ],
+  "housekeeping": {
+    "risk_config_state": "risk_config.yaml correctly reflects 0.60 / 0.15 / 0.70 / 0.015 / 0.04. No changelog entry added this tick (no numeric change). A prose note about the declined relax is captured in trigger_check.trigger_b_first_sell_since_day_1 and actions_not_taken[0] rather than in the changelog, since the changelog is for file mutations and the file was not mutated.",
+    "output_file": "/home/ubuntu/trading/ai-trading-bot/src/agents/outputs/2026-04-24/risk_assessment_1030.json",
+    "next_scheduled_tick": "11:00 IST — watch for any follow-on SELL, AUBANK trajectory, MAHABANK re-approach of the armed fire line, and BFSI drift relative to the 37% d-trigger."
+  }
+}

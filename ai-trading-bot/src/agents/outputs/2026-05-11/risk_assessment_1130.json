@@ -1,0 +1,27 @@
+{
+  "timestamp": "2026-05-11 11:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000710.06,
+    "cash": 551039.06,
+    "deployed_pct": 44.93,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 2567.97
+  },
+  "findings": [
+    "6th exit at 11:15:33 — PIDILITIND CLOSE (-₹1,538.46 realized on 33 sh, cost ₹49,170, proceeds ₹47,631.54). UNPAIRED so far at 11:30 (no admit in the 11:00→11:30 window). Holdings count 12 → 11 (1-out, 0-in). Today's tally: 6 exits + 2 admits; previous 5 exits paired with admits within 1-32 min, this one is currently 15 min unpaired — at the lower edge of the prior cadence, not yet a stall.",
+    "Deployment 44.93% (cost basis) — first dip below the 50% chronic-idle threshold this morning, mechanical consequence of fresh single-exit. Cash ₹551,039 (55.07%). The 11:00 pre-armed RE-DEPLOYMENT WATCH (55%-by-12:30) escalates: moving away from target rather than toward it. 60 min still on the clock to 12:30, so not yet chronic — but elevates to a hard watch item for the 12:00 tick.",
+    "Sector composition (7 buckets, n=11): FMCG 11.86% n=3 (MARICO+DABUR+TATACONSUM, MAX SECTOR); Pharma 6.81% n=2; Gold-ETF 5.00%; Capital Goods 4.75%; Cables 4.55%; Auto 4.30%; Specialty Chem 3.90% n=1 (SRF only, PIDILITIND removed); IT 3.77%. Bucket count 8 → 7 (Specialty Chem n=2 → n=1, no buckets eliminated). On deployed-capital basis FMCG sits at 26.40% << 35% cap.",
+    "Position sizing band 1.95%-5.00% of total (cost basis). 9/11 names cluster in 3.77%-5.00%; 2 sub-3% outliers (DABUR 1.95%, LAURUSLABS 1.96%) at 18% of names — NOT the >85% tiny-everything hedging-against-self anti-pattern. Max position GOLDBEES 5.00% well below 20% cap.",
+    "Daily P&L net realized +₹2,567.97 (+0.26%), POSITIVE. 6-exit set 3W/3L, win-rate 50%, gross wins ₹7,747.80 vs gross losses ₹5,179.83 (loss-to-gross-win 67%). PIDILITIND losing exit at -3.13% well inside 5% max-SL bound (2nd losing exit today inside bound, after ABCAPITAL -3.08%). Full ~₹30,021 daily-loss buffer intact, ~₹32,589 cushion above the -3% gate.",
+    "SL geometry continues to validate: 4 fresh profit-lock trailing-SL MODIFYs at 11:14-11:15 on MARICO/COFORGE/LAURUSLABS/WOCKPHARMA (SLs raised ABOVE entry). Strategy actively trailing 4 names; not idle. Combined with the 2 losing exits-inside-bound, SL band now 7x-validated this session.",
+    "Signal acceptance healthy: no high-confidence (≥0.70) BLOCKs across today's guardrail ledger. All 19 BLOCKED entries today are CNC-mechanical (short-sell-without-holding, MODIFY-with-no-position from already-closed names), not confidence-driven. Confidence floor demonstrably non-binding.",
+    "Overrides:{} has been the floor for ~139.5 hr / 5.81 days since 2026-05-05 16:00 EOD reset. Loosening structurally impossible (base config.yaml is the spec floor). The PIDILITIND exit is a strategy/decision-layer event, not a risk-config event — risk's only role here is to flag the watch escalation.",
+    "Pre-armed 12:00 watch items: (a) RE-DEPLOYMENT — if PIDILITIND remains unpaired by 12:00 AND deployment stays <50%, flag chronic-idle reconsideration (note: loosening N/A, would be a strategy/decision flag); (b) FMCG sleeve at 11.86%, ~3.14 pp buffer to a 15% trigger; (c) tomorrow's 5/12 India April CPI — BFSI/NBFC sleeve still n=0 (pre-emptive de-risk preserved); (d) DRREDDY/CIPLA earnings 5/12 — Pharma sleeve preserved at n=2; (e) HFCL 5-day-stale OPEN order is strategy/broker scope, not risk-config; (f) Specialty Chem now single-name SRF (concentration-within-bucket increased but bucket weight reduced)."
+  ],
+  "actions_taken": [
+    "HOLD — no parameter changes. Overrides block remains {} (empty). 41st consecutive HOLD tick. Rationale: (1) Loosen N/A — overrides already at floor; base config.yaml cannot be loosened beyond per spec. (2) Tighten not justified on any dimension: 0/3 distress fires (max position 5.00% << 20%; max sector FMCG on deployed basis 26.40% << 35%; deployment 44.93% << 80%); daily P&L net positive +0.26%; SL geometry 7x-validated today (4 profit-lock MODIFYs + 2 losing-exits-inside-bound); confidence floor non-binding (all today's blocks are CNC-mechanical); sector diversity preserved at 7 buckets across 11 names; defensive ballast (FMCG+Pharma+Gold) 23.67%. The PIDILITIND unpaired exit drops deployment 4.84 pp but is one tick old at the 30-min cadence — within typical rotation pattern (prior 5 exits paired within 1-32 min); not yet chronic. Tightening would friction further re-deployment of ₹551K cash without trigger.",
+    "Logged HOLD entry with full state delta walk in risk_config.yaml changelog at 2026-05-11 11:30:00. Escalated re-deployment watch to hard watch item for 12:00 tick (re-evaluate if PIDILITIND remains unpaired by 12:00 and deployment stays <50%)."
+  ]
+}

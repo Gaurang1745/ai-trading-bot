@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-05-11 11:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1002248.52,
+    "cash": 503407.52,
+    "deployed_pct": 49.77,
+    "holdings_count": 12,
+    "positions_count": 0,
+    "daily_pnl": 4106.43
+  },
+  "findings": [
+    "Active rotation in progress: 5 exits + 2 admits today across 2 distinct rotation events. 09:55-09:56 swept BHARATFORG/PNBHOUSING/GRSE/CAMS; 10:12 admitted TATACONSUM; 10:43-10:44 swapped ABCAPITAL out for CGPOWER in. This is the 2nd admit in a 32-min window, substantively confirming active-rebalancing hypothesis over chronic-under-deployment.",
+    "Deployment 49.77% sits just below the 50% chronic-idle threshold but is NOT chronic — single-tick rotation event with two admits already executed and ₹503K cash available for further admits. 10:30 pre-armed watch (no further admits beyond TATACONSUM) defused by CGPOWER admit.",
+    "Sector composition (8 buckets, n=12): FMCG 11.83% n=3 max sector (MARICO+DABUR+TATACONSUM); Specialty Chem 8.80% n=2; Pharma 6.80% n=2; Gold-ETF 4.99%; Capital Goods 4.75% n=1 (NEW via CGPOWER); Cables 4.54%; Auto 4.29%; IT 3.77%. BFSI/NBFC sleeve ELIMINATED via ABCAPITAL exit — pre-emptive de-risking ahead of tomorrow's 5/12 India April CPI print.",
+    "Position sizing band 1.94%-4.99% (cost basis). 10/12 names cluster in 3.77%-4.99%; 2 sub-3% outliers (DABUR 1.94%, LAURUSLABS 1.96%) at 17% of names — NOT the >85% tiny-everything hedging-against-self anti-pattern. Max position GOLDBEES 4.99% well below 20% cap.",
+    "Daily P&L net realized +₹4,106.43 (+0.41%), POSITIVE. 5-exit set 3W/2L, win-rate 60%, loss-to-gross-win ratio 47% (gross wins ₹7,747.80 vs gross losses ₹3,641.37). ABCAPITAL losing exit at ~-3.08% of cost well inside 5% max-SL bound. Full ~₹30,067 (3%) daily-loss buffer intact, ~₹34,173 cushion above the gate.",
+    "Signal acceptance healthy: TATACONSUM and CGPOWER both cleared base 0.50 confidence floor without friction. Zero high-conf (≥0.70) BLOCKs across today's guardrail ledger. Confidence floor demonstrably non-binding.",
+    "Overrides:{} has been the floor for ~139 hr / 5.79 days since 2026-05-05 16:00 EOD reset. Loosening is structurally impossible (base config.yaml is the floor by spec).",
+    "Pre-armed watch items for 11:30/12:00: (a) re-deployment re-armed at 55%-by-12:30 threshold; (b) FMCG sleeve at 11.83%, ~3.17 pp buffer to a 15% re-arm trigger; (c) BFSI sleeve now n=0 entering 5/12 CPI print — rate-sensitivity idiosyncratically eliminated; (d) HFCL 5-day-stale OPEN order is strategy/broker scope, not risk-config."
+  ],
+  "actions_taken": [
+    "HOLD — no parameter changes. Overrides block remains {} (empty). 40th consecutive HOLD tick. Rationale: (1) Loosen N/A — overrides already at floor; base config.yaml cannot be loosened beyond per spec. (2) Tighten not justified on any dimension: 0/3 distress fires (max position 4.99% << 20%; max sector FMCG 11.83% << 35%; deployment 49.77% << 80%); daily P&L net positive +0.41%; SL geometry 6x-validated (5 profit-lock MODIFYs + ABCAPITAL losing-exit inside bound); confidence floor non-binding (2 admits cleared today); sector diversity preserved at 8 buckets across 12 names; defensive ballast (FMCG+Pharma+Gold) rebuilt to 23.62%. Tightening would friction further re-deployment of remaining ₹503K cash without trigger.",
+    "Logged HOLD entry with full state delta walk in risk_config.yaml changelog at 2026-05-11 11:00:00."
+  ]
+}

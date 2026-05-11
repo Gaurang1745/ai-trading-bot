@@ -1,0 +1,84 @@
+{
+  "timestamp": "2026-04-29 15:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995489.39,
+    "cash": 549634.49,
+    "deployed_pct": 0.4479,
+    "deployed_pct_full_fill_projection": 0.4961,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": -103.25,
+    "cumulative_pnl": -4510.61,
+    "cumulative_pnl_pct": -0.0045
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+    {"symbol": "GOLDBEES", "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "BANDHANBNK", "value": 50000.00, "pct_of_capital": 0.0502, "sector": "BFSI"},
+    {"symbol": "POWERGRID", "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+    {"symbol": "COALINDIA", "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"}
+  ],
+  "open_orders": [
+    {"symbol": "GLENMARK", "qty": 20, "price": 2400.0, "value": 48000.0, "confidence": 0.65, "sl_pct": 0.044, "sector": "Pharma", "submitted": "09:10:58", "age_min": 349}
+  ],
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1206,
+    "Pharma": 0.1005,
+    "Gold": 0.0503,
+    "Power": 0.0483,
+    "Mining": 0.0471
+  },
+  "guardrail_buffers": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1206 largest, buffer 2.94 pp",
+    "max_sector_pct (0.22)": "BFSI 0.1293 largest (full-fill), buffer 9.07 pp",
+    "max_deployed_pct (0.65)": "full-fill 0.4961, buffer 15.39 pp (widened from 5.71 pp at 14:30 via NTPC + HINDZINC exits)",
+    "daily_loss_limit_pct (0.04)": "daily P&L -103.25, buffer ~₹39,897 to circuit breaker, ~₹14,897 to next-tighten pre-fire trigger -15K",
+    "max_sl_pct (0.04)": "no new entries this tick",
+    "min_confidence (0.65)": "no new entries this tick"
+  },
+  "tick_delta_vs_1430": {
+    "trades_since_1430": 2,
+    "fills_since_1430": 0,
+    "decisions_detail": "STRATEGY RESUMED ACTIVITY at 14:42:17 / 14:42:27 — two CNC SELL→CLOSEs back-to-back, 10 seconds apart. (1) HINDZINC 75 shares sold, realized +₹171.75 (+0.37% on cost ₹45,900). (2) NTPC 125 shares sold, realized -₹275.00 (-0.54% on cost ₹50,562.50). Combined realized -₹103.25. Both exits small magnitude — disciplined trims, NOT panic exits.",
+    "cash_delta": 96359.25,
+    "holdings_delta": -2,
+    "open_orders_delta": 0,
+    "daily_pnl_delta": -103.25,
+    "summary": "First decision-active tick of the afternoon. Strategy broke its 1h58m post-BANDHANBNK silence at 14:42 with two paired CLOSEs. Cash 453,275 → 549,634 (+₹96,359). Holdings 9 → 7. Deployment 54.47% → 44.79% / full-fill 59.29% → 49.61% (-9.68 pp). Sector decongestion: Power 9.91% → 4.83% (NTPC exit, single-name now), Metals 4.61% → 0% (HINDZINC fully exited)."
+  },
+  "findings": [
+    "STRATEGY-ACTIVE TICK: two CLOSEs in 10 seconds at 14:42 (HINDZINC +₹171.75, NTPC -₹275). Combined -₹103.25 realized — small in magnitude and net (the NTPC loss is 0.54% on cost, HINDZINC win 0.37%). The pattern timing (2 CLOSEs back-to-back at session-end) superficially echoes the Day-6 panic-exit pattern (3 CLOSEs in 28 min, -₹5,964) — but the magnitudes here are 60x smaller and one leg is a winner, consistent with portfolio rebalancing rather than loss-aversion panic. Behavioral watch only; no numeric lever attaches.",
+    "Deployment materially lower: filled-book 44.79% (was 54.47%), full-fill projection 49.61% (was 59.29%). The 65% deployed cap buffer widened 5.71 pp → 15.39 pp. Re-deployment headroom is now substantial — if strategy submits fresh BUYs in the 15:00→15:30 window, the cap is no longer the binding constraint.",
+    "Sector decongestion across two clusters: Power 9.91% → 4.83% (POWERGRID alone now; NTPC exited cleanly). Metals 4.61% → 0% (HINDZINC fully exited). BFSI unchanged at 12.93% (largest), FMCG unchanged at 12.06%, Pharma full-fill unchanged at 10.05%. All 6 remaining sectors comfortably under 22% cap with ≥9 pp buffer.",
+    "Single-name distribution unchanged on largest end: NESTLEIND 12.06% remains the only position above 10% of capital, 2.94 pp buffer to 15% cap. BANDHANBNK 5.02% smallest at the filled tail.",
+    "Daily realized P&L = -₹103.25 — first non-zero P&L day-to-date. Buffer to ₹40K daily_loss_limit is ~₹39,897 (~387x today's loss). No risk of circuit-breaker firing.",
+    "Cumulative book P&L now -₹4,510.61 (-0.45%) vs -₹4,407.36 (-0.44%) at 14:30. The Day-6 panic-exit damage continues to dominate the cumulative line; today's -₹103.25 is rounding noise on the cumulative scale.",
+    "GLENMARK OPEN order now 5h49m old (submitted 09:10:58 at ₹2400 limit, sl_pct 0.044) — observability flag continues. Pre-armed trigger from 14:30 (max_sl_pct 0.04 → 0.035 if a 3rd ceiling-hugging entry arrives) remains armed; no firing this tick (zero new entries).",
+    "Strategy-decision silence resolved: 14:30 flagged 1h46m+ post-BANDHANBNK; broke at 14:42 (1h58m mark) with the paired SELL→CLOSEs. Activity cadence into close re-established."
+  ],
+  "actions_taken": [],
+  "actions_considered_but_not_taken": [
+    "Tighten max_deployed_pct (0.65 → 0.60): NOT FIRED. Pre-fire trigger needed full-fill > 62%; full-fill DROPPED from 59.29% to 49.61% (-9.68 pp via the two SELLs). Lever moved further from firing, not closer. Tightening on a freed-up book would be punitive against the very strategy behavior the override stack incentivizes (SELL → freed cash → quality-gated BUY).",
+    "Tighten daily_loss_limit_pct (0.04 → 0.03): NOT FIRED. Pre-fire trigger needed daily P&L worse than -₹15K; today is -₹103.25 (₹14,897 buffer to fire trigger, ₹39,897 to circuit breaker). Loss-gate tightening on a -0.01% day is theatrical.",
+    "Tighten max_sector_pct (0.22 → 0.20): NOT FIRED. Pre-fire trigger needed any sector full-fill > 17%; largest now BFSI 12.93% with 4.07 pp pre-fire buffer (unchanged from 14:30 — the SELLs eased smaller sectors but BFSI is the cap-binding sector and was not touched).",
+    "Tighten max_sl_pct (0.04 → 0.035): NOT FIRED. Pre-fire trigger needed a 3rd ceiling-hugging entry today; zero new entries since 14:30. Lever remains ARMED for the 15:00→15:30 window — if a fresh entry arrives at sl_pct ≥ 0.04 (mirroring GLENMARK 0.044 + BANDHANBNK at boundary), this fires.",
+    "Tighten min_confidence (0.65 → 0.68): NOT FIRED. Zero new entries this tick; closed-trade sample now n=10 (3W/5L from prior + today's HINDZINC W + NTPC L = 4W/6L, win-rate 40%) — still too thin for confidence-vs-outcome statistical inference.",
+    "Tighten max_position_pct (0.15 → 0.12): NOT FIRED. NESTLEIND 12.06% largest, 2.94 pp buffer; the SELLs touched mid-tail names (NTPC 5.05%, HINDZINC 4.61%), didn't move the largest-position axis.",
+    "Note on discipline: this is a STRATEGY-ACTIVE LOOSENING tick — deployment fell, sectors decongested, cash freed. The disciplined response is to NOT tighten when the book is moving in the direction the override stack incentivizes. Firing any lever now would be friction-without-trigger and would punish the desired behavior. Hold."
+  ],
+  "armed_triggers_for_next_tick": [
+    "max_sl_pct 0.04 → 0.035 — fires if a 3rd entry today arrives with sl_pct ≥ 0.04 (continues from 14:30; GLENMARK + BANDHANBNK pattern). Re-deployment headroom is now wider, raising the prior probability that a fresh entry slot is taken in the 15:00→15:30 window.",
+    "max_deployed_pct 0.65 → 0.60 — fires if full-fill projection climbs back above 62% via fresh BUYs (currently 49.61%, 12.39 pp pre-fire buffer; would require ~₹123K of new admissions to reach trigger).",
+    "max_sector_pct 0.22 → 0.20 — fires if any sector full-fill exposure exceeds 17% (largest BFSI 12.93%, 4.07 pp pre-fire buffer). Pharma is the next-most-exposed at 10.05% full-fill; a 7+ pp Pharma add (e.g., a 2nd Pharma fresh BUY beyond GLENMARK) would risk triggering.",
+    "daily_loss_limit_pct 0.04 → 0.03 — fires if daily realized P&L worsens past -₹15K (currently -₹103.25, ₹14,897 buffer). Watch for further exit cadence — if 3+ more CLOSEs fire in the 15:00→15:30 window with magnitudes echoing Day-6 (-₹1K to -₹3K each), this trigger could come into play.",
+    "min_confidence 0.65 → 0.68 — fires if a 3rd entry today arrives at the 0.65 floor (GLENMARK at 0.65; BANDHANBNK at 0.68 — boundary-hugging-on-confidence pattern not yet established). Re-evaluate at EOD if today closes with ≥3 entries clustered at 0.65-0.66.",
+    "Exit-cadence watch (BEHAVIORAL, not a numeric lever) — 14:42 paired CLOSEs are small-magnitude and look disciplined. If 3+ more CLOSEs fire in the 15:00→15:30 window with average loss > 0.5% and net realized hits -₹2K, escalate to a Day-6-style panic-exit observation in the next risk_monitor tick AND consider firing the daily_loss_limit_pct lever at the -₹3K (not -₹15K) threshold.",
+    "OPEN-order ageing watch — GLENMARK at 5h49m. If still OPEN through 15:30 (i.e., 6h20m+ at 15:30 tick), log as stale-order observation for Day-7 EOD review. Strategy layer owns the cancel/MODIFY decision; risk_monitor flags ageing only."
+  ],
+  "rationale": "Strategy-active loosening tick (HINDZINC + NTPC paired CLOSEs at 14:42) — net realized -₹103.25, but the bookkeeping outcome is healthier across every dimension: deployment dropped 9.68 pp, Power decongested to single-name, Metals fully exited, cash up ₹96K. Every prior-armed trigger moved FURTHER from firing, not closer. The disciplined response is to hold all parameters and let the loosened book absorb whatever the strategy submits in the final session window. The two CLOSEs superficially pattern-match Day-6 (multiple CNC exits in <30 min), but the magnitudes (60x smaller, one a winner) and timing (session-end rebalancing vs Day-6's mid-session sweep) make this look like ordinary pruning, not panic. Behavioral watch armed for further exit cadence; numeric levers all dormant. No changelog entry written because no parameter was changed."
+}

@@ -1,0 +1,78 @@
+{
+  "timestamp": "2026-04-23 09:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 929250.0,
+    "cash": 446330.0,
+    "deployed_pct": 0.5196,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "filled_book_detail": {
+    "holdings_value": 482920.0,
+    "holdings": [
+      {"symbol": "MAHABANK",   "qty": 1200, "avg_price": 81.5,   "value": 97800.0, "pct_capital": 0.1053, "sector": "BFSI-PSU"},
+      {"symbol": "PNBHOUSING", "qty": 80,   "avg_price": 984.0,  "value": 78720.0, "pct_capital": 0.0847, "sector": "BFSI-NBFC"},
+      {"symbol": "TORNTPOWER", "qty": 36,   "avg_price": 1650.0, "value": 59400.0, "pct_capital": 0.0639, "sector": "Power"},
+      {"symbol": "AUBANK",     "qty": 50,   "avg_price": 1050.0, "value": 52500.0, "pct_capital": 0.0565, "sector": "BFSI-Private"},
+      {"symbol": "GOLDBEES",   "qty": 400,  "avg_price": 125.1,  "value": 50040.0, "pct_capital": 0.0539, "sector": "Gold-ETF"},
+      {"symbol": "NESTLEIND",  "qty": 35,   "avg_price": 1410.0, "value": 49350.0, "pct_capital": 0.0531, "sector": "FMCG"},
+      {"symbol": "GRANULES",   "qty": 70,   "avg_price": 681.0,  "value": 47670.0, "pct_capital": 0.0513, "sector": "Pharma"},
+      {"symbol": "HINDUNILVR", "qty": 20,   "avg_price": 2372.0, "value": 47440.0, "pct_capital": 0.0511, "sector": "FMCG"}
+    ],
+    "sector_concentration_filled": {
+      "BFSI_total":   {"value": 229020.0, "pct_capital": 0.2465, "pct_deployed": 0.4742},
+      "FMCG_total":   {"value": 96790.0,  "pct_capital": 0.1041, "pct_deployed": 0.2004},
+      "Power_total":  {"value": 59400.0,  "pct_capital": 0.0639, "pct_deployed": 0.1230},
+      "Pharma_total": {"value": 47670.0,  "pct_capital": 0.0513, "pct_deployed": 0.0987},
+      "Gold_ETF":     {"value": 50040.0,  "pct_capital": 0.0539, "pct_deployed": 0.1036}
+    }
+  },
+  "open_order_overhang": {
+    "total_open_value": 302664.5,
+    "pct_capital_if_filled": 0.3257,
+    "orders": [
+      {"symbol": "AUBANK",     "qty": 70,  "price": 1050.0, "value": 73500.0,  "submitted": "2026-04-22 12:08:26", "note": "duplicate lot — same day as filled AUBANK 50 @ 1050"},
+      {"symbol": "NESTLEIND",  "qty": 50,  "price": 1415.0, "value": 70750.0,  "submitted": "2026-04-22 12:08:06", "note": "duplicate lot — same day as filled NESTLEIND 35 @ 1410"},
+      {"symbol": "AUBANK",     "qty": 56,  "price": 1047.0, "value": 58632.0,  "submitted": "2026-04-22 12:39:33", "note": "3rd AUBANK lot — stacks on 50 filled + 70 open"},
+      {"symbol": "NTPC",       "qty": 125, "price": 404.5,  "value": 50562.5,  "submitted": "2026-04-22 13:42:55"},
+      {"symbol": "ADANIPOWER", "qty": 230, "price": 214.0,  "value": 49220.0,  "submitted": "2026-04-22 14:12:49"}
+    ]
+  },
+  "full_fill_scenario": {
+    "projected_deployed_value": 785584.5,
+    "projected_deployed_pct": 0.8454,
+    "breaches_max_deployed_cap_0_75": true,
+    "grandfathered": true,
+    "single_name_breaches": [
+      {"symbol": "AUBANK", "qty_filled": 176, "est_value": 184632.0, "pct_capital": 0.1987, "cap": 0.15, "breach_margin_pp": 4.87}
+    ],
+    "cluster_on_full_fill": {
+      "BFSI":  {"value": 361152.0, "pct_capital": 0.3887, "pct_deployed": 0.4597},
+      "Power": {"value": 159182.5, "pct_capital": 0.1713, "pct_deployed": 0.2026},
+      "FMCG":  {"value": 167540.0, "pct_capital": 0.1803, "pct_deployed": 0.2133}
+    }
+  },
+  "current_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.75
+  },
+  "findings": [
+    "Filled-book state is within all current overrides: deployed 51.96% < 0.75 cap; largest single name MAHABANK at 10.53% < 0.15 cap; no realized PnL today (market not yet open at 09:00).",
+    "BFSI concentration on filled book is the dominant sector exposure: MAHABANK + PNBHOUSING + AUBANK = ₹229,020 = 24.65% of total capital and 47.42% of the deployed book. Still within tolerance but the single largest cluster by a wide margin — a BFSI-systemic headline (rate surprise, PSU-bank news) is the primary single-factor drawdown risk for today.",
+    "OPEN-order overhang carried from 2026-04-22 is the key carry-forward risk: 5 orders totaling ₹302,665 (32.57% of capital) are pending. On full fill, deployed jumps to 84.54% (breaches 0.75 cap) and AUBANK single-name reaches 19.87% (breaches 0.15 cap). These OPEN orders are grandfathered under the pre-override acceptance pattern established yesterday, so tighter caps applied now will NOT cancel them — they only gate new entries.",
+    "Duplicate-order hygiene is the structural issue behind the AUBANK cap-breach risk: three AUBANK lots (70, 56, 50) and two NESTLEIND lots (50, 35) were emitted within the same session on 2026-04-22. Strategy layer's EOD note added ORDER HYGIENE to the system prompt to address this at the decision layer; expect the strategy agent to cancel/reshape duplicates at market open before they fill cumulatively.",
+    "Emerging Power cluster: TORNTPOWER (filled) + NTPC (open) + ADANIPOWER (open) → ₹159,183 = 17.13% of capital if all fill. Second-largest cluster on full-fill scenario; warrants attention but not yet a breach target (no Power-specific override exists).",
+    "Emerging FMCG cluster: NESTLEIND full (after open fill) + HINDUNILVR = ₹167,540 = 18.03% of capital if NESTLEIND open fills. Comparable magnitude to Power cluster.",
+    "Realized PnL telemetry is still zero (no sells executed in Day 1; no trades yet today). Daily-loss gate (0.03) is not a live risk vector this tick — same rationale as yesterday's 14:30 / 16:00 decisions.",
+    "No intraday positions (paper_positions table empty) — entire exposure is in CNC holdings, so intraday-leverage risk is not a concern."
+  ],
+  "actions_taken": [
+    "No numeric override changes this tick. Holding min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.75 into market open.",
+    "Rationale: at 09:00 premarket there is no new realized-outcome data to react to (market not yet open; holdings unchanged from 2026-04-22 close; zero trades today). The changelog pattern has been to add one lever per observable risk inflection; the OPEN-book overhang is a known, already-priced-in concern from yesterday's 14:30 0.75 deployed-cap override, and further tightening would not retract grandfathered OPEN orders. The ORDER HYGIENE / CLUSTER DISCIPLINE prompt additions from yesterday's 16:00 EOD are the intended Day-1→Day-2 handoff mechanism for the duplicate AUBANK/NESTLEIND problem — let the strategy layer observe the open and act (cancel duplicates, trim stacked lots) before adding more numeric friction.",
+    "Explicit DID-NOT-TIGHTEN reasoning: (a) daily_loss_limit_pct held at 0.03 — realized PnL is ₹0, no live loss vector; (b) min_risk_reward held at 1.5 — R:R quality has not been identified as the live driver of Day-1 underperformance (per 14:30 / 15:00 / 16:00 notes); (c) min_confidence held at 0.60 — on Day-1 sample, 0.72-confidence trades (MAHABANK, NESTLEIND) were among the larger mark-to-market losers, so raising the floor is not yet an evidence-backed lever; (d) default_sl_pct / drawdown_* held — no drawdown observed, SL-tightening without realized-loss data would be premature.",
+    "Reassessment trigger for next tick: if market opens and (i) OPEN-book fills push AUBANK past 0.15 despite grandfathering, evaluate whether a one-time position-trim directive is warranted; (ii) deployed crosses 85% on fills, evaluate lowering max_deployed_pct further (0.75 → 0.70) to enforce a firm top; (iii) any cluster (BFSI, Power, FMCG) crosses 25% of capital on fills, consider a cluster-specific override; (iv) realized daily P&L turns negative by > 1.5% of capital, evaluate tightening daily_loss_limit_pct from 0.03 → 0.025."
+  ]
+}

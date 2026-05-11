@@ -1,0 +1,100 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [et_markets 2026-04-21 15:45] US equities regulator 'closely monitoring' shaky private credit market
+1. [et_markets 2026-04-21 15:06] Trump's Fed chair pick Kevin Warsh vows to safeguard independence at confirmation hearing
+2. [livemint 2026-04-21 15:05] Gold, silver rates today: Comex gold slips $51/oz; silver falls $2/oz as investors weigh US-Iran talks
+3. [et_markets 2026-04-21 14:38] HCL Tech Q4 Results: PAT up 4% YoY at Rs 4,488 cr; Rs 24 per share dividend declared
+4. [et_markets 2026-04-21 14:32] US retail sales rises 1.7% MoM in March driven by gas price spike due to the Iran war
+5. [et_markets 2026-04-21 14:26] Apple shares fall as Tim Cook steps down as CEO
+6. [et_markets 2026-04-21 14:12] Tata Elxsi Q4 Results: Profit jumps 28% YoY to Rs 220 crore; co declares Rs 75 per share dividend
+7. [et_markets 2026-04-21 13:56] 9 mid-cap stocks trading below their industry average PE
+8. [livemint 2026-04-21 13:51] Wall Street rises on AI optimism, strong corporate earnings
+9. [et_markets 2026-04-21 13:41] U.S. stocks tick higher, led by UnitedHealth Group, as oil prices remain relatively stable
+10. [livemint 2026-04-21 13:38] UGRO Capital Q4 Results: Net profit jumps 26% YoY to ₹51 crore; income rises 51% YoY
+11. [et_markets 2026-04-21 13:26] HCL Tech announces Rs 24 per share dividend, sets April 25 as record date
+12. [et_markets 2026-04-21 13:06] Cyient DLM Q4 Results: Profit falls 28% to Rs 22 crore
+13. [et_markets 2026-04-21 12:42] HCL Tech Q4 Results: Cons PAT up 4% YoY at Rs 4,488 crore, revenue rises 12%; Rs 24 per share dividend declared
+14. [livemint 2026-04-21 12:36] HCL Tech Q4 Results: Board declares interim dividend of ₹24 per share. Details here
+15. [livemint 2026-04-21 12:31] HCL Tech Q4 results: Profit rises 4% YoY to ₹4,488 crore; revenue up 2.4% YoY in CC
+16. [et_markets 2026-04-21 12:28] Quotes of the day by Bill Miller: “All of the great investing periods begin when things are terrible and end when they are wonderful.”
+17. [et_markets 2026-04-21 12:19] Gainers & Losers: Nestle, Groww and Ola among 7 big movers on Tuesday
+18. [et_markets 2026-04-21 12:15] US Stock Market Today | Dow Jones | Nasdaq Live: Trump's Fed pick Warsh questioned about assets at confirmation hearing; US stocks fall
+19. [livemint 2026-04-21 11:59] US stock market today: Dow, S&P 500 futures rise up to 0.6% as AI optimism offsets geopolitical uncertainty
+20. [livemint 2026-04-21 11:39] Stock Market Strategy: Is it time to raise exposure in equities? What should investors do?
+21. [livemint 2026-04-21 11:39] Vedanta subsidiary Hindustan Zinc announces board meet date to consider Q4 results, interim dividend. Check details
+22. [et_markets 2026-04-21 11:35] Persistent Systems Q4 Results: Profit jumps 34% YoY to Rs 529 crore, revenue up 25%
+23. [et_markets 2026-04-21 11:30] Aurobindo Pharma announces schedule, record date for its Rs 800 crore share buyback
+24. [et_markets 2026-04-21 11:06] Bank of Maharashtra among 7 midcap stocks that hit 52-week high; rally up to 32% in a month
+25. [et_markets 2026-04-21 11:00] $12 billion Trump tariff refund for Indian exporters. Which stocks may benefit?
+26. [et_markets 2026-04-21 10:49] Traders! Stay long, trail your stops as Nifty rally broadens, says Vinay Rajani; picks 3 stocks
+27. [et_markets 2026-04-21 10:40] Rupee falls, tracking Asian peers; partial rollback of RBI FX curbs weighs
+28. [et_markets 2026-04-21 10:36] Multibagger hunter Vijay Kedia buys 4.5% in SME Mahamaya Lifesciences; adds smallcap SPML Infra in Q4
+29. [et_markets 2026-04-21 10:27] Nestle India shares jump 8% to new record high. What changed after Q4 results?
+30. [livemint 2026-04-21 10:17] Top Gainers & Losers on April 21: Nestle India, Groww, PNB Housing, Bank of Maharashtra, Sobha among top gainers
+31. [et_markets 2026-04-21 10:12] Nifty can rally to 30,089 in Prabhudas Lilladher’s bull case scenario, adds 3 stocks to model portfolio
+32. [livemint 2026-04-21 10:04] Sensex jumps 753 points, Nifty 50 ends above 24,550; investors earn ₹3 lakh crore in a day; US-Iran peace talks in focus
+33. [livemint 2026-04-21 10:01] China’s silver imports jump to record high. Is it time to buy silver?
+34. [livemint 2026-04-21 09:47] A rush of price hikes at companies as margins take priority over volumes
+35. [livemint 2026-04-21 09:38] US-Iran peace talks: Why could oil prices stay above $85/barrel even if Strait of Hormuz opens? Explained
+36. [livemint 2026-04-21 09:28] Rolex Rings shares gain 17% as board to consider buyback proposal on THIS date
+37. [livemint 2026-04-21 09:05] Is the US stock market due for a deep correction amid stretched valuations and geopolitical risks?
+38. [livemint 2026-04-21 08:58] Nestle Q4 Results 2026: Net profit rises 26% at ₹1,114 crore; declares final dividend of ₹5/share
+39. [et_markets 2026-04-21 08:57] Nestle India Q4 Results: Cons profit jumps 27% YoY to Rs 1,111 crore; Rs 5/sh dividend declared
+40. [et_markets 2026-04-21 08:55] MF Picks: 13 smallcap stocks surge up to 115% in six months; 3 turn multibaggers
+41. [livemint 2026-04-21 08:47] Wipro share buyback: Should you participate or not in ₹15,000-crore offer? Experts weigh in
+42. [livemint 2026-04-21 08:46] Gold Price Outlook: Is the yellow metal still the most trusted asset for Indian households?
+43. [livemint 2026-04-21 08:41] Sebi’s crackdown on options frenzy is bearing fruit, NSE data shows
+44. [livemint 2026-04-21 08:37] Penny stock under Re 1 jumps over 8% after this acquisition update
+45. [livemint 2026-04-21 08:21] Mehul Telecom IPO Day 3: Issue subscribed over 21x so far; NIIs steal the show
+46. [et_markets 2026-04-21 08:20] Groww's Ishan Bansal sees structural shift in derivatives participation post regulatory changes
+47. [livemint 2026-04-21 08:02] Sensex gains 1,300 points in 3 sessions: Can de-escalation in the US-Iran war drive it to 85K?
+48. [et_markets 2026-04-21 07:59] Trump tariff refunds begin today: Gokaldas Exports, Avanti Feeds, other textile and shrimp stocks rally up to 7%
+49. [livemint 2026-04-21 07:46] Stock market holiday: Why is the Israeli stock market closed today?
+50. [et_markets 2026-04-21 07:41] Sensex jumps 1,300 points in three days ahead of Iran war ceasefire expiry: 4 key factors
+51. [et_markets 2026-04-21 07:40] Global markets face rising strain as supply chain tightens and oil risk persists: Neelkanth Mishra
+52. [et_markets 2026-04-21 07:38] Trent shares jump 8% in two days as investors await bonus issue bonanza on April 22. What to expect?
+53. [et_markets 2026-04-21 07:36] Lemon Tree Hotels shares soar 13%. What’s keeping traders active?
+54. [et_markets 2026-04-21 07:32] Global Markets | South Korea's KOSPI rises to record high as chipmakers surge on export boom
+55. [et_markets 2026-04-21 07:29] Global Markets | Australian shares end flat on US-Iran peace talk uncertainty; Rio Tinto gains
+56. [et_markets 2026-04-21 07:23] Global Markets | Japan's Nikkei ends higher as tech gains on Middle East deal optimism
+57. [livemint 2026-04-21 07:21] Small-cap FMCG stock inches close to 52-week high. Do you own?
+58. [livemint 2026-04-21 07:21] HCL Tech Q4 Results Highlights: PAT jumps 4% YoY to ₹4,488 crore; ₹24 dividend announced
+59. [livemint 2026-04-21 07:18] 'No theme runs forever': Devina Mehra busts the ‘buy and forget’ investing myth
+60. [et_markets 2026-04-21 07:11] Betting on large banks, cautious on housing finance and microfinance; watch guidance in FMCG: Sandip Sabharwal
+61. [et_markets 2026-04-21 07:08] Tata Steel shares jump 12% so far in April. Here’s why Nomura stays bullish on India’s steel sector
+62. [et_markets 2026-04-21 07:01] Patanjali Foods declares Rs 1.75/share interim dividend, sets April 25 as record date
+63. [et_markets 2026-04-21 06:54] Inox Clean is said to revive plan for up to $1 billion India IPO
+64. [livemint 2026-04-21 06:47] Nifty 50 Trading Strategy: Analysts recommend Bull Call Spread options strategy for 28 April expiry
+65. [livemint 2026-04-21 06:32] Ola Electric shares surge 70% in April on sales revival. Are they a better bet than rival Ather?
+66. [et_markets 2026-04-21 06:25] US Stock Market: John Ternus takes the helm as Apple prepares for post-Cook era
+67. [et_markets 2026-04-21 06:23] FIIs pull out another $2 billion from bank stocks. Are financials most hated now?
+68. [livemint 2026-04-21 06:17] Groww share price soars 10% to hit record high after Q4 profit jumps 122%: Is it the right time to buy?
+69. [et_markets 2026-04-21 06:15] Markets look past conflict as investors bet on long-term growth: Ed Yardeni
+70. [et_markets 2026-04-21 06:13] Adani Power shares zoom nearly 40% in just 13 sessions. Should you book profits now?
+71. [livemint 2026-04-21 06:07] Vodafone Idea, Groww, Bank of Maharashtra among the most traded stocks today, 21 April 2026
+72. [et_markets 2026-04-21 06:04] Vedanta Demerger: Check record date, demerger ratio, other key things to know
+73. [livemint 2026-04-21 06:03] ₹26 to ₹1825: Multibagger defence stock turns ₹1 lakh into ₹70 lakh in six years
+74. [et_markets 2026-04-21 05:49] HDFC, Yes Bank, SBI, AU Small Finance Bank shares jump up to 4%. Key Nifty Bank levels to watch out for
+75. [et_markets 2026-04-21 05:46] Oberoi Realty shares rise 3% after sharp surge in Q4FY26 bookings
+76. [et_markets 2026-04-21 05:35] Bank of Maharashtra shares jump 13% in three sessions! Time to buy after Q4 results?
+77. [livemint 2026-04-21 05:30] Stocks to buy: Sagar Doshi suggests AJAX Engineering, Elgi Equipments, KFin Technologies shares to buy
+78. [et_markets 2026-04-21 05:26] Angel One shares rise 15% in just one week! Should investors buy after Q4 results?
+79. [et_markets 2026-04-21 05:22] Investors should start deploying capital gradually: Daljeet Kohli
+80. [livemint 2026-04-21 05:11] HCL Tech share price: Should you buy IT stock ahead of Q4 results 2026?
+81. [livemint 2026-04-21 05:05] Adani Power trumps Adani Ports to become the largest Adani Group stock

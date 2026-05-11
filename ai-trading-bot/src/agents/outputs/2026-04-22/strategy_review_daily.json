@@ -1,0 +1,120 @@
+{
+  "date": "2026-04-22",
+  "review_type": "daily",
+  "trades_analyzed": 13,
+  "summary": {
+    "wins": 2,
+    "losses": 6,
+    "total_pnl": -2844.10,
+    "pnl_type": "unrealized_eod_only",
+    "realized_pnl": 0.0,
+    "win_rate": 0.25,
+    "win_rate_note": "8 of 13 orders filled; 2 of the 8 closed the session in the green. 5 orders remained OPEN at close (LIMIT above market, did not fill).",
+    "avg_win": 383.2,
+    "avg_loss": -601.75,
+    "best_trade": {"symbol": "PNBHOUSING", "pnl": 500.0, "pnl_pct": 0.64},
+    "worst_trade": {"symbol": "MAHABANK", "pnl": -2088.0, "pnl_pct": -2.13},
+    "orders_submitted": 13,
+    "orders_filled": 8,
+    "orders_open_at_close": 5,
+    "fill_rate": 0.615,
+    "sells_placed": 0,
+    "modify_actions": 0,
+    "exit_actions": 0,
+    "book_deployed_pct_filled": 0.4829,
+    "book_deployed_pct_if_open_fills": 0.7856,
+    "cash_remaining_pct": 0.5171
+  },
+  "filled_positions_eod": [
+    {"symbol": "MAHABANK", "qty": 1200, "avg": 81.5, "ltp": 79.76, "pnl": -2088.0, "pnl_pct": -2.13, "confidence": 0.72, "sector": "PSU_Bank"},
+    {"symbol": "PNBHOUSING", "qty": 80, "avg": 984.0, "ltp": 990.25, "pnl": 500.0, "pnl_pct": 0.64, "confidence": 0.65, "sector": "Housing_Finance"},
+    {"symbol": "GOLDBEES", "qty": 400, "avg": 125.1, "ltp": 124.99, "pnl": -44.0, "pnl_pct": -0.09, "confidence": 0.62, "sector": "ETF_Gold"},
+    {"symbol": "TORNTPOWER", "qty": 36, "avg": 1650.0, "ltp": 1657.4, "pnl": 266.4, "pnl_pct": 0.45, "confidence": 0.68, "sector": "Power"},
+    {"symbol": "NESTLEIND", "qty": 35, "avg": 1410.0, "ltp": 1395.8, "pnl": -497.0, "pnl_pct": -1.01, "confidence": 0.72, "sector": "FMCG"},
+    {"symbol": "AUBANK", "qty": 50, "avg": 1050.0, "ltp": 1043.2, "pnl": -340.0, "pnl_pct": -0.65, "confidence": 0.68, "sector": "Private_Bank"},
+    {"symbol": "GRANULES", "qty": 70, "avg": 681.0, "ltp": 672.75, "pnl": -577.5, "pnl_pct": -1.21, "confidence": 0.65, "sector": "Pharma"},
+    {"symbol": "HINDUNILVR", "qty": 20, "avg": 2372.0, "ltp": 2368.8, "pnl": -64.0, "pnl_pct": -0.13, "confidence": 0.62, "sector": "FMCG"}
+  ],
+  "open_orders_at_close": [
+    {"symbol": "NESTLEIND", "qty": 50, "limit": 1415.0, "note": "Duplicate of NESTLEIND 35@1410 (filled); LIMIT 15 above fill price, never executed."},
+    {"symbol": "AUBANK", "qty": 70, "limit": 1050.0, "note": "Duplicate #1 of AUBANK 50@1050 (filled); same LIMIT, earlier tick, queued behind."},
+    {"symbol": "AUBANK", "qty": 56, "limit": 1047.0, "note": "Duplicate #2 of AUBANK; third AUBANK BUY emitted in session."},
+    {"symbol": "NTPC", "qty": 125, "limit": 404.5, "note": "Power-cluster stack on top of TORNTPOWER (filled) and ADANIPOWER (also OPEN)."},
+    {"symbol": "ADANIPOWER", "qty": 230, "limit": 214.0, "note": "3rd Power-cluster name; triggered the 14:30 max_deployed_pct=0.75 risk_monitor override."}
+  ],
+  "patterns_found": [
+    "Pattern 1 — DUPLICATE ORDER STACKING: AUBANK was ordered 3 times (70@1050 OPEN, 56@1047 OPEN, 50@1050 FILL) and NESTLEIND 2 times (50@1415 OPEN, 35@1410 FILL) in the same session. Two of the three AUBANK orders never filled and simply locked up capital as OPEN reservations. The decision agent clearly did not consult its own OPEN-order book before re-emitting. This is the single largest structural failure today and is the direct trigger for two of the risk_monitor's three mid-day overrides (12:30 max_position_pct=0.15, 13:00 min_confidence=0.60).",
+    "Pattern 2 — 13/13 DIRECTIONAL LONGS, 0 EXITS/MODIFIES: Every trade today was a BUY. Not a single MODIFY (trailing SL), not a single EXIT, not a single SELL on an existing holding. The priority-order instruction 'walk existing positions first' was nominally followed but produced HOLD for every position with zero risk adjustments, even on MAHABANK which drifted to -2.13% on the day.",
+    "Pattern 3 — LIMIT-ABOVE-MARKET PRICING: 5 of 13 LIMIT BUYs did not fill because the LIMIT price was at or above the current market. Examples: NESTLEIND 1415 (later traded at 1395.8), AUBANK 1050 (later 1043.2), NTPC 404.5 (last quote lower). Effective fill rate was 61.5%. The 5 unfilled orders still consumed reserved cash, reducing admission headroom throughout the afternoon.",
+    "Pattern 4 — 13/13 BREAKOUT-TO-52W-HIGH ENTRIES: Every trade reasoning referenced a 52-week high or fresh all-time-high breakout. No contrarian setups, no mean-reversion, no support-level buys, no basket ETF hedges beyond the single GOLDBEES 5% position. On a 'MIXED sentiment' binary-event day (US-Iran ceasefire expiration, per the premarket brief) this uniform breakout-chasing is the opposite of the prescribed 'trade light, avoid fresh longs' bias.",
+    "Pattern 5 — CORRELATED-THEME CLUSTERS forming inside per-sector caps: BFSI cluster filled at 22.90% (MAHABANK 9.78% + PNBHOUSING 7.87% + AUBANK 5.25%) and projected to 36.12% on full OPEN-book fill. Power cluster projected 15.92% on full fill (TORNTPOWER + NTPC + ADANIPOWER). FMCG cluster projected 16.75% (NESTLEIND + HINDUNILVR). Each individual sector stays under the 35% cap, but the three macro clusters together are 68.79% of capital / 87.56% of the deployed book on full fill — concentration disguised as diversification.",
+    "Pattern 6 — CONFIDENCE NOT CALIBRATED WITH OUTCOME: The two highest-confidence trades (MAHABANK 0.72 and NESTLEIND 0.72) were the two largest losers at session close (−2.13% and −1.01%). The lowest-confidence filled trade (GOLDBEES 0.62) was essentially flat. Sample is 1 day / 8 positions, far too small to redraw the confidence curve, but it argues against further tightening min_confidence (beyond the 0.60 set today) until a larger sample is available.",
+    "Pattern 7 — RISK MONITOR DID ALL THE THROTTLING: Three separate overrides had to be installed today (12:30 max_position_pct 0.20→0.15; 13:00 min_confidence 0.55→0.60; 14:30 max_deployed_pct 0.80→0.75) to halt admission velocity. After 14:30, zero new entries were admitted for the rest of the session. That the numeric framework had to work this hard is a signal that the behavioral (prompt) layer did not self-govern."
+  ],
+  "guardrail_effectiveness": {
+    "guardrail_log_entries_today": 45,
+    "guardrail_blocks": 0,
+    "guardrail_note": "All 45 entries are is_valid=1 with empty errors/warnings arrays. The SQL-enforced guardrails (min_confidence, min_risk_reward, price/volume floors, sector caps) did not block any submitted trade today — every order passed. The effective throttling came from the risk_monitor agent dynamically writing tighter overrides into risk_config.yaml (the three entries on 2026-04-22 noted in that file's changelog). Gap in coverage: the guardrails never flagged the duplicate-AUBANK or duplicate-NESTLEIND orders, which is the day's most consequential failure. Either the guardrail layer needs a 'max working orders per symbol' check, or the behavioral layer must prevent the emission in the first place — today's fix prioritizes the behavioral layer."
+  },
+  "timing_observations": {
+    "first_trade": "2026-04-22 11:35:11 (MAHABANK, ~2h20m after open)",
+    "last_trade": "2026-04-22 14:13:33 (HINDUNILVR, ~1h17m before close)",
+    "admission_density": "13 entries across ~2h40m of accumulation, then zero admissions in the last 1h17m (after the 14:30 max_deployed_pct=0.75 override).",
+    "timing_assessment": "No clear evidence of 'too early' or 'too late' entry timing — the more pressing issue is that admissions did not pace with intraday market quality. The agent kept adding through the midday window even as the market chop intensified and the risk_monitor flagged rising concentration. On a binary-event day it would have been appropriate to close the intake far earlier than 14:30."
+  },
+  "position_sizing_observations": {
+    "largest_filled_position_pct": 0.0978,
+    "largest_filled_symbol": "MAHABANK",
+    "largest_projected_single_name_pct": 0.1846,
+    "largest_projected_symbol": "AUBANK",
+    "largest_projected_note": "AUBANK projected 18.46% if both OPEN lots fill — a grandfathered breach of the 0.15 max_position_pct cap installed at 12:30. The two OPEN AUBANK lots were admitted before the cap tightened and are not retroactively cancelled.",
+    "sizing_vs_confidence_fit": "Partially disciplined. MAHABANK 9.78% @ 0.72 confidence fits the 'reserve 10–15% allocation for confidence >= 0.70' rule. PNBHOUSING 7.87% @ 0.65 confidence is slightly above the ~5% cap the rule suggests for the 0.55–0.65 range. GRANULES 4.77% @ 0.65 and HINDUNILVR 4.74% @ 0.62 are inside the rule. The rule is being mostly observed but the cluster-level sizing (BFSI 22.9% combined) is the real concern, not any single-name breach.",
+    "recommendation": "The per-name 0.15 cap is binding enough. The missing layer is a correlated-cluster cap — addressed in the new system-prompt rule 10 rather than as a new numeric knob."
+  },
+  "stop_loss_performance": {
+    "sl_range_today": "MAHABANK 6.1% / PNBHOUSING 2.9% / GOLDBEES 4.1% / TORNTPOWER 3.3% / NESTLEIND 3.5% / AUBANK 3.8% / GRANULES 4.4% / HINDUNILVR 3.5%.",
+    "sls_hit_today": 0,
+    "sls_trailed_today": 0,
+    "assessment": "Stop-loss widths at entry look reasonable for swing CNC (mostly 3–4.5%, with MAHABANK at the wider end for a conviction play). No SL was breached on the day. However, zero trailing-SL MODIFY actions were emitted despite two positions (PNBHOUSING +0.64%, TORNTPOWER +0.45%) moving favorably. The system_prompt change (new rule in PRIORITY ORDER plus the philosophy bullet on 'what do I do with what I already own?') is aimed directly at this gap. SL width policy itself does not need adjustment on a 1-day sample."
+  },
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added new HARD CONSTRAINT rule 9 'ORDER HYGIENE — NEVER DUPLICATE WORKING ORDERS': forbids emitting a second BUY on a symbol that already has an OPEN/PENDING BUY; requires checking the OPEN-orders section each tick; bans LIMIT BUYs placed above the last traded price; bans laddered near-duplicate LIMITs.",
+      "why": "Direct response to today's AUBANK (3 orders) and NESTLEIND (2 orders) duplicate-order failures, and to the 5/13 unfilled-LIMIT rate where LIMITs were set above market (NESTLEIND 1415, AUBANK 1050).",
+      "expected_impact": "Fill rate should rise from 61.5% toward 85–95%; capital reservation bloat from phantom OPEN lots should collapse; risk_monitor should no longer need to install per-name caps just to stop single-symbol stacking."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added new HARD CONSTRAINT rule 10 'SECTOR / CLUSTER DISCIPLINE': defines correlated-theme clusters (rate-sensitive financials, power cluster, oil-sensitive cluster) and imposes a ~20% cluster cap + a prohibition on stacking multiple same-theme 52-week-high breakouts in one session.",
+      "why": "Today's book forms three distinct macro clusters (BFSI 22.9%/36.1% projected; Power 15.9% projected across 3 names; FMCG 16.8% projected across 2 names) that each stay under the 35% per-sector cap but collectively represent 68.8% of capital on full fill. The per-sector cap is clearly under-describing the actual macro risk.",
+      "expected_impact": "The decision agent should self-limit cluster stacking before the risk_monitor has to install a max_deployed_pct override. Correlated drawdowns on a single macro driver (rate surprise, crude spike, FMCG miss) should be reduced."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added three TRADING PHILOSOPHY bullets: (a) binary macro/geopolitical event days bias toward NO_ACTION and cycle time on MODIFY/EXIT instead; (b) deployment hysteresis — at >60% deployed with flat-or-negative session P&L, default NO_ACTION on new entries unless the setup materially beats what's held; (c) every tick's FIRST question is 'what do I do with what I already own?' rather than 'what should I buy next?'.",
+      "why": "Today's premarket brief explicitly called the US-Iran ceasefire a 'binary event' and recommended 'trade light, avoid fresh longs'. The decision agent placed 13 fresh longs anyway. Separately, 8 filled holdings produced zero MODIFY and zero EXIT actions — the agent effectively skipped position management.",
+      "expected_impact": "Fewer marginal entries on high-event-risk days; more trailing-SL / thesis-check activity per tick. Reduces gap-risk exposure overnight and converts the 'pure accumulation' failure mode into a more balanced buy/manage cadence."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Expanded the TRADING DECISION PRIORITY ORDER block to explicitly require walking the OPEN/PENDING orders section each tick (leave / cancel each), and to forbid submitting a second BUY for a symbol that already has a working BUY.",
+      "why": "The existing priority-order text covered filled positions but not OPEN orders. The AUBANK and NESTLEIND duplicates are the direct evidence that OPEN orders were being ignored across ticks. Placing this rule inside the decision-output schema (the maximally salient part of the prompt) is the simplest structural fix.",
+      "expected_impact": "Every decision tick should now explicitly address every OPEN order (leave or cancel). Eliminates the 'phantom OPEN lots accumulate across ticks' failure mode."
+    },
+    {
+      "file": "src/agents/risk_config.yaml",
+      "what": "Added a strategy-agent changelog entry for 2026-04-22 16:00 documenting the Day-1 EOD review and noting that the three risk_monitor numeric overrides (min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.75) are held unchanged for overnight. No numeric keys added or modified.",
+      "why": "The three earlier-today risk_monitor tightenings are binding against the concentration profile carried into overnight and should not be loosened at EOD. Today's actionable failures are structural (behavioral / prompt) rather than numeric-calibration, so the right layer to change is the system prompt.",
+      "expected_impact": "Tomorrow's premarket brief inherits the tightened overrides and re-evaluates them once OPEN-book fill outcomes and overnight-gap telemetry are observable."
+    }
+  ],
+  "recommendations": [
+    "Consider adding a GUARDRAIL-LAYER check 'max_working_orders_per_symbol = 1' in addition to the prompt change. The prompt change is the right primary fix, but a belt-and-braces numeric guardrail would prevent recurrence if a future prompt change ever reverts.",
+    "Consider persisting a per-session SL/target schema for filled holdings (today's portfolio snapshot showed stop_loss=0 and target=0 on every held position, even though the originating trades all had SL/target values). Without this the MODIFY/trail-SL logic has to reconstruct levels from the trades table each tick.",
+    "Tomorrow's premarket brief should evaluate: (a) did the 5 OPEN orders fill in the closing auction or expire/carry? — this determines whether the book opens at 48.29% or 78.56% deployed. (b) any overnight gap on the BFSI trio (MAHABANK + PNBHOUSING + AUBANK) or on the Power cluster. (c) whether to relax max_deployed_pct back to 0.80 if OPEN orders rejected (restoring admission headroom) or to keep it at 0.75 if they filled.",
+    "Build a 'duplicate order guard' at the trades-table insert boundary: if a BUY order for symbol X with status OPEN already exists, refuse to submit a second BUY on X until the first resolves. This is belt-to-the-prompt's-braces.",
+    "Re-evaluate confidence calibration after ~20 closed trades. Today's 1-day sample shows 0.72-confidence trades (MAHABANK, NESTLEIND) were the larger losers while 0.65-confidence (PNBHOUSING) was a winner — too small to conclude, but worth tracking as a formal calibration slope over the next two weeks before any further min_confidence tightening.",
+    "Add a sector/cluster-concentration line-item to the data the decision agent receives each tick, so the 'cluster discipline' rule from today's prompt change is informed by a pre-computed projected-cluster-weight number rather than requiring the agent to re-derive it from holdings + open orders each cycle."
+  ]
+}

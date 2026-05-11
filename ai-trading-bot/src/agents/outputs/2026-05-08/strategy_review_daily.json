@@ -1,0 +1,136 @@
+{
+  "date": "2026-05-08",
+  "review_type": "daily",
+  "trades_analyzed": 22,
+  "summary": {
+    "wins": 4,
+    "losses": 2,
+    "total_pnl": 1314.72,
+    "win_rate": 0.6667,
+    "avg_win": 1030.85,
+    "avg_loss": 1404.33,
+    "win_loss_amount_ratio": 0.73,
+    "new_buys_today": 11,
+    "closes_today": 6,
+    "decision_cycles_estimated": 14,
+    "llm_calls_count": 85,
+    "guardrail_decisions_today": 328,
+    "guardrail_blocks": 20,
+    "guardrail_blocks_real": 0,
+    "guardrail_blocks_state_sync": 14,
+    "guardrail_blocks_confidence_zero": 6,
+    "eod_deployment_pct": 62.79,
+    "holdings_count_eod": 14,
+    "portfolio_value_eod": 1009580.59,
+    "cumulative_pnl_since_inception": -1859.0,
+    "session_realized_pnl": 1314.72,
+    "session_unrealized_pnl": -1859.0,
+    "override_count_eod": 0
+  },
+  "trade_breakdown": {
+    "closed_today": [
+      {"symbol": "ADANIPORTS", "qty": 30, "exit_price": 1739.53, "pnl": 1185.9, "exit_rationale": "Stored SL 1735 above CMP 1732.80 — verified arithmetic. Cited promoter 2% block sale as POST-ENTRY new info (Rule 17(c) compliant). Defensible exit."},
+      {"symbol": "TITAGARH", "qty": 60, "exit_price": 839.58, "pnl": 94.8, "exit_rationale": "5.9x volume distribution-quality action + Q4 results upcoming binary risk (Rule 11). Defensible — failed follow-through on huge volume cited as post-entry info."},
+      {"symbol": "ABCAPITAL", "qty": 135, "exit_price": 364.22, "pnl": -645.3, "exit_rationale": "Cited 'margin compression -275bps QoQ flagged in research' as post-entry new info, but the Q4 print itself was on May 4 — i.e., information the entry should have weighed. Borderline Rule 17(c). FOLLOWED 77 min later by a fresh BUY on the SAME name at virtually identical price (Rule 14 same-session round-trip violation)."},
+      {"symbol": "NAVINFLUOR", "qty": 7, "exit_price": 7026.98, "pnl": 888.86, "exit_rationale": "WINNER-SIDE PRE-SL PANIC: '+1.9%, CMP 7043 vs SL 6960 — only 1.2% above SL with intraday range 6996-7071 putting SL within reach. Exit positively rather than accept guaranteed stopout.' SL was at the calibrated 1% trail-gap floor — 'too tight' was a self-criticism of the SL placement, not new information. Outcome positive (lucky); rationale matches the Day-12 pre-SL panic pattern with the sign flipped to winner-side."},
+      {"symbol": "HAL", "qty": 11, "exit_price": 4752.62, "pnl": 1953.82, "exit_rationale": "Q4 board meeting May 14 (4 sessions). Per Rule 11 disposition (a) — exit before binary event at +3.8%. Defensible Rule 11 compliant exit."},
+      {"symbol": "LUPIN", "qty": 24, "exit_price": 2370.61, "pnl": -2163.36, "exit_rationale": "Stored SL 2370 > CMP 2366.20 — actual SL breach. Valid mechanical exit. The loss magnitude was inflated by the 11:31 average-down (24 shares stopped vs the 18 originally entered)."}
+    ],
+    "new_entries_today": [
+      {"symbol": "PIDILITIND", "qty": 33, "entry": 1490, "sl": 1465, "target": 1575, "rr": 1.89, "confidence": 0.72, "sector": "Chemicals", "note": "Q4 beat one-day-old; clean Rule 11 entry (binary already passed)."},
+      {"symbol": "LUPIN", "qty": 18, "entry": 2470, "sl": 2400, "target": 2590, "rr": 1.6, "confidence": 0.72, "sector": "Pharma", "note": "Q4 print +87.5% PAT; entry defensible. Outcome failed."},
+      {"symbol": "WOCKPHARMA", "qty": 30, "entry": 1618, "sl": 1580, "target": 1740, "rr": 1.66, "confidence": 0.68, "sector": "Pharma", "note": "Q4 turnaround; clean entry."},
+      {"symbol": "BHARATFORG", "qty": 25, "entry": 2015, "sl": 1955, "target": 2110, "rr": 1.58, "confidence": 0.68, "sector": "Auto/Defense", "note": "Q4 + 52w-high breakout; clean entry."},
+      {"symbol": "POLYCAB", "qty": 5, "entry": 9100, "sl": 8800, "target": 9550, "rr": 1.5, "confidence": 0.7, "sector": "Capital Goods/W&C", "note": "Q4 record + Citi TP raise; clean entry."},
+      {"symbol": "SRF", "qty": 14, "entry": 2785, "sl": 2755, "target": 2920, "rr": 1.59, "confidence": 0.62, "sector": "Chemicals", "note": "Cluster-cap concern noted in own reasoning (3rd Chemicals name); admitted at low end of conviction."},
+      {"symbol": "LUPIN", "qty": 6, "entry": 2433, "sl": 2370, "target": 2540, "rr": 1.7, "confidence": 0.72, "sector": "Pharma", "note": "RULE 19 VIOLATION (NEW): same-session AVERAGE-DOWN on a position already at -1.5%. Top-up reasoning re-cited the same Q4 catalyst; what was new was the price drop, not the catalyst. Fueled the -₹2,163 stopout."},
+      {"symbol": "ABCAPITAL", "qty": 130, "entry": 364.5, "sl": 354, "target": 384, "rr": 1.86, "confidence": 0.68, "sector": "BFSI", "note": "RULE 14 VIOLATION (same-session re-entry): exited 77 min earlier on margin-compression thesis, re-bought on Q4-record thesis at virtually identical price. Both facts known at both timestamps — flipped disposition without new information."},
+      {"symbol": "BAJAJ-AUTO", "qty": 4, "entry": 10760, "sl": 10440, "target": 11260, "rr": 1.56, "confidence": 0.72, "sector": "Auto", "note": "Q4 PAT +103%, buyback @ 12000 hard floor; clean entry."},
+      {"symbol": "DABUR", "qty": 40, "entry": 487, "sl": 472, "target": 510, "rr": 1.53, "confidence": 0.65, "sector": "FMCG", "note": "Q4 print + 20-DMA breakout; clean entry."},
+      {"symbol": "LAURUSLABS", "qty": 16, "entry": 1226, "sl": 1190, "target": 1290, "rr": 1.78, "confidence": 0.72, "sector": "Pharma", "note": "Pharma 52w-high + 6th positive quarter; clean entry. Status OPEN at 14:21 — fill TBD by EOD."}
+    ]
+  },
+  "patterns_found": [
+    "PATTERN 1 — RULE 19 GAP: SAME-SESSION AVERAGE-DOWN ON LOSER (LUPIN, single biggest loss): LUPIN BUY 18 @ ₹2470 at 09:45 → BUY 6 @ ₹2433 at 11:31 (position at ~-1.5%, top-up re-cited the SAME Q4 catalyst as 'now materialized') → SELL 24 @ ₹2370.61 at 12:48 (SL hit, full stopout) = -₹2,163. The 11:31 add converted a calibrated single-tranche risk (₹44,460) into a doubled-up bet (₹59,058) at the moment the thesis was breaking. Without the add, the same SL trigger would have cost ~₹1,800 instead of ₹2,163 — the average-down inflated the loss by ~17%. This failure mode is not currently covered by any existing rule: Rule 17 covers preemptive EXIT panic, Rule 14 covers post-exit re-entry, but neither addresses 'add to a same-session loser.' New Rule 19 closes this gap.",
+    "PATTERN 2 — RULE 14 SAME-SESSION ROUND-TRIP NOT EXPLICITLY COVERED: ABCAPITAL SELL @ ₹364.22 at 11:31 (exit thesis: 'margin compression -275bps QoQ flagged in research') → BUY 130 @ ₹364.50 at 12:48 (re-entry thesis: 'Q4 record results PAT +41%, asset quality improving, fresh ATH 372'). Both facts existed at both timestamps; the 77-min round-trip surrendered ₹645 + spread for zero positional change. Rule 14 already covers cross-session re-entry cooldowns but the same-session variant is the most acute form and was not explicitly enumerated. The original SL placement at 365 was the issue (Rule 17 territory — 1% from CMP) — the right action was MODIFY-the-SL, not EXIT-and-rebuy. Rule 14 extension makes the same-session variant explicit.",
+    "PATTERN 3 — RULE 17 GAP: WINNER-SIDE 'SL TOO TIGHT' EXIT (NAVINFLUOR): EXIT at +1.9% citing 'CMP 7043 vs SL 6960 — only 1.2% above SL... Stored SL too tight for normal noise.' The 1.2% gap was at the calibrated 1% trail-gap floor (Rule 14(d)) — i.e., the SL was placed CORRECTLY, not 'too tight.' Outcome was +₹888.86 (lucky); the position was running toward target 7300 (+5.8% / +₹2,800 potential) and was alternatively exposed to a 1% trail-stopout at +0.87% / +₹414. Trading the upside option for the certain +1.9% across N similar exits compounds into a measurable expectancy hit. Rule 17 in its Day-12 form addressed the LOSER-side panic (CMP near SL on a losing position) but did not cover the symmetric WINNER-side panic. Rule 17 extension makes the winner-side variant explicit.",
+    "PATTERN 4 — RULES 17 & 18 BOTH WORKING (positive evidence): Day-12's Rule 17 fixed the pre-SL panic-exit pattern: today's loser-side closes (ABCAPITAL, LUPIN) cited either post-entry new info or actual SL breach, not 'CMP near SL' panic — this is the Rule 17-compliant pattern. Day-13's Rule 18 fixed the zero-admit dormancy: today produced 11 new BUYs across multiple decision cycles (vs Day-13's zero), with deployment lifting from 53.57% to 62.79% (+9.2pp). The active-trader experiment is now generating data on conviction-scaled execution rather than on whether the bot will trade or not. The remaining gaps are Patterns 1-3 above — adjacent failure modes that the existing rule set didn't cover.",
+    "PATTERN 5 — STATE-SYNC GUARDRAIL BLOCKS (14 of 20 blocks today): 11 'MODIFY for X but no open position/holding' blocks (ADANIPORTS x2, TITAGARH x2, BHARATFORG, HAL x4, plus 2 more) + 3 'Cannot short-sell in CNC. Holdings: 0' blocks (HAL, LUPIN x2). All 14 are stale-state artifacts: the LLM emitted MODIFY/SELL on a symbol that had been exited a tick or two earlier. The decision was already obsolete by the time the engine processed it. This is Rule 12 territory ('EXIT IS FINAL'), but the rule already exists — these blocks suggest the orchestrator's snapshot of holdings lags behind the most recent fill by one or more decision ticks. Not a strategy-side fix; flagged for orchestrator team. The remaining 6 blocks are 'Confidence (0.0/0.3/0.4) below 0.5 threshold' — those are the engine correctly rejecting under-conviction proposals, not noise.",
+    "PATTERN 6 — RISK-CONFIG OVERRIDES STILL EMPTY (correctly): risk_config.yaml overrides {} held all session. Risk monitor logged 35-tick HOLD (per 15:30 EOD changelog). Position sizing 1.4% to 7.9% (cap 20%), max sector cap not approached, deployment 62.79% (cap 80%), no min-confidence binds, no risk-budget binds. Today's losses (-₹2,808 gross) were inside the lane the engine permits — the LUPIN average-down and ABCAPITAL round-trip are LLM-decision-quality issues, not engine-permission issues. Tightening overrides would be a wrong-shape response: it would suppress legitimate Rule 18 admit activity that just started working, while not addressing Rules 14/17/19 gaps. Override stack stays empty.",
+    "PATTERN 7 — DEPLOYMENT TRAJECTORY HEALTHY: Day-11 EOD 48% → Day-12 EOD 73% → Day-13 EOD 53.57% (zero-admit) → Day-14 EOD 62.79% (admits restored, no panic-exits). The active-trader band (60-70%) is consolidating. Cash idle ₹371,382 vs Day-13's ₹462,827 — 20% reduction in idle capital with realistic conviction-checked admits, not forced-deploy. No event in sight that justifies further deployment lift; current band is appropriate.",
+    "PATTERN 8 — POSITION SIZING STILL UNCALIBRATED VS CONVICTION (4th-session observation): Day-14 admits sized 1.4% (LUPIN top-up) to 4.9% (PIDILITIND). Conviction range 0.62-0.72. POLYCAB at 0.70 conf sized 4.5%; LAURUSLABS at 0.72 conf sized 1.9% (smallest); BAJAJ-AUTO at 0.72 conf sized 4.3%. Conviction does not predict size. Day-10/11/12/13 all flagged this — patience is wearing thin. Holding for a future review (Rule 19 + Rule 14/17 extensions are this review's higher-leverage fixes), but a 'conviction-scaled sizing' clause is becoming overdue."
+  ],
+  "guardrail_effectiveness": {
+    "total_decisions": 328,
+    "blocks": 20,
+    "real_strategy_blocks": 0,
+    "noise_blocks_state_sync_modify": 11,
+    "noise_blocks_state_sync_cnc_short": 3,
+    "noise_blocks_confidence_zero_or_low": 6,
+    "override_count_start": 0,
+    "override_count_eod": 0,
+    "comment": "Override stack stayed empty all session (correct — 35-tick HOLD by risk monitor). 14 of 20 blocks are state-sync artifacts (LLM emitting orders against a stale holdings snapshot). 6 blocks are correct conf-floor rejections of under-conviction emissions. ZERO real strategy proposals were declined by guardrails today. The day's discipline failures (LUPIN, ABCAPITAL, NAVINFLUOR) all came through clean. This is a strategy-side gap, not a guardrail-tuning issue."
+  },
+  "deployment_assessment": {
+    "start_pct_estimate": 53.57,
+    "eod_pct": 62.79,
+    "session_change_pp": 9.22,
+    "comment": "Healthy lift from Day-13 EOD 53.57% to Day-14 EOD 62.79%. Eleven admits across multiple decision cycles confirms Rule 18 took effect post-restart. Cash idle dropped from ₹462,827 to ₹371,382 — ~20% reduction in unutilized capital. Within the 60-70% active-trader target band. No further override-side loosening warranted; the strategy is now self-pacing admits at a reasonable rate."
+  },
+  "activity_assessment": {
+    "decision_cycles_estimated": 14,
+    "new_buys_today": 11,
+    "buys_per_cycle": 0.79,
+    "vs_day13_buys_per_cycle": 0.0,
+    "vs_day12_buys_per_cycle": 0.69,
+    "comment": "Activity firmly in the active-trader range. 11 admits across an estimated 14 decision cycles = ~0.79 admits per cycle, well above Day-13's 0/48 = 0 and Day-12's 9/13 = 0.69. The session distributed admits across the full trading day (09:44 PIDILITIND first to 14:21 LAURUSLABS last) rather than morning-clustering — explicit Rule 18 + post-cluster-anchoring philosophy both producing intended behavior. No further activity-side tuning warranted."
+  },
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 19 — NO SAME-SESSION AVERAGE-DOWN ON LOSING POSITIONS (NEW)",
+      "what": "Added new Rule 19 immediately after Rule 18 (within the _TEMPLATE string, before its closing triple-quote). Rule forbids same-session add-to-position when the original entry is at unrealized loss > 0.5%; explicitly allows same-session adds to WINNERS subject to (a) up >= 1% from entry, (b) chart structure improved since entry, (c) combined size still within per-name risk budget; carves out cross-session adds as unconstrained by this rule. Anti-pattern called out explicitly: 'catalyst materialized today' is not a valid add justification when the same catalyst was already cited at the original entry — what's new is the price drop, not the catalyst. Cites today's LUPIN failure with full timestamp/price detail (09:45 BUY 18 @ 2470 → 11:31 BUY 6 @ 2433 → 12:48 SELL 24 @ 2370.61 = -₹2,163 vs estimated -₹1,800 if the average-down hadn't fired).",
+      "why": "LUPIN was today's largest single-name loss (-₹2,163, 17% larger than it would have been without the average-down). The 11:31 top-up at ₹2433 doubled the position from ₹44,460 to ₹59,058 at the moment the thesis was breaking; the same SL trigger that cost the original 18 shares ~₹1,800 instead consumed both tranches at ~₹2,163. Existing rules don't cover this failure mode: Rule 17 addresses preemptive EXITs (loser-side panic close), Rule 14 addresses post-exit re-entries (cooldown), Rule 15 addresses same-session round-trips (entry-and-exit same day). None of them covers 'add MORE to a losing position you opened earlier today.' Rule 19 closes that gap. Override-side fixes considered and rejected: there is no risk_config lever that distinguishes 'first entry on a name' from 'top-up entry on a name', so the engine can't enforce this — the discipline must come from the prompt where the decision is generated.",
+      "expected_impact": "Forward-looking on next bot restart (system_prompt is built at boot from config.yaml + _TEMPLATE). Day-15 watch metrics: (i) frequency of same-session second BUYs on the same symbol when the first BUY is at unrealized loss > 0.5% — target zero. (ii) realized loss magnitude on stopout positions: should drop because positions that hit SL will eat the original tranche only, not a doubled-up position. (iii) total P&L variance per name: tighter, because the failure-mode tail (averaging-into-stopout) is suppressed. NOT a target: total trade count. Same-session WINNER adds remain allowed under Rule 19's three explicit conditions, so genuinely-improving setups can still be scaled up."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 14 — SAME-SESSION VARIANT (EXTENSION)",
+      "what": "Extended Rule 14 (SAME-NAME RE-ENTRY COOLDOWN) with a new sub-clause and prior-failure-mode entry covering same-session sell-then-buy explicitly. Added immediately before the '═══ TRADEABLE INSTRUMENTS ═══' divider, after the Day-3→Day-5 TORNTPOWER prior-failure-mode entry. New sub-clause states: cooldown applies to ALL prior exits including same-session ones; if exit reasoning at time T cites fact X and re-entry reasoning at time T+1h cites fact Y, and both X and Y existed at both timestamps, the dispositions are INCOMPATIBLE — pick one. Cites today's ABCAPITAL failure: SELL 11:31 at ₹364.22 (margin compression rationale) → BUY 12:48 at ₹364.50 (Q4 record + asset quality improving rationale). 77-min round-trip, ₹645 surrendered for zero positional change.",
+      "why": "Rule 14's existing prior-failure-mode (TORNTPOWER Day-3→Day-5) framed the cooldown as a multi-day affair; the same-session variant is the most acute form of the same pattern but was not explicitly enumerated. Today's ABCAPITAL round-trip demonstrates the gap. The original SL was 1% below CMP (Rule 17 territory — pre-SL panic geometry); the right action was MODIFY-the-SL, not EXIT-then-rebuy at virtually identical price. Making the same-session case explicit in Rule 14 gives the LLM a sharp test it can apply: 'have I just exited this symbol today citing fact X? If so, my re-entry reasoning must cite a fact that arrived AFTER the exit.'",
+      "expected_impact": "Forward-looking on next bot restart. Day-15+ watch metrics: (i) frequency of same-session sell-then-buy on the same name — target zero unless explicit post-exit catalyst is named. (ii) when same-session round-trip does occur, the re-entry reasoning must contain a fact-with-timestamp post-exit clause. (iii) reduction in pure-friction round-trip cost (broker spread + decision-slot waste)."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 17 — WINNER-SIDE VARIANT (EXTENSION)",
+      "what": "Extended Rule 17 (PRE-SL EXIT DISCIPLINE) with a new sub-clause covering profitable positions where a trailed SL feels 'too close' to CMP. Added before the existing Day-12 prior-failure-mode block. New sub-clause states: 'SL too tight on a winner' is the same panic pattern as the loser-side variant, just with sign flipped; the right responses are (a) HOLD (default for winner above breakeven), (b) MODIFY new_stop_loss to a value within the band [stored_SL, LTP×0.99] so the trail-gap discipline is maintained while not loosening the SL, or (c) EXIT only on post-entry NEW fact. Cites today's NAVINFLUOR exit at +1.9% with reasoning 'CMP 7043 vs SL 6960 — only 1.2% above SL... too tight for normal noise' as the prior failure mode. Notes the 1.2% gap was AT the calibrated 1% trail-gap floor (Rule 14(d)) — i.e., SL placement was correct, not 'too tight.' Outcome lucky positive (+₹889) but expectancy-negative across N similar exits given the upside option to run to target 7300 (+5.8%) was surrendered for guaranteed partial gain.",
+      "why": "Rule 17 in its Day-12 form covered the [-1%, SL] band on losing positions but did not cover the symmetric winner-side panic. Today's NAVINFLUOR exit demonstrated the gap: same psychological pattern (front-run-the-stop), same decision-quality issue (trade upside option for guaranteed partial gain), but on a profitable position so it doesn't fire under Rule 17's loser-band wording. Outcome happened to be positive (+₹889), but expectancy across N similar exits is negative because the surrendered target-runway (here ~₹2,800 potential) compounds. Closing the variant in Rule 17 means the same single rule covers both the LUPIN-style loser-panic and the NAVINFLUOR-style winner-panic.",
+      "expected_impact": "Forward-looking on next bot restart. Day-15+ watch metrics: (i) frequency of EXIT on winner positions citing 'SL too tight' or 'noise within reach of SL' — target zero, replaced with HOLD or MODIFY-tighten-monotonically. (ii) average winner exit P&L: expected to RISE because more winners will run closer to target before either SL fires or target hits, vs the current pattern of premature winner-side closes at +1-3%."
+    }
+  ],
+  "non_changes_with_rationale": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "decision": "NO CHANGE — overrides block remains empty {}",
+      "rationale": "Override stack has been {} since Day-11 EOD. Risk monitor in 35-tick HOLD as of 15:30. Position sizing 1.4-7.9% (cap 20%), deployment 62.79% (cap 80%), no min-confidence/risk-budget binds. Today's losses were all inside the engine-permitted lane — the failures (LUPIN average-down, ABCAPITAL round-trip, NAVINFLUOR winner-panic) are LLM-decision-quality issues that no override lever can prevent. Tightening overrides would suppress the legitimate Rule 18 admit activity that just started working WITHOUT addressing the actual gaps. Override stack stays empty."
+    },
+    {
+      "file": "config/config.yaml",
+      "decision": "NO CHANGE — base parameters unchanged",
+      "rationale": "min_confidence (0.50), min_risk_reward (1.5), max_position_pct (0.20), max_sector_pct (0.35), max_deployed_pct (0.80), min_cash_buffer_pct (0.20), default_sl_pct (0.02), max_sl_pct (0.05), daily_loss_limit_pct (0.075) are all working as intended. None bound today's decisions; today's failures were pattern/discipline gaps, not threshold misses. The Rule 19 add and Rule 14/17 extensions are the right-shape fixes."
+    },
+    {
+      "file": "Engine-side: orchestrator holdings-snapshot freshness",
+      "decision": "FLAGGED — outside strategy review scope",
+      "rationale": "14 of 20 guardrail blocks today were state-sync artifacts (11 'MODIFY for X but no open position/holding' + 3 'Cannot short-sell in CNC. Holdings: 0'). Pattern: LLM emits a MODIFY or SELL on a symbol whose recent EXIT/CLOSE has not yet been reflected in the holdings snapshot the next decision cycle reads. This means the LLM is making a follow-up decision against a stale view of the book. Rule 12 already addresses this from the prompt side ('EXIT IS FINAL'), but the underlying issue is orchestrator state propagation latency. Not a strategy-review-surface fix; needs orchestrator-team attention. Mentioned here so it isn't conflated with discipline failures."
+    }
+  ],
+  "recommendations": [
+    "MONITOR DAY-15+ FOR RULE 19 EFFECT: With Rule 19 in place after next bot restart, watch (a) frequency of same-session add-to-loser attempts (target zero), (b) realized loss magnitude on names that go to SL (should not be inflated by averaging), (c) explicit Rule 19 condition-check language in any same-session WINNER add reasoning ('up >= 1%, chart improved, combined risk-budget verified'). If the rule produces collateral damage by suppressing genuine winner-side scaling, the conditions can be relaxed in a future review.",
+    "MONITOR DAY-15+ FOR RULE 14 SAME-SESSION VARIANT EFFECT: Watch for ZERO same-session sell-then-buy on the same name unless the re-entry reasoning explicitly states a post-exit catalyst with a timestamp. If the LLM circumvents by waiting until the next session for the rebuy without genuine new info, the cross-session cooldown (existing Rule 14 body) should bite — but if it doesn't, that's evidence for a follow-up review.",
+    "MONITOR DAY-15+ FOR RULE 17 WINNER-SIDE VARIANT EFFECT: Watch for (a) zero EXITs on winner positions citing 'SL too tight' or 'noise within reach of SL', (b) emergence of MODIFY-tighten-within-band actions in their place (e.g., raising stored SL toward LTP×0.99 floor as price runs), (c) average winner-exit P&L rising as more winners run nearer to target.",
+    "POSITION SIZING vs CONVICTION (5th consecutive observation): LAURUSLABS at conf 0.72 sized 1.9%; PIDILITIND at conf 0.72 sized 4.9%. No systematic conviction-scaling. Day-10/11/12/13/14 all flagged this. Worth a TRADING PHILOSOPHY clause in a future review: 'conviction 0.72+ → size toward 6-8% (closer to per-name cap); conviction 0.62-0.65 → size 2-4%.' Not in this review's scope (Rule 19 + extensions are higher-leverage), but moving up the priority queue.",
+    "STATE-SYNC ENGINE-SIDE: 14 of 20 guardrail blocks today were stale-state artifacts. Pure no-op for trading outcomes (the decisions never executed) but consume LLM cycles and clutter the audit trail. Suggested fix on the orchestrator side: pass the most-recent fill/CLOSE state into the next decision cycle's prompt explicitly ('Symbols you exited THIS cycle, do not emit MODIFY/SELL on them next cycle'), so the LLM doesn't need to deduce holdings freshness from a snapshot that may lag. Outside strategy_review scope but flagged.",
+    "LAURUSLABS PENDING CHECK: LAURUSLABS BUY 16 @ ₹1226 LIMIT was OPEN at 14:21:45 with status not yet COMPLETE in the trades table at review time. Day-15 pre-market should confirm whether the order filled before close, was auto-cancelled at session end, or carried as a stale order. If still open at next session start, decision logic should evaluate whether the original thesis (pharma 52w-high, +0.10 confidence modifier) is still intact at next session's open price."
+  ]
+}

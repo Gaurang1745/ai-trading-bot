@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-04-29 09:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001956.49,
+    "cash": 549175.24,
+    "deployed_pct": 45.19,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Deployment at 45.19% (LTP-marked, EOD 04-28 snapshot) sits 19.81 pp below the binding max_deployed_pct=0.65 override and is the lowest deployment level since Day-1 — direct consequence of Day-6's three discretionary CNC exits (HINDUNILVR, TORNTPOWER, MAHABANK) that freed ~14.6 pp. Admission surface is wide open; no deployment-cap pressure on entries today.",
+    "Largest single name NESTLEIND at 12.22% of portfolio (LTP ₹1,440 × 85) retains 2.78 pp buffer to the max_position_pct=0.15 cap — comfortable, no firing trigger on per-name sizing.",
+    "Sector exposures all comfortable vs the 0.22 max_sector_pct cap: FMCG 12.22% (single name NESTLEIND, 9.78 pp buffer); Power 9.86% (NTPC+POWERGRID, 12.14 pp buffer); BFSI 8.33% (PNBHOUSING only, 13.67 pp buffer — major shift from Day-1 35.99% peak after AUBANK/INDUSINDBK/MAHABANK exits over Days 3-6); Pharma 5.23%; Gold ETF 4.90%; Mining 4.66%. No grandfathered breaches remain on the book — first session of the experiment without one.",
+    "Latent PSU cluster: NTPC + POWERGRID + COALINDIA = 14.52% of capital — three correlated PSU names that could co-move on policy/dividend/disinvestment news. Not a sector-cap breach (each in different sub-buckets) but a correlation watch-item; if a 4th PSU name is admitted today this becomes a candidate for a separate observability flag.",
+    "Stale OPEN orders persist from Day-3 (2026-04-27): TATAPOWER 110 @ ₹443 (₹48,730), HINDZINC 75 @ ₹612 (₹45,900), PHARMABEES 1500 @ ₹23.65 (₹35,475) — 2 calendar days old, total ₹130,105 (13.0% of capital). These are unmanaged exposure overhang — if they fill, projected deployment jumps 45.19% → 58.18%, and Power exposure jumps 9.86% → 14.73%. Operational concern (strategy-layer cancel/reprice decision), not a numeric-knob trigger; flagging for the strategy agent's next tick.",
+    "Realized daily P&L is ₹0.0 (premarket — no trades on 2026-04-29 yet). Cumulative P&L per latest snapshot is +₹1,956.49 (+0.20%). Buffer to the daily_loss_limit_pct=0.04 circuit-breaker (just tightened at Day-6 EOD) is the full ₹40,078 today.",
+    "Mark-to-market posture on holdings is constructive: 4 of 7 names in the green (PNBHOUSING +6.05%, NESTLEIND +1.92%, SUNPHARMA +0.77%, NTPC +0.58%); 3 mildly red (GOLDBEES -1.93%, POWERGRID -0.47%, COALINDIA -0.43%). No single-name distress (no holding worse than -2%, all SLs intact). MAHABANK-style -5%/-6% mark-to-market drag is no longer on the book post-Day-6 exit."
+  ],
+  "actions_taken": [
+    "No numeric overrides changed. Risk level LOW; no pre-armed trigger fires this tick. Book is in its healthiest state of the experiment (lowest deployment, no grandfathered sector breaches, positive cumulative, no single-name distress). Existing override stack — min_confidence=0.65, max_position_pct=0.15, max_deployed_pct=0.65, max_sector_pct=0.22, default_sl_pct=0.015, min_sl_pct=0.01, max_sl_pct=0.04, daily_loss_limit_pct=0.04 — remains well-calibrated for the current posture; further tightening without a firing trigger would be theatrical and would friction legitimate strategy entries.",
+    "Pre-arm watch-items for today's intraday ticks: (a) if 4th PSU name admitted (>17% PSU broad cluster) → consider a custom PSU-cluster observability flag; (b) if any of the 3 stale 04-27 OPEN orders fills, re-evaluate deployment + cluster impact; (c) if strategy cancels stale OPEN orders without re-entry, no action needed — book stays at 45% deployment; (d) if a new BFSI add appears, the 8.33% BFSI base means 13.67 pp of room — no immediate trigger, but track relative to Day-1 stacking pattern."
+  ]
+}

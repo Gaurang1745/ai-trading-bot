@@ -1,0 +1,84 @@
+{
+  "date": "2026-04-27",
+  "review_type": "daily",
+  "trades_analyzed": 13,
+  "summary": {
+    "wins": 2,
+    "losses": 1,
+    "total_pnl": 131.38,
+    "win_rate": 0.667,
+    "avg_win": 498.65,
+    "avg_loss": -865.92,
+    "notes": "13 trade-table rows = 7 BUYs + 3 SELL-CLOSE pairs (each pair is 2 rows: SELL + CLOSE). Closed-position count = 3 (AUBANK -₹865.92 loss, GRANULES +₹955.50 win, INDUSINDBK +₹41.80 win). Win rate 2/3 = 66.7%. Avg win = (955.50 + 41.80) / 2 = ₹498.65. Avg loss = -₹865.92 (single observation). Realized R:R per closed trade = avg_win / |avg_loss| = 0.58 — a single-day sample dominated by one large loss; need more data. Open-book unrealized at last 14:40 mark was +₹2,156.60, snapshot generator went silent thereafter so EOD mark unobservable. Cumulative experiment realized P&L = +₹1,556.38 (Day-2 +₹1,425 + Day-5 +₹131.38)."
+  },
+  "trades_today_detailed": [
+    {"time": "09:31:56", "symbol": "AUBANK", "action": "EXIT", "qty": 176, "fill": 1044.13, "pnl": -865.92, "confidence": 0.65, "reason": "Pre-Q4-results binary-event exit — defensible per Rule 11"},
+    {"time": "10:13:02", "symbol": "TATAPOWER", "action": "BUY", "qty": 110, "limit": 443.0, "sl": 425.0, "target": 470.0, "confidence": 0.62, "status": "OPEN", "warning": "SL too wide (4.1%). Max 4% — clamped"},
+    {"time": "10:42:49", "symbol": "INDUSINDBK", "action": "BUY", "qty": 55, "limit": 878.0, "sl": 855.0, "target": 920.0, "confidence": 0.62, "status": "FILLED"},
+    {"time": "10:42:57", "symbol": "HINDZINC", "action": "BUY", "qty": 75, "limit": 612.0, "sl": 590.0, "target": 660.0, "confidence": 0.65, "status": "OPEN"},
+    {"time": "11:13:02", "symbol": "POWERGRID", "action": "BUY", "qty": 150, "limit": 320.5, "sl": 318.0, "target": 335.0, "confidence": 0.62, "status": "FILLED"},
+    {"time": "11:45:12", "symbol": "TORNTPOWER", "action": "BUY", "qty": 28, "limit": 1810.0, "sl": 1770.0, "target": 1920.0, "confidence": 0.62, "status": "FILLED", "note": "Same-name re-entry: SOLD on Day-3 at +₹1,834 'asymmetric Q4 risk', re-bought today at IDENTICAL ₹1810 entry while Q4 still pending"},
+    {"time": "11:45:44", "symbol": "GRANULES", "action": "EXIT", "qty": 70, "fill": 694.65, "pnl": 955.50, "confidence": 0.65, "reason": "Pre-Q4 (Apr 29, 2 days away) + FDA Form 483 overhang exit — defensible per Rule 11"},
+    {"time": "12:14:33", "symbol": "SUNPHARMA", "action": "BUY", "qty": 30, "limit": 1734.0, "sl": 1720.0, "target": 1830.0, "confidence": 0.65, "status": "FILLED", "note": "Pharma admission 29 min after GRANULES exit; reasoning cited fresh $11.75B Organon catalyst — name-specific edge, not pure recycle"},
+    {"time": "12:14:45", "symbol": "INDUSINDBK", "action": "EXIT", "qty": 55, "fill": 878.76, "pnl": 41.80, "confidence": 0.65, "reason": "Same-day round-trip exit on bot's own subsequently-surfaced research: SFIO probe + SEBI restraint + Rs 1,979 cr derivatives lapse + suspected internal fraud. These signals were publicly known at entry time."},
+    {"time": "12:14:55", "symbol": "PHARMABEES", "action": "BUY", "qty": 1500, "limit": 23.65, "sl": 22.85, "target": 24.95, "confidence": 0.62, "status": "OPEN", "note": "Pharma ETF admission 30 min after GRANULES exit; reasoning explicitly framed as 'diversified vehicle to avoid single-stock binary risk during peak results week' — vehicle-class shift, not pure recycle"}
+  ],
+  "patterns_found": [
+    "P1 GOVERNANCE-OVERHANG IGNORED AT ENTRY (single strongest evidence today): INDUSINDBK BUY at 10:42 → SELL at 12:14 (92 min later) on the bot's own subsequently-surfaced research showing active SFIO criminal probe, SEBI insider-trading restraint on former officials, Rs 1,979 cr derivatives lapse, suspected internal fraud. Net P&L +₹41.80 (lucky breakeven, not skill). The bearish governance signals were PUBLIC at entry time; the failure was sequencing — bullish 'Q4 turnaround / NII +43.4% / NIM expansion' narrative weighed first, governance overhang only surfaced on a later research pass. On a different LTP path the same round-trip could have been a -₹2,000 to -₹5,000 loss. ADDRESSED by new system_prompt Rule 13.",
+    "P2 SAME-NAME ROUND-TRIP WITHOUT NEW THESIS: TORNTPOWER SOLD at Day-3 10:12 (+₹1,834, 'asymmetric Q4 risk into binary event at 52-week high') → BOUGHT at Day-5 11:45 at the IDENTICAL ENTRY PRICE 1810 ('Power sector breakout, 6.7% on 3.3x volume, JERA partnership + Nabha catalysts'). Q4 binary risk that justified the Day-3 exit was STILL pending on Day-5; the two thesis are mutually inconsistent within a 72-hour window. Day-5 reasoning did not lead with new JERA / Nabha info nor explicitly retract the Day-3 exit thesis. Risk-monitor flagged the 'buy-back-what-you-just-sold' pattern at 12:00 as 'a quality concern — strategy is testing the perimeter created by the deployment cap by trading old slots for new ones'. ADDRESSED by new system_prompt Rule 14.",
+    "P3 CLUSTER-STACK FORCING RISK-LAYER CASCADE: TATAPOWER (10:13) + POWERGRID (11:13) + TORNTPOWER (11:45) — three new Power-cluster admissions in 92 minutes on top of held NTPC, creating a 4-name Power cluster (~19.8% of capital on full fill). Existing Rule 10 prose ('do NOT add a second, third, and fourth breakout-to-52-week-high in the SAME theme in a single session') was present but did not bite. Risk layer ratcheted FOUR times in 90 minutes: max_sector_pct 0.30 → 0.25 → 0.22, max_deployed_pct 0.70 → 0.65, min_confidence 0.60 → 0.62. ADDRESSED by strengthening Rule 10 with HARD LIMIT enumeration (≤1 new in held-cluster, ≤2 new in unheld-cluster per session).",
+    "P4 CONFIDENCE FLOOR-HUGGING: 6 of 7 BUY decisions today were at the minimum confidence floor (0.62 was the prevailing floor for the first 5; SUNPHARMA at 0.65 cleared the 12:30 raise). All four Power names + INDUSINDBK + PHARMABEES were at 0.62. Strategy is gaming the threshold rather than treating it as a quality bar — every additional risk-monitor confidence raise has produced new entries at the new floor. n=5 closed sample is too small to make confidence a statistical predictor; signal is only behavioral. NOT codified as a new rule today (sample-size constrained per the 2026-04-25 weekly changelog's 'wait for n≥10' condition); risk_monitor's 0.65 override stays in risk_config.yaml.",
+    "P5 BINARY-EVENT EXIT DISCIPLINE WORKING WELL: AUBANK (Q4 results today, 09:31 exit -0.4%) and GRANULES (Q4 in 2 days + FDA overhang, 11:45 exit +2%) both correctly executed Rule 11 (binary-event default = EXIT or risk-trim). Combined with Day-3's TORNTPOWER and ADANIPOWER exits, this is now 4-of-4 successful binary-event exits since Rule 11 was added on 2026-04-25 — the rule is biting cleanly and deserves a 'kept doing what's working' note for the next weekly review.",
+    "P6 TRAILING-SL DISCIPLINE IS ACTIVE BUT COSMETIC: 50+ MODIFY-trail-SL events in today's guardrail log (all warning 'MODIFY sets SL above entry — locking in profit', which is informational not blocking). Names with active trail-up: PNBHOUSING (entry 984 → SL 1029-1040), NESTLEIND (entry 1412.94 → SL 1418), MAHABANK (entry 81.50 → SL not surfaced in log), NTPC (entry 404.5 → SL 405-407), GRANULES (entry 681 → SL 685-694.48 before exit). The rule (TRAILING SL MANDATE in MODIFY rules section) is being followed. No issues today but watch for the prior-failure-mode — SL trailed flush with or above LTP — none observed today.",
+    "P7 TWO CNC SHORT-SELL ATTEMPTS BLOCKED: at 11:12:50 ('Cannot short-sell in CNC. Holdings: 0, Order qty: 110' + 'Confidence (0.55) below 0.6 threshold') and 12:14:49 ('Cannot short-sell in CNC. Holdings: 0, Order qty: 110' + 'Confidence (0.6) below 0.62 threshold'). Both correctly blocked by guardrails (Rule 3 SHORT SELLING RULES). The recurring quantity 110 across both attempts and the absence of a SELL symbol in the log suggest the bot was attempting a CNC SELL on a symbol it did not hold, possibly TATAPOWER (110 shares matches the TATAPOWER OPEN BUY qty). The behavior is consistent with confusing 'cancel my pending OPEN BUY' with 'place a SELL'. Engine handled correctly; no rule change needed but worth surfacing as a research note to the system-prompt order-hygiene section if it recurs.",
+    "P8 OPEN-ORDER FILL STARVATION (3+ HOUR STRATEGY SILENCE): post-12:14:55 PHARMABEES BUY, the strategy went silent for the rest of the session — 195+ min with zero new BUY/SELL by 15:30. Three OPEN orders (TATAPOWER 317 min aged, HINDZINC 287 min, PHARMABEES 195 min) all sat unfilled past their flag thresholds. The 0.65 max_deployed_pct cap (set at 11:30) was binding 7.50 pp under projected full-fill, meaning no new BUY admission was possible without a SELL freeing deployment. The 12:30 INDUSINDBK SELL was the only sell of the cap-binding window. This is a CADENCE issue not a quality issue — the deployment cap is doing its job (forcing SELL-before-BUY), but the strategy did not respond by trimming any other holding. Worth flagging for engineering: should the bot's decision-cycle priority shift to TRIM/MODIFY analysis when deployment-cap-binding silence exceeds 90 min? Out-of-mandate for this strategy review; surfaced as recommendation."
+  ],
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 10 SECTOR / CLUSTER DISCIPLINE",
+      "what": "Added HARD LIMIT clause: in any single session, AT MOST 1 NEW position in a cluster where a name is already held; AT MOST 2 NEW positions in an unheld cluster. Counting includes OPEN/PENDING orders.",
+      "why": "Pattern P3 above. TATAPOWER + POWERGRID + TORNTPOWER (3 new Power-cluster admissions in 92 min on top of held NTPC) forced the risk layer to ratchet 4 different levers in 90 minutes (max_sector_pct twice, max_deployed_pct, min_confidence twice). Existing soft prose rule did not bite — converting to enumerated hard limit.",
+      "expected_impact": "Future cluster-stack patterns are preempted at the strategy-layer pre-commitment, before the risk layer has to ratchet. Should reduce mid-session sector_pct / deployed_pct tightenings — those are correct responses but introduce friction that propagates across subsequent ticks (raised confidence floors, narrower deployment slots, extended OPEN-order silence)."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "NEW Rule 13 REGULATORY / GOVERNANCE DUE DILIGENCE",
+      "what": "Added new HARD CONSTRAINT requiring pre-entry scan of news/research data for active SFIO/SEBI/RBI/CBI/ED probes, USFDA Form 483/Warning Letter/Import Alert, whistleblower/audit issues, insider-trading restraints, suspected fraud. If any unresolved overhang flagged, default disposition on a NEW entry is NO_ACTION even when technical/sector setup is bullish.",
+      "why": "Pattern P1 above. INDUSINDBK 92-minute round-trip (BUY at 10:42 → SELL at 12:14) on bot's own surfaced governance overhang (SFIO + SEBI + Rs 1,979 cr derivatives lapse), all of which was public information at entry time. Net +₹41.80 was luck not skill.",
+      "expected_impact": "Eliminates a class of same-session BUY-then-SELL round-trips driven by post-entry research surfacing. Risk-asymmetric: false positives (skipping a name with flagged-but-immaterial overhang) are cheap; false negatives (entering a name with live SFIO probe) are expensive. Particularly material for BFSI and Pharma (the two sectors with concentrated regulator action in the Indian universe)."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "NEW Rule 14 SAME-NAME RE-ENTRY COOLDOWN",
+      "what": "Added new HARD CONSTRAINT: after EXIT or SELL-to-zero, no fresh BUY on the same symbol for at least 5 trading sessions UNLESS (a) a new post-exit catalyst materially changes the prior thesis, or (b) the original exit thesis has been demonstrably invalidated by subsequent price action AND new information. Re-entry reasoning must explicitly acknowledge the prior exit and state the new catalyst.",
+      "why": "Pattern P2 above. TORNTPOWER Day-3 SELL at +₹1,834 ('asymmetric Q4 risk') → Day-5 BUY at IDENTICAL entry price 1810 with no acknowledgement of the prior exit's still-pending Q4 catalyst.",
+      "expected_impact": "Round-trip churn on the same symbol is preempted unless explicitly justified. Also addresses the broader 'trading old slots for new ones' pattern flagged by risk-monitor at 12:00 — strategy uses SELLs to free deployment slots for cosmetically-different but thematically-identical re-entries. The 5-session cooldown forces the re-entry to clear a higher bar than continued-upside FOMO."
+    }
+  ],
+  "considered_but_declined": [
+    {
+      "item": "Promote min_confidence 0.65 override to base config 0.50 → 0.60 for durability",
+      "why_declined": "n=5 closed trades is below the n≥10 bar set in the 2026-04-25 weekly changelog. Override stays in risk_config.yaml. Revisit at next weekly review (post-Day-10)."
+    },
+    {
+      "item": "Add a SECTOR-RECYCLE COOLDOWN rule (no fresh same-sector BUY in same session as a binary-event SELL)",
+      "why_declined": "Day-5 Pharma evidence is mixed: SUNPHARMA had a fresh name-specific catalyst (Organon $11.75B acquisition); PHARMABEES was an explicit single-stock → ETF vehicle-class shift. Both legitimate. A blanket sector-recycle ban would block valid moves. Will codify only if a future recycle occurs WITHOUT a name-specific catalyst or vehicle-class shift."
+    },
+    {
+      "item": "Promote max_sl_pct 0.04 override to base config 0.05 → 0.04",
+      "why_declined": "Day-5 — still inside the 5-10 day post-override stability window required for promotion (override set 2026-04-23). Revisit at Day-10."
+    },
+    {
+      "item": "Engine-side numeric guardrails for new Rule 10 HARD LIMIT and Rule 14 cooldown",
+      "why_declined": "Both would require new state in GuardrailEngine (per-session cluster-admission counter; per-symbol exit-time tracker). Prompt-layer pre-commitment is the lighter intervention with the same target behavior. Revisit only if the new prose rules fail to bite in a future session."
+    }
+  ],
+  "recommendations": [
+    "R1 ENGINEERING — DEPLOYMENT-CAP-BINDING SILENCE HANDLING: post-12:14:55 the strategy went silent for 195+ min while 3 OPEN orders sat unfilled past their age thresholds. The 0.65 max_deployed_pct cap correctly forced SELL-before-BUY, but the strategy did not respond by trimming any other holding — it simply went quiet. Consider a decision-cycle prompt augmentation that detects 'deployment-cap-binding for >60 min with no fills and no SELLs' and surfaces an explicit TRIM-CANDIDATE prompt to the strategy layer. Out-of-mandate for prose rule changes; engineering recommendation.",
+    "R2 ENGINEERING — STALE PORTFOLIO_SNAPSHOT DETECTION: 14:40 → 15:30 had no fresh portfolio_snapshot, leaving risk-monitor unable to verify Trigger D 2nd-leg fire on stale data. This is an observability gap, not a strategy issue. Snapshot generator should emit at least one row per 30-min cadence even if portfolio state is unchanged.",
+    "R3 RESEARCH — UNIVERSE-LEVEL GOVERNANCE OVERHANG TAGGING: rather than relying on the bot to surface SFIO/SEBI/USFDA flags per-name in the research pass, consider a universe-level pre-tag (loaded at boot or daily) listing names with active regulator action. INDUSINDBK, YESBANK (historical), SUZLON (historical), several pharma names (USFDA 483) would be candidates. The pre-tag would be loaded into the prompt context so Rule 13 has authoritative input rather than relying on the news-feed pass to surface the flag in time.",
+    "R4 PROMPT — POSITION-SIZE QUARTILES BY CONFIDENCE: today's 6-of-7 BUYs at confidence 0.62 with sizes ranging 4.6%-5.1% suggests the system is treating 'confidence 0.62' as a single bucket. The existing rule says '0.55-0.65 confidence cap at ~5%, ≥0.70 for full 10-15%'. Could refine into quartile bands (0.55-0.60: ≤3%; 0.60-0.65: ≤5%; 0.65-0.70: ≤8%; ≥0.70: ≤15%) so confidence-discrimination has more granular position-size feedback. Defer to next weekly review when there's enough closed-trade data to calibrate.",
+    "R5 NEXT WEEKLY REVIEW (Day-10, ~2026-05-02): with n≥10 closed trades expected, confidence-vs-outcome correlation finally has signal. Re-evaluate min_confidence 0.65 override (promote to base?), max_sl_pct 0.04 override (promote to base?), and the position-size quartile refinement (R4). Also re-evaluate the Day-5 prose additions (Rules 10/13/14): did the cluster HARD LIMIT bite? Did Rule 13 catch any further governance-overhang round-trips? Did Rule 14 prevent any further same-name same-week round-trips?"
+  ]
+}

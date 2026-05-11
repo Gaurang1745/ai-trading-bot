@@ -1,0 +1,68 @@
+{
+  "timestamp": "2026-04-28 12:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995592.64,
+    "cash": 596075.24,
+    "deployed_pct": 0.4013,
+    "holdings_count": 6,
+    "positions_count": 0,
+    "daily_pnl": -5964.24
+  },
+  "portfolio_detail": {
+    "snapshot_basis": "live DB read at 12:00 tick (paper_holdings + paper_cash + trades WHERE DATE(timestamp)=DATE('now') AND mode='PAPER')",
+    "holdings_value_at_cost": 399517.40,
+    "realized_pnl_today": -5964.24,
+    "deployed_pct_at_cost": 0.4013,
+    "holdings": [
+      {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+      {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.00, "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+      {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.00, "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+      {"symbol": "NTPC", "qty": 125, "avg_price": 404.50, "value": 50562.50, "pct_of_capital": 0.0508, "sector": "Power"},
+      {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.10, "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold-ETF"},
+      {"symbol": "POWERGRID", "qty": 150, "avg_price": 320.50, "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"}
+    ],
+    "sector_exposure_at_cost": {
+      "FMCG": {"pct": 0.1206, "names": ["NESTLEIND"], "buffer_to_cap_pp": 0.0994},
+      "Power": {"pct": 0.0991, "names": ["NTPC", "POWERGRID"], "buffer_to_cap_pp": 0.1209},
+      "BFSI": {"pct": 0.0791, "names": ["PNBHOUSING"], "buffer_to_cap_pp": 0.1409},
+      "Pharma": {"pct": 0.0522, "names": ["SUNPHARMA"], "buffer_to_cap_pp": 0.1678},
+      "Gold-ETF": {"pct": 0.0503, "names": ["GOLDBEES"], "buffer_to_cap_pp": 0.1697}
+    },
+    "largest_position": {"symbol": "NESTLEIND", "pct_at_cost": 0.1206, "buffer_to_cap_pp": 0.0294},
+    "trades_today": [
+      {"time": "11:16:10", "symbol": "HINDUNILVR", "action": "CLOSE/SELL", "qty": 20, "fill_price": 2317.04, "pnl": -1099.20, "sector": "FMCG"},
+      {"time": "11:44:10", "symbol": "TORNTPOWER", "action": "CLOSE/SELL", "qty": 28, "fill_price": 1761.82, "pnl": -1349.04, "sector": "Power"},
+      {"time": "11:44:18", "symbol": "MAHABANK", "action": "CLOSE/SELL", "qty": 1200, "fill_price": 78.57, "pnl": -3516.00, "sector": "BFSI"}
+    ],
+    "daily_pnl_pct_of_capital": -0.0060,
+    "buffer_to_3pct_loss_gate_inr": 23904.71
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.22
+  },
+  "delta_since_1130": {
+    "holdings_changes": "TWO additional EXITS executed at 11:44 (28-min after the 11:16 HINDUNILVR exit): TORNTPOWER 28 @ ₹1761.82 realized -₹1,349.04 (-2.66% on cost basis 1810), MAHABANK 1200 @ ₹78.57 realized -₹3,516.00 (-3.59% on cost basis 81.50). Holdings 8 → 6.",
+    "cash_change_inr": 143614.96,
+    "deployed_pct_change": "0.5491 → 0.4013 (-14.78 pp). Book is materially de-risked.",
+    "realized_pnl_today_change": -4865.04,
+    "sector_decongestion": "TWO sectors actively decongested in 30-min window: Power 14.92% → 9.91% (-5.01 pp, TORNTPOWER exit) and BFSI 17.65% → 7.91% (-9.74 pp, MAHABANK exit). FMCG already decongested at 11:16 (HINDUNILVR exit). Three of five sectors trimmed in the same 30-min episode."
+  },
+  "findings": [
+    "STRATEGY DECISIVELY DE-RISKING: 3 SELLs in 28 minutes (HINDUNILVR 11:16, TORNTPOWER 11:44, MAHABANK 11:44), zero BUYs. This is the strongest single-session decongestion behavior observed across the 5 trading days — strategy layer is exiting underperformers across THREE distinct sectors (FMCG/Power/BFSI). Trade rationale logged in tags aligns with the system_prompt's binary-event and capital-preservation rules: HINDUNILVR Q4 in T+2, TORNTPOWER bearish reversal at 52w high after +39% rally, MAHABANK approaching SL with PSU bank rotation stalled.",
+    "Deployment dropped 54.91% → 40.13% (-14.78 pp). The 0.65 max_deployed_pct cap moved from 10.09 pp inside-binding to 24.87 pp inside-binding — admission window is fully open. The 11:30 grandfathered full-fill breach (2.59 pp) is RESOLVED with the 3-name exit (cash freed ₹143,614.96 with no offsetting BUY).",
+    "Realized P&L today: -₹5,964.24 (-0.60% of capital). Buffer to 3% daily loss gate is ~₹23,905 (4.0x). Buffer to -1% findings-trigger threshold is ~₹3,992. The losses are loss-realization on losing positions, not unforced fresh damage — the alternative was carrying -3.5% to -5%+ MTM stops into a deteriorating tape.",
+    "Sector concentration at cost is now COMFORTABLY broad: FMCG 12.06% (largest, single name NESTLEIND, 9.94 pp buffer to 22% cap); Power 9.91% (NTPC + POWERGRID, 12.09 pp buffer); BFSI 7.91% (PNBHOUSING alone, 14.09 pp buffer); Pharma 5.22% (SUNPHARMA); Gold-ETF 5.03% (GOLDBEES, defensive hedge). No correlated cluster meaningfully near cap.",
+    "Position sizing: NESTLEIND remains largest at 12.06% of capital (2.94 pp buffer to 0.15 cap). Other 5 names range 4.83% (POWERGRID) to 7.91% (PNBHOUSING). No single name approaches per-name cap.",
+    "All 7 risk overrides remain materially tighter than base config (min_confidence 0.65 vs 0.50, max_position_pct 0.15 vs 0.20, max_deployed_pct 0.65 vs 0.80, default_sl_pct 0.015 vs 0.02, min_sl_pct 0.01 vs 0.005, max_sl_pct 0.04 vs 0.05, max_sector_pct 0.22 vs 0.35). Post-exit state is comfortably inside every binding dimension — the framework is already well-bracketed and the live profile is significantly inside those brackets.",
+    "Disciplined call: NO override change. Tightening guardrails on a tick where the strategy executed three textbook SELL-before-BUY decongestions across multiple sectors would punish exactly the behavior the framework was tuned to encourage. The 11:30 carry-forward trigger (b) — 'if strategy admits a NEW BUY within 60 min of the HINDUNILVR exit' — explicitly DID NOT FIRE; instead, two further SELLs landed within 28 min, the inverse pattern (and the desired one).",
+    "Risk level LOW (unchanged, post-exit state qualitatively healthier than 11:30). Composite distress meta-trigger dormant: book is positive on a cost basis if MTM holds (realized -₹5,964 already booked), no single-name distress (all sub--5% MTM names exited), strategy demonstrably not silent (3 trades in 28 min). Carry-forward triggers for 12:30/13:00 ticks: (a) if strategy admits a NEW BUY in same Sector as one of the three just-exited names (FMCG/Power/BFSI) within 60 min — re-test of Day-4 12:00 buy-back-what-you-just-sold pattern, would warrant raising min_confidence 0.65 → 0.67; (b) if MAHABANK or TORNTPOWER are RE-BOUGHT specifically (already-recycled names within 24h) — would warrant the same 0.67 step plus an explicit cluster-recycle observability flag; (c) if realized loss extends past -1% (₹9,956 — additional ₹3,992 needed) — would warrant tightening daily_loss_limit_pct 0.03 → 0.025; (d) if a 4th SELL is executed without an offsetting BUY by 13:00 — would shift posture from 'de-risking' to 'derisking-too-far' observability and consider RELAXING max_deployed_pct (NOT a tightening direction; flag only)."
+  ],
+  "actions_taken": []
+}

@@ -1,0 +1,89 @@
+{
+  "timestamp": "2026-04-28 11:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1003335.63,
+    "cash": 452460.28,
+    "deployed_pct": 0.5491,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 1728.25
+  },
+  "portfolio_detail": {
+    "snapshot_source": "portfolio_snapshots row at 2026-04-28 11:16:30 (latest, captured 14m before this tick, immediately post-HINDUNILVR-exit)",
+    "holdings_value_at_cost": 547997.40,
+    "holdings_value_at_mtm": 550875.35,
+    "total_unrealized_pnl_mtm": 2877.95,
+    "realized_pnl_today": -1099.20,
+    "total_daily_pnl": 1728.25,
+    "cumulative_pnl": 3335.63,
+    "deployed_pct_at_cost": 0.5478,
+    "deployed_pct_at_mtm": 0.5491,
+    "open_orders_value": 130105.00,
+    "open_orders_count": 3,
+    "open_orders": [
+      {"symbol": "TATAPOWER", "qty": 110, "price": 443.00, "value": 48730.00, "sector": "Power", "submitted": "2026-04-27 10:13:02", "age_at_tick": "25h17m", "day_stale": true},
+      {"symbol": "HINDZINC", "qty": 75, "price": 612.00, "value": 45900.00, "sector": "Metals", "submitted": "2026-04-27 10:42:57", "age_at_tick": "24h47m", "day_stale": true},
+      {"symbol": "PHARMABEES", "qty": 1500, "price": 23.65, "value": 35475.00, "sector": "Pharma-ETF", "submitted": "2026-04-27 12:14:55", "age_at_tick": "23h15m", "day_stale": false}
+    ],
+    "projected_deployed_pct_on_full_fill": 0.6759,
+    "projected_deployed_pct_change_vs_1100": -0.0485,
+    "sector_exposure_at_cost": {
+      "BFSI": {"pct": 0.1765, "names": ["MAHABANK", "PNBHOUSING"], "buffer_to_cap_pp": 0.0435},
+      "Power": {"pct": 0.1492, "names": ["NTPC", "TORNTPOWER", "POWERGRID"], "buffer_to_cap_pp": 0.0708},
+      "FMCG": {"pct": 0.1200, "names": ["NESTLEIND"], "buffer_to_cap_pp": 0.1000},
+      "Pharma": {"pct": 0.0520, "names": ["SUNPHARMA"], "buffer_to_cap_pp": 0.1680},
+      "Gold-ETF": {"pct": 0.0500, "names": ["GOLDBEES"], "buffer_to_cap_pp": 0.1700}
+    },
+    "sector_exposure_on_full_fill": {
+      "Power": 0.1980,
+      "BFSI": 0.1765,
+      "FMCG": 0.1200,
+      "Pharma": 0.0874,
+      "Gold-ETF": 0.0500,
+      "Metals": 0.0459
+    },
+    "position_sizes_pct_at_cost": {
+      "NESTLEIND": 0.1200,
+      "MAHABANK": 0.0978,
+      "PNBHOUSING": 0.0787,
+      "SUNPHARMA": 0.0520,
+      "NTPC": 0.0506,
+      "TORNTPOWER": 0.0507,
+      "GOLDBEES": 0.0500,
+      "POWERGRID": 0.0481
+    },
+    "largest_position": {"symbol": "NESTLEIND", "pct_at_cost": 0.1200, "buffer_to_cap_pp": 0.0300}
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.22
+  },
+  "delta_since_1100": {
+    "holdings_changes": "HINDUNILVR EXITED at 11:16:10 — 20 @ ₹2317.04 (cost ₹2372), realized -₹1,099.20 (-2.32%). Holdings 9 → 8.",
+    "cash_change": 46340.80,
+    "open_orders_changes": "none — same 3 carryover orders unchanged in count, qty, price; TATAPOWER and HINDZINC remain day-stale; PHARMABEES will cross 24h at ~12:14:55 (45m from this tick)",
+    "trades_today": 1,
+    "realized_pnl_today_change": -1099.20,
+    "total_daily_pnl_change": "+₹351.50 (10:43 +₹1,376.75 → 11:16 +₹1,728.25). Despite realizing a ₹1,099 loss, net daily P&L IMPROVED — MTM gained ~₹1,450 across the remaining 8 holdings in the 33-minute window.",
+    "trigger_state_change": "Trigger (i) Power-on-full-fill 19.68% → 19.80% (TORNTPOWER MTM unchanged, still 2.20 pp inside 22% cap, dormant). Trigger (ii) day-stale count 2 of 3 — unchanged this tick (PHARMABEES crosses ~12:15). Trigger (iii) MAHABANK no fresh mark; book MTM improvement implies likely modest improvement, dormant. Trigger (iv) BFSI cost-basis flat 17.65% (no admissions, no exits in BFSI), 84 bps buffer to 18.5% re-inflection. Trigger (v) realized day-loss ₹1,099 = 0.11% capital, 27.4x buffer to 3% gate."
+  },
+  "findings": [
+    "STRATEGY BROKE SILENCE: First Day-5 trade executed at 11:16:10 — HINDUNILVR EXIT (20 @ ₹2317.04, cost ₹2372, realized -₹1,099.20 / -2.32%). Cumulative strategy silence ended at ~26h since the last action (Day-4 morning). Exit reason logged in trade tag aligns cleanly with system_prompt rule 11 (BINARY-EVENT DISCIPLINE): HUL Q4 results T+2 (April 30), with Street expectations weak (EBITDA -4% YoY, margin compression) and binary event risk into a position already at -2.5% MTM. This is the EXACT pattern the rule was authored for after the AUBANK Apr-27 board-meeting episode.",
+    "Net daily P&L is POSITIVE +₹1,728.25 despite realizing the HINDUNILVR loss — MTM across the remaining 8 holdings gained +₹1,450 in the 33-minute window between 10:43 and 11:16:30. Book remains structurally healthy; realized loss buffer to the 3% loss gate is ~₹28,901 (27.4x).",
+    "FMCG cluster HALVED: 2 names (NESTLEIND + HINDUNILVR = 16.78% of capital at cost) → 1 name (NESTLEIND alone at 12.00%). FMCG is the SECOND sector to be actively decongested by the strategy after Pharma decongestion on Day-3 (GRANULES SELL at 11:45 Day-3 / 04-23). Cluster discipline behavior is reinforcing.",
+    "Deployment materially relaxed: filled-deployment 59.51% → 54.91% (-4.60 pp), projected-on-full-fill 72.44% → 67.59% (-4.85 pp). The 0.65 max_deployed_pct cap moved from 5.49 pp inside-binding (admission window open) to 10.09 pp inside-binding — admission slots more available. Grandfathered full-fill breach reduced from 7.44 pp to 2.59 pp.",
+    "Sector concentration (at cost): BFSI 17.65% (4.35 pp buffer to 0.22 cap) — flat; Power 14.92% (7.08 pp); FMCG 12.00% (10.00 pp, was 4.78 pp pre-exit on a 2-name basis); Pharma 5.20%; Gold-ETF 5.00%. On full carryover fill: Power 19.80% (2.20 pp buffer — closest sector to cap); Pharma 8.74% (2 names); Metals 4.59%. No projected breach of 0.22 cap.",
+    "Position sizing at cost: NESTLEIND 12.00% remains largest (3.00 pp buffer to 0.15 cap, identical to the 11:00 cost-basis figure). All 7 others between 4.81% (POWERGRID) and 9.78% (MAHABANK). No single name approaches per-name cap.",
+    "Three carryover OPEN orders unchanged in 26 hours (TATAPOWER 25h17m / HINDZINC 24h47m / PHARMABEES 23h15m). Day-stale count: 2 of 3 (PHARMABEES will cross at ~12:14:55 — ~45m from this tick). Trigger (ii) from 11:00 carry-forward will FIRE at 12:15 if no fills occur and no cancel/replace executes — currently observability-level, not action-level.",
+    "Zero new BUY admissions this tick. The HINDUNILVR exit is the textbook SELL-before-BUY pattern the framework was tuned to encourage (system_prompt rule 8 + the 04-25 binary-event discipline rule 11). Tightening guardrails NOW would punish exactly the strategy-layer behavior the framework wants to reward.",
+    "All 7 risk overrides remain materially tighter than base (min_confidence 0.65 vs 0.50, max_position_pct 0.15 vs 0.20, max_deployed_pct 0.65 vs 0.80, default_sl_pct 0.015 vs 0.02, min_sl_pct 0.01 vs 0.005, max_sl_pct 0.04 vs 0.05, max_sector_pct 0.22 vs 0.35). The book is structurally well-bracketed; the post-exit state is more comfortable across every binding dimension.",
+    "Disciplined call: NO override change. Risk level downgraded LOW (from LOW at 11:00 — both ticks LOW, but the post-exit state is qualitatively healthier). Carry-forward triggers for the 12:00/12:30 ticks: (a) if PHARMABEES day-stale crosses at ~12:15 WITHOUT intervening fill OR cancel, day-stale count → 3 and trigger (ii) fires for an order-hygiene observability flag; (b) if strategy admits a NEW BUY within 60 min of the HINDUNILVR exit (i.e., before ~12:15), this would re-test the cluster-recycle pattern flagged at Day-4 12:00 (TORNTPOWER buy-back-what-you-just-sold) and would warrant raising min_confidence 0.65 → 0.67; (c) if MAHABANK extends to ≤ -5% (price ≤ ₹77.43) — re-test of Day-2 14:18 boundary; (d) book deterioration past +₹0 into red — currently +₹1,728 with ~₹11,728 buffer to -1% findings trigger."
+  ],
+  "actions_taken": []
+}

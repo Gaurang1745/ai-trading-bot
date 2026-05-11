@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-11 10:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1003227.62,
+    "cash": 554977.42,
+    "deployed_pct": 44.68,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 5128.43
+  },
+  "findings": [
+    "Active rotation in 09:29->09:57 window — bot closed 4 holdings (PNBHOUSING +7436.80, BHARATFORG -794.75, GRSE -1386.72, CAMS +311.00) for net realized +5566.33 on the session (2W/2L, loss-to-gross-win ratio 28.2% = disciplined magnitude).",
+    "Holdings count 15 -> 11 (-4 names) and deployment 65.05% -> 44.68% (-20.37 pp) in a single tick. First time below the 50% chronic-under-deployment threshold in 12+ sessions, but this is a one-tick rotation event not chronic stalling — ~203K cash freed, strategy expected to redeploy. Pre-armed two-tick rule: if deployment remains <50% through 11:00 with zero new admits, flag chronic.",
+    "Sector concentration DECREASED post-rotation. Max sector dropped from BFSI 15.29% (n=3: PNBHOUSING+CAMS+ABCAPITAL) to Specialty Chem 8.79% (n=2: PIDILITIND+SRF). BFSI sleeve shrank to ABCAPITAL only (n=1, 4.72%); Auto sleeve shrank to BAJAJ-AUTO only (n=1, 4.29%); Defense sleeve eliminated entirely (GRSE was sole name).",
+    "All 11 positions sit at 1.94%–4.99% of total — max GOLDBEES 4.99%, min DABUR 1.94%. Two sub-3% outliers (DABUR 1.94%, LAURUSLABS 1.95%) but only 18% of names, not the >85% tiny-everything anti-pattern. No oversized position.",
+    "Distress score 0/3: max position 4.99% << 20% cap, max sector 8.79% << 22%, deployment 44.68% << 80%. Daily P&L net positive +0.51%, daily-loss buffer ~30,097 fully intact.",
+    "Signal acceptance surface fully open. Today's guardrail_log has 97 valid events; BLOCKED rows are mechanical (stale-state MODIFY on already-sold PNBHOUSING/CAMS + CNC short-sell attempts on zero-holding names) — NOT min_confidence rejections. Zero high-confidence (>=0.70) BLOCKs across 9+ sessions.",
+    "Stop-loss geometry working as designed intra-session — profit-locks active on COFORGE (SL raised to 1340/1356.71 = +6.4-7.8% above 1259 entry) and MARICO (SL raised to 825 = +0.6% above 820 entry). BHARATFORG/GRSE losing exits both well inside 5% max SL bound, validating geometry.",
+    "Overrides block remains empty ({}) for ~138 hr (5.75 days) since 2026-05-05 16:00 EOD — nothing to revert in the loose direction (base config IS the floor per spec).",
+    "Macro: India April CPI 5/12 risk meaningfully de-risked by the rotation (BFSI exposure cut 15.29% -> 4.72%, removing PNBHOUSING+CAMS rate-sensitive names ~10.6 pp). Pharma sleeve preserved at n=2 for DRREDDY/CIPLA earnings 5/12 read-across. Auto headwind exposure halved (Brent ~101)."
+  ],
+  "actions_taken": [
+    "HOLD all parameters at base config (overrides:{} unchanged). 38th consecutive HOLD tick. No tighten (0/3 distress fires, P&L positive, no high-conf blocks, SL geometry validated, sector concentration dropped post-rotation). No loosen (overrides already at floor — base config is the maximum-loose state per spec).",
+    "Pre-armed RE-DEPLOYMENT WATCH for 11:00 tick: if strategy fails to admit any new name AND deployment remains <50% through 11:00, escalate idle-capital concern. Single-tick rotation acceptable; two-tick stall is chronic-signal threshold.",
+    "Pre-armed defensive-sleeve narrowing watch: Defense eliminated (n=0), BFSI n=3->n=1, Auto n=2->n=1. New admits should ideally restore one of these sleeves or maintain current 8-bucket diversity."
+  ]
+}

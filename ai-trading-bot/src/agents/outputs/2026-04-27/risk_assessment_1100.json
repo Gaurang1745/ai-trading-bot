@@ -1,0 +1,103 @@
+{
+  "timestamp": "2026-04-27 11:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000559.58,
+    "total_value_basis": "cost_basis (no live LTP feed available at this tick)",
+    "cash": 459937.18,
+    "deployed_pct": 0.5403,
+    "deployed_pct_on_full_open_book_fill": 0.6349,
+    "holdings_count": 8,
+    "open_orders_count": 2,
+    "positions_count": 0,
+    "daily_pnl_realized": -865.92,
+    "daily_pnl_realized_pct": -0.000866,
+    "buffer_to_base_loss_gate_3pct": 29150.0
+  },
+  "filled_holdings_cost_basis": {
+    "MAHABANK_BFSI": {"qty": 1200, "avg": 81.50, "value": 97800.00, "pct_capital": 0.0978},
+    "PNBHOUSING_BFSI": {"qty": 80, "avg": 984.00, "value": 78720.00, "pct_capital": 0.0787},
+    "INDUSINDBK_BFSI_NEW_TODAY": {"qty": 55, "avg": 878.00, "value": 48290.00, "pct_capital": 0.0483},
+    "GOLDBEES_GoldETF": {"qty": 400, "avg": 125.10, "value": 50040.00, "pct_capital": 0.0500},
+    "NESTLEIND_FMCG": {"qty": 85, "avg": 1412.94, "value": 120099.90, "pct_capital": 0.1200},
+    "HINDUNILVR_FMCG": {"qty": 20, "avg": 2372.00, "value": 47440.00, "pct_capital": 0.0474},
+    "GRANULES_Pharma": {"qty": 70, "avg": 681.00, "value": 47670.00, "pct_capital": 0.0476},
+    "NTPC_Power": {"qty": 125, "avg": 404.50, "value": 50562.50, "pct_capital": 0.0505}
+  },
+  "open_orders": {
+    "TATAPOWER_Power_BUY_OPEN": {"qty": 110, "limit_price": 443.00, "value": 48730.00, "pct_capital": 0.0487, "submitted": "10:13:02"},
+    "HINDZINC_Metals_BUY_OPEN_NEW_TODAY": {"qty": 75, "limit_price": 612.00, "value": 45900.00, "pct_capital": 0.0459, "submitted": "10:42:57"}
+  },
+  "sector_breakdown_pct_of_capital_cost_basis": {
+    "BFSI_filled": 0.2247,
+    "BFSI_on_full_fill": 0.2247,
+    "FMCG_filled": 0.1675,
+    "Power_filled": 0.0505,
+    "Power_on_full_fill": 0.0992,
+    "Gold_ETF": 0.0500,
+    "Pharma": 0.0476,
+    "Metals_on_hindzinc_fill": 0.0459
+  },
+  "active_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.70,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.30,
+    "daily_loss_limit_pct_base": 0.03
+  },
+  "tick_over_tick_delta_vs_1030": {
+    "holdings_count": "7 → 8 (+1 INDUSINDBK FILLED at 10:42:49)",
+    "open_orders_count": "1 → 2 (+1 HINDZINC OPEN at 10:42:57; TATAPOWER still OPEN)",
+    "cash": "508,227.18 → 459,937.18 (-48,290 INDUSINDBK fill)",
+    "deployed_pct_filled": "0.4921 → 0.5403 (+4.82 pp on INDUSINDBK fill)",
+    "deployed_pct_full_fill": "0.5407 → 0.6349 (+9.42 pp; HINDZINC adds 4.59 pp on top of 4.82 pp INDUSINDBK fill)",
+    "BFSI_pct": "0.1765 → 0.2247 (+4.82 pp via INDUSINDBK; the freed AUBANK BFSI capacity has been partially recycled into a different BFSI name)",
+    "trades_today": "3 → 5 (+1 INDUSINDBK BUY COMPLETE, +1 HINDZINC BUY OPEN)",
+    "daily_pnl_realized": "-865.92 → -865.92 (no new closes)",
+    "interpretation": "Two NEW BUYs in the 30-min window since 10:30 (INDUSINDBK FILLED, HINDZINC OPEN), bringing today's BUY count to 3 (TATAPOWER + INDUSINDBK + HINDZINC). This is the 3-in-60-min ratchet of Trigger F (complacency watch) — but the second leg of Trigger F (deployment back above 65%) DOES NOT fire: projected deployment on full open-book fill is 63.49%, sitting 1.51 pp below the 65% threshold. INDUSINDBK is structurally a BFSI re-stack of the AUBANK-freed capacity, but it stays well under the 30% sector cap (BFSI 22.47% on fill, 7.53 pp buffer). HINDZINC opens a NEW sector (Metals) — first non-BFSI/Power/FMCG/Pharma/GoldETF exposure on the book — at a modest 4.59% sizing, structurally diversifying rather than concentrating."
+  },
+  "findings": [
+    "INDUSINDBK BUY (55 @ ₹878 = 4.83% of capital) FILLED at 10:42:49: this is a BFSI re-stack of AUBANK-freed capacity. BFSI now 22.47% (MAHABANK 9.78% + PNBHOUSING 7.87% + INDUSINDBK 4.83%). Sector cap (0.30 override) functioned as designed — admitted the entry because pre-fill BFSI 17.65% + 4.83% projected = 22.48% sits well under the cap. Trigger E (sector-cap validation, CARRIED FROM 10:30) FIRES as OBSERVATION: the cap is live, machine-readable, and correctly admitted a quality BFSI add inside the 30% envelope.",
+    "Trigger C (BFSI re-stacking, CARRIED FROM 10:30) DOES NOT fire: spec required the new BFSI BUY to push BFSI above 25%; observed BFSI on fill 22.47%. 2.53 pp of headroom remains under the 25% Trigger-C line, and 7.53 pp under the 30% cap. The pattern is real (BFSI did re-stack) but at admissible scale.",
+    "HINDZINC BUY (75 @ ₹612 = 4.59% of capital) OPEN at 10:42:57: opens Metals as a new sector on the book (zinc/lead miner — uncorrelated to BFSI/FMCG/Power exposure). At 4.59% sizing this is structurally diversifying, not concentrating. Single-name risk and sector risk both well within all caps. No special trigger needs arming for Metals at this scale.",
+    "Trigger F (complacency watch, CARRIED FROM 10:30) FIRES as PARTIAL: the 3-in-60-min BUY ratchet IS satisfied (TATAPOWER 10:13, INDUSINDBK 10:42, HINDZINC 10:42 — 3 BUYs in 29 minutes, well inside the 60-min window). The deployment leg DOES NOT fire (projected 63.49% on full fill vs 65% threshold — 1.51 pp shortfall). Per spec, a partial fire is a flag-only event in this assessment, not a numeric tightening trigger. Flagged here as the explicit observation: re-deployment cadence has accelerated post-AUBANK and warrants the 11:30 tick attention.",
+    "Trigger I (Power-cluster re-emergence, CARRIED FROM 10:30) DOES NOT fire: Power on full TATAPOWER fill = NTPC 5.05% + TATAPOWER 4.87% = 9.92%, well under the 13% trigger line. Only 2 Power names (the trigger line was 3rd Power name + 13% combined). HINDZINC is Metals, NOT Power.",
+    "Largest single-name (filled): NESTLEIND 12.00% — unchanged tick-over-tick, 3.00 pp BUFFER below the 0.15 per-name cap. Hierarchy now: NESTLEIND 12.00% → MAHABANK 9.78% → PNBHOUSING 7.87% → NTPC 5.05% → GOLDBEES 5.00% → INDUSINDBK 4.83% → TATAPOWER 4.87% (on fill) → GRANULES 4.76% → HINDUNILVR 4.74% → HINDZINC 4.59% (on fill). On full fill, the book holds 10 names; concentration is structurally improved relative to the 8-name pre-AUBANK book that was carrying the 18.6% AUBANK lot.",
+    "Deployment: 54.03% (filled) / 63.49% (on full open-book fill). 15.97 pp / 6.51 pp BUFFER below the 0.70 max_deployed_pct cap. The buffer has compressed from 15.93 pp (10:30 full-fill) to 6.51 pp on full fill today. Still non-binding, but the cushion has materially narrowed in a single 30-min window (was 20.79 pp at 10:30 filled-book; now 15.97 pp filled / 6.51 pp on-fill).",
+    "Cash buffer: ₹459,937.18 (filled book). On full fill (TATAPOWER + HINDZINC): ₹365,307. Cash has compressed by ₹48,290 in 30 min via INDUSINDBK fill, with another ₹94,630 commit pending. Even at full deployment of in-flight orders, ₹365K of cash remains — sufficient to absorb a ~5.7% MTM drawdown without forced liquidation.",
+    "Daily P&L: realized -₹865.92 (AUBANK exit, unchanged tick-over-tick). Buffer to base 3% loss gate: ₹29,150. Buffer to internal -1% findings trigger (Trigger A): ₹9,140 (assuming book MTM is flat against unobservable LTP — if MTM remains green per 10:30 read, buffer is wider). All P&L-based loss gates remain dormant by a wide margin. No new closes mean no realized P&L delta.",
+    "Composite distress meta-trigger (Trigger D, CARRIED FROM 10:30): all three legs DORMANT. (i) book P&L based on 10:30 read was +0.27% (well above -1.5% threshold; no live LTP feed at this tick to confirm), (ii) no single-name at ≤-7% reported (MAHABANK at -2.48% per 10:30, materially above -7%), (iii) strategy NOT silent (3 BUYs in 30 min — opposite of silence). Risk-level firmly LOW; no path to elevation visible on current trajectory.",
+    "Pattern of concern (NOT a fired trigger, but worth surfacing): post-AUBANK, the strategy layer has re-deployed ₹142,920 of freed capacity in 71 minutes (TATAPOWER ₹48,730 at 10:13 + INDUSINDBK ₹48,290 at 10:42 + HINDZINC ₹45,900 at 10:42). Of this, ₹48,290 (33.8%) went BACK INTO BFSI via INDUSINDBK — a different name but the same sector that was just trimmed. The structural improvement is that BFSI is now 22.47% vs 35.92% pre-AUBANK-trim (a meaningful 13.45 pp net reduction); the structural concern is that the strategy did not use the AUBANK exit to fully decongest BFSI. Pre-arming Triggers J and K below to handle continued BFSI re-stacking or deployment overshoot."
+  ],
+  "actions_taken": [
+    "NO numeric override changes this tick. Held: min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.70, default_sl_pct=0.015, min_sl_pct=0.01, max_sl_pct=0.04, max_sector_pct=0.30. Each existing override remains a forward back-pressure ring that is currently functioning as designed — the 30% sector cap correctly admitted INDUSINDBK at 22.47% projected BFSI; the 70% deployment cap continues to leave 6.51 pp of full-fill headroom; the per-name and SL-band caps each retain comfortable buffers.",
+    "Specifically, did NOT fire max_sector_pct 0.30 → 0.25: spec hard-trigger (Trigger C) required BFSI > 25% on the new BUY; observed BFSI 22.47% sits 2.53 pp under that line. Tightening prematurely on a single in-cap re-stack would punish the strategy for a structurally-improved BFSI footprint (35.92% pre-AUBANK → 22.47% now, a 13.45 pp net reduction). Pre-armed for the next tick under Trigger J.",
+    "Specifically, did NOT fire max_deployed_pct 0.70 → 0.65: projected deployment 63.49% on full fill is 6.51 pp under cap and 1.51 pp under the Trigger F deployment-leg threshold. Tightening would close the admission surface that the strategy just used to diversify into Metals (a NEW sector). Reward, do not penalize, the diversification component of the re-deployment.",
+    "Risk level HELD at LOW (unchanged from 10:30 / 10:00 / 09:30 / 09:00). Drivers: (i) AUBANK binary exposure resolved (zero), (ii) BFSI 22.47% < 30% cap (7.53 pp buffer), (iii) no per-name breach (largest 12.00% NESTLEIND, 3.00 pp buffer), (iv) deployment 63.49% on full fill < 70% cap (6.51 pp buffer), (v) realized P&L -₹866 (-0.087%), (vi) 10 active names on full fill (improving diversification vs 8 names pre-AUBANK). No leg of LOW→MEDIUM ladder is firing."
+  ],
+  "pre_armed_triggers_intraday_for_1130": [
+    "TRIGGER A (PnL-based, primary, CARRIED): If book daily P&L ≤ -1.00% (₹-10,006) at any tick → FIRE daily_loss_limit_pct 0.03 → 0.025. Buffer ~₹9,140 from current realized read.",
+    "TRIGGER C (BFSI re-stacking, CARRIED, NOW NEAR-FIRING): If strategy admits ANOTHER BFSI BUY by 11:30 that pushes BFSI above 25% via mark + entry → FIRE max_sector_pct 0.30 → 0.25. After the INDUSINDBK fill, BFSI is 22.47% with only 2.53 pp of buffer to the trigger line — even a small (~₹25K) BFSI add would trip it.",
+    "TRIGGER D (composite HIGH/CRITICAL meta, CARRIED): three-leg distress meta unchanged from 10:30 — all legs dormant.",
+    "TRIGGER F (complacency watch, RECONFIGURED): the original 3-BUY-in-60-min leg has fired today (3/3 in 29 min). New form for 11:30: if 4th BUY by 11:30 AND deployment > 65% → FIRE max_deployed_pct 0.70 → 0.65. Currently 3 BUYs / 63.49% on fill — 1.51 pp under the 65% line; one more BUY of size ≥1.51% (≥₹15,090) would clear the deployment leg.",
+    "TRIGGER G (MAHABANK extension watch, CARRIED): If MAHABANK marks below ₹76.61 (pnl_pct ≤ -6.00%) → re-assess max_sl_pct 0.04 → 0.035. Last reported -2.48%; trajectory benign (decompressing from -6.42% on Apr-24).",
+    "TRIGGER H (TATAPOWER fill watch, CARRIED): If TATAPOWER fills materially above ₹447 → flag slippage observation (not a numeric trigger). Order is at LIMIT ₹443.",
+    "TRIGGER I (Power-cluster re-emergence, CARRIED): If a 3rd Power name is admitted by 11:30 taking Power-sector exposure above 13% → FIRE max_sector_pct 0.30 → 0.25. Currently 2 names on full fill = 9.92%.",
+    "TRIGGER J (NEW, BFSI re-stack escalation): If BFSI exposure climbs above 25% by 11:30 (via further BFSI BUY OR via mark-to-market drift on a fresh entry) → FIRE max_sector_pct 0.30 → 0.25 immediately, regardless of mechanism. Spec-hardened from Trigger C. Buffer 2.53 pp.",
+    "TRIGGER K (NEW, deployment hysteresis): If filled-book deployment crosses 60% (currently 54.03%, threshold 60.00%, buffer 5.97 pp) AT THE SAME TICK as a 4th new BUY → FIRE max_deployed_pct 0.70 → 0.65. Stacks with the new Trigger F to bracket the deployment-overshoot risk from both the filled-book and full-fill angles.",
+    "TRIGGER L (NEW, HINDZINC fill watch): If HINDZINC fills materially above ₹620 (>1.3% above order price ₹612) → flag slippage observation. New name on the book, watch first-fill quality."
+  ],
+  "did_not_fire_with_reasons": [
+    "max_sector_pct (0.30 → 0.25): BFSI on fill 22.47% sits 2.53 pp under the 25% Trigger-C line; the cap correctly admitted the INDUSINDBK add. Tightening pre-emptively to 0.25 would close BFSI to ANY further add — including high-quality opportunistic re-balancing — on a sector that has just been net-reduced by 13.45 pp. Pre-armed under Trigger J for any continuation of the BFSI re-stack pattern.",
+    "max_deployed_pct (0.70 → 0.65): full-fill projected deployment 63.49% sits 6.51 pp under the 70% cap. Tightening to 0.65 would create a 1.51 pp binding gap on the in-flight book — closing admission to a 5th BUY today (which strategy may legitimately want for the freed cash). Pre-armed under Trigger F (reconfigured) and Trigger K.",
+    "max_position_pct (0.15 → 0.12): no name above 0.13 on full fill (largest NESTLEIND 12.00%, second MAHABANK 9.78%). Tightening to 0.12 leaves NESTLEIND grandfathered — no behavioral change.",
+    "min_confidence (0.60 → 0.65): closed-trade sample is 3 (TORNTPOWER win, ADANIPOWER loss, AUBANK loss). At n=3, confidence has no signal yet — same hold rationale as prior ticks.",
+    "default_sl_pct (0.015 → 0.012) / max_sl_pct (0.04 → 0.035) / min_sl_pct (0.01 → 0.015): SL band already tight at [1.0%, 4.0%]; per-name worst-case risk 0.60% at max sizing. No firing trigger on SL discipline. Pre-armed under Trigger G for MAHABANK extension scenario (currently dormant).",
+    "daily_loss_limit_pct (0.03 → 0.025): book at -₹866 realized (-0.087%); ~₹29,150 buffer to the base loss gate, ~₹9,140 buffer to the -1% findings trigger. Loss-gate tightening on a near-flat realized book is theatrical. Pre-armed under Trigger A.",
+    "Risk level NOT raised to MEDIUM: all structural drivers that would justify elevation are absent — no grandfathered breach (AUBANK gone), no firing trigger, no distress P&L, no single-name pain, strategy ACTIVE (3 BUYs vs prior days of silence). Holding LOW honestly reflects the book."
+  ],
+  "next_check": "2026-04-27 11:30 (mid-session — observe whether TATAPOWER/HINDZINC fill at LIMIT, whether strategy attempts a 4th BUY today (which would interact with the reconfigured Trigger F + Trigger K stack), MAHABANK trajectory vs the dormant -6% Trigger G line, and whether any further BFSI add triggers the now-near-firing Trigger J)"
+}

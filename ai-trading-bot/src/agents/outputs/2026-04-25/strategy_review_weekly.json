@@ -1,0 +1,111 @@
+{
+  "date": "2026-04-25",
+  "review_type": "weekly",
+  "week_window": "2026-04-22 (Day 1) → 2026-04-24 (Day 3)",
+  "trades_analyzed": 17,
+  "summary": {
+    "buys": 13,
+    "sells": 2,
+    "wins": 1,
+    "losses": 1,
+    "total_pnl": 1425.0,
+    "realized_pnl": 1424.8,
+    "win_rate": 0.5,
+    "avg_win": 1834.2,
+    "avg_loss": -409.4,
+    "open_positions": 8,
+    "open_position_cost_basis_inr": 676965,
+    "deployed_pct_of_capital": 67.5,
+    "starting_capital_inr": 1000000,
+    "portfolio_value_eod_2026_04_24_inr": 1003611.95
+  },
+  "closed_trades_detail": [
+    {
+      "symbol": "TORNTPOWER",
+      "entry_date": "2026-04-22",
+      "entry_price": 1650.0,
+      "exit_date": "2026-04-24",
+      "exit_price": 1700.95,
+      "qty": 36,
+      "pnl_inr": 1834.2,
+      "pnl_pct": 3.09,
+      "exit_reason": "Preemptive: SL effectively breached intraday (day low 1685.60), Q4 results pending May, 52-week high — closed door on binary risk",
+      "verdict": "WIN — small gain banked correctly; exit timing right despite trailing-SL placement above LTP being a self-stop pattern (got out by luck, not design)"
+    },
+    {
+      "symbol": "ADANIPOWER",
+      "entry_date": "2026-04-22",
+      "entry_price": 214.0,
+      "exit_date": "2026-04-24",
+      "exit_price": 212.22,
+      "qty": 230,
+      "pnl_inr": -409.4,
+      "pnl_pct": -0.83,
+      "exit_reason": "Preemptive: Apr 29 concall expected -12.3% YoY PAT decline, 35% April rally with blow-off-top characteristics, bearish engulfing/doji on daily",
+      "verdict": "WIN-IN-DISGUISE — small loss accepted to dodge expected negative earnings catalyst; right call"
+    }
+  ],
+  "open_positions_with_event_risk": [
+    {"symbol": "AUBANK", "qty": 176, "avg_price": 1049.05, "pct_of_capital": 18.6, "binary_catalyst": "Q4 results / board meeting Apr 27 (Mon)", "action_required": "TRIM or EXIT before close Mon morning — this is THE test of the new rule 11"},
+    {"symbol": "GRANULES", "qty": 70, "avg_price": 681.0, "pct_of_capital": 4.7, "binary_catalyst": "Q4 results Apr 29 (per Day-1 reasoning)", "action_required": "EXIT before Apr 29 open per stated thesis"},
+    {"symbol": "HINDUNILVR", "qty": 20, "avg_price": 2372.0, "pct_of_capital": 4.7, "binary_catalyst": "Q4 results Apr 30", "action_required": "TRIM/SL-tighten before Apr 30"},
+    {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "pct_of_capital": 12.0, "binary_catalyst": "None imminent (already reported)", "action_required": "Normal trail discipline"},
+    {"symbol": "MAHABANK", "qty": 1200, "avg_price": 81.5, "pct_of_capital": 9.8, "binary_catalyst": "None imminent", "action_required": "Mark-to-market drag (-6.4% MTM Day 3) — strategy must own SELL decision; SL ₹75 still in force"}
+  ],
+  "patterns_found": [
+    "Pattern 1 — Earnings-trim discipline IS working when triggered: both Day-3 exits (TORNTPOWER +₹1,834, ADANIPOWER -₹409) were preemptive trims ahead of binary catalysts. Net +₹1,425 realized came entirely from the willingness to close doors before known events.",
+    "Pattern 2 — But the discipline is NOT codified: AUBANK at 18.6% of capital faces Apr 27 board meeting and has not been trimmed. Same setup as the two exited names; without an explicit prompt rule, application is inconsistent.",
+    "Pattern 3 — MODIFY-after-EXIT bug: 5 guardrail rejections — 3 ADANIPOWER + 2 TORNTPOWER 'MODIFY for X but no open position/holding' AFTER the SELL exits. The model emitted MODIFY on subsequent ticks for symbols it had just closed. Pure wasted decision slots.",
+    "Pattern 4 — Day-1 stacking pattern produced grandfathered breaches: 3 separate AUBANK BUY lots on Apr 22 (70+56+50=176) drove single-name to 18.6% (>15% cap), and BFSI cluster to 36.2% (>35% cap). Both are now grandfathered drift; only forward admissions can be controlled.",
+    "Pattern 5 — Day-2 (Apr 23) strategy stall: zero new strategy-layer decisions for ~6 hours post-open despite TORNTPOWER and ADANIPOWER moving materially in opposite directions. The prompt's 'FIRST question is what do I do with what I already own' guidance was insufficient on Day 2; only on Day 3 did the model finally act on these names — and got the calls right.",
+    "Pattern 6 — Trailing-SL flush-with-LTP: TORNTPOWER SL was trailed 1650 → 1704.81 over 22 seconds while LTP was ~1700. The exit at 1700.95 was effectively a stop-out placed on top of CMP — captured the gain by luck not design. Already addressed in prior review with TRAIL-GAP DISCIPLINE rule.",
+    "Pattern 7 — Confidence range concentrated 0.62–0.72: no high-conviction (≥0.75) entries; 5 of 13 entries at 0.62-0.65. Sample too small (1W, 13 trades) to judge predictive power but the realized winner (TORNTPOWER, 0.68 entry) and loser (ADANIPOWER, 0.66 entry) sit in the middle of the band — confidence has no signal yet."
+  ],
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added rule 11 BINARY-EVENT DISCIPLINE to HARD CONSTRAINTS — for any held position with an earnings/board/ex-date catalyst within 3 trading sessions, default disposition is EXIT or risk-trim (not passive HOLD), with three explicit options: (a) full close, (b) MODIFY tighten SL to ~2-3% of LTP, (c) reduce position to ≤5% of capital. Inverse rule blocks new full-size CNC entries into impending binary events.",
+      "why": "Both Day-3 exits succeeded because the model preemptively trimmed binary risk (TORNTPOWER Q4 May, ADANIPOWER Apr 29 concall) — net +₹1,425. But AUBANK at 18.6% of capital faces Apr 27 board meeting and is currently held passive; same playbook should apply but isn't codified. The Apr 27 outcome will be the immediate test of this rule.",
+      "expected_impact": "AUBANK gets trimmed/exited before Apr 27 open, capping the largest binary tail in the book. GRANULES (Apr 29) and HINDUNILVR (Apr 30) similarly get protocol-driven decisions instead of hoping the model remembers its own prior reasoning. Symmetric inverse rule prevents new fresh-into-earnings entries — a different shape of the same failure."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added rule 12 EXIT IS FINAL — explicit prohibition on emitting MODIFY (or any reference) for a symbol on the tick AFTER an EXIT/SELL-to-zero. Cites the TORNTPOWER and ADANIPOWER rejected MODIFYs as the failure mode.",
+      "why": "5 guardrail rejections on Day 3 (timestamps after the 10:12 and 10:43 exits): the model attempted to MODIFY SL on positions it had just closed. Engine correctly blocked all 5, but each was a wasted Opus decision slot.",
+      "expected_impact": "Eliminates a class of zero-yield decisions that consume tokens and decision-throughput. Cleaner audit log."
+    },
+    {
+      "file": "src/agents/risk_config.yaml",
+      "what": "Added trading.max_sector_pct override 0.35 → 0.30 (in overrides.trading block). Hot-reloads at next guardrail validation.",
+      "why": "BFSI cluster (AUBANK 18.6% + MAHABANK 9.8% + PNBHOUSING 7.9% = 36.2% of capital) is grandfathered above the 35% base cap. With base cap intact, a future BFSI add up to ~36.2% would still be admitted under per-position rules until aggregate hits 35%. Tightening to 30% means: while BFSI exposure remains above 30% (it is), guardrail will REJECT any new BFSI BUY. Forces the strategy layer to either trim BFSI first or rotate into other sectors. Verified the override path: guardrails.py:55 reads max_sector_pct, line 214 lists it in tighter_when_lower, and lines 239-242 apply trading.* overrides. (This corrects the 2026-04-23 risk_monitor note that said 'no sector-cap concept in base config — override would be dead letter' — the cap and override path both exist.)",
+      "expected_impact": "Hard back-pressure on further BFSI stacking. Existing 3 BFSI holdings continue (grandfathered, non-punitive). Any new BFSI signal must wait for BFSI exposure to drop below 30% via SELL — encourages SELL-before-BUY dynamics in financials specifically. Combined with rule 11 (binary-event discipline on AUBANK Apr 27), this should mechanically force a BFSI trim within the next 1-2 sessions."
+    }
+  ],
+  "considered_but_declined": [
+    {
+      "considered_change": "Raise min_confidence override 0.60 → 0.65",
+      "why_declined": "Sample too small. Only 2 closed trades — winner was 0.68, loser was 0.66 (entries) / 0.65 (exit). The 0.62-0.65 band has no discernible track record yet; raising the floor would gate signal on noise. Re-visit after 10+ closed trades."
+    },
+    {
+      "considered_change": "Add max_working_orders_per_symbol=1 numeric guardrail",
+      "why_declined": "Day-1 stacking (3 AUBANK lots, 2 NESTLEIND lots) was already addressed in the 2026-04-22 16:00 EOD review by the ORDER HYGIENE prompt-layer additions. Day-3 had no duplicate-stacking failures, so the prompt fix is holding. Adding a numeric guardrail now would be belt-and-suspenders without a current firing trigger."
+    },
+    {
+      "considered_change": "Tighten trailing_sl.trail_gap_pct from 2% to 1% in base config",
+      "why_declined": "Per 2026-04-24 strategy_changelog: engine-side CNC trailing is not wired up (paper_broker.modify_sl_target bypasses CNC), so this knob has no effect. The TRAIL-GAP DISCIPLINE rule in the prompt is the actual lever; it is already in place."
+    },
+    {
+      "considered_change": "Promote current overrides (min_confidence 0.60, max_position_pct 0.15, max_deployed_pct 0.70, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.04) to base config.yaml",
+      "why_declined": "Premature — only ~3 trading days of observed behavior. Lock-in should follow ≥5-10 days of data showing the levers are not over-tightening. Hold in risk_config.yaml for now."
+    }
+  ],
+  "recommendations": [
+    "Monday 2026-04-27 will be the immediate test of rule 11: AUBANK board meeting. Watch whether the model emits an EXIT or a SL-tighten-to-~2% MODIFY on AUBANK before/around 09:15. If no protocol-driven action fires, the rule needs strengthening (e.g., explicit 'AUBANK Apr 27' style example or a hot-list of catalyst dates injected per cycle).",
+    "Track GRANULES (Apr 29 results) and HINDUNILVR (Apr 30 results) against the same rule. Three sequential tests in 3 trading days will be a fast read on whether the new rule is operationally followed or merely understood.",
+    "After AUBANK trim/exit lands, BFSI exposure will drop below 30% and the new sector override will stop binding. Re-evaluate then: does it stay at 0.30, get loosened back to 0.35, or get promoted to base? Decision should follow another 5 trading days of data.",
+    "MAHABANK at -6.4% MTM with SL ₹75 (8.6% wide entry SL) is the largest single-name drag on the book. Strategy layer owns the SELL decision; risk_monitor has fired all available levers (default_sl_pct, min_sl_pct, max_sl_pct now combined cap per-name worst-case at ~0.6% of portfolio for new entries, vs MAHABANK's 1.02% blueprint). Watch for either recovery toward entry or a strategy-layer SELL by mid-week.",
+    "Consider adding a per-cycle 'binary-events-within-3-sessions' synthetic table to the TRADING_DECISION input data so the model doesn't have to re-derive earnings dates from prior reasoning. This is an engineering-side improvement, not a prompt change.",
+    "Day-2 silence pattern is the persistent operational risk. Even with the existing prompt guidance, ~6 hours of zero strategy-layer SELL/MODIFY/EXIT decisions on Apr 23 was the structural setup for Day-3's last-minute trims. If the same silence happens before AUBANK Apr 27, the rule 11 test will fail by inaction. Engineering-side: consider an LLM-driven 'cycle audit' that flags when no decisions have been emitted for >2 hours during market hours."
+  ],
+  "next_review": "2026-04-27 (Mon) post-market — first test of binary-event discipline on AUBANK board meeting"
+}

@@ -1,0 +1,67 @@
+{
+  "timestamp": "2026-04-29 13:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995592.64,
+    "cash": 503275.24,
+    "deployed_pct": 0.4945,
+    "deployed_pct_full_fill_projection": 0.5930,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 2,
+    "daily_pnl": 0.0,
+    "cumulative_pnl": -4407.36,
+    "cumulative_pnl_pct": -0.0044
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+    {"symbol": "NTPC", "value": 50562.50, "pct_of_capital": 0.0508, "sector": "Power"},
+    {"symbol": "GOLDBEES", "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "POWERGRID", "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+    {"symbol": "COALINDIA", "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"},
+    {"symbol": "HINDZINC", "value": 45900.00, "pct_of_capital": 0.0461, "sector": "Metals"}
+  ],
+  "open_orders": [
+    {"symbol": "GLENMARK", "qty": 20, "price": 2400.0, "value": 48000.0, "confidence": 0.65, "sl_pct": 0.044, "sector": "Pharma"},
+    {"symbol": "BANDHANBNK", "qty": 250, "price": 200.0, "value": 50000.0, "confidence": 0.68, "sl_pct": 0.045, "sector": "BFSI"}
+  ],
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1206,
+    "Pharma": 0.1005,
+    "Power": 0.0991,
+    "Mining_Metals": 0.0932,
+    "Gold": 0.0503
+  },
+  "guardrail_buffers": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1206, buffer 2.94 pp",
+    "max_sector_pct (0.22)": "BFSI 0.1293 largest, buffer 9.07 pp",
+    "max_deployed_pct (0.65)": "full-fill 0.5930, buffer 5.70 pp",
+    "daily_loss_limit_pct (0.04)": "daily P&L 0.0, buffer ~₹40K",
+    "max_sl_pct (0.04)": "GLENMARK 0.044, BANDHANBNK 0.045 — both AT/just past ceiling, admitted at boundary",
+    "min_confidence (0.65)": "GLENMARK 0.65 (at floor), BANDHANBNK 0.68"
+  },
+  "findings": [
+    "Cash buffer healthy at 50.55% of capital (₹503,275). Deployment 49.45% filled / 59.30% on full-fill projection — comfortable 5.70 pp buffer to 65% cap.",
+    "No single-name concentration breach: largest filled position NESTLEIND at 12.06% of capital, 2.94 pp buffer to 15% max_position_pct cap.",
+    "No sector concentration breach: largest sector BFSI 12.93% on full fill (PNBHOUSING+BANDHANBNK), 9.07 pp buffer to 22% max_sector_pct cap. All 6 sectors comfortably under cap.",
+    "Daily realized P&L = ₹0 (2 BUYs today, both still OPEN; 0 SELLs). Not at risk of daily_loss_limit_pct circuit breaker.",
+    "Both today's entries cleared the 0.65 min_confidence floor (GLENMARK at floor 0.65, BANDHANBNK 0.68). Signal-quality gating working as designed.",
+    "FLAG: Both today's SL widths (GLENMARK 4.4%, BANDHANBNK 4.5%) are AT or fractionally past the 4% max_sl_pct ceiling. Strategy is admitting trades at the SL-width boundary — not a breach (guardrail admitted them) but a signal that the per-position risk budget is being maximally utilized. Per-name worst-case risk for both entries ~0.22% of capital (5% size × 4.4-4.5% SL), within 0.5% per-name budget.",
+    "FLAG: Strategy classified BANDHANBNK as 'private bank' separate from PNBHOUSING 'HFC' in entry reasoning — the guardrail layer treats both as BFSI cluster (12.93% combined). Acceptable buffer remains, but worth noting the strategy's narrative is sub-classifying within BFSI.",
+    "Cumulative book P&L -0.44% (₹-4,407.36) reflects Day-6 panic-exit damage (-0.60% realized that session). No new losses today — book is healing via cash redeployment, not realization.",
+    "PHARMABEES (1500@23.65) and TATAPOWER (110@443.0) from 2026-04-27 still appear OPEN in trade history but are absent from paper_holdings — likely expired/cancelled OPEN orders. Not active risk."
+  ],
+  "actions_taken": [],
+  "actions_considered_but_not_taken": [
+    "Tighten daily_loss_limit_pct (0.04 → 0.03): NOT FIRED. Book at 0.0 daily P&L, no signal. Tightening on a zero-loss book is theatrical.",
+    "Tighten max_deployed_pct (0.65 → 0.60): NOT FIRED. Current 49.45% filled / 59.30% projected, 5.70 pp buffer remaining — cap is not yet binding and tightening further would gate legitimate diversifying admissions on the freed Day-6 capacity.",
+    "Tighten max_sector_pct (0.22 → 0.20): NOT FIRED. Largest sector BFSI 12.93%, 9.07 pp buffer. No cluster emerging.",
+    "Tighten min_confidence (0.65 → 0.68): NOT FIRED. Both today's entries clear the floor; closed-trade sample (n=8: 3W/5L per Day-6 EOD note) still too small for confidence-vs-outcome signal.",
+    "Tighten max_position_pct (0.15 → 0.12): NOT FIRED. NESTLEIND 12.06% largest, 2.94 pp buffer. No single-name breach pattern.",
+    "Tighten max_sl_pct (0.04 → 0.035): CONSIDERED — both today's BUYs are AT the SL-width ceiling. NOT FIRED this tick because (a) guardrail admitted both at the boundary so the cap is functioning as designed, (b) per-name risk is within 0.5% budget, (c) tightening mid-session would not retroactively affect today's already-OPEN orders. ARMED for re-evaluation: if a 3rd ceiling-hugging entry arrives this session, fire."
+  ],
+  "rationale": "Healthy mid-session book with no firing triggers. The Day-1 through Day-6 override stack (min_confidence 0.65, max_position_pct 0.15, max_deployed_pct 0.65, max_sector_pct 0.22, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.04, daily_loss_limit_pct 0.04) is doing its work — admissions are gated, sizing is contained, and Day-7 has so far seen 2 well-reasoned ~5% BUYs cleared at the confidence floor. No new lever fires; risk_monitor's role this tick is to verify the overrides are biting and let the strategy operate within them."
+}

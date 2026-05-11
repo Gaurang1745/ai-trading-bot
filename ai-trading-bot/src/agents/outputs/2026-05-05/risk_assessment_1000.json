@@ -1,0 +1,28 @@
+{
+  "timestamp": "2026-05-05 10:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000357.64,
+    "cash": 578837.64,
+    "deployed_pct": 42.14,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": -589.80
+  },
+  "findings": [
+    "Diversified book: 8 holdings across 7 distinct sectors/themes (BFSI, ETF-Gold, ETF-Pharma, Auto-OEM, Ports, Defense, Realty). Largest single name PNBHOUSING 7.87% — 12+ pp buffer to base 0.20 position cap; 7 others sit in disciplined 3.55-5.52% band, no concentration risk.",
+    "Largest sector cluster BFSI 12.88% (PNBHOUSING + BANDHANBNK, n=2) carries 22+ pp buffer to base 0.35 sector cap. All other sectors are single-name. No correlated cluster of n≥3 anywhere — the 04-22/04-25/04-27 cluster-stack patterns that drove the original tightening regime have not recurred for 8+ trading days.",
+    "Chronic under-deployment is the dominant risk signal: deployment 42.14% (down 4.59 pp from 09:30 after GESHIP carry-position exit at 09:43:28 for -₹589.80). Deployment has held in a 42-47% band across 12+ consecutive ticks since 05-04 09:00 against an 80% base cap — 38 pp of idle capital with no upcoming event in sight. Per the active-trader doctrine in instructions, idle capital is a cost, not a virtue.",
+    "Daily P&L -₹589.80 (one carry exit, GESHIP, on a 1.27% SL discipline trigger). Buffer to -7.5% daily_loss_limit is ₹74,410 — completely non-binding. Realized P&L YTD remains positive at approx +₹2,922.75 (+₹3,512.55 carry from 05-04 less today's -₹589.80).",
+    "min_confidence override 0.55 is demonstrably non-binding: 0 BLOCKED rows across 7 trading days at this floor. The 05-04 today-admit losses (BAJAJ-AUTO -₹570.50 at conf 0.66 + EXIDEIND -₹1,433.90 at conf 0.68) were both ADMITTED at confidence well above 0.55 — the 0.55 floor did not filter them and would not be filtered by any reasonable higher floor either. Holding the override on the strength of those losses would punish the wrong margin.",
+    "SL-trio overrides (default_sl_pct 0.015 / min_sl_pct 0.01 / max_sl_pct 0.045) ARE earning their keep: today's GESHIP loss (-₹589.80, -1.27%), 05-04 BAJAJ-AUTO (-₹570.50), EXIDEIND (-₹1,433.90) all stayed small precisely because SL bands are tight. Loosening these now would unwind the lever containing per-name drag.",
+    "Yellow flag from 05-04 — today-admit ledger 0W/2L — remains technically unresolved (no profitable today-admit close has booked since). However, both losses were entered at conf > 0.65, so the 0.55 floor cannot validly be held responsible for them. Justifies a measured partial revert (3 pp) on min_confidence rather than a full revert (5 pp) to base 0.50.",
+    "Composite distress meta-trigger 0/3: book P&L positive YTD; no single-name distress; strategy not silent (1 SL-discipline exit this session). Position-sizing discipline now self-enforced at the strategy layer (~5% per name), making the previously-reverted max_position_pct/max_sector_pct/max_deployed_pct overrides correctly ambient rather than constraining."
+  ],
+  "actions_taken": [
+    "Loosened min_confidence override 0.55 → 0.52 (3 pp partial revert toward base 0.50). Reason: (a) chronic under-deployment 42-47% across 12+ ticks signals over-caution against the active-trader doctrine, and (b) the 0.55 floor has 0 BLOCKED rows in 7 days and the 05-04 yellow-flag losses were at conf 0.66-0.68 (above any reasonable floor), so the override is not buying real signal-filtering value. Step calibrated to partial (not full) revert because the 05-04 today-admit ledger (0W/2L) plus today's GESHIP -₹589.80 carry-loss argue for cautious cadence; a successful 1-2 session run with admits in the 0.52-0.55 range will license a full revert next.",
+    "Held default_sl_pct (0.015), min_sl_pct (0.01), max_sl_pct (0.045) unchanged. Reason: SL discipline is the lever actively containing per-name drag — every recent loss (GESHIP -₹589.80, BAJAJ-AUTO -₹570.50, EXIDEIND -₹1,433.90) is small precisely because the SL bands are tight. Reverting any of the SL-trio now would loosen the working lever to chase a non-binding one.",
+    "Did NOT tighten any override: zero distress legs fire — sectors diversified with 22+ pp buffer, position-sizing self-enforced at ~5%, P&L positive YTD, 0 BLOCKED in 7 days, no cluster build-up. Tightening with no firing trigger would skip the cost-of-override safety in the wrong direction.",
+    "Did NOT add new overrides on max_position_pct / max_sector_pct / max_deployed_pct: the 05-04 16:00 strategy_review and 05-05 09:00 risk_monitor reverted those because they were non-binding on a self-disciplined book. Today's portfolio (max position 7.87%, max sector 12.88%, deployment 42.14%) reaffirms that judgment — re-introducing those caps now would be friction without filtering benefit."
+  ]
+}

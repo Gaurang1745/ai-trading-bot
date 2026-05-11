@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-05 14:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001856.64,
+    "cash": 516981.64,
+    "deployed_pct": 48.40,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 909.20
+  },
+  "findings": [
+    "Composite distress 0/3 — no leg fires. BFSI cluster only n=2 (PNBHOUSING 7.86% + BANDHANBNK 5.01% = 12.87%) with 22.13 pp buffer to base 0.35 sector cap; remaining 7 sectors single-name (ETF-Gold, Ports, Auto OEM, Defense, Capital Goods, Realty, Specialty Chem) — diversified across 8 distinct sectors with no concentration risk.",
+    "Position sizing healthy: max PNBHOUSING 7.86% well under base 0.20 cap (12.14 pp buffer); other 8 names band 4.82-5.51% — none sub-3% (no hedging-against-itself shape).",
+    "Day P&L positive +₹909.20 (GESHIP -₹589.80 + PHARMABEES +₹510.00 + ANANTRAJ +₹989.00, all carry-closes); ~₹30,965 buffer to base -3% daily loss limit.",
+    "Deployment 48.40% — under-deployment trigger from 09:00/10:00 has materially resolved (33.48%→48.40% on the 11:13 admit cluster); 31.6 pp headroom to base 80% cap; healthy not over-deployed.",
+    "min_confidence override 0.52 has been empirically non-binding for 8+ trading days (0 real BLOCKED on conf today; only entry is the 11:13:49 conf=0.0 malformed-payload sentinel, not a real sub-0.55 admit). Today's 3 real admits all at conf 0.68-0.70 — well above the test band.",
+    "Original 05-04 yellow flag (today-admit ledger 0W/2L: BAJAJ-AUTO conf 0.66 + EXIDEIND conf 0.68) is empirically refuted as justification for the 0.52 floor — both losses admitted ABOVE 0.55, so neither floor would have filtered them. The licensing test ('1-2 sessions with admits in the 0.52-0.55 band performing cleanly') from the 10:00 partial revert has been structurally unexercised for 4 hours because admits aren't arriving at the test band.",
+    "7-tick HOLD pattern (11:00, 11:30, 12:00, 12:30, 13:00, 13:30 ticks all HOLD with the same recapitulated justification) matches the 'rationalized inaction' / 'cumulative tightening has made the bot over-cautious' shape the prompt explicitly warns against. The 13:30 entry pre-committed to revert at 14:00 if conditions held; both conditions confirmed.",
+    "Admit-side book frozen ~167 min since 11:13:45 BHEL/NAVINFLUOR/SOBHA cluster — but strategy is NOT idle: guardrail_log shows 8 trail-stop MODIFY checks at 13:41-13:42 on PNBHOUSING (SL 1029, +4.6% locked) and ADANIPORTS (SL ratcheted 1710→1715, +0.9% locked). Defensive engagement on existing winners is active.",
+    "SL trio (default_sl_pct 0.015 + min_sl_pct 0.01) remains the actively-binding lever — recent losses (GESHIP -1.27% on entry, BAJAJ-AUTO -0.55%, EXIDEIND -2.5%) all sat within the tightened SL geometry; the 05-04 SL-discipline thesis is unrefuted and stays in force regardless of conf floor."
+  ],
+  "actions_taken": [
+    "Reverted min_confidence override 0.52 → base 0.50 (removed from overrides block) — executes the 13:30 commitment after both conditions confirmed at 14:00. Override empirically non-binding for 8+ trading days; original 05-04 yellow-flag justification empirically refuted (losses admitted above 0.55); licensing test for full revert structurally unexercised because admits don't arrive in the 0.52-0.55 band; 7-tick HOLD pattern matches the explicit 'rationalized inaction' warning. Cost of revert is minimal — SL trio remains as actively-binding per-trade protection.",
+    "Held default_sl_pct 0.015 (vs base 0.02) — actively-binding lever; 05-04 SL-discipline thesis unrefuted; no fresh exit data on today's 3 admits to challenge.",
+    "Held min_sl_pct 0.01 (vs base 0.005) — actively-binding floor; sets tightest-allowed SL; supports per-trade drag containment on stable-name admits.",
+    "Override count 3 → 2 (one reverted toward base, two remain on the SL trio that is empirically protecting per-trade losses)."
+  ]
+}

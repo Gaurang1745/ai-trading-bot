@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-05-11 13:30:00",
+  "risk_level": "HIGH",
+  "portfolio_summary": {
+    "total_value": 969713.16,
+    "cash": 471262.16,
+    "deployed_pct": 51.40,
+    "holdings_count": 12,
+    "positions_count": 0,
+    "daily_pnl": -28428.93
+  },
+  "findings": [
+    "MATERIAL ADVERSE EVENT: MCX position (bought 12:41:15 at 8400 for cost 50,400) was closed at 13:14:41 with realized P&L -31,245.60 = -62.0% single-name loss in 33 minutes. The loss exceeds base max_sl_pct (5%) by ~12.4x, indicating the SL geometry failed to bound this name (either a real adverse market move on a thin/volatile listing or an execution/price-feed anomaly).",
+    "Daily realized P&L moved from +2,816.67 at 13:00 (3W/4L) to -28,428.93 at 13:30 (3W/5L) — a -31,245.60 single-event swing. Loss is -2.84% of 1M starting capital, only 16 bps from the historical -3% soft gate and 466 bps from the base -7.5% hard gate.",
+    "Two OPEN admits at 12:41:33 still pending: TATACONSUM top-up 20 @ 1240 (24,800) and LALPATHLAB BUY 5 @ 1670 (8,350) = 33,150 in-flight deployment. Bot is still attempting to add positions after the MCX disaster.",
+    "Portfolio SHAPE remains defensively intact post-MCX-exit: 12 holdings across ~9 sector buckets, max position GOLDBEES 5.16% (vs 20% cap), max sector FMCG 11.85% (vs 35% cap), deployment 51.40% cost basis (vs 80% cap). The damage is realized-P&L only, not concentration.",
+    "No high-confidence (>=0.70) entries blocked today — confidence floor non-binding pre-tighten. Admission of MCX itself cleared base 0.50; whether the entry confidence was sub-threshold for an anomaly-prone name is the open diagnostic question.",
+    "This is the first material risk action in ~141.5 hr (5.9 days, since 2026-05-05 EOD reset). 44-tick HOLD streak ended by a single-event tail risk, not chronic drift — supports a minimal 2-lever override surface rather than wholesale tightening."
+  ],
+  "actions_taken": [
+    "Tightened daily_loss_limit_pct from base 0.075 to 0.04 (override). At current -2.84% realized, this places the halt gate ~1.16 pp / ~11,571 below current vs base's ~46,571 buffer — materially closer ceiling to prevent a double-blow day. Revert candidate at EOD if no further adverse event, otherwise retain through tomorrow's 5/12 CPI + DRREDDY/CIPLA earnings session.",
+    "Tightened min_confidence from base 0.50 to 0.60 (override). Still admits high-conf (>=0.70) signals freely (today's 5 admits were all >=0.68) but blocks medium-band 0.50-0.59 entries until MCX root cause is diagnosed (real market move vs execution/feed anomaly vs signal-quality breakdown). Pending OPEN orders submitted at 12:41 under base 0.50 are unaffected — broker-queued before override.",
+    "Did NOT tighten max_sl_pct: MCX blew through 5% by 12.4x, so tighter SL config would not have helped — this is a strategy/broker-layer diagnostic, not a risk-config lever.",
+    "Did NOT tighten max_deployed_pct or position-sizing: shape metrics all comfortably within base caps; no concentration distress to address."
+  ]
+}

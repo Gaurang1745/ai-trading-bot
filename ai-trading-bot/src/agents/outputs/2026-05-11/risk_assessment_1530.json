@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-05-11 15:30:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 969621.51,
+    "cash": 443924.51,
+    "deployed_pct": 54.22,
+    "holdings_count": 13,
+    "positions_count": 0,
+    "daily_pnl": -28520.58
+  },
+  "findings": [
+    "EOD realized P&L locked at -₹28,520.58 (-2.85% vs ₹1M baseline); ~₹11,479 / 115 bps cushion to current daily_loss_limit_pct override gate (-4%); ~₹46,479 / 465 bps cushion to base gate (-7.5%).",
+    "MCX -62% single-name blowout (-₹31,245.60 in 33 min at 13:14:41, 12.4x base max_sl_pct) root cause STILL undiagnosed — strategy/broker-layer fix pending; risk-config override surface retained until diagnosis confirms one-off.",
+    "Book fully quiescent post-15:00: zero trades, zero guardrail activity (last guardrail entry 14:52:36, ~38+ min silence into close). Earlier active management — TORNTPHARM admit 14:14, LALPATHLAB cleanup 15:00 — rules out strategy-stall.",
+    "TATACONSUM top-up 20 @ ₹1,240 still OPEN since 12:41:33 (~2h 50m stale); did NOT fill before close — strategy/order-book cleanup at 5/12 session start, not a risk-config concern.",
+    "Sector composition healthy: FMCG 12.23% n=3 (MAX, MARICO+DABUR+TATACONSUM); Pharma 9.86% n=3 (SUNPHARMA+LAURUSLABS+TORNTPHARM); Industrials/Capital Goods 9.60% n=2; Healthcare 5.01% n=1; Gold-ETF 5.16%; Auto 4.44%; Specialty Chem 4.02%; IT 3.89%. All sectors well inside 35% base max_sector_pct cap.",
+    "Position sizes well-distributed cost-basis 2.01%-5.16%; max GOLDBEES 5.16% << 20% base max_position_pct; 10 of 13 names in primary 3.89%-5.16% cluster — no oversized name, no tiny-everything anti-pattern.",
+    "Deployment 54.22% cost basis — moderate, not chronically under-deployed; pre-5/12-catalyst conservative posture is appropriate; would rise to ~56.6% if TATACONSUM top-up fills tomorrow.",
+    "min_confidence 0.60 override (active 120 min): zero 0.50-0.59 band admit attempts observed — no binding-edge data; TORNTPHARM 14:14 admit cleared 0.60 floor without friction; zero high-conf (≥0.70) BLOCKs all day; no evidence override is eating legitimate signal.",
+    "Tomorrow's 5/12 session: CPI macro print + DRREDDY/CIPLA earnings = 2-catalyst session creating real overnight gap risk on the 13-holding book (esp. Pharma sleeve at 9.86%).",
+    "13:30 pre-commitment ('Revert candidate at EOD if no further adverse event, OR retain through tomorrow's 5/12 catalyst session') — invoking the OR-branch is consistent with stated decision rules given undiagnosed MCX + 2-catalyst overnight risk."
+  ],
+  "actions_taken": [
+    "HOLD daily_loss_limit_pct override at 0.04 (vs base 0.075) — retained through 5/12 EOD because: MCX root cause still undiagnosed, tomorrow's 2-catalyst session creates real overnight gap risk, and the override affects 5/12's daily limit gate (resets at session start) giving earlier intervention if catalyst-driven adverse open recurs. Reverting tonight would widen tomorrow's gate by 3.5 pp / ~₹35K with no offsetting risk-reduction evidence.",
+    "HOLD min_confidence override at 0.60 (vs base 0.50) — retained through 5/12 EOD because: zero evidence override is biting legitimate signal (no 0.50-0.59 admit attempts, no high-conf BLOCKs in 120 min); on a catalyst-day, requiring higher conviction biases toward fewer-but-better admits and supports defensive posture until MCX failure mode is closed.",
+    "No tighten — distress 0/3 on shape (max position 5.16% << 20%; max sector FMCG 12.23% << 35%; deployment 54.22% << 80%); no new adverse event in 30 min; daily P&L locked at EOD.",
+    "No loosen on other parameters — max_sl_pct held at base 0.05 (MCX blew through 5% by 12.4x, indicating SL system failed to act, not that the ceiling was too wide; tighter ceiling unproductive); max_position_pct, max_deployed_pct, max_sector_pct unchanged at base levels (no biting evidence).",
+    "Explicit revert review deferred to 5/12 EOD post-catalyst-clear. Acceleration triggers if observed earlier: (a) MCX root cause confirmed one-off execution/feed anomaly; (b) high-conf (≥0.70) admit BLOCKED by 0.60 floor; (c) 0.50-0.59 admit attempt providing binding-edge telemetry."
+  ]
+}

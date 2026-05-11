@@ -1,0 +1,119 @@
+{
+  "timestamp": "2026-04-30 10:00:00",
+  "tick_kind": "intraday_60min",
+  "session_day": 8,
+  "risk_level": "LOW",
+  "risk_level_internal_vs_external": {
+    "internal_portfolio_risk": "LOW",
+    "external_macro_risk": "ELEVATED",
+    "rationale": "Internal book remains well-diversified across 6 sectors (Energy/Oil&Gas re-entered via ONGC fill 09:42:27 + CHENNPETRO BUY-OPEN 09:42:35); deployment 49.79% sits 15.21 pp under the 0.65 cap (54.86% on CHENNPETRO full fill = 10.14 pp under). No concentration breach, no single-name distress, no panic-pattern signals. Strategy is demonstrably ACTIVE: 3 trades in first 100 minutes (1 disciplined POWERGRID exit -₹159, 1 ONGC fill at high conviction 0.72, 1 CHENNPETRO BUY-OPEN at 0.68). External macro unchanged from 09:00/09:30: risk-off (Brent ~$120, FII -₹2,468 Cr Apr 29, USD/INR 94.85, Big Tech overnight prints, ~47 NSE earnings tape). Composite tilt: LOW — internal cleanliness dominates a moderate macro headwind; one spec-armed SL-band tightening fires this tick but is a targeted defense fire, not a risk-level escalation."
+  },
+  "portfolio_summary": {
+    "total_value": 995330.39,
+    "cash": 499720.49,
+    "deployed_pct": 0.4979,
+    "deployed_pct_full_fill_projection": 0.5486,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": -159.0,
+    "daily_pnl_pct": -0.00016,
+    "cumulative_pnl": -4669.61,
+    "cumulative_pnl_pct": -0.00467
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "value": 120099.90, "pct_of_capital": 0.1207, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.0, "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.0, "value": 52020.00, "pct_of_capital": 0.0523, "sector": "Pharma"},
+    {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.1, "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "BANDHANBNK", "qty": 250, "avg_price": 200.0, "value": 50000.00, "pct_of_capital": 0.0502, "sector": "BFSI"},
+    {"symbol": "ONGC", "qty": 165, "avg_price": 302.0, "value": 49830.00, "pct_of_capital": 0.0501, "sector": "Energy"},
+    {"symbol": "GLENMARK", "qty": 20, "avg_price": 2400.0, "value": 48000.00, "pct_of_capital": 0.0482, "sector": "Pharma"},
+    {"symbol": "COALINDIA", "qty": 100, "avg_price": 469.0, "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"}
+  ],
+  "open_orders": [
+    {"symbol": "CHENNPETRO", "side": "BUY", "qty": 45, "price": 1120.0, "stop_loss": 1075.0, "target": 1200.0, "confidence": 0.68, "sl_pct": 0.0402, "rr": 1.78, "submitted": "2026-04-30 09:42:35", "value_on_fill": 50400.00, "pct_of_capital_on_fill": 0.0506, "sector": "Energy"}
+  ],
+  "todays_trades": [
+    {"symbol": "POWERGRID", "side": "SELL", "qty": 150, "pnl": -159.0, "ts": "2026-04-30 09:09:47", "note": "Disciplined small-loss exit at the open; lone Power name removed."},
+    {"symbol": "ONGC", "side": "BUY", "qty": 165, "price": 302.0, "stop_loss": 290.0, "target": 322.0, "confidence": 0.72, "sl_pct": 0.0397, "rr": 1.67, "ts": "2026-04-30 09:42:27", "status": "FILLED", "note": "FIRST high-confidence (≥0.70) admission of the experiment. SL 3.97% — JUST UNDER the 0.04 cap (3 bps headroom). Floor 0.65 admitted cleanly."},
+    {"symbol": "CHENNPETRO", "side": "BUY", "qty": 45, "price": 1120.0, "stop_loss": 1075.0, "target": 1200.0, "confidence": 0.68, "sl_pct": 0.0402, "rr": 1.78, "ts": "2026-04-30 09:42:35", "status": "OPEN", "note": "FIRES pre-armed Trigger (c): SL 4.018% > 4.000% cap. 2nd Energy name (joining ONGC). Engine permitted under warning-not-block."}
+  ],
+  "sector_exposure_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1207,
+    "Pharma": 0.1005,
+    "Energy_filled": 0.0501,
+    "Energy_full_fill": 0.1007,
+    "Gold": 0.0503,
+    "Mining": 0.0471
+  },
+  "guardrail_buffers": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1207 largest, buffer 2.93 pp — non-binding",
+    "max_sector_pct (0.28)": "BFSI 0.1293 largest, buffer 15.07 pp — non-binding; Energy 0.1007 on full fill (17.93 pp buffer); Pharma 0.1005 (17.95 pp buffer)",
+    "max_deployed_pct (0.65)": "deployed 0.4979, buffer 15.21 pp; full fill 0.5486 = 10.14 pp buffer — non-binding",
+    "daily_loss_limit_pct (base 0.075)": "today P&L -₹159, buffer ~₹74,503 to circuit breaker — 469x current loss",
+    "min_confidence (0.65)": "1 admission cleared at 0.72 (ONGC, first high-conf), 1 at 0.68 (CHENNPETRO) — floor admitting cleanly, NOT eating top-tier signal",
+    "max_sl_pct (0.04 → 0.035 this tick)": "CHENNPETRO 0.0402 was a FRESH BREACH of the 0.04 ceiling (engine warning-not-block); ONGC 0.0397 was 3 bps under. New 0.035 ceiling locks future admissions tighter; CHENNPETRO grandfathered.",
+    "default_sl_pct (0.015)": "ONGC 3.97% and CHENNPETRO 4.02% are both well above the recommended default — strategy is at the cap, not the default. No fire (default isn't a hard ceiling).",
+    "min_sl_pct (0.01)": "no admissions today below 1% — non-binding"
+  },
+  "delta_from_0930_tick": {
+    "ONGC_fill": "165 @ ₹302 = ₹49,830 (4.98% capital). Energy/Oil&Gas sector RE-ENTERED at 5.01%. Confidence 0.72 — FIRST high-conf admission of the experiment per recent telemetry. SL 290 = 3.97% distance, R:R 1.67. Cleared the 0.65 min_confidence floor with 7 pp of conviction headroom.",
+    "CHENNPETRO_BUY_OPEN": "45 @ ₹1120 = ₹50,400 on fill (5.06% capital). 2nd Energy name. Confidence 0.68 (3 pp above floor). SL 1075 = 4.018% distance — 2 bps over the 0.04 ceiling, engine permitted with warning-not-block. R:R 1.78. Status: OPEN.",
+    "deployment_change": "44.79% (09:30) → 49.79% (10:00) realized via ONGC fill (+5.00 pp). On CHENNPETRO full fill: 54.86% (+10.07 pp from 09:30). Idle cash absolute ₹499,720 (50.21%). The 0.65 cap retains 10.14 pp buffer on full fill — non-binding but tightening.",
+    "sector_count": "5 → 6 (Energy back). Largest unchanged BFSI 12.93%; Energy is now the 4th-largest at 10.07% on full fill.",
+    "open_orders_count": "0 → 1 (CHENNPETRO). Re-engaged in-flight commitment.",
+    "behavioral_health": "POSITIVE. Strategy is reading the macro tape cleanly: cut the lone Power name early (-₹159 small-loss discipline), then admitted 2 fresh entries at 09:42 — one at conviction 0.72 (rare for this experiment), one at 0.68. Cadence is healthy (3 trades in 100 min) without being frantic. The high-conf ONGC entry validates that the 0.65 floor IS NOT eating top-tier signal — exactly the inverse of the over-cautious failure mode the prompt warns against."
+  },
+  "trigger_status_carried_from_0930_tick": {
+    "max_sl_pct 0.04 → 0.035 (fresh ≥4% SL admission within first hour, until 10:00)": "FIRES — CHENNPETRO 09:42:35 SL 4.018% is a FRESH admission (not carry-over), inside the first-hour window (≤10:00), at sl_pct ≥ 0.04. EXECUTED this tick.",
+    "REVOCATION max_sector_pct 0.28 → 0.22 (any 3rd Pharma OR Pharma > 14% OR 4-name cluster OR BFSI > 17%)": "DORMANT — Pharma 10.05% (3.95 pp under threshold); BFSI 12.93% (4.07 pp under); no clusters; no 3rd Pharma/Energy name yet.",
+    "REVOCATION max_sector_pct 0.28 → 0.20 (5-name cluster OR sector > 22%)": "DORMANT.",
+    "daily_loss_limit_pct base 0.075 → override 0.05 (intraday loss > -₹20K within 60 min)": "DORMANT — book P&L -₹159 (0.8% of trigger threshold); 125x buffer.",
+    "LOOSEN max_deployed_pct 0.65 → 0.70 at 11:00 tick (≥2 high-conf entries + capacity-binding approaching)": "PARTIAL — 1/2 high-conf entries (ONGC 0.72); CHENNPETRO 0.68 doesn't qualify; capacity 10.14 pp on full fill (not yet approaching binding). Carries to 11:00 — needs 1 more high-conf admission to fire.",
+    "min_confidence 0.65 → 0.60 LOOSEN": "DEFERRED to Day-10 (~2026-05-04) for n≥15 closed-trade sample. ONGC 0.72 is a positive datapoint for confidence-as-signal but n=10 sample insufficient.",
+    "Composite distress meta-trigger D (HIGH risk_level)": "DORMANT — 0/3 legs fire (book P&L -0.016% > -0.5%; no single-name in book < -3%; strategy demonstrably active with 3 trades in 100 min)."
+  },
+  "findings": [
+    "TRIGGER (c) FIRES — FRESH ≥4% SL ADMISSION: CHENNPETRO BUY 45 @ ₹1120 admitted at 09:42:35 with SL ₹1075 = SL distance 4.018% (1120-1075=45; 45/1120=0.04018) breaches the 0.04 max_sl_pct ceiling. This is a FRESH admission (not a carry-over fill), within the Day-8 first-hour window (09:42:35 < 10:00 disarm), at sl_pct ≥ 0.04 — every leg of the pre-armed trigger spec is satisfied. Engine permitted under warning-not-block (same permissiveness pattern as GLENMARK 4.4% on 04-29 09:10). 2nd instance in 24h of the GLENMARK-blueprint pattern — strategy is repeatedly admitting at the right edge of the SL cap. This validates the 09:00 hold-rationale on SL-band overrides ('fresh blueprint of the breach pattern these caps were meant to prevent'); within 1h12m of holding, the precedent recurred.",
+    "FIRST HIGH-CONFIDENCE ADMISSION OF THE EXPERIMENT: ONGC BUY 165 @ ₹302 admitted at 09:42:27 with confidence 0.72 (≥0.70 threshold). This is the first conviction admission per recent telemetry — yesterday's blocks were all 0.60-0.62, premarket blocks similar. The 0.65 min_confidence floor cleared this entry with 7 pp of headroom — by the prompt's explicit criterion ('high-confidence (≥0.70) entries being blocked'), the floor is DEMONSTRABLY NOT EATING TOP-TIER SIGNAL — it is admitting it. This is positive evidence against the over-cautious failure mode and counts toward the Day-10 milestone n≥15 sample for confidence-vs-outcome statistical signal.",
+    "DEPLOYMENT IS DEEPENING ON HEALTHY CADENCE: 44.79% (09:30) → 49.79% (10:00) via ONGC fill, projected 54.86% on CHENNPETRO full fill. 10.14 pp buffer to 0.65 cap on full fill — cap is non-binding but the gap is narrowing. Under-deployment thesis weakened: the bot is actively committing capital on conviction (ONGC 0.72) and cap is not the constraint — strategy is signal-finding within a risk-off macro. Loosening max_deployed_pct now would be premature; the 11:00 LOOSEN trigger (≥2 high-conf entries + capacity > 60%) is currently 1/2 satisfied.",
+    "ENERGY/OIL&GAS RE-ENTERED AS A 2-NAME CLUSTER: ONGC 5.01% filled + CHENNPETRO 5.06% open = 10.07% on full fill. New 6th sector. Sits 3.93 pp under the 14% revocation threshold for max_sector_pct (3rd-largest sector after BFSI 12.93%, FMCG 12.07%, ahead of Pharma 10.05%). On a heavy-earnings risk-off day with Brent ~$120, an Energy theme expression is macro-coherent (oil-shock beneficiary). The cluster is well within bounds; no revocation trigger fires.",
+    "BFSI/FMCG/PHARMA UNCHANGED FROM 09:30: BFSI 12.93% (PNBHOUSING + BANDHANBNK, 15.07 pp buffer to 0.28 cap), FMCG 12.07% (NESTLEIND, 15.93 pp buffer), Pharma 10.05% (SUNPHARMA + GLENMARK, 17.95 pp buffer). All sectors hold 8+ pp of buffer. Largest single position NESTLEIND 12.07% — 2.93 pp buffer to max_position_pct=0.15.",
+    "DAILY P&L ESSENTIALLY FLAT: -₹159 (-0.016%) — sole realized loss is the disciplined POWERGRID exit. 469x buffer to base 0.075 daily-loss circuit breaker, 125x buffer to override 0.05 if armed. Book is essentially flat despite risk-off macro. Loss-gate tightening is not actionable.",
+    "ONGC SL JUST UNDER THE CEILING: SL 290 = 3.97% distance (1120 - 1075 = 12, 12/302 = 0.0397). 3 bps headroom under the 0.04 cap. Strategy is sizing SLs at the right edge of the band — the cap is BITING (or ONGC would have been wider). Combined with CHENNPETRO 4.018% breach, the empirical evidence is that 0.04 was the right ceiling and is now correctly tightened to 0.035 to dampen the right-edge clustering pattern.",
+    "STRATEGY BEHAVIORAL HEALTH IS POSITIVE: 3 trades in first 100 minutes (1 disciplined SELL, 1 high-conf BUY-fill, 1 BUY-OPEN), zero duplicate-symbol orders, zero stale OPEN-book carryovers across 24h. The Day-1 ORDER HYGIENE failures are no longer present. EXIT IS FINAL discipline holds (no POWERGRID re-entry within 24h yet). Strategy is correctly reading the risk-off tape: cut early, deploy on conviction, sector-rotate into Energy on the macro signal. This is the over-cautious failure-mode's INVERSE."
+  ],
+  "actions_taken": [
+    "TIGHTENED max_sl_pct from 0.04 to 0.035 — Pre-armed Trigger (c) fires CLEANLY on CHENNPETRO BUY admitted 09:42:35 with SL 4.018% (fresh admission, ≥4% SL, within Day-8 first hour). 2nd instance in 24h of the GLENMARK-blueprint pattern. The 09:00 hold-rationale on SL bands has been validated empirically — the precedent recurred within 72 minutes. New per-name worst-case risk at max_position_pct=0.15 × max_sl_pct=0.035 = 0.525% (down from 0.60%, a 12.5% additional defense). Stacks below default_sl_pct=0.015 (recommended) and above min_sl_pct=0.01 (floor); admission band is now [1.0%, 3.5%] vs prior [1.0%, 4.0%]. Non-punitive: CHENNPETRO grandfathered (in-flight OPEN order admitted under prior 0.04 ceiling); ONGC unaffected (3.97% SL is under both old and new ceiling); all 8 filled holdings keep current SLs."
+  ],
+  "actions_considered_but_not_taken": [
+    "TIGHTEN max_sl_pct further (0.04 → 0.030 in one step): NOT taken. Step-just-below-current-breach (0.035) matches the 04-22 14:30 max_deployed_pct precedent (cap set just below projected fill, not far below). 0.030 would create a 200 bps gap below CHENNPETRO's SL distance — overshoots the spec-armed step and over-rotates against future sizing flexibility. One precise step honors trigger spec exactly.",
+    "TIGHTEN min_sl_pct (0.01 → 0.012): NOT taken. The Day-3 11:00 paired-knob fire required MAHABANK <-6% distress; current book is essentially flat (-0.016%) with no single-name distress. No firing trigger.",
+    "TIGHTEN min_confidence (0.65 → 0.70): NOT taken. ONGC just cleared at 0.72 — FIRST high-conf admission of the experiment. Floor is admitting top-tier signal cleanly; raising it now would reject exactly the conviction trades the system_prompt is designed to encourage. By the prompt's criterion, the floor is NOT eating high-conf signal — it is admitting it. This datapoint actually argues for HOLD, possibly LOOSEN at Day-10 review, never TIGHTEN.",
+    "TIGHTEN max_position_pct (0.15 → 0.12): NOT taken. NESTLEIND 12.07% largest, 2.93 pp buffer; cap not binding; no firing trigger. Tightening would not retract NESTLEIND (grandfathered) and would only friction future sizing without evidence.",
+    "TIGHTEN max_deployed_pct (0.65 → 0.60): NOT taken. 49.79% deployed (54.86% on full fill) — 10.14 pp buffer on full fill. Cap is not binding. Tightening would close the admission window into a healthy active session that just produced a 0.72-confidence trade. Wrong asymmetry — the bot is FINDING SIGNAL, not over-deploying.",
+    "TIGHTEN max_sector_pct (revocation 0.28 → 0.22): NOT taken. No revocation trigger fires — Energy 10.07% (3.93 pp under 14% threshold), Pharma 10.05% (3.95 pp under), BFSI 12.93% (4.07 pp under 17% revocation), no 4-name cluster, no 3rd Pharma/Energy name. The 09:00 loosening (0.22 → 0.28) remains correctly calibrated.",
+    "TIGHTEN daily_loss_limit_pct (base 0.075 → override 0.05): NOT taken. Pre-armed trigger required intraday loss > -₹20K within 60 min; current -₹159 is 0.8% of threshold. 469x buffer. Loss-gate tightening on a flat book is theatrical.",
+    "LOOSEN max_deployed_pct (0.65 → 0.70): NOT yet taken. The 11:00 LOOSEN trigger needs ≥2 high-conf entries by 11:00 AND full-fill deployment > 60% — currently 1/2 (ONGC 0.72; CHENNPETRO 0.68 doesn't qualify) and full-fill 54.86% (5.14 pp under 60%). Both legs partial. Carries to 11:00 — if 1 more high-conf entry admits before 11:00, the trigger fires.",
+    "LOOSEN min_confidence (0.65 → 0.60): NOT taken. Deferred to Day-10 (~2026-05-04) for n≥15 closed-trade sample. ONGC 0.72 is positive evidence for confidence-as-signal but n=10 sample insufficient for statistical inference. Hold per milestone plan.",
+    "LOOSEN max_sl_pct (0.04 → 0.05 toward base): NOT taken — and emphatically so. Today's fresh CHENNPETRO breach is direct evidence that the 0.04 ceiling was correctly placed and that strategy will admit at the cap when permitted. Loosening would invite more right-edge SL clustering. The action is the OPPOSITE — tighten this tick.",
+    "LOOSEN max_position_pct (0.15 → 0.18): NOT taken. No firing trigger; cap non-binding; loosening on a quiet case is theatrical. Hold pending Day-10 review.",
+    "LOOSEN max_sector_pct further (0.28 → 0.32): NOT taken. The 09:00 step was 1 hour ago; second consecutive loosening on the same lever within an hour over-rotates against the strategy agent's stated Day-10 holistic review milestone. Hold the 09:00 calibration.",
+    "ELEVATE risk_level to MEDIUM: NOT taken. Composite distress meta-trigger D fires 0/3 legs (book P&L -0.016%, no single-name distress, strategy demonstrably active). The CHENNPETRO SL breach is a quality-of-admission concern addressed by the surgical max_sl_pct tighten — it is not a portfolio distress signal."
+  ],
+  "armed_triggers_for_next_tick": [
+    "max_sl_pct 0.035 → 0.030: ARMED — fires on any 3rd fresh ≥3.5% SL admission today (1 already today: CHENNPETRO 4.02%; ONGC 3.97% sits just 3 bps under threshold and would have fired had it been 0.0035 wider). Heightened armament given today's right-edge clustering pattern.",
+    "REVOCATION TRIGGER (sector cap snap-back): max_sector_pct 0.28 → 0.22 fires on (a) any 3rd Pharma admission OR Pharma full-fill > 14% (currently 10.05%, requires Pharma add ≥4% capital), (b) any 3rd Energy admission OR Energy full-fill > 14% (currently 10.07%, requires Energy add ≥3.93% capital — TIGHTER than Pharma), (c) any 4-name sector cluster emergence in BFSI/FMCG/Power/Adani-complex, (d) BFSI returning above 17% (currently 12.93%, requires ≥4.07% capital BFSI add).",
+    "REVOCATION TRIGGER (deeper): max_sector_pct 0.28 → 0.20 fires on any 5-name sector cluster OR any sector full-fill > 22%.",
+    "daily_loss_limit_pct base 0.075 → override 0.05: pre-armed if Day-8 cumulative-day mark-to-market loss > -₹20K (≈2% of capital) within first 60 min remaining (until ~10:15).",
+    "LOOSEN max_deployed_pct 0.65 → 0.70 at 11:00 tick: pre-armed if (a) ≥2 high-conf (≥0.70) entries admitted before 11:00 AND (b) full-fill deployment > 60%. Currently 1/2 (ONGC 0.72 only) and 54.86% (5.14 pp under). Needs ONE more high-conf entry to fire.",
+    "min_confidence 0.65 → 0.60 LOOSEN: deferred to Day-10 (~2026-05-04) milestone for n≥15 closed-trade sample. ONGC 0.72 is positive datapoint #1 toward this evaluation.",
+    "max_sl_pct 0.035 → 0.04 LOOSEN: deferred — would require 5+ trading days without a fresh ≥3.5% SL admission AND closed-trade sample n≥15 with no SL-related stop-outs. Today's fresh breach RESETS this window.",
+    "POWERGRID re-entry watch: if strategy re-buys POWERGRID within 24h at ≥ ₹319.44 (avg sell price), log as buy-back-what-you-just-sold pattern (echoes Day-6 TORNTPOWER behavior). Behavioral flag, not action trigger.",
+    "CHENNPETRO fill watch: order is OPEN; if it doesn't fill by EOD it ages into Day-9 — Apr-29 GLENMARK-style stale-LIMIT review applies (cancel-or-carry decision at premarket Apr-31).",
+    "Composite distress meta-trigger D (HIGH risk_level): re-arms if (i) book P&L < -0.5% intraday AND (ii) any single-name in book < -3% AND (iii) strategy silent ≥ 60 min after market open. All three legs currently dormant — strategy active and book essentially flat."
+  ],
+  "rationale": "Day-8 10:00 intraday tick. ONE PRECISE TIGHTEN on ONE CLEANLY-FIRED PRE-ARMED TRIGGER: max_sl_pct 0.04 → 0.035 in response to CHENNPETRO BUY admitted 09:42:35 with SL 4.018% — the 2nd instance in 24h of the GLENMARK-blueprint pattern (fresh admission marginally over the 4% ceiling with engine warning-not-block). The 09:00 hold-rationale on SL-band overrides has been empirically validated: within 1h12m of holding, the precedent recurred. Step calibrated just-below-current-breach (3.5% vs CHENNPETRO 4.02%) — disciplined, non-punitive, grandfathers the in-flight order. The wider portfolio picture is HEALTHY: ONGC admitted at 0.72 confidence is the FIRST high-conf admission of the experiment per recent telemetry, validating that the 0.65 min_confidence floor is NOT eating top-tier signal — exactly the over-cautious failure mode the prompt warns against. Strategy is active (3 trades in 100 min, zero duplicate orders, disciplined exit + sector rotation into Energy on macro coherence). Deployment is deepening on conviction (44.79% → 54.86% projected) without crowding the cap (10.14 pp buffer remains). All other overrides hold their 09:00/09:30 calibration: max_sector_pct=0.28 (largest sector 12.93%, 15.07 pp buffer); max_deployed_pct=0.65 (10.14 pp buffer on full fill); max_position_pct=0.15 (NESTLEIND 12.07%, 2.93 pp buffer); min_confidence=0.65 (admitting ONGC at 0.72 cleanly); SL-band default 0.015 / floor 0.01 unchanged. NO revocation triggers fire (Energy 10.07%, Pharma 10.05% both under 14%; BFSI 12.93% under 17%; no 4-name cluster). NO further tightening warranted (composite distress dormant; loss-gate dormant; per-name and per-sector caps non-binding). NO further loosening warranted (macro risk-off persists; CHENNPETRO breach reaffirms SL-band defense; LOOSEN max_deployed_pct is 1/2 firing legs). One surgical action, no theater."
+}

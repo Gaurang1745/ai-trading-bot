@@ -1,0 +1,70 @@
+{
+  "date": "2026-05-11",
+  "review_type": "daily",
+  "trades_analyzed": 22,
+  "summary": {
+    "wins": 3,
+    "losses": 6,
+    "total_pnl": -28521.0,
+    "win_rate": 0.333,
+    "avg_win": 2665.5,
+    "avg_loss": -6086.18,
+    "realized_pnl_excl_mcx": 2724.6,
+    "mcx_single_trade_loss": -31245.6,
+    "mcx_share_of_total_loss": 1.096,
+    "deployment_eod_pct": 29.19,
+    "capital_eod": 973441.11,
+    "capital_drawdown_pct_vs_start": -2.85
+  },
+  "patterns_found": [
+    "MCX disaster dominates the day. Single trade −₹31,246 (3.12% of capital) caused by an unverified stale-price LIMIT BUY at ₹8,400 while live CMP was ₹3,193 — a 163% gap that matches the textbook signature of an unadjusted post-corporate-action level (likely 1:1 bonus). Without this trade the day was +₹2,724 across the other 21 trades. The bot's own reasoning text on the BUY ended mid-sentence with 'NOTE: deferring this — without confirmed CMP d…' yet the action emitted was BUY, not NO_ACTION. The same watchlist_research payload quoted the correct CMP: 'trading around Rs 3,193 (+3.12%)'.",
+    "Same-session binary catalyst ignored on MCX entry. Research clearly listed 'Earnings conference call scheduled today (May 11) at 4 PM IST' as the headline catalyst. Entry at 12:41 was ~3 hours pre-call. Rule 11's 'within 3 trading sessions' inverse-rule should have blocked the entry — but the strategy agent did not even mention the call in the entry reasoning. It only surfaced in the EXIT reasoning 33 min later. Same information, both timestamps.",
+    "Early-morning preemptive-close cluster persists despite Rule 17. Four positions exited 09:55–09:56 (BHARATFORG, PNBHOUSING, GRSE, CAMS) — three were pre-SL-panic patterns dressed up as 'binary-cluster risk', 'cannot loosen / cannot tighten' or 'SL ~0.04% from CMP'. PNBHOUSING was a +9.4% winner that surrendered upside option to lock the gain; CAMS booked +1.8% on a 0.9% SL gap claiming Rule 15(c) 1%-floor logic; WOCKPHARMA booked +0.6% on a 0.04% SL gap. These are all variants of the Rule 17(d) WINNER-SIDE pre-SL panic and net positive only because the eventual closes happened to be lucky. The underlying pattern is the bot trailing SLs across sessions until the next session's open compresses the gap into self-stopout geometry — root cause is yesterday's overly-aggressive trailing, not today's exits.",
+    "Activity level was appropriate to elevated. 22 trades / 102 cycles = ~22% activity, with 8 new entries (TATACONSUM, CGPOWER, APOLLOHOSP, SUNPHARMA, MCX, TATACONSUM-add, LALPATHLAB, TORNTPHARM). This is the OPPOSITE failure shape of Day-13's zero-admit dormancy — the bot did NOT freeze. On a -1.2% Nifty / VIX +12% risk-off tape, eight admits is arguably mildly aggressive but well within the active-trader experiment's mandate. The damage was execution quality (MCX), not over-restraint.",
+    "Deployment remains structurally low. EOD 29.19% on a ₹973K book; previous sessions 23.6% / 17.4% / 9.5% / 13.0%. Trend is correct (rising) but average is well below the 80% soft-target. With overrides now binding (min_confidence 0.60), expect deployment to stay in the 30-50% band through tomorrow's CPI + DRREDDY/CIPLA earnings session, then re-open. Cluster discipline is being respected (FMCG max sector at 12.23%, Pharma 9.86%, all under 35% cap).",
+    "Stop-loss discipline is bimodal — the wide trade-side SLs were defensible (PIDILITIND, ABCAPITAL hit legitimate SLs after sector breakdowns; BHARATFORG exited on post-entry Q4 print downgrade), but the inherited-from-yesterday trail-SL geometry repeatedly compressed below the 1% gap floor overnight. The 1% trail-gap floor in Rule 14(d) is calibrated for intraday; cross-session opens can compress it further with no engine-side rebuild.",
+    "Guardrail rejection volume modest. 28 BLOCKED events of 302 total (9.3%). The pattern is dominated by repeated MODIFY attempts on exited positions (PNBHOUSING, CAMS, WOCKPHARMA, HFCL, MCX — 'no open position/holding'), suggesting Rule 12 (EXIT IS FINAL) still being violated, and 5+ CNC short-sell attempts (Holdings 0, Order qty N) — Rule 3 still being violated. Both are stale-state failures, not strategy failures."
+  ],
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added Rule 21 (CMP/LTP VERIFICATION) to the _TEMPLATE — mandates that every BUY/SELL use a price grounded in the LTP/CMP fields from the current cycle's structured data. Adds an explicit 5% sanity-check between submitted price and data CMP, a NO_ACTION trigger when CMP field is missing, and a prohibited-phrases list ('estimated entry pending verification', 'without confirmed CMP', etc.) that automatically routes the decision to NO_ACTION. Cites the MCX disaster as the failure-mode prior.",
+      "why": "The single MCX trade caused 109.6% of today's reported loss. Bot submitted a LIMIT BUY at ₹8,400 while the same cycle's watchlist_research blob quoted CMP at ₹3,193 — a 163% gap consistent with unadjusted post-corporate-action data. The bot's own reasoning admitted the price was 'estimated entry pending verification' and ended with 'deferring this — without confirmed CMP d…' yet the action emitted was BUY. A pre-submit CMP-gap check would have blocked this entry outright. Reasoning evidence: trade row 155, reasoning length 500 chars (truncated mid-sentence), submitted price 8400, fill price 8400, exit fill 3192.4, pnl −31245.6.",
+      "expected_impact": "Catastrophic stale-price entries (>5% gap between submitted price and data CMP) become self-blocked at the strategy layer before they reach guardrails. The specific MCX-class failure mode (corporate-action-adjusted stocks with prices in the bot's context window from before the adjustment) should be eliminated. Some legitimate intraday gappers with >5% intraday range may incorrectly trigger NO_ACTION — but that is a small price for closing the 3% single-trade-blowup tail."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added Rule 22 (ACTION ↔ REASONING CONSISTENCY) — formalizes that if the reasoning concludes with deferring / skipping / NO_ACTION / aborting / passing on, the `action` field MUST be NO_ACTION. Adds an explicit 'last sentence' self-check before emitting any BUY/SELL/MODIFY, and clarifies that when reasoning walks itself from bullish to bearish mid-paragraph, the CONCLUSION governs, not the preamble.",
+      "why": "MCX BUY 12:41 reasoning ended mid-sentence with 'NOTE: deferring this — without confirmed CMP d…' but the emitted `action` was BUY. This is a discipline failure where the prose-level decision (NO) and the executed-field-level decision (BUY) diverged. The guardrail engine reads numeric fields, not prose, so the disagreement landed an undefended order in the book. This is a generalizable failure pattern — any 'thinking out loud → reverse course mid-paragraph' reasoning is at risk of the same bug.",
+      "expected_impact": "Reduces the chance of self-contradictory orders landing in the book. Particularly applies to entries where the bot's own due-diligence pass surfaces a disqualifier (binary event, governance flag, price unverified) but the schema-fill step has already populated action=BUY. The 'last sentence governs' framing is a simple checksum the bot can apply before emit."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added Rule 23 (SAME-SESSION BINARY-EVENT ENTRY BAN) — extends Rule 11's 'within 3 trading sessions' inverse-rule with a same-session special case. For intraday earnings prints, today's conference calls, board-meeting results expected by close, and same-day regulator decisions, the default is NO_ACTION on new entries, not a sized event-trade. Notes that research blobs routinely name these in `catalysts` / `recent_news` and require a pre-entry scan.",
+      "why": "MCX research explicitly listed 'Earnings conference call scheduled today (May 11) at 4 PM IST — management commentary on FY27 trajectory' as the headline catalyst. The 12:41 BUY happened ~3 hours pre-call. The entry reasoning did not mention the call. The 13:14 EXIT reasoning DID name it ('earnings call TODAY 4PM is binary event'). The information was equally available at both timestamps; it was simply not scanned at entry. Rule 11 covered '3 sessions' but the same-session subcase needed explicit emphasis because the failure pattern is most severe there.",
+      "expected_impact": "Closes the same-session-earnings entry tail risk. The MCX trade is a compound failure of Rules 21 and 23 — either alone would have blocked it. Rule 23 also discourages similar setups on any name with same-day catalysts (conf-call earnings, USFDA decisions due today, RBI policy days)."
+    }
+  ],
+  "risk_overrides_status": {
+    "daily_loss_limit_pct": {
+      "current_override": 0.04,
+      "base": 0.075,
+      "set_by": "risk_monitor at 13:30 post-MCX",
+      "plan": "Retain through 2026-05-12 (CPI + DRREDDY/CIPLA earnings session). Revert candidate at 2026-05-12 EOD if no further adverse event AND MCX root cause confirmed as one-off execution/feed anomaly."
+    },
+    "min_confidence": {
+      "current_override": 0.60,
+      "base": 0.50,
+      "set_by": "risk_monitor at 13:30 post-MCX",
+      "plan": "Retain through 2026-05-12 binary session. Revert candidate at 2026-05-12 EOD. Note: zero 0.50-0.59 band attempts observed in 120 min of override life so far — no actual binding-edge telemetry yet."
+    },
+    "strategy_review_action_on_overrides": "No change. The risk monitor's response is calibrated to the event. Strategy review's contribution is the system_prompt layer addressing the strategic root cause (CMP verification, action/reasoning consistency, same-session binary entry ban) — these will be in force from the next bot restart and complement the immediate override surface."
+  },
+  "recommendations": [
+    "Diagnose the paper-trading fill behavior for LIMIT orders with prices far from CMP. In a real broker, a LIMIT BUY at ₹8,400 when ask is ₹3,201 fills at the inside price (~₹3,201), not at the LIMIT. Today's paper-trading layer appears to have filled at the LIMIT price (₹8,400) — that is non-realistic and was the proximate cause of the −₹31k vs the ~₹0 realistic-fill outcome. Add a price-realism check in the paper fill simulator: for BUY LIMITs above the current ask, fill at the ask, not the LIMIT.",
+    "Build a structured 'live CMP' presentation in the trading-decision payload. Currently the bot can read CMP from either the structured field or the prose recent_news; the MCX failure shows the bot defaulting to a stale internal estimate. Ensuring CMP is in a single canonical field with a freshness timestamp would make Rule 21's sanity-check trivially mechanical.",
+    "Investigate cross-session SL geometry compression. Four exits this morning cited 'SL flush with CMP / above CMP' — these are positions whose SLs were trailed too tight yesterday. Consider widening the engine-side trail_gap_pct floor (currently 2% in trailing_sl.trail_gap_pct, with the prompt allowing 1% for manual MODIFY) — or add an open-of-session SL audit that flags any SL within 1% of CMP and either widens it back to 1.5%+ OR exits cleanly. The current state lets cross-session compression set up morning panic-exits.",
+    "Monitor the min_confidence 0.60 override for over-tightening. Risk_monitor notes ZERO 0.50-0.59 admit attempts in 120 min of override life. If the override stays in place across multiple sessions with no binding-edge events, it is just suppressing the bot's normal medium-conviction band without measurable benefit — schedule a hard revert review for 2026-05-13 if 2026-05-12 closes cleanly.",
+    "Investigate the EXIT-then-MODIFY repeat pattern. Multiple BLOCKED events today on PNBHOUSING/CAMS/WOCKPHARMA/HFCL/MCX MODIFYs after the exit was already executed. The bot is reading stale position state. Either the position-state cache needs explicit invalidation post-exit in the same cycle, or the prompt's Rule 12 ('EXIT IS FINAL') needs even sharper enforcement."
+  ]
+}

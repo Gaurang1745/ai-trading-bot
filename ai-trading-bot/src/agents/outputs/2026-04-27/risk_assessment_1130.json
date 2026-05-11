@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-04-27 11:30:00",
+  "risk_level": "MEDIUM",
+  "risk_level_change_from_1100": "LOW → MEDIUM",
+  "portfolio_summary": {
+    "total_value": 1000559.58,
+    "total_value_basis": "cost_basis (no live LTP feed available at this tick)",
+    "cash": 459937.18,
+    "deployed_pct": 0.5403,
+    "deployed_pct_on_full_open_book_fill": 0.6830,
+    "holdings_count": 8,
+    "open_orders_count": 3,
+    "positions_count": 0,
+    "daily_pnl": -865.92,
+    "daily_pnl_realized_pct": -0.000866,
+    "buffer_to_base_loss_gate_3pct": 29150.0
+  },
+  "filled_holdings_cost_basis": {
+    "MAHABANK_BFSI": {"qty": 1200, "avg": 81.50, "value": 97800.00, "pct_capital": 0.0978},
+    "PNBHOUSING_BFSI": {"qty": 80, "avg": 984.00, "value": 78720.00, "pct_capital": 0.0787},
+    "INDUSINDBK_BFSI": {"qty": 55, "avg": 878.00, "value": 48290.00, "pct_capital": 0.0483},
+    "GOLDBEES_GoldETF": {"qty": 400, "avg": 125.10, "value": 50040.00, "pct_capital": 0.0500},
+    "NESTLEIND_FMCG": {"qty": 85, "avg": 1412.94, "value": 120099.90, "pct_capital": 0.1200},
+    "HINDUNILVR_FMCG": {"qty": 20, "avg": 2372.00, "value": 47440.00, "pct_capital": 0.0474},
+    "GRANULES_Pharma": {"qty": 70, "avg": 681.00, "value": 47670.00, "pct_capital": 0.0476},
+    "NTPC_Power": {"qty": 125, "avg": 404.50, "value": 50562.50, "pct_capital": 0.0505}
+  },
+  "open_orders": {
+    "TATAPOWER_Power_BUY_OPEN": {"qty": 110, "limit_price": 443.00, "value": 48730.00, "pct_capital": 0.0487, "submitted": "10:13:02"},
+    "HINDZINC_Metals_BUY_OPEN": {"qty": 75, "limit_price": 612.00, "value": 45900.00, "pct_capital": 0.0459, "submitted": "10:42:57"},
+    "POWERGRID_Power_BUY_OPEN_NEW_TICK": {"qty": 150, "limit_price": 320.50, "value": 48075.00, "pct_capital": 0.0481, "submitted": "11:13:02"}
+  },
+  "sector_breakdown_pct_of_capital_cost_basis": {
+    "BFSI_filled_and_full_fill": 0.2248,
+    "FMCG_filled_and_full_fill": 0.1674,
+    "Power_filled": 0.0505,
+    "Power_on_full_fill_3_names": 0.1473,
+    "Gold_ETF": 0.0500,
+    "Pharma": 0.0476,
+    "Metals_on_hindzinc_fill": 0.0459
+  },
+  "active_overrides_after_1130_tightening": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct_new": 0.65,
+    "max_deployed_pct_prior": 0.70,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct_new": 0.25,
+    "max_sector_pct_prior": 0.30,
+    "daily_loss_limit_pct_base": 0.03
+  },
+  "tick_over_tick_delta_vs_1100": {
+    "holdings_count": "8 → 8 (no fills since 10:42 INDUSINDBK)",
+    "open_orders_count": "2 → 3 (+1 POWERGRID OPEN at 11:13:02 — 4th BUY of the session)",
+    "cash": "459,937.18 → 459,937.18 (no fills)",
+    "deployed_pct_filled": "0.5403 → 0.5403 (unchanged on filled book)",
+    "deployed_pct_full_fill": "0.6349 → 0.6830 (+4.81 pp on POWERGRID OPEN)",
+    "Power_pct_full_fill": "0.0992 (2 names) → 0.1473 (3 names: NTPC + TATAPOWER + POWERGRID)",
+    "trades_today": "5 → 6 (+1 POWERGRID BUY OPEN). BUY:SELL ratio now 4:1.",
+    "daily_pnl_realized": "-865.92 → -865.92 (no new closes)",
+    "interpretation": "POWERGRID BUY 150 @ ₹320.50 (₹48,075 = 4.81% of capital) submitted as OPEN at 11:13:02 — the 3rd Power-sector name and 4th BUY of the session. This single submission satisfies the firing conditions of TWO pre-armed triggers from the 11:00 tick: (i) Trigger I (3rd Power name + Power exposure > 13%) — Power on full fill jumps from 9.92% to 14.73%, a clean 1.73 pp breach of the 13% trigger line; (ii) Trigger F reconfigured (4th BUY by 11:30 AND deployment > 65%) — both legs now fire with 4 BUYs (TATAPOWER 10:13, INDUSINDBK 10:42, HINDZINC 10:42, POWERGRID 11:13) and full-fill deployment 68.30% > 65% threshold. This is the strongest re-deployment cadence of the 4-day experiment: post-AUBANK exit at 09:31, ₹190,995 has been committed across 4 BUYs in 102 minutes, against only 1 SELL — the inverse of the system_prompt rule 8 SELL-before-BUY discipline at high deployment. Strategy has reverted toward the Day-1 binge-buy pattern that originally required the 0.75/0.70 deployed cap interventions."
+  },
+  "findings": [
+    "POWERGRID BUY (150 @ ₹320.50 = 4.81% of capital) submitted OPEN at 11:13:02. Third Power-sector name (joining filled NTPC 5.05% + still-OPEN TATAPOWER 4.87%). Power-sector exposure on full fill now 14.73% — a clean 1.73 pp breach of the 13% Trigger I line.",
+    "Trigger I (Power-cluster re-emergence, CARRIED) FIRES cleanly: 3rd Power name + 14.73% > 13% threshold. Pattern echoes the Day-1 Power cluster (TORNTPOWER + NTPC + ADANIPOWER) that drove the original deployed cap interventions.",
+    "Trigger F (complacency watch, RECONFIGURED at 11:00) FIRES cleanly on BOTH legs: 4 BUYs in 60 minutes (TATAPOWER 10:13 → INDUSINDBK 10:42 → HINDZINC 10:42 → POWERGRID 11:13) AND full-fill deployment 68.30% > 65% threshold. Strongest re-deployment cadence of the 4-day experiment.",
+    "Post-AUBANK exit redeployment cadence: ₹190,995 committed across 4 new BUYs in 102 minutes, against only 1 SELL (₹185,007 AUBANK exit). BUY:SELL ratio 4:1 — inverse of the system_prompt rule 8 SELL-before-BUY discipline at high deployment.",
+    "Trigger J (BFSI re-stack escalation) DOES NOT fire: BFSI on full fill 22.48% (unchanged tick-over-tick — POWERGRID is Power, not BFSI). 2.52 pp buffer to the 25% trigger line.",
+    "Trigger K (deployment hysteresis on filled-book) DOES NOT fire on its filled-book leg: filled-book deployment unchanged at 54.03% < 60% threshold (the POWERGRID submission is OPEN, not filled). However Trigger F's full-fill leg captures the same risk vector and fires.",
+    "Trigger H (TATAPOWER fill watch) DORMANT: TATAPOWER still OPEN at LIMIT ₹443, no fill observed.",
+    "Trigger L (HINDZINC fill watch) DORMANT: HINDZINC still OPEN at LIMIT ₹612, no fill observed.",
+    "Trigger G (MAHABANK extension watch) DORMANT: no fresh LTP feed at this tick; last reported -2.48% at 10:30, well above the -6.00% trigger line.",
+    "Trigger A (PnL loss-gate) DORMANT: realized P&L -₹865.92 unchanged (no new closes). ~₹9,140 buffer to the -1% findings trigger, ~₹29,150 buffer to the base 3% loss gate.",
+    "Trigger D (composite distress meta) DORMANT: book P&L not at distress, no single-name at ≤-7%, strategy NOT silent (4 BUYs in 60 min — opposite of silence). Risk level escalates only to MEDIUM, not HIGH or CRITICAL.",
+    "Largest single-name (filled): NESTLEIND 12.00% — unchanged tick-over-tick, 3.00 pp BUFFER below the 0.15 per-name cap. No per-name trigger.",
+    "Cash buffer: ₹459,937.18 (filled book). On full fill (TATAPOWER + HINDZINC + POWERGRID): ₹317,232. Cash will compress by another ₹142,705 if all three OPEN orders fill — still leaves >31% cash, comfortably above the 20% min_cash_buffer_pct.",
+    "Sector exposure post-1130 tightening (max_sector_pct 0.25): BFSI 22.48% retains 2.52 pp buffer, FMCG 16.74% retains 8.26 pp buffer, Power 14.73% retains 10.27 pp buffer. No grandfathered breach. Critical observation: BFSI is now 'near-binding' under 0.25 — any subsequent BFSI add of size > 2.52% will be rejected by the guardrail layer.",
+    "Deployment exposure post-1130 tightening (max_deployed_pct 0.65): filled-book 54.03% retains 10.97 pp buffer; full-fill projected 68.30% sits 3.30 pp ABOVE the new cap. The new cap is BINDING against full-fill projection — a deliberate calibration that grandfathers all 3 in-flight OPEN orders (TATAPOWER, HINDZINC, POWERGRID) but closes the admission window to ANY further BUY until OPEN-book fills land or a SELL frees deployment."
+  ],
+  "actions_taken": [
+    "Tightened max_sector_pct from 0.30 to 0.25 — fired pre-armed Trigger I cleanly (3rd Power name POWERGRID + Power exposure 14.73% > 13% threshold). Non-punitive: no current sector exposure invalidated; cap binds against future admissions. BFSI 2.52 pp buffer, FMCG 8.26 pp, Power 10.27 pp under the new cap.",
+    "Tightened max_deployed_pct from 0.70 to 0.65 — fired pre-armed Trigger F (reconfigured) cleanly (4th BUY POWERGRID + full-fill deployment 68.30% > 65% threshold). Non-punitive: 3 in-flight OPEN orders grandfathered to fill normally; the new cap creates a 3.30 pp BINDING admission gap so no NEW BUY is admissible until OPEN orders land or a SELL frees deployment back below 65%.",
+    "Risk level RAISED from LOW to MEDIUM. Drivers: (i) two pre-armed triggers fired on a single tick — the most simultaneous-fire event of the 4-day experiment; (ii) 3-name Power cluster has materialized in real-time; (iii) deployment cap is now binding on full-fill projection; (iv) BUY:SELL cadence 4:1 in last 102 min reverts toward Day-1 binge-buy pattern. NOT raised to HIGH because P&L and single-name discipline are intact (no firing of Trigger D legs)."
+  ],
+  "did_not_fire_with_reasons": [
+    "min_confidence (0.60 → 0.65): closed-trade sample is still 3 (TORNTPOWER win, ADANIPOWER loss, AUBANK loss). At n=3, confidence has no statistical signal yet. The live failure mode is cadence, not signal-quality — the deployment cap directly addresses cadence; the confidence lever addresses quality. One lever per failure mode.",
+    "max_position_pct (0.15 → 0.12): largest filled name NESTLEIND 12.00% has 3 pp buffer to current cap; on full fill, no name approaches 0.13. Tightening to 0.12 leaves NESTLEIND grandfathered with no behavioral effect.",
+    "default_sl_pct (0.015 → 0.012) / max_sl_pct (0.04 → 0.035) / min_sl_pct (0.01 → 0.015): SL band already tight at [1.0%, 4.0%]; per-name worst-case risk 0.60% at max sizing. No firing trigger on SL discipline. Trigger G (MAHABANK extension) remains the spec-hard SL-discipline trigger and is dormant.",
+    "daily_loss_limit_pct (0.03 → 0.025): book at -₹866 realized (-0.087%); ~₹29,150 buffer to the base loss gate. Loss-gate tightening on a near-flat realized book is theatrical. Pre-armed under Trigger A.",
+    "Trigger J max_sector_pct → 0.22 (further tightening below 0.25): would create immediate near-binding gap on BFSI 22.48% (only 0.48 pp buffer would remain — effectively zero room). The 0.25 step is calibrated to bite future admissions while grandfathering all in-flight commitments; further compression on BFSI is not warranted absent fresh BFSI activity.",
+    "Risk level NOT raised to HIGH: Trigger D composite distress meta-trigger has all 3 legs dormant — book P&L not in distress, no single-name at ≤-7%, strategy NOT silent. MEDIUM honestly reflects the cadence-driven risk inflection without overstating absent-distress."
+  ],
+  "pre_armed_triggers_intraday_for_1200": [
+    "TRIGGER A (PnL-based, primary, CARRIED): If book daily P&L ≤ -1.00% (₹-10,006) at any tick → FIRE daily_loss_limit_pct 0.03 → 0.025. Buffer ~₹9,140 from current realized read.",
+    "TRIGGER C/J (BFSI re-stacking, CARRIED, NOW NEAR-BINDING under new 0.25 cap): If strategy attempts ANOTHER BFSI BUY by 12:00 of size pushing BFSI exposure projection above the new 0.25 cap → expect guardrail REJECT (no override change needed; cap will enforce). If BFSI exposure climbs above 24% via mark-to-market → FIRE max_sector_pct 0.25 → 0.22. Buffer 1.52 pp / 2.52 pp.",
+    "TRIGGER D (composite HIGH/CRITICAL meta, CARRIED): three-leg distress meta — currently all dormant. Re-evaluate if any leg flips.",
+    "TRIGGER F (complacency, FIRED THIS TICK — RE-ARMED): If strategy attempts a 5th BUY by 12:00 OR the BUY:SELL ratio extends beyond 5:1 today → consider min_confidence 0.60 → 0.62 (a finer-grained signal-quality lever, since cadence is now hard-capped via deployment). Holdng off raising min_confidence to 0.65 absent deeper closed-trade sample.",
+    "TRIGGER G (MAHABANK extension watch, CARRIED): If MAHABANK marks below ₹76.61 (pnl_pct ≤ -6.00%) → re-assess max_sl_pct 0.04 → 0.035. Last reported -2.48%; trajectory benign.",
+    "TRIGGER H (TATAPOWER fill watch, CARRIED): If TATAPOWER fills materially above ₹447 → flag slippage observation.",
+    "TRIGGER I (Power-cluster, FIRED THIS TICK — RE-ARMED at higher threshold): If a 4th Power name is admitted by 12:00 OR Power-sector exposure (mark + entry) climbs above 17% → FIRE max_sector_pct 0.25 → 0.22 AND consider raising min_confidence 0.60 → 0.62. Currently 3 Power names, 14.73% on full fill, 2.27 pp buffer.",
+    "TRIGGER L (HINDZINC fill watch, CARRIED): If HINDZINC fills materially above ₹620 (>1.3% above order price ₹612) → flag slippage observation.",
+    "TRIGGER M (NEW, OPEN-book fill cascade): If 2+ of the 3 OPEN orders fill in the 11:30→12:00 window AND filled-book deployment crosses 60% → FIRE max_deployed_pct 0.65 → 0.62 to deepen the binding gap. Filled-book buffer 5.97 pp; small individual fills won't trip but a TATAPOWER + POWERGRID double-fill (₹96,805) would push filled-book deployment to ~63.7%, crossing 60%.",
+    "TRIGGER N (NEW, BUY-without-SELL ratio): If the strategy admits ANY new BUY between 11:30 and 13:00 without an intervening SELL → FIRE min_confidence 0.60 → 0.62 as the cadence-quality complement to the now-binding deployment cap. Spec is intentionally tight: any incremental BUY against the 4:1 ratio while the cap is binding indicates the decision layer is testing the perimeter."
+  ],
+  "next_check": "2026-04-27 12:00 (mid-session — observe whether ANY of the 3 OPEN orders fills (TATAPOWER, HINDZINC, POWERGRID), whether the strategy attempts a 5th BUY which would test the now-binding max_deployed_pct 0.65 cap, MAHABANK trajectory, and BFSI sector re-stacking pressure under the now-near-binding 0.25 cap)"
+}

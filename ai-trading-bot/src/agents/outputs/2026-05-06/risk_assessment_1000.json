@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-05-06 10:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1000135.82,
+    "cash": 569580.82,
+    "deployed_pct": 43.05,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": -1720.82
+  },
+  "findings": [
+    "Overrides block already empty (cleared by yesterday's 16:00 EOD strategy_review) — system is at base config on every lever (daily_loss 3%, sl 2%, confidence 0.50, R:R 1.5, position 20%, deployed 80%). The loosening floor has been reached; nothing further to revert.",
+    "Daily realized P&L -₹1,720.82 (-0.17%) = MARUTI -₹1,007.12 (closed 09:13:11 at -2.7%) + BHEL -₹713.70 (closed 09:43:14 at -1.6%). Buffer to base 3% daily-loss limit is ~₹28,283; utilization only 5.7%. Negligible risk-elevation signal.",
+    "Both today's exits are STRATEGIC pre-SL discretionary closes on adverse setups (MARUTI: SL 13400 0.2% below CMP, virtually-guaranteed stopout; BHEL: -2.23% intraday vs +0.5-1.5% market on 4.2x volume = distribution). These are disciplined tactical exits, not portfolio stress events.",
+    "Position sizing band 4.83%-7.87% across 8 holdings — PNBHOUSING max at 7.87%, well under base 20% cap with >12 pp headroom. No sub-3% tiny positions (smallest is NAVINFLUOR 4.83%). No hedging-against-itself shape.",
+    "Sector spread strong: 8 distinct sectors. BFSI cluster (PNBHOUSING + BANDHANBNK) = 12.89% — 22.11 pp buffer to base 35% cap. All other sectors single-name (Gold ETF, Ports, Defense, Realty, Specialty Chem, Rail/Capgoods). Composite distress 0/3.",
+    "Deployment 43.05% on filled holdings (no OPEN orders post-TITAGARH fill) — moderate and healthy for an 8-name book mid-session. Active rotation pattern (close-and-redeploy) is functioning, not a chronic under-deployment shape.",
+    "No high-confidence signals being declined (overrides empirically non-binding for 8+ trading days when they existed; now at base they cannot block any conf>=0.50 signal). Reverting overrides further is structurally impossible — base is the floor."
+  ],
+  "actions_taken": [
+    "HOLD — no changes. Overrides block remains empty. Override count 0 unchanged. No tighten, no loosen. Reason: (1) Nothing to loosen — at base on every lever, loosening floor reached. (2) Nothing to tighten — daily loss utilization 5.7% of limit (negligible), two exits are tactical SL-avoidance not stress, position sizing balanced, sector spread strong, deployment healthy. (3) The two realized losses sum to -0.17% — well within paper-book noise band; tightening on -0.17% would be reactionary and would block legitimate signal."
+  ]
+}

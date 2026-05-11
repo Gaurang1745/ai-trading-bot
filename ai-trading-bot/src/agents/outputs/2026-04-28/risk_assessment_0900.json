@@ -1,0 +1,70 @@
+{
+  "timestamp": "2026-04-28 09:00:51",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1001556.88,
+    "cash": 406119.48,
+    "deployed_pct": 0.5945,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "portfolio_detail": {
+    "holdings_value": 595437.40,
+    "open_orders_value": 130105.00,
+    "open_orders_count": 3,
+    "open_orders": [
+      {"symbol": "TATAPOWER", "qty": 110, "price": 443.00, "value": 48730.00, "sector": "Power", "submitted": "2026-04-27 10:13:02"},
+      {"symbol": "HINDZINC", "qty": 75, "price": 612.00, "value": 45900.00, "sector": "Metals", "submitted": "2026-04-27 10:42:57"},
+      {"symbol": "PHARMABEES", "qty": 1500, "price": 23.65, "value": 35475.00, "sector": "Pharma-ETF", "submitted": "2026-04-27 12:14:55"}
+    ],
+    "projected_deployed_pct_on_full_fill": 0.7244,
+    "sector_exposure_filled": {
+      "BFSI": {"pct": 0.1762, "names": ["MAHABANK", "PNBHOUSING"]},
+      "FMCG": {"pct": 0.1673, "names": ["NESTLEIND", "HINDUNILVR"]},
+      "Power": {"pct": 0.1491, "names": ["NTPC", "TORNTPOWER", "POWERGRID"]},
+      "Pharma": {"pct": 0.0519, "names": ["SUNPHARMA"]},
+      "Gold-ETF": {"pct": 0.0500, "names": ["GOLDBEES"]}
+    },
+    "sector_exposure_on_full_fill": {
+      "BFSI": 0.1762,
+      "FMCG": 0.1673,
+      "Power": 0.1977,
+      "Pharma": 0.0874,
+      "Metals": 0.0458,
+      "Gold-ETF": 0.0500
+    },
+    "position_sizes_pct": {
+      "NESTLEIND": 0.1199,
+      "MAHABANK": 0.0977,
+      "PNBHOUSING": 0.0786,
+      "SUNPHARMA": 0.0519,
+      "TORNTPOWER": 0.0506,
+      "NTPC": 0.0505,
+      "GOLDBEES": 0.0500,
+      "POWERGRID": 0.0480,
+      "HINDUNILVR": 0.0474
+    },
+    "largest_position": {"symbol": "NESTLEIND", "pct": 0.1199, "buffer_to_cap_pp": 0.0301}
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.22
+  },
+  "findings": [
+    "Premarket open: 9 filled holdings worth ₹595,437.40 (59.45% deployed) + ₹406,119.48 cash. F&O positions: zero. Daily P&L: ₹0.00 (no trades on 2026-04-28 at the 09:00 snapshot; market not yet open).",
+    "Three OPEN orders carry over from 2026-04-27 — TATAPOWER 110 @ 443 (Power), HINDZINC 75 @ 612 (Metals), PHARMABEES 1500 @ 23.65 (Pharma-ETF) — totalling ₹130,105 (13.00% of capital). All are grandfathered under the prior-session 0.65 max_deployed_pct cap that was binding 7.44 pp under the projected full-fill at the 11:30 fire on 2026-04-27.",
+    "Projected deployment on full fill of carryover OPEN orders is 72.44% — a 7.44 pp grandfathered breach of the 0.65 cap. The cap is already designed to BIND on new admissions; no further BUY can be admitted by the guardrail layer until either (a) a SELL frees deployment back below 65%, or (b) one of the OPEN orders is rejected/cancelled.",
+    "Sector concentration (filled book): BFSI 17.62% (MAHABANK 9.77% + PNBHOUSING 7.86%), FMCG 16.73% (NESTLEIND 11.99% + HINDUNILVR 4.74%), Power 14.91% (NTPC 5.05% + TORNTPOWER 5.06% + POWERGRID 4.80%), Pharma 5.19%, Gold-ETF 5.00%. All clusters sit comfortably inside the 0.22 max_sector_pct override.",
+    "Sector concentration on full carryover fill: Power climbs to 19.77% (4 names: NTPC + TORNTPOWER + POWERGRID + TATAPOWER) — 2.23 pp buffer to the 0.22 cap. Pharma 8.74% (SUNPHARMA + PHARMABEES). Metals 4.58% (HINDZINC, new). BFSI/FMCG unchanged. No projected breach of any sector cap on the carryover-fill scenario.",
+    "Position sizing: NESTLEIND 11.99% is the largest filled holding (3.01 pp buffer to the 0.15 cap). All other holdings sit between 4.74% and 9.77%. No single name approaches the cap.",
+    "Cash buffer is healthy at 40.55% of capital — well above any working threshold. With deployment under the binding cap and no firing-trigger condition met at premarket, the disciplined call is to ARM triggers for the session rather than fire pre-emptively. Triggers being armed for 2026-04-28: (i) if Power on full fill crosses 22% (e.g., a 5th Power name) → consider max_sector_pct 0.22 → 0.20; (ii) if a 3rd OPEN-order day-stale (>24h old) emerges or any one is RE-SUBMITTED at a worse price → flag order-hygiene drift; (iii) if MAHABANK marks below -7% (closed Day-3 at -5.14%) → consider tightening default_sl_pct 0.015 → 0.012; (iv) if BFSI grandfathered breach re-inflects above 18.5% via fresh adds → re-arm min_confidence 0.65 → 0.67; (v) if realized day-loss reaches -₹15,000 (1.5% of capital, half the loss-gate) → consider tightening daily_loss_limit_pct 0.03 → 0.025.",
+    "All seven risk overrides are already significantly tighter than base config from progressive Day 1-4 tightening (min_confidence 0.65 vs base 0.50, max_position_pct 0.15 vs 0.20, max_deployed_pct 0.65 vs 0.80, default_sl_pct 0.015 vs 0.02, min_sl_pct 0.01 vs 0.005, max_sl_pct 0.04 vs 0.05, max_sector_pct 0.22 vs 0.35). The book is structurally well-bracketed; no new pre-armed trigger fired this tick."
+  ],
+  "actions_taken": []
+}

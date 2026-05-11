@@ -1,0 +1,47 @@
+{
+  "date": "2026-04-22",
+  "agent": "strategy",
+  "review_type": "daily_post_market",
+  "changes": [
+    {
+      "timestamp": "2026-04-22 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "HARD CONSTRAINTS — new rule 9 (ORDER HYGIENE)",
+      "what": "Added a new hard-constraint section titled 'ORDER HYGIENE — NEVER DUPLICATE WORKING ORDERS' that forbids submitting a second BUY on a symbol when a prior BUY is still OPEN/PENDING, and adds explicit guidance against setting LIMIT BUY prices above the last traded price.",
+      "why": "Today the decision agent emitted 3 BUY orders on AUBANK (70 @ ₹1050 OPEN, 56 @ ₹1047 OPEN, 50 @ ₹1050 FILL) and 2 BUY orders on NESTLEIND (50 @ ₹1415 OPEN, 35 @ ₹1410 FILL) across consecutive decision ticks. The earlier OPEN orders were never cancelled, never referenced, and never considered as already committing capital. This caused the risk_monitor to have to intervene twice (12:30 max_position_pct=0.15, 13:00 min_confidence=0.60) specifically to contain AUBANK stacking. Separately, 5 of 13 LIMIT orders did not fill because the LIMIT price was set at or above the prevailing market — the prompt never warned against this anti-pattern.",
+      "expected_impact": "Future decision ticks should (a) treat an OPEN BUY on symbol X as already-committed capital and not emit another BUY on X until the first resolves, and (b) avoid setting LIMIT BUYs above the last traded price, which should raise the fill rate of submitted orders from today's ~62% (8/13) toward the 85–95% range."
+    },
+    {
+      "timestamp": "2026-04-22 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "HARD CONSTRAINTS — new rule 10 (SECTOR / CLUSTER DISCIPLINE)",
+      "what": "Added a new hard-constraint section on correlated-theme clusters (rate-sensitive financials, power cluster, oil-sensitive cluster). Introduces a ~20% cluster cap and an explicit rule: 'Do NOT add a second, third, and fourth breakout-to-52-week-high in the SAME theme in a single session.'",
+      "why": "Today's book concentrates in three clusters beyond the simple per-sector cap: BFSI (MAHABANK 9.78% + PNBHOUSING 7.87% + AUBANK 5.25% filled; projected 36.12% on full fill), Power (TORNTPOWER 5.94% filled + NTPC 5.06% OPEN + ADANIPOWER 4.92% OPEN = 15.92% on full fill), and FMCG (NESTLEIND 12.01% aggregate + HINDUNILVR 4.74% = 16.75%). Every single trade was a breakout-to-52-week-high — 13/13. This is theme concentration disguised as 'diversification by sector code'.",
+      "expected_impact": "The decision agent should self-limit cluster stacking before the risk_monitor has to install numeric overrides. Fewer correlated entries → lower single-macro-driver drawdown risk."
+    },
+    {
+      "timestamp": "2026-04-22 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "TRADING PHILOSOPHY — binary-event-day discipline, deployment hysteresis, position-first cadence",
+      "what": "Added three bullets to the trading philosophy section: (1) on binary macro/geopolitical event days bias toward NO_ACTION on new entries and spend cycles on MODIFY/EXIT; (2) deployment hysteresis — once the book is >60% deployed with flat-or-negative unrealized P&L, default to NO_ACTION on new entries unless the setup is materially better than what's held; (3) every decision cycle's FIRST question is 'what do I do with what I already own?' rather than 'what should I buy next?'.",
+      "why": "Today's premarket brief explicitly flagged the US-Iran ceasefire expiration as a 'binary event', recommended 'trade light, avoid fresh longs', and called out FII outflows. The decision agent then placed 13 fresh longs anyway, including four explicitly framed as 'defensive rotation' (NESTLEIND, HINDUNILVR, GOLDBEES, GRANULES) that were all breakout-to-52w-high directional longs, not hedges. Separately, across 8 filled holdings at session close, the agent produced zero MODIFY and zero EXIT decisions — no trailing SL, no trim on the 2 winners, no stop audit on the 6 losers.",
+      "expected_impact": "On macro-binary days and at >60% deployment, the agent should admit fewer marginal entries and spend more cycles on SL-trail and thesis-check decisions, reducing both gap-risk exposure and the 'pure accumulation' failure mode observed today."
+    },
+    {
+      "timestamp": "2026-04-22 16:00:00",
+      "file": "src/ai/system_prompt.py",
+      "section": "TRADING DECISION — expanded PRIORITY ORDER to cover OPEN orders",
+      "what": "Extended the PRIORITY ORDER block (which already required walking existing filled positions before new entries) to also require walking the OPEN/PENDING orders section: either leave each pending order alone, or explicitly CANCEL it if the setup has deteriorated — and explicitly never submit a second BUY for a symbol that already has a working BUY.",
+      "why": "The priority-order section already existed but was insufficient: the decision agent walked filled holdings but ignored the OPEN-order book. The AUBANK and NESTLEIND duplicates are the direct evidence. Tightening the priority-order language at the decision-output schema (where it's maximally salient) is the simplest structural fix.",
+      "expected_impact": "Decision ticks should now explicitly address every OPEN order each cycle (leave / cancel), eliminating the 'phantom OPEN lots accumulate' failure mode that produced today's five un-filled limits."
+    },
+    {
+      "timestamp": "2026-04-22 16:00:00",
+      "file": "src/agents/risk_config.yaml",
+      "section": "changelog (new strategy entry; overrides unchanged)",
+      "what": "Added a strategy-agent changelog entry documenting Day-1 EOD review. Left min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.75 unchanged. No new numeric keys added.",
+      "why": "The three risk_monitor tightenings earlier today are binding against the concentration profile carried into overnight and should remain in place. Changes today address structural (behavioral / prompt) failures, not numeric-calibration failures. Raising min_confidence further to 0.65 was considered and rejected — today's 0.72-confidence trades (MAHABANK, NESTLEIND) were among the biggest losers, so confidence is not yet calibrated with outcome on this sample.",
+      "expected_impact": "Overnight admission capacity stays gated; tomorrow's premarket review will re-evaluate the overrides once OPEN-book resolution and overnight-gap data are observable."
+    }
+  ]
+}

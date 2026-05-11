@@ -1,0 +1,29 @@
+{
+  "timestamp": "2026-05-08 09:00:41",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Day-14 09:00 premarket. State delta vs Day-13 15:30 EOD: ZERO portfolio movement. Holdings 11 byte-identical (PNBHOUSING 7.90% / GOLDBEES 5.02% / ADANIPORTS 5.12% / HAL 5.05% / NAVINFLUOR 4.85% / TITAGARH 5.04% / ABCAPITAL 5.00% / MARICO 4.94% / COFORGE 3.79% / GRSE 4.86% / CAMS 2.02%). Cash Rs 462,827.37 unchanged. Cost basis Rs 534,000 unchanged. Total Rs 996,827.37 unchanged. Filled deployment 53.57% unchanged. paper_positions table empty. No fills/closes since M&M CLOSE 2026-05-06 12:53:55 (~44.1 hr clean of admission/exit activity, advancing through a complete dormant Day-13 session).",
+    "Sector composition spread across 7+ distinct buckets: BFSI/NBFC (PNBHOUSING+ABCAPITAL+CAMS) 14.92% vs typical 35% cap (20.08 pp buffer); Defense+Rail (HAL+GRSE+TITAGARH) 14.95% vs 35% (20.05 pp buffer); Gold-ETF (GOLDBEES) 5.02%; Logistics (ADANIPORTS) 5.12%; Specialty Chem (NAVINFLUOR) 4.85%; FMCG (MARICO) 4.94%; IT-Services (COFORGE) 3.79%. No concentration distress.",
+    "Position-size range 2.02%-7.90%; max position PNBHOUSING 7.90% vs base cap 20% (12.10 pp buffer). 9 of 11 names in the 3.79%-7.90% band — healthy spread, NOT the all-tiny hedge-against-self anti-pattern (CAMS 2.02% is the lone sub-3%, explainable by smaller starter position).",
+    "Daily P&L 0.0 today (premarket, NSE pre-open). Full 3% buffer (Rs 29,904 worth) intact. No realized loss exposure.",
+    "Signal acceptance: zero risk-config-layer blocks on high-conf (>=0.70) admits across the cumulative ledger; the only Day-13 block was the 11:16:59 HFCL phantom-position integrity catch (strategy/broker reconciliation scope, NOT a risk_config.yaml lever). Conf and R:R floors empirically non-binding through 9+ sessions.",
+    "Override count = 0 — risk_config.yaml has carried an empty overrides block since the 2026-05-05 16:00 EOD reset, now ~65 hr stable through complete Day-12 + Day-13 sessions and into Day-14 premarket. 22 consecutive HOLD ticks accumulated.",
+    "Idle-capital observation: deployment 53.57% sits at the lower edge of the active-trader band but ABOVE the 50% chronic-under-deployment trigger — un-fired. Lever has no relax direction at base anyway (min_confidence already 0.50, max_position_pct already 0.20, max_deployed_pct already 0.80 — every relax dimension floored). Bind is on strategy-side admission cadence (~44.1 hr clean of fresh fills), NOT on risk_config.yaml.",
+    "Macro backdrop NEGATIVE: Iran-US tensions resurface, KOSPI -1.88%, Nikkei -0.62%, GIFT Nifty ~24,395 flat-to-soft. Crude $97.70 (+2.76%). PSU bank cluster prints today (SBIN/BANKBARODA/BANKINDIA) — but our BFSI holdings (PNBHOUSING housing-finance, ABCAPITAL NBFC, CAMS registrar) are not direct PSU bank names; sympathy-trade beta only, not earnings-event beta. Defense+Rail (HAL/GRSE/TITAGARH 14.95%) is positioned as a sentiment tailwind beneficiary if Iran escalates. Gold-ETF (GOLDBEES 5.02%) provides risk-off bid. FMCG (MARICO 4.94%) provides defensive. The book is well-shaped for the scenario without any pre-emptive tightening.",
+    "HFCL stale-order: ~46.7 hr OPEN since 2026-05-06 10:16:40, position-existence integrity check fired correctly Day-13 11:16:59. Reconciliation/strategy-layer scope. Even a retroactive fill would put deployment at 61.61%, still 18.39 pp under the 80% cap — no risk-config response required.",
+    "Three Day-13 SELL @ 0.0 REJECTs (TITAGARH 10:44:55, COFORGE 11:48:27, GOLDBEES 13:47:34) — malformed-payload sentinels caught at order-validation, NOT at risk-config gates. Pattern is strategy-layer payload-shape concern, NOT a risk_config.yaml lever; informational only at this tier.",
+    "Composite HIGH-meta-trigger: 0/3 fires (book P&L 0.0 not below -0.5%, no single-name distress data, strategy demonstrably engaged at SL-management layer Day-13 with 130+ MODIFY validations across 4 bursts). No tighten signal."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty. Override count 0 unchanged. No tighten, no loosen. 22nd consecutive HOLD tick (Day-12 12:30 / 13:00 / 13:30 / 14:00 / 14:30 / 15:00 / 15:30 EOD + Day-13 09:00 / 09:30 / 10:00 / 10:30 / 11:00 / 11:30 / 12:00 / 12:30 / 13:00 / 13:30 / 14:00 / 14:30 / 15:00 / 15:30 EOD + Day-14 09:00 premarket).",
+    "Decision walk: (1) Nothing to LOOSEN — every lever at base since the 05-05 16:00 reset; base is the floor by spec (min_confidence cannot drop below 0.50, daily_loss_limit_pct cannot exceed base 0.03, default_sl_pct/min_sl_pct/max_sl_pct/max_position_pct/max_deployed_pct all at their base values). No loosen direction available. (2) Nothing to TIGHTEN on shape — composite distress 0/3, BFSI/Defense-Rail clusters both ~15% with 20+ pp buffer to typical 35% caps, max position 7.90% with 12 pp buffer to 20% cap, deployment 53.57% above the 50% trigger. (3) Nothing to tighten on daily P&L — fresh 0.0 utilization, no realized losses. (4) Nothing to tighten on signal acceptance — zero high-conf blocks at risk-config layer. (5) Nothing to tighten on SL geometry — Day-13 produced 130+ cumulative MODIFY validations across 4 bursts, all admitted cleanly at base SL geometry; tightening would friction a four-times-validated pattern. (6) Macro-driven pre-emptive tightening rejected — book is already well-shaped for the Iran/PSU-bank-earnings backdrop (Defense+Rail tailwind exposure, Gold-ETF risk-off bid, FMCG defensive, no direct PSU bank holdings); the daily-loss-limit base 3% provides natural elastic absorption if a tail event fires; pre-emptive tightening on a forecast that hasn't fired yet manufactures friction with no firing trigger. Tightening here manufactures friction; loosening is undefined (base = floor). HOLD."
+  ]
+}

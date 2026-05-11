@@ -1,0 +1,90 @@
+{
+  "date": "2026-05-04",
+  "review_type": "daily",
+  "trades_analyzed": 7,
+  "summary": {
+    "wins": 4,
+    "losses": 3,
+    "total_pnl": 3512.55,
+    "win_rate": 0.5714,
+    "avg_win": 1736.05,
+    "avg_loss": 1143.88,
+    "win_loss_ratio": 1.52,
+    "new_entries": 6,
+    "total_trade_events": 14,
+    "eod_deployment_pct": 46.73,
+    "holdings_count": 9,
+    "portfolio_value": 1005084.34,
+    "cumulative_session_return_pct": 0.35
+  },
+  "trade_breakdown": {
+    "closed_today": [
+      {"symbol": "ONGC", "type": "exit_prior_session", "sector": "Oil&Gas", "pnl": -1427.25, "entry": 302.0, "exit": 293.35, "reason": "Crude reversal post-Mideast de-escalation; pre-empted SL trip"},
+      {"symbol": "BANDHANBNK", "type": "exit_prior_session", "sector": "BFSI", "pnl": 2877.5, "entry": 200.0, "exit": 211.51, "reason": "TRAIL-GAP VIOLATION — stored SL 207.78 above CMP 206.90, forced exit"},
+      {"symbol": "COALINDIA", "type": "exit_prior_session", "sector": "Coal/Mining", "pnl": 1276.0, "entry": 469.0, "exit": 481.76, "reason": "Apr 2026 production -9.7% YoY, fundamental deterioration on top of 52w high"},
+      {"symbol": "BAJAJ-AUTO", "type": "same_session_round_trip", "sector": "Auto", "pnl": -570.5, "entry": 10310.0, "exit": 10195.9, "reason": "Binary-event panic exit at -1% (Rule 15 violation — pre-existing event was known at entry)"},
+      {"symbol": "SUNPHARMA", "type": "exit_prior_session", "sector": "Pharma", "pnl": 2591.7, "entry": 1734.0, "exit": 1820.39, "reason": "Trail-gap violation + Q4 May 19 binary; clean +5% lock-in"},
+      {"symbol": "BAJFINANCE", "type": "exit_prior_session", "sector": "BFSI", "pnl": 199.0, "entry": 944.0, "exit": 947.98, "reason": "TRAIL-GAP VIOLATION — stored SL 950 above CMP 949.55, forced exit at marginal gain"},
+      {"symbol": "EXIDEIND", "type": "same_session_round_trip", "sector": "Auto-Anc", "pnl": -1433.9, "entry": 374.0, "exit": 362.97, "reason": "SL hit at -2.6% on event-trade into May 6 board meeting"}
+    ],
+    "new_entries_open": [
+      {"symbol": "ADANIPORTS", "qty": 30, "price": 1700, "confidence": 0.70, "sector": "Logistics/Ports"},
+      {"symbol": "MARUTI", "qty": 4, "price": 13800, "confidence": 0.66, "sector": "Auto"},
+      {"symbol": "ANANTRAJ", "qty": 100, "price": 506, "confidence": 0.62, "sector": "Realty"},
+      {"symbol": "HAL", "qty": 11, "price": 4575, "confidence": 0.68, "sector": "Defence"},
+      {"symbol": "BANDHANBNK", "qty": 240, "price": 209, "confidence": 0.62, "sector": "BFSI", "note": "Same-day re-entry 90 min after exit; Rule 14 cooldown borderline"}
+    ]
+  },
+  "patterns_found": [
+    "PATTERN 1 — Trail-gap discipline failed twice on the same playbook: BANDHANBNK (SL trailed 200→207.78 with CMP ~207, gap ~0.4%) and BAJFINANCE (SL trailed 944→950 with CMP 949.55, gap ~0.05%) both forced same-session 'SL-above-CMP' exits. Wins were lucky outcomes (+₹2,878 and +₹199); the trail itself caused both exits, not the chart. Existing 0.5% rule was tighter than NSE's typical intraday noise band.",
+    "PATTERN 2 — Event-trade entries lost 2-for-2: BAJAJ-AUTO (conf 0.62, May 6 board, 2 sessions out) -₹570 in 62 minutes; EXIDEIND (conf 0.68, May 6 board, 2 sessions out) -₹1,434 in 90 minutes. Combined -₹2,004. Both at sub-0.70 conviction, both into the SAME May 6 calendar. Auto-sector binary risk fired the same tail twice within 3 hours.",
+    "PATTERN 3 — Same-name same-day re-entry: BANDHANBNK SELL 211.51 at 10:15 → BUY 209 at 11:45 (90 min later). Rule 14 mandates 5-session cooldown unless new catalyst or invalidated thesis; bot's reasoning didn't acknowledge prior exit. Root cause is upstream: the 10:15 exit was a forced trail-gap exit, not thesis-driven. Fix the trail, the re-entry disappears.",
+    "PATTERN 4 — Risk overrides were non-binding all session: max_sector_pct cap 0.28 vs largest sector BFSI 12.88% (15+ pp buffer); max_deployed_pct cap 0.75 vs deployment 46.73% (28+ pp buffer); min_confidence 0.60 vs strategy's organic 0.62-0.70 floor. Strategy is self-disciplined; non-binding overrides only generate drift between system_prompt placeholders and actual enforcement.",
+    "PATTERN 5 — Win/loss split by category: BFSI +₹3,076 (2W/0L), Pharma +₹2,591 (1W/0L), Coal/Mining +₹1,276 (1W/0L) — all winners on legacy positions exited on thesis or trail-gap mechanics. Auto -₹2,003 (0W/2L) — both losses were event-trades. Oil&Gas -₹1,427 (0W/1L) — pre-empted SL on macro reversal. Loss cluster is event-trades, not sectoral.",
+    "PATTERN 6 — Activity level was healthy: 14 trade events (6 new, 7 closes, 1 same-name re-entry), 0 NO_ACTION-only ticks during market hours. Loosened-overrides regime worked — bot did not sit out cycles, deployed capital actively, captured rotation between exits and new admissions. Activity level is no longer a problem.",
+    "PATTERN 7 — Guardrail block noise: 4 'Confidence 0.0 below 0.6 threshold' blocks (default-conf NO_ACTION proposals routed through validator), 4 'Cannot short-sell in CNC' blocks (duplicate close attempts after position already exited), 1 'MODIFY for X but no open position' block (same root cause). All are engine-side noise, not real strategy errors. None should drive parameter changes."
+  ],
+  "guardrail_effectiveness": {
+    "real_blocks": 0,
+    "noise_blocks_confidence_zero": 4,
+    "noise_blocks_duplicate_close": 4,
+    "noise_blocks_modify_after_exit": 1,
+    "comment": "All blocks were noise — no strategy proposals were materially declined by guardrails. The min_confidence override at 0.60 never fired against a real signal. Override regime was effectively decorative — strategy was already operating in the conservative envelope on its own."
+  },
+  "deployment_assessment": {
+    "eod_pct": 46.73,
+    "peak_intraday_estimate_pct": 51.5,
+    "average_session_pct": 48.5,
+    "comment": "Below the 50% target despite high activity. Cash buffer is generous. After reverting deployed-cap override to base 0.80, strategy has 33+ pp of headroom for higher conviction days. No urgent action needed; let next session evidence drive whether to push deployment higher."
+  },
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 11 — BINARY-EVENT DISCIPLINE",
+      "what": "Added: event-trade entries require min confidence ≥ 0.70 AND at most ONE event-trade per session. Cited Day-10 failure (BAJAJ-AUTO + EXIDEIND -₹2,004 combined).",
+      "why": "Two losing event-trade entries today, both at sub-0.70 conviction, both into the same May 6 calendar. Existing rule allowed event-trades but had no conviction floor or per-session cap.",
+      "expected_impact": "Suppresses sub-0.70 binary-event entries (would have blocked BAJAJ-AUTO at conf 0.62), prevents stacking event-trades on the same calendar (would have blocked the second of two). Does not affect non-event swing entries."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Trailing SL Mandate (c) TRAIL-GAP DISCIPLINE",
+      "what": "Tightened required trail-gap from 0.5% → 1.0% below LTP for longs (1.0% above for shorts). Added Day-10 failure modes (BANDHANBNK and BAJFINANCE) as examples.",
+      "why": "Two forced exits today on 'SL above CMP' pattern — strategy trailed SL into <0.5% gap from CMP, then exited when normal noise pushed CMP onto SL. Win outcomes obscured the design failure.",
+      "expected_impact": "Stops trailed SLs from sitting in the intraday noise band. Positions get room to run to real targets. Same-name same-day re-entries (today: BANDHANBNK round-trip) should disappear since the upstream cause is removed."
+    },
+    {
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides",
+      "what": "Removed max_sector_pct override (reverts to base 0.35 from 0.28). Removed max_deployed_pct override (reverts to base 0.80 from 0.75). Loosened min_confidence override 0.60 → 0.55. Kept max_position_pct 0.15, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.045.",
+      "why": "All three reverted/loosened overrides were non-binding throughout the session. Original justifications (early-week cluster-stack incidents, MAHABANK SL blow-up) have not recurred. Reverting reduces system_prompt-vs-guardrail drift and gives more headroom. Kept SL-width and size overrides because today's event-trade losses validate keeping per-name risk tight.",
+      "expected_impact": "Hot-effect immediate. Strategy gets sector-cap headroom, deployment headroom, and one more notch of low-conviction signal admission. Should raise activity slightly without raising per-trade risk (size/SL caps unchanged)."
+    }
+  ],
+  "recommendations": [
+    "Re-evaluate the same-name re-entry rule (Rule 14): in cases where the prior exit was a mechanical trail-gap exit (not a thesis exit), the cooldown is questionable. Today's BANDHANBNK round-trip was technically a violation but produced acceptable outcome. Consider clarifying that trail-gap-induced exits don't trigger the cooldown, OR (better) prevent the trail-gap exit upstream — which today's edits address.",
+    "Investigate engine-side noise blocks: 4 duplicate close attempts after position-already-exited and 4 zero-confidence routing blocks suggest the strategy layer is re-issuing close orders for positions it doesn't realize are gone, or routing NO_ACTION through the validator with default 0.0 confidence. Engine-side fix: reject 0.0-confidence NO_ACTION before guardrail; on close orders, re-read paper_holdings before submission.",
+    "Monitor the new event-trade conviction floor across the next 3-5 sessions. If it suppresses too many entries (e.g., legitimate 0.65-0.69 setups into 4-session-out events), consider lowering the floor to 0.65 with the per-session cap kept at 1.",
+    "Day-10 was a healthy active-trader day: 14 events, +0.35% return, no NO_ACTION cycles, 47% deployment. The loosened-overrides regime is producing data worth analyzing. Continue this direction — do NOT tighten overrides reflexively on the two event-trade losses; they were a discipline failure (entering at sub-0.70 conf into binary calendars), not a system-risk failure.",
+    "Consider a future change: bump max_position_pct override 0.15 → 0.18 (still below base 0.20) once the bot demonstrates one full session of conviction-scaled sizing where a 0.70+ entry is sized at 8-10%. Currently all entries are clustered at 5% regardless of conviction — the 'scale size with conviction' rule isn't biting because the position cap is too uniform."
+  ]
+}

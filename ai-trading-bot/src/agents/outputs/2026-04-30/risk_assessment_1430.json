@@ -1,0 +1,37 @@
+{
+  "timestamp": "2026-04-30 14:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 997434.89,
+    "cash": 587249.89,
+    "deployed_pct": 41.12,
+    "deployed_pct_full_fill": 45.76,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": 1945.50
+  },
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 17.64,
+    "Pharma": 8.77,
+    "Oil_Gas_Mining": 9.70,
+    "Gold_ETF": 5.02,
+    "Shipping": 4.64
+  },
+  "findings": [
+    "Snapshot byte-identical to 14:00: 8 holdings, 1 OPEN GESHIP, cash ₹587,249.89, filled deployment 41.12%, full-fill 45.76%. Zero new trades, no fills, no exits in the 14:00 → 14:30 window.",
+    "Strategy silence now 138 minutes (12:12 BAJFINANCE submit → 14:30) — the longest single quiet stretch today, validating the 14:00 entry's day-end-arc hypothesis.",
+    "GESHIP OPEN order from 11:12 has been pending 200 minutes by 14:30; n=1 stale-OPEN case is not actionable today but flagged for Day-9 premarket review.",
+    "All 6 tightening triggers from the 14:00 RE-ARM spec evaluate DORMANT: no 4th BFSI name (count holds at 3), BFSI 17.64% on full-fill (4.36 pp under 22% cap), Pharma 8.77% with 2 names (5.23 pp under 14% threshold), today's ≥3.5% SL admission count holds at 1, admit-exit-60min pattern still n=1 (CHENNPETRO 62-min marginally outside strict window), sub-1.5 R:R admission still n=1 (BAJFINANCE 1.41).",
+    "Loosen path (h) max_deployed_pct 0.65 → 0.70 fails BOTH legs: high-conf (≥0.70) admissions today = 1 (ONGC 0.72; threshold ≥2); deployment full-fill 45.76% sits 9.24 pp below 55% threshold AND cap is non-binding by 19.24 pp, so loosening unlocks zero actual admission capacity.",
+    "Loosen path (i) min_confidence 0.65 → 0.60 has its n≥15 sample precondition MET at n=15 closed trades (cumulative net -₹2,565.81, win-rate 6/15 = 40%), but is held for the Day-10 (~2026-05-04) holistic-stack-refinement review per the strategic-review venue established 04-25 09:05; tactical fire is rejected because the 09:00 max_sector_pct loosen 0.22 → 0.28 was REVOKED at 12:30 same-day on a clean BFSI re-stacking trigger, providing fresh empirical evidence that tactical loosens can backfire within hours.",
+    "Loosen path (g) max_sector_pct 0.22 → 0.28 dormant: BFSI 17.64% sits 4.64 pp ABOVE the 13% sustained-low precondition.",
+    "By the prompt's explicit 'high-confidence ≥0.70 entries being blocked' criterion, ONGC 0.72 was ADMITTED today, not blocked — top-tier signal is NOT being eaten by the 0.65 floor.",
+    "By the prompt's 'chronically under-deployed across multiple sessions' criterion, today's 45.76% IS sub-50% but is end-of-day capital preservation (9 trades 09:00-12:30 + 138 min silence to 14:30), NOT chronic over-cautiousness; deployment is signal-gated (strategy quiet), not parameter-gated (cap non-binding by 19.24 pp).",
+    "Realized P&L today +₹1,945.50 (+0.195%) — POSITIVE session; composite distress meta-trigger 0/3, supports LOW risk classification.",
+    "30 minutes remaining to 15:00 no-new-MIS deadline + MIS squareoff start; session transitioning from active-trading to capital-preservation mode; max_deployed_pct loosen leg likely to close the day unfilled regardless of intervening ticks."
+  ],
+  "actions_taken": [
+    "HOLD all 7 overrides (min_confidence 0.65, max_position_pct 0.15, max_deployed_pct 0.65, default_sl_pct 0.015, min_sl_pct 0.01, max_sl_pct 0.035, max_sector_pct 0.22). Fourth consecutive HOLD tick (after 13:00 / 13:30 / 14:00) — no firing trigger means no new tightening, no satisfied loosen precondition (Day-10 milestone is the disciplined venue for the n=15 min_confidence leg) means no loosening. Per the prompt's cost-of-override doctrine, the disciplined HOLD is the action."
+  ]
+}

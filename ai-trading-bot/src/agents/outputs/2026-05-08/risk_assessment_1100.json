@@ -1,0 +1,26 @@
+{
+  "timestamp": "2026-05-08 11:00:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 998108.07,
+    "cash": 338728.07,
+    "deployed_pct": 66.06,
+    "holdings_count": 14,
+    "positions_count": 0,
+    "daily_pnl": 1280.70
+  },
+  "findings": [
+    "Distress trigger fires 0/3 at 11:00 tick. Composite shape healthy: max position PNBHOUSING 7.89% (12.11 pp under 20% cap), largest sector cluster BFSI/NBFC 14.90% n=3 (20.10 pp under 35% cap), 8 distinct sector buckets across 14 names (vs 7 at 10:30 — POLYCAB adds Cables/Capital-Goods bucket; TITAGARH exit pares Defense+Rail to n=2 at 9.89%).",
+    "Deployment 66.06% (cost basis) trending up from 62.64% at 10:30 / 57.78% at 10:00 / 48.40% at 09:30 — fully resolved the 09:30 idle-capital observation (16.06 pp above the 50% chronic-under-deployment threshold). If BHARATFORG OPEN order (₹50,375 since 10:17:15, ~43 min stale) fills, deployment lifts to 71.10% with 8.90 pp buffer to 80% cap.",
+    "State delta vs 10:30: TWO fresh BUY admits COMPLETE (POLYCAB 5 @ ₹9,100 = ₹45,500 at 10:52:10; SRF 14 @ ₹2,785 = ₹38,990 at 10:52:30) plus a clean profit-take exit (TITAGARH CLOSE +₹94.80 / +0.31% at 10:51:54). Strategy-layer admission cadence demonstrably engaged across 5 admits + 1 OPEN since NSE open — far past 'paused' or 'dormant' state.",
+    "Daily P&L +₹1,280.70 (+0.128% of total): ADANIPORTS +₹1,185.90 (09:12:50, +2.32%) + TITAGARH +₹94.80 (10:51:54, +0.31%). Full 3% daily-loss buffer (₹29,943.24) intact and growing. Two clean profit-take fires this session re-validate base SL geometry — narrowing default_sl_pct or raising min_sl_pct would friction a twice-validated profit-lock pattern with no firing distress signal.",
+    "Position-size range 2.02%–7.89%, 13 of 14 names in the 3.78%–7.89% band (CAMS 2.02% lone sub-3% from prior session). No tiny-everything hedge-against-self anti-pattern. Sector composition: BFSI/NBFC 14.90% (n=3), Specialty Chem 13.68% (n=3 with SRF added), Defense+Rail 9.89% (n=2 post-TITAGARH), Pharma 9.31% (n=2), Gold-ETF 5.01%, FMCG 4.93%, POLYCAB 4.56%, IT-Services 3.78%. Largest cluster sits 20.10 pp under cap.",
+    "Signal acceptance: zero high-conf (≥0.70) blocks at risk-config layer cumulative through 9+ sessions; FIVE BUY admits today (PIDILITIND/LUPIN/WOCKPHARMA/POLYCAB/SRF) all cleared base floors (min_confidence 0.50, min_risk_reward 1.5) without risk-config gate. Floors empirically non-binding — no tighten signal, no over-cautious bite to relax.",
+    "BHARATFORG BUY 25 @ ₹2,015 OPEN at 10:17:15 — ~43 min stale at 11:00 tick. Strategy-layer / broker-reconciliation scope, not risk-config. Even on retroactive fill, deployment 71.10% sits 8.90 pp under 80% cap.",
+    "HFCL stale-order: ~48.7 hr OPEN since 2026-05-06 10:16:40, integrity check pattern continues (strategy-layer scope). Even on retroactive fill, deployment lift remains well within 80% cap.",
+    "Macro backdrop (Iran-US tensions / PSU bank earnings cluster SBIN/BANKBARODA/BANKINDIA) — book composition is well-shaped for the scenario already: Defense+Rail 9.89% as Iran-tension sentiment-tailwind, Gold-ETF 5.01% as risk-off bid, FMCG MARICO 4.93% as defensive, BFSI cluster is housing-finance/NBFC/registrar (sympathy-beta only, no DIRECT PSU bank earnings exposure). Pre-emptive tighten on a forecast that hasn't fired manufactures friction with no firing trigger."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty {}. No tighten, no loosen. 26th consecutive HOLD tick; all-at-base posture from 2026-05-05 16:00 EOD reset stable through ~67 hr. Loosen direction is undefined (every relax dimension at base floor by spec: min_confidence cannot drop below 0.50, max_position_pct cannot exceed 0.20, max_deployed_pct cannot exceed 0.80, daily_loss_limit_pct cannot exceed base in loose direction). Tighten direction has no firing signal: 0/3 distress fires, deployment healthy and rising, max position 7.89%, largest sector cluster 14.90%, daily P&L positive +0.128%, base SL geometry re-validated by two clean profit-takes this session, signal-acceptance surface fully open with 5 base-floor-clearing admits today and zero high-conf blocks. Any tighten now would friction a freshly engaged admission cadence."
+  ]
+}

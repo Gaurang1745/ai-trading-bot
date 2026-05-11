@@ -1,0 +1,100 @@
+{
+  "date": "2026-05-05",
+  "review_type": "daily",
+  "trades_analyzed": 6,
+  "summary": {
+    "wins": 2,
+    "losses": 1,
+    "total_pnl": 909.20,
+    "win_rate": 0.6667,
+    "avg_win": 749.50,
+    "avg_loss": 589.80,
+    "win_loss_ratio": 1.27,
+    "new_entries": 3,
+    "carry_closes": 3,
+    "total_trade_events": 6,
+    "eod_deployment_pct": 48.40,
+    "holdings_count": 9,
+    "portfolio_value": 1003326.64,
+    "session_return_pct": 0.09,
+    "cumulative_pnl_since_inception": 3326.64
+  },
+  "trade_breakdown": {
+    "closed_today": [
+      {"symbol": "GESHIP", "type": "carry_close", "sector": "Shipping", "pnl": -589.80, "fill_price": 1522.34, "confidence": 0.70, "reason": "Binary event (board meeting May 14, 7 sessions out) + -3.6% intraday tape weakness on Iran de-escalation noise; pre-empted at -1.1% on capital-preservation rule; valid Rule 11 exit"},
+      {"symbol": "PHARMABEES", "type": "carry_close", "sector": "Pharma ETF", "pnl": 510.00, "fill_price": 23.99, "confidence": 0.65, "reason": "Strategy cited 'Stored SL 23.75 ~1% below CMP — extremely tight, one downtick stops out' and chose to book +1.5% rather than risk self-stopout. The min_sl_pct 0.01 override floor was the constraint that produced this preemptive exit"},
+      {"symbol": "ANANTRAJ", "type": "carry_close", "sector": "Realty", "pnl": 989.00, "fill_price": 515.89, "confidence": 0.72, "reason": "Governance overhang (active ED PMLA raids Apr 24-25) + Q4 board meeting May 11 (binary, 6 sessions); Rule 11 + Rule 13 combined trigger; clean +2% exit"}
+    ],
+    "new_entries_open": [
+      {"symbol": "BHEL", "qty": 130, "entry": 380, "sl": 372, "target": 410, "sl_pct": -2.11, "target_pct": 7.89, "rr": 3.74, "confidence": 0.68, "sector": "Capital Goods", "note": "Q4 PAT +156% YoY, breaking 18-year high on volume. Clean SL geometry."},
+      {"symbol": "NAVINFLUOR", "qty": 7, "entry": 6900, "sl": 6900, "target": 7300, "sl_pct": 0.0, "target_pct": 5.80, "rr": "undefined", "confidence": 0.70, "sector": "Specialty Chem", "note": "DATA ERROR — submitted stop_loss EQUAL to entry price 6900. Reasoning narrative claimed 'SL 6650 = -3.6%' but executed field was 6900. Position carries CNC into 05-06 with 0% downside protection. Rule 16 violation; engine did NOT reject; min_sl_pct 0.01 override did not catch SL=entry."},
+      {"symbol": "SOBHA", "qty": 35, "entry": 1478, "sl": 1420, "target": 1570, "sl_pct": -3.92, "target_pct": 6.22, "rr": 1.59, "confidence": 0.68, "sector": "Realty", "note": "Q4 PAT +124% YoY, FY26 pre-sales record Rs 8,140cr +30%. Bucking realty weakness on results."}
+    ]
+  },
+  "patterns_found": [
+    "PATTERN 1 — BURST-THEN-FREEZE ADMIT CADENCE: All three new entries landed in a single 22-second cluster at 11:13:23-11:13:45 (BHEL/NAVINFLUOR/SOBHA), then admit-side book FROZE for ~257 minutes through to EOD. Of ~12 decision cycles (every 30 min, 09:30-15:00), exactly ONE produced new admits. Activity dropped 57% vs Day-10 (21 trade events → 9). Strategy was NOT idle — it ran trail-stop MODIFY check sweeps every 30 min on existing winners (PNBHOUSING SL ratcheted 984→1029, ADANIPORTS SL ratcheted 1700→1715) and watchlist research batches b0-b4 ran throughout — but no new admits were converted from research to entries after 11:13.",
+    "PATTERN 2 — OPPORTUNITY COST: 5+ BULLISH-rated candidates declined post-cluster. Watchlist batches surfaced: M&M +0.10 confidence-modifier (b1), ADANIGREEN +0.08 (b1), LALPATHLAB +0.10 (b2), CAMS +0.13 (b2), MEESHO +0.05 (b3) — all BULLISH research_sentiment, all in sectors NOT yet held, all unadmitted. With deployment held at 48.40% (1.6 pp BELOW the 50% target the prior review's recommendations were calibrated to) and ~₹517K cash idle through 4 hours of session, declining 5+ qualifying candidates is the textbook opportunity-cost shape the active-trader experiment is built to surface.",
+    "PATTERN 3 — NAVINFLUOR SL=ENTRY DATA ERROR: NAVINFLUOR BUY 7@6900 was submitted with stop_loss=6900 and target=7300. Reasoning narrative explicitly described 'SL 6650 = -3.6% from entry' and computed risk-budget '4.8% × 3.6% = 0.17%' — but the executed `stop_loss` field landed as 6900 (= entry price). |entry - stop_loss| = 0; R:R math is undefined; position carries CNC into next session with 0% downside protection. Engine guardrails did NOT reject (guardrail_log around 11:13:29 shows is_valid=1 with empty errors). Same root cause as 04-30 BAJFINANCE R:R-mismatch (Rule 16) but a more dangerous variant — sub-floor R:R is bad, divide-by-zero is worse.",
+    "PATTERN 4 — RATIONALIZED-INACTION ON OVERRIDES: Risk monitor produced 14 ticks today (every 30 min) with 11 of them being HOLDs on the same lever stack (default_sl_pct 0.015 + min_sl_pct 0.01) — a recapitulated 'SL-discipline thesis' justification each time without new evidence. Three reverts WERE executed (max_position_pct 09:00, max_sl_pct 10:30, min_confidence 14:00 after a 7-tick HOLD). The remaining SL-trio overrides survived to EOD on a thesis that the day's data refutes: (a) NAVINFLUOR was admitted with SL=entry — the exact failure the override was supposed to prevent; (b) recent loss events the override stack defended (GESHIP -1.27%, BAJAJ-AUTO -0.55%, EXIDEIND -2.5%) were DISCRETIONARY pre-SL exits, not SL fires — strategy was doing risk management without override help; (c) PHARMABEES preemptive exit explicitly cited the 1% SL floor as too tight, evidence the override was constraining strategy into early-booking behavior.",
+    "PATTERN 5 — WIN/LOSS BY CATEGORY: All 3 close P&L came from CARRY-CLOSES (positions inherited from Day-10 or earlier), not today-admits. Wins were Realty +₹989 (governance/binary exit) and Pharma ETF +₹510 (preemptive book). Loss was Shipping -₹590 (binary event exit). Today's 3 NEW admits are 0W/0L intraday — all carrying CNC into 05-06 unresolved. Today-admit ledger remains 0W/2L from Day-10 (BAJAJ-AUTO + EXIDEIND); today's 3 admits will be the first chance to add fresh data to that ledger.",
+    "PATTERN 6 — DEPLOYMENT STAGNATION: 46.73% start → 48.40% EOD. Net change +1.67 pp despite 3 admits + 3 closes (gross gross deploy +14.92 pp from cluster, gross close -8.66 pp from carry exits). The session ended with ~₹517K cash idle and ~31.6 pp of headroom to the 80% base deployment cap. This is the second consecutive session ending at sub-50% deployment (Day-10: 46.73%; Day-11: 48.40%) — moving in the right direction but slowly. The recommendation from Day-10 review ('let next session evidence drive whether to push deployment higher') has clear evidence today: post-cluster afternoon was structurally where the headroom should have been used.",
+    "PATTERN 7 — EXIT QUALITY WAS HIGH: All 3 carry-closes were defensible. GESHIP (-₹590, binary event 7 sessions out + tape weakness) and ANANTRAJ (+₹989, governance overhang + binary 6 sessions) both correctly applied Rules 11/13. PHARMABEES preemptive book (+₹510 at +1.5% with trail-gap 1.04%) is the questionable one — strategy chose to exit on perceived self-stopout risk rather than let the trail-gap rule do its work. This is the same pattern as Day-10's BANDHANBNK/BAJFINANCE forced exits, except Day-10's were caused by trail-gap < 0.5% (real self-stopout risk) while today's was avoiding a 1.04% trail gap (above the Rule 14c floor). The 1% trail-gap floor IS doing its work; the strategy is layering paranoia on top.",
+    "PATTERN 8 — GUARDRAIL BLOCKS: Only 2 BLOCKED rows all day. (i) 10:11:51 'MODIFY for PHARMABEES but no open position/holding' — duplicate close attempt after the 10:11:43 SELL-to-zero, classic Rule 12 violation noise. (ii) 11:13:49 'BLOCKED: Confidence (0.0) below 0.52 threshold' with default-applied SL/target — malformed payload sentinel (NO_ACTION proposal routed through validator with default 0.0 conf). Zero REAL strategy proposals were declined by the override stack today. The min_confidence override was empirically non-binding (correctly reverted to base 0.50 at 14:00); the SL-width overrides were ALSO non-binding except for the case where they actively HARMED outcomes (PHARMABEES preemptive exit, NAVINFLUOR SL=entry slipping through)."
+  ],
+  "guardrail_effectiveness": {
+    "real_strategy_blocks": 0,
+    "noise_blocks_modify_after_exit": 1,
+    "noise_blocks_zero_confidence": 1,
+    "override_count_start": 4,
+    "override_count_eod_pre_review": 2,
+    "override_count_post_review": 0,
+    "reverts_executed_today": 3,
+    "comment": "Override stack is fully reverted to base after this review. The 14-tick HOLD pattern through afternoon was rationalized inaction — the SL-discipline thesis was empirically refuted by NAVINFLUOR SL=entry (which the override didn't catch) and PHARMABEES preemptive exit (where the 1% min_sl_pct floor caused the unwanted behavior). All 3 'recent losses' the override defended were discretionary pre-SL exits, not SL fires — strategy was doing risk work the override gets credit for."
+  },
+  "deployment_assessment": {
+    "start_pct": 46.73,
+    "eod_pct": 48.40,
+    "session_change_pp": 1.67,
+    "average_session_pct_estimate": 42.0,
+    "comment": "Sub-50% for the 2nd consecutive session. Day-10 had high activity (21 events) but flat deployment; Day-11 had low activity (9 events) and barely moved deployment. The bot is comfortable at ~47% — that is the inferred 'comfort zone' of strategy_agent. Empty-overrides + the new TRADING PHILOSOPHY post-cluster bullet should push deployment higher when watchlist research surfaces qualifying candidates in the afternoon. Target for Day-12: deployment >55% by EOD if afternoon batches surface +0.05+ confidence-modifier candidates."
+  },
+  "activity_assessment": {
+    "decision_cycles_estimated": 12,
+    "cycles_with_new_admits": 1,
+    "cycles_with_only_holds_or_modifies": 11,
+    "admit_rate": 0.083,
+    "vs_day10_admit_rate": 0.46,
+    "comment": "Day-11 admit rate (1/12 = 8%) is 1/6 of Day-10's (~46%). The bot collapsed all admits into a single cluster. Watchlist research continued (b0-b4 batches with sentiment modifiers from -0.08 to +0.15) but nothing converted post-11:13. This is the burst-then-freeze failure mode the prompt change addresses."
+  },
+  "changes_made": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "section": "overrides block",
+      "what": "Emptied the overrides block entirely. Reverted default_sl_pct 0.015 → base 0.02 (removed) and min_sl_pct 0.01 → base 0.005 (removed). Override count 2 → 0. Logged as a strategy_review changelog entry on top of the 14 risk_monitor entries from today.",
+      "why": "The 'SL-discipline' thesis defending these two overrides through 14 risk-monitor HOLD ticks today is empirically refuted by Day-11 evidence. (a) NAVINFLUOR was admitted at 11:13:31 with stop_loss=6900=entry — a 0% SL, well below the 1% min_sl_pct floor — and the engine ALLOWED it (guardrail is_valid=1, no warning). The override did NOT catch the worst SL submission of the session, undermining the claim that it's 'actively-binding for SL discipline.' (b) Recent 'losses' the override stack was supposedly protecting (GESHIP -1.27% / BAJAJ-AUTO -0.55% / EXIDEIND -2.5%) were DISCRETIONARY pre-SL exits driven by binary-event / governance / R:R reasoning — not SL fires. The strategy was doing risk management; the override gets credit for an outcome it did not produce. (c) PHARMABEES exit at 10:11:43 explicitly cited 'Stored SL 23.75 ~1% below CMP 24.00 — extremely tight, one normal downtick stops out' — direct evidence that the 1% min_sl_pct floor was driving preemptive exits at +1.5% rather than letting the trail-gap rule do its work. (d) The 14-tick HOLD pattern recapitulated the same justification without new evidence — exactly the rationalized-inaction shape the prompt warns against.",
+      "expected_impact": "Hot-effect immediate (GuardrailEngine re-reads on mtime change). Strategy regains the ability to set sub-1% SLs on stable-name plays where appropriate. Default SL pads back to base 2% (from 1.5%), giving more room on lower-volatility names. Removes the system_prompt-vs-guardrail drift on SL placeholders. Per-trade risk discipline now sits entirely in: (i) the new Rule 16 SL-direction check, (ii) Rule 5 risk-budget cap (0.5% per name), (iii) strategy's own conviction-scaled sizing. If a future loss is genuinely a 'too-tight base SL' problem, we'll have evidence to re-tighten. Until then, holding non-binding (or harmful) overrides has measurable opportunity cost."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 16 — R:R-EXECUTION CONSISTENCY (added SL-DIRECTION CHECK clause)",
+      "what": "Added explicit clause requiring stop_loss strictly different from entry AND on the correct side of the trade direction (BUY: SL < price; short SELL: SL > price). Cited NAVINFLUOR as the prior failure mode: stop_loss=6900=entry, target=7300, reasoning claimed SL 6650 but executed field was 6900. R:R math is undefined (divide by zero), engine accepted, position carries with 0% downside protection.",
+      "why": "Today's NAVINFLUOR submission proved the existing Rule 16 R:R-math check is insufficient: |entry - stop_loss| = 0 produces an undefined value, not a clean rejection. The reasoning self-described a 3.6% SL but the executed `stop_loss` field landed at entry. Same root cause as the 04-30 BAJFINANCE R:R-mismatch failure mode but a strictly worse variant (sub-floor R:R is bad; divide-by-zero is worse). The strategy must explicitly verify the SL number is on the correct side of entry before submitting, not rely on the engine to catch SL=entry.",
+      "expected_impact": "Forward-looking — applies on next bot restart when system_prompt is rebuilt. Reduces probability of SL=entry submissions by adding explicit final-step audit on the SL field. Does NOT replace engine-side hardening (which is a separate recommendation) — the engine should still reject SL=entry, but the prompt now acknowledges this as a known failure mode rather than relying on the validator alone."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "TRADING PHILOSOPHY (added post-cluster activity bullet)",
+      "what": "Added new bullet: 'A morning admit cluster does NOT \"satisfy\" the session.' Explicit instruction that watchlist research running through the afternoon is meant to feed new admits when fresh BULLISH-rated candidates with +0.05+ confidence modifiers surface — regardless of whether 2-3 names were already added in the morning. Cited Day-11 as the failure mode: 11:13 cluster of 3 names → 257-min admit freeze → 5+ BULLISH candidates declined (M&M +0.10, ADANIGREEN +0.08, LALPATHLAB +0.10, CAMS +0.13, MEESHO +0.05) → deployment held at 48.40% with ~₹517K idle.",
+      "why": "Today's admit cadence collapsed into a 22-second window then froze for the rest of the session. This is not the 'cumulative tightening made the bot over-cautious' shape — overrides were already being reverted in the same hours — it's an ANCHORING shape. The morning admit decision was treated as 'the day's view' and afternoon research was used to confirm rather than to add. The prior philosophy bullet ('a tick that only emits HOLDs and never a BUY when the watchlist contains qualifying setups is also incomplete') addresses the per-tick version but not the session-level version; today's evidence shows the session-level version is the live failure mode.",
+      "expected_impact": "Forward-looking on next bot restart. Should bias the afternoon decision cycles toward converting fresh BULLISH-rated candidates into admits when deployment is below the soft target. Combined with the empty-overrides change, the strategy now has both the prose nudge and the regulatory headroom to push deployment higher when warranted. Watch for: Day-12 admit count (target: ≥3 distinct cycles produce admits, not 1 cluster + freeze) and EOD deployment (target: >55%)."
+    }
+  ],
+  "recommendations": [
+    "ENGINE-SIDE HARDENING: The guardrail engine should reject any BUY where stop_loss == price, or where stop_loss > price for BUY (short SELL inverse). Today's NAVINFLUOR SL=entry slipped through with is_valid=1 and no warning — even with min_sl_pct 0.01 in effect at the time. The min_sl_pct check apparently doesn't fire when SL field is structurally invalid (rather than just too tight). Adding an explicit 'stop_loss must differ from price by at least min_sl_pct in the trade direction' check would catch SL=entry plus SL on the wrong side. This is a code change to src/trading/guardrails.py — outside the scope of strategy_review file edits but worth flagging for next code-side review.",
+    "MONITOR DAY-12 ADMIT CADENCE: With overrides emptied and the post-cluster prose bullet in place, Day-12 is the test session. Watch for: (a) admit count distributed across ≥3 decision cycles (not 1 morning cluster + freeze); (b) EOD deployment >55%; (c) NAVINFLUOR resolution — if the SL=entry position gaps down overnight, the loss could be material; check pre-market for NAVINFLUOR action and consider whether to apply a corrective MODIFY before the open.",
+    "RISK MONITOR LOGIC REVIEW: 14 ticks today with 11 HOLDs and the same recapitulated SL-discipline justification suggests the risk_monitor's prompt could benefit from a 'rationalized inaction' detector — when the same lever has been HELD for N consecutive ticks with the same justification AND no new evidence has arrived, automatically flip to a 'consider revert' bias. Today the risk-monitor itself observed the freeze pattern multiple times but kept the SL-trio in place because the SL-discipline thesis was 'unrefuted' — when in fact the day's data was actively refuting it. Consider adding to risk_monitor's prompt: 'A thesis that has not generated a single bind in 8+ trading days is empirically dead; reverting to base is the correct call regardless of how compelling the original rationale was.'",
+    "TRAIL-GAP RULE WORKING: Day-10's 0.5%→1.0% tightening is doing its job. Today's PHARMABEES had a 1.04% trail-gap (above the floor) and the strategy correctly held the SL — but then preemptively exited anyway citing 'tight'. That is a strategy-discipline issue, not a rule-tuning issue. Do NOT widen the trail-gap floor to 1.5% reflexively. Watch over the next 2-3 sessions whether preemptive 'tight' exits recur with overrides empty (default_sl_pct now 2%, base trail-gap 1%); if they do, the strategy may be inferring a tighter implicit floor than the rule states.",
+    "WATCHLIST RESEARCH IS NOT THE BOTTLENECK: Batches b0-b4 produced rich, sentiment-tagged candidates with confidence modifiers spanning -0.08 to +0.15. The bottleneck is conversion from research to admit, not from market scan to research. This argues against widening the research pipeline (max_watchlist_size already at 25) and FOR addressing the post-cluster decision logic — which today's prompt change targets directly.",
+    "BUMP MAX_POSITION_PCT AS NEXT MOVE (PROVISIONAL): Day-10 review recommended bumping max_position_pct override 0.15→0.18 once the bot demonstrated conviction-scaled sizing. With the override now removed entirely (today's 09:00 risk-monitor revert), max_position_pct is back at base 0.20. All 3 of today's new admits sized at ~5% — strategy continues to ignore conviction-scaling at the position-size lever despite available headroom. Do not change anything in config — this is a strategy behavior issue, not a parameter issue. Consider adding a future TRADING PHILOSOPHY clause: 'Conviction 0.70+ entries should be sized 7-10%, not the same 5% as 0.60-0.65 entries.' Hold for a 2-session evidence window first."
+  ]
+}

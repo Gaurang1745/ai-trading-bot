@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-04-27 10:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 1006366.68,
+    "total_value_cost_basis": 1000559.58,
+    "cash": 508227.18,
+    "deployed_pct": 0.4921,
+    "deployed_pct_on_tatapower_fill": 0.5407,
+    "holdings_count": 7,
+    "open_orders_count": 1,
+    "positions_count": 0,
+    "daily_pnl_realized": -865.92,
+    "daily_pnl_unrealized_intraday": 5807.10,
+    "daily_pnl_book_mtm_vs_apr24_eod": 2754.73,
+    "daily_pnl_pct_book_mtm": 0.0027
+  },
+  "sector_breakdown_pct_of_capital_cost_basis": {
+    "BFSI": 0.1765,
+    "FMCG": 0.1675,
+    "Power_PSU": 0.0506,
+    "Power_PSU_on_tatapower_fill": 0.0993,
+    "Gold_ETF": 0.0500,
+    "Pharma": 0.0477
+  },
+  "single_name_breakdown_pct_of_capital_cost_basis": {
+    "NESTLEIND": 0.1200,
+    "MAHABANK": 0.0978,
+    "PNBHOUSING": 0.0787,
+    "NTPC": 0.0506,
+    "GOLDBEES": 0.0500,
+    "TATAPOWER_open_pending_fill": 0.0487,
+    "GRANULES": 0.0477,
+    "HINDUNILVR": 0.0474
+  },
+  "active_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.70,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.30,
+    "daily_loss_limit_pct_base": 0.03
+  },
+  "tick_over_tick_delta_vs_1000": {
+    "holdings_count": "7 → 7 (unchanged)",
+    "cash": "508,227.18 → 508,227.18 (unchanged; TATAPOWER OPEN not yet filled)",
+    "deployed_pct_filled": "0.4921 → 0.4921 (unchanged on filled book)",
+    "deployed_pct_on_full_fill": "0.4921 → 0.5407 (+4.87 pp on TATAPOWER fill)",
+    "trades_today": "2 → 3 (added TATAPOWER BUY 110 @ ₹443 OPEN at 10:13:02)",
+    "daily_pnl_realized": "-865.92 → -865.92 (no new realized P&L)",
+    "MAHABANK_pnl_pct": "n/a (no 10:00 mark in snapshot) → -2.48% (LTP ₹79.48; well above the Trigger G -6% line)",
+    "book_mtm_intraday": "cost-basis at 10:00 → +₹5,807 unrealized at 10:13:16 (book is GREEN today)",
+    "PNBHOUSING_strength": "+6.55% / +₹5,156 (largest single-name gainer; offsets the MAHABANK -2.48% and HINDUNILVR -1.05% drags)",
+    "interpretation": "FIRST POST-AUBANK RE-DEPLOYMENT INITIATED. Strategy submitted a single new BUY (TATAPOWER 110 @ ₹443 = ₹48,730 = 4.87% of capital) at 10:13:02 — 41 minutes after the AUBANK exit. The choice is structurally clean: (i) Power sector, NOT a BFSI re-stack (Trigger C does not fire), (ii) sized at 4.87% — well under the 0.15 per-name cap, (iii) projected deployment 54.07% on fill — still 15.93 pp under the 0.70 cap, (iv) no duplicate-order or near-duplicate pattern (TATAPOWER is a fresh name, not a re-add of an exited name). This is the disciplined SELL→BUY recycle the override stack was designed to enable, not punish. Power cluster on full fill = NTPC (5.06%) + TATAPOWER (4.87%) = 9.93% — comfortably below the 30% sector cap and below the 16% level that would echo the prior 3-name Power cluster from Day-1."
+  },
+  "findings": [
+    "TATAPOWER OPEN BUY (110 @ ₹443 = 4.87% of capital): single, modestly-sized Power admission consuming roughly half the cap-implied per-name slot (4.87% vs 15% cap) and one-fifth of the cap-implied Power-sector slot (4.87% vs 30% sector cap inclusive of NTPC). No quality concerns flagged at the override layer — projected post-fill deployment 54.07% has 15.93 pp of headroom to the 0.70 cap, and Power-sector exposure post-fill 9.93% has 20.07 pp of headroom to the 0.30 cap. Trigger F (complacency watch from 10:00) DOES NOT fire: spec required 3+ new BUYs in a 60-min window taking deployment back above 65%; observed pattern is 1 BUY in 17 min and projected deployment is 54.07%.",
+    "BFSI sector concentration: 17.65% (₹176,520 — MAHABANK 9.78% + PNBHOUSING 7.87%). 12.35 pp BUFFER below the 0.30 max_sector_pct override. Trigger C (BFSI re-stacking watch from 10:00) DOES NOT fire: TATAPOWER is Power, not BFSI; no new BFSI BUY has been attempted since the AUBANK exit. The cap continues to function as a forward back-pressure ring against BFSI re-stacking, currently dormant.",
+    "MAHABANK at LTP ₹79.48 / pnl_pct -2.48% (snapshot 35 at 10:13:16). Trigger G (MAHABANK extension watch from 10:00) DOES NOT fire: MAHABANK is 3.52 pp ABOVE the -6.00% fire line (₹76.61) and has materially recovered from its prior-session pain regime (-5.31% on Apr-23, -6.42% on Apr-24, now -2.48%). The single-name MTM drag has compressed from -₹6,276 (Apr-24) to -₹2,424 (today). The largest single-name LOSER today is now NESTLEIND no it's actually MAHABANK at -₹2,424 — but PNBHOUSING (+₹5,156), NESTLEIND (+₹1,289), GRANULES (+₹1,845), and NTPC (+₹531) more than offset, leaving the book at +₹5,807 unrealized.",
+    "Largest single-name (filled): NESTLEIND 12.00% (₹120,099.90) — 3.00 pp BUFFER below the 0.15 per-name cap. On TATAPOWER fill, the hierarchy is NESTLEIND 12.00% → MAHABANK 9.78% → PNBHOUSING 7.87% → NTPC 5.06% → GOLDBEES 5.00% → TATAPOWER 4.87% → GRANULES 4.77% → HINDUNILVR 4.74%. Concentration index (sum-of-squares of weights) is structurally improved post-AUBANK and remains so on the TATAPOWER add — no name is dominating top-of-book risk.",
+    "Deployment: 49.21% (filled book) / 54.07% (on TATAPOWER fill). 20.79 pp / 15.93 pp BUFFER below the 0.70 max_deployed_pct cap. The cap is non-binding by a comfortable margin in either scenario. Admission surface remains open for additional quality entries up to ~₹207,724 / ~₹158,994 of incremental headroom.",
+    "Cash buffer: ₹508,227.18 (50.50% of book by LTP; 50.79% by cost-basis). On TATAPOWER fill, cash drops to ₹459,497 (45.66% by LTP). Either way this remains the largest cash reserve since Day-1 inception and is well above any historical session reading. Sufficient absorbance for ~5% of book MTM drawdown without forced liquidation, and ample opportunistic-add capacity.",
+    "Daily P&L: realized -₹865.92 (AUBANK exit only); intraday MTM unrealized +₹5,807; book vs Apr-24 EOD +₹2,754.73 (+0.27%). The book is GREEN today. Buffer to base 3% loss gate from realized loss: ₹29,150 (97% of full budget). Buffer to internal -1% findings trigger (Trigger A from 10:00): ₹9,140. All P&L-based loss gates remain dormant by a wide margin.",
+    "FMCG concentration: 16.75% (NESTLEIND 12.00% + HINDUNILVR 4.74%). Unchanged tick-over-tick. HUL Q4 FY26 results scheduled in week of Apr-28 remain a secondary binary event in book within 5 sessions, but bounded at HINDUNILVR's 4.74% — far smaller than the AUBANK 18.44% binary-event lot that was successfully neutralized this morning. No pre-emptive action needed; rule-11 (binary-event discipline) will continue to govern.",
+    "Strategy SELL-then-BUY recycle pattern is now observable in this session: 09:31:56 AUBANK SELL → 10:13:02 TATAPOWER BUY. The 41-minute gap between the trim and the re-deployment is reasonable (not instant churn, not paralysis). The new entry is in a different sector (Power vs BFSI), respects per-name discipline (4.87% vs 12% prior largest), and consumes only a fraction of the freed capital (₹48,730 of the ₹183,767 inflow). This is a structurally healthy re-deployment cadence — reward, do not penalize.",
+    "Composite distress meta-trigger (Trigger D from 10:00): all three legs DORMANT. (i) book P&L at +0.27% (well above -1.5% threshold), (ii) no single-name at ≤-7% (worst is MAHABANK -2.48%), (iii) strategy not silent (most recent action was TATAPOWER BUY at 10:13:02, ~17 min ago at assessment time). Risk-level is firmly LOW; no path to elevation visible on current trajectory."
+  ],
+  "actions_taken": [
+    "NO numeric override changes this tick. Disciplined hold consistent with the established surgical-fire pattern. The book has just executed a textbook SELL→BUY recycle (AUBANK exit → TATAPOWER add), and tightening overrides now would punish the strategy layer for the very behavior that the prior 5 sessions of override-stacking were designed to enable. None of the 7 pre-armed triggers from 10:00 (A, B-retired, C, D, E, F, G) has fired — every one remains dormant.",
+    "All seven existing overrides held: min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.70, default_sl_pct=0.015, min_sl_pct=0.01, max_sl_pct=0.04, max_sector_pct=0.30. Each remains a forward back-pressure ring against future re-stacking — non-binding on current exposure but binding on hypothetical re-admissions. Specifically: (i) the 0.30 sector cap continues to gate any incremental BFSI BUY ~₹123K beyond current exposure, (ii) the 0.15 per-name cap continues to gate any single name at ~₹150K, (iii) the 0.70 deployment cap continues to gate cumulative deployment at ~₹158K of headroom on TATAPOWER fill, (iv) the SL band [1.0%, 4.0%] continues to gate per-name new-entry risk at ≤0.60% of book.",
+    "Risk level HELD at LOW (unchanged from 10:00). Structural drivers remain: (i) AUBANK binary exposure resolved (zero), (ii) BFSI 17.65% < 30% cap (12.35 pp buffer), (iii) no per-name breach (largest 12.00% NESTLEIND, 3.00 pp buffer to cap), (iv) deployment 49.21% / 54.07% on fill < 70% cap (15.93 pp buffer), (v) book P&L positive (+₹2,754.73 / +0.27% MTM), (vi) cash buffer 50.50% (highest since inception). No leg of the LOW→MEDIUM→HIGH→CRITICAL ladder has any firing path on current trajectory."
+  ],
+  "pre_armed_triggers_intraday": [
+    "TRIGGER A (PnL-based, primary, CARRIED FROM 10:00): If book daily P&L ≤ -1.00% (₹-10,006) at any tick → FIRE daily_loss_limit_pct 0.03 → 0.025. Currently at +0.27% MTM. Buffer ₹12,761 to fire (book MTM has IMPROVED, widening the buffer).",
+    "TRIGGER B (RETIRED for AUBANK, CARRIED FROM 10:00): The AUBANK adverse post-event trigger is no longer applicable — position is closed. Pre-arm rolls forward as a generic 'next BFSI binary-event trigger' if a new BFSI position is admitted (none currently in flight; TATAPOWER is Power).",
+    "TRIGGER C (BFSI re-stacking, CARRIED FROM 10:00): If strategy admits a NEW BFSI BUY within 60 min of next assessment that pushes BFSI above 25% via mark + entry → FIRE max_sector_pct 0.30 → 0.25. Currently dormant (TATAPOWER is Power; BFSI flat at 17.65%).",
+    "TRIGGER D (composite HIGH→CRITICAL meta, CARRIED FROM 10:00): Generic distress meta requires (i) book P&L ≤ -1.5% AND (ii) any single-name ≤ -7% AND (iii) strategy silent ≥60 min after first sub-threshold breach → ELEVATE risk_level CRITICAL + FIRE daily_loss_limit_pct 0.03 → 0.020 + max_position_pct 0.15 → 0.12. All three legs DORMANT.",
+    "TRIGGER E (sector-cap validation, CARRIED FROM 10:00): If strategy attempts a BFSI BUY today, observe whether guardrail rejects above 30% (or whether projected BFSI on fill stays below). Still pending observation — no BFSI BUY attempt yet.",
+    "TRIGGER F (complacency watch, CARRIED FROM 10:00, NEAR-FIRING-CONDITION-RECEDED): If strategy admits 3+ new BUYs in a 60-min window taking deployment back above 65% → flag in next risk_assessment as a re-stacking pattern. Current count: 1 BUY (TATAPOWER) in 17 minutes; projected deployment 54.07% on fill (10.93 pp under the 65% threshold). Ratchet 1 of 3 — material headroom remains.",
+    "TRIGGER G (MAHABANK extension watch, CARRIED FROM 10:00): If MAHABANK marks below ₹76.61 (pnl_pct ≤ -6.00% on the 1200-share lot) → re-assess whether the 0.04 max_sl_pct ceiling is too loose for the next admission queue (potential lever: 0.04 → 0.035). Currently at ₹79.48 / -2.48%, 3.52 pp BUFFER. The earlier session pain trade has materially decompressed.",
+    "TRIGGER H (NEW, TATAPOWER-fill-pending watch): If TATAPOWER fills above ₹447 (>0.9% above order price ₹443) → flag as a slippage-on-fill that the strategy layer should observe in the next strategy_review (NOT a numeric tightening trigger; an observation feed). Order is at LIMIT ₹443, so fill at price is the base case; this trigger is for the rare GTT/SL-M edge case.",
+    "TRIGGER I (NEW, Power-cluster re-emergence watch): If a SECOND new Power name (beyond TATAPOWER + NTPC) is admitted today taking Power-sector exposure above 13% → FIRE max_sector_pct 0.30 → 0.25 (Power-cluster equivalent of Trigger C for BFSI). Day-1 demonstrated that 3-name Power clusters can build quickly (TORNTPOWER + NTPC + ADANIPOWER); 2 names today is fine, 3 should re-engage the cap. Currently 2 names projected (NTPC + TATAPOWER on fill), 1 name filled — trigger is forward-armed."
+  ],
+  "did_not_fire_with_reasons": [
+    "daily_loss_limit_pct (0.03 → 0.025): book is GREEN at +₹2,754.73 (+0.27%) MTM; the realized AUBANK loss (-₹865.92) is more than offset by unrealized gains across PNBHOUSING (+₹5,156), GRANULES (+₹1,845), NESTLEIND (+₹1,289), NTPC (+₹531). Loss-gate tightening on a green book is theatrical. Pre-armed as Trigger A.",
+    "min_confidence (0.60 → 0.65): closed-trade sample is now 3 (TORNTPOWER win 0.68, ADANIPOWER loss 0.66, AUBANK loss). At n=3 confidence still has no signal — same hold rationale as 09:00/09:30/10:00/Apr 25 weekly review.",
+    "max_position_pct (0.15 → 0.12): no name is now above the 0.15 cap (largest is NESTLEIND 12.00%). TATAPOWER projected at 4.87% on fill is well under any tightened cap. Tightening to 0.12 would still leave NESTLEIND grandfathered — no behavioral change. Pre-armed within Trigger D as a distress-regime stack.",
+    "max_deployed_pct (0.70 → 0.65): deployment at 49.21% (or 54.07% on TATAPOWER fill); the cap has 15.93 pp of buffer in the worst case. Tightening here would close admission surface that the strategy just earned via the AUBANK trim. Punishes the right behavior.",
+    "max_sector_pct (0.30 → 0.25): BFSI at 17.65%, cap has 12.35 pp of buffer. No new BFSI BUY attempted; tightening to 0.25 is theatrical given current exposure. Pre-armed as Trigger C and Trigger I (Power-cluster equivalent).",
+    "default_sl_pct (0.015 → 0.012) / max_sl_pct (0.04 → 0.035) / min_sl_pct (0.01 → 0.015): SL band already tight at [1.0%, 4.0%]; worst-case new-entry per-name risk 0.60% at max sizing. No firing trigger on SL discipline. Pre-armed within Trigger G for MAHABANK extension scenario (currently DORMANT — MAHABANK at -2.48%, 3.52 pp buffer).",
+    "Risk level NOT raised to MEDIUM/HIGH: the structural drivers that would justify elevation (binary-event exposure, grandfathered breaches, distress P&L, single-name pain, strategy silence) are all resolved or absent. Holding LOW is honest signaling for the current book."
+  ],
+  "next_check": "2026-04-27 11:00 (mid-session snapshot — observe whether TATAPOWER fills as expected at LIMIT ₹443, whether strategy attempts further re-deployment of the freed cash, MAHABANK trajectory vs the dormant -6% Trigger G line, and whether SBI Cards Q4 results have any spillover into MAHABANK/PNBHOUSING)"
+}

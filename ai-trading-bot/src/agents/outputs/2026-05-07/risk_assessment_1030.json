@@ -1,0 +1,25 @@
+{
+  "timestamp": "2026-05-07 10:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 996827.37,
+    "cash": 462827.37,
+    "deployed_pct": 53.57,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "findings": [
+    "Day-13 10:30 tick. Portfolio state byte-identical to the 10:00 snapshot — zero new fills, zero new admits, zero closes, zero SL fires in the 10:00-10:30 window. Last trade fill remains M&M CLOSE at 2026-05-06 12:53:55 (~21.6 hr of zero portfolio activity). 11th consecutive HOLD tick across Day-12 PM (12:30/13:00/13:30/14:00/14:30/15:00/15:30 EOD) + Day-13 (09:00/09:30/10:00/10:30).",
+    "Overrides block has been empty since the 2026-05-05 16:00 EOD reset (~42.5 hr stable). All risk levers at base values. There is nothing to loosen — base is the floor by spec; min_confidence cannot drop below 0.50, daily_loss_limit_pct cannot exceed 7.5%, etc.",
+    "Sector concentration LOW with strong buffers: BFSI 14.92% (PNBHOUSING 7.90% + ABCAPITAL 5.00% + CAMS 2.02%, n=3) vs 35% base cap = 20.08 pp buffer; Defense+Rail 14.96% (HAL 5.05% + GRSE 4.86% + TITAGARH 5.05%, n=3) vs 35% = 20.04 pp buffer. 7+ distinct sector buckets across 11 names (BFSI, Defense+Rail, ETF, Logistics, Specialty-Chem, FMCG, IT-Services).",
+    "Position sizing healthy: range 2.02% (CAMS) to 7.90% (PNBHOUSING); max position 12.10 pp under the 20% cap; 9 of 11 names sit in the 3.79%-7.90% band. CAMS at 2.02% is the lone sub-3% slot (1-of-11) — long-tail observation, not the all-tiny hedge-against-self anti-pattern that would justify tightening.",
+    "Deployment 53.57% (Rs 534,000 cost basis / Rs 996,827.37 total) — 26.43 pp under the 80% cap. Sits at the lower edge of healthy; chronic-under-deployment trigger pre-armed but not yet firing. Idle-capital observation is un-actionable from this config: max_deployed_pct is a CAP not a floor, and the 26.43 pp of slack is admission space the strategy is already free to use. The bind is on strategy-side admission cadence, not on risk_config.yaml.",
+    "Daily P&L 0.0 with the full 3% loss buffer available; 0 guardrail entries today flagging signal-acceptance friction. Composite distress meta-trigger 0/3: book P&L not negative, no single-name distress, no high-confidence (>=0.70) admit blocks observed. Tightening loss-gate or confidence floor here would manufacture friction with no firing trigger.",
+    "Live SL trail validations posted at 10:16 (PNBHOUSING 1035, ADANIPORTS 1730, NAVINFLUOR 6960 — slight intraday adjustments to existing profit-locking trails) — no admits triggered, no blocks raised. Strategy-side trail logic remains free under base SL geometry; raising min_sl_pct or narrowing default_sl_pct would friction this exact pattern.",
+    "Stale HFCL BUY 600@133.5 (Rs 80,100 MIS LIMIT) still OPEN in paper_orders since 2026-05-06 10:16:40 (~24 hr) — DB-write reconciliation lag, MIS auto-cancel almost certainly fired by 15:20 IST on 05-06 without DB sync. Strategy/broker-layer scope, not risk-config arbitration; both possible reconciled outcomes (53.57% or 61.61% deployed) sit comfortably under the 80% cap."
+  ],
+  "actions_taken": [
+    "HOLD — no parameter changes. Overrides block remains empty (size 0). All guardrails at base. 11th consecutive HOLD tick. Decision walk: (1) Nothing to LOOSEN — already at base since the 2026-05-05 16:00 EOD reset; base is the floor by spec, loosening below base is undefined. The 30-min window 10:00-10:30 added no binding evidence (no high-conf admits attempted, no admits blocked). (2) Nothing to TIGHTEN — composite distress 0/3 unchanged: BFSI 14.92%/35%, Defense+Rail 14.96%/35%, max position 7.90%/20%, deployment 53.57%/80%, daily P&L 0.0/3%, signal-acceptance surface fully open. Tightening any lever here would manufacture friction with no firing trigger. Changelog entry added to risk_config.yaml documenting the no-action decision."
+  ]
+}

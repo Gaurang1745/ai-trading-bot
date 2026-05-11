@@ -1,0 +1,42 @@
+{
+  "date": "2026-05-09",
+  "review_type": "weekly",
+  "window_reviewed": "2026-05-04 to 2026-05-08 (5 trading days)",
+  "changes": [
+    {
+      "timestamp": "2026-05-09T09:00:00+05:30",
+      "agent": "strategy_review_weekly",
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 20 — CONVICTION-SCALED POSITION SIZING (NEW)",
+      "change_type": "ADD",
+      "what": "Inserted new Rule 20 inside the _TEMPLATE string, immediately after Rule 19 and before the closing triple-quote. The new rule mandates conviction-tier-based sizing: 0.60-0.65 → 3-5% of portfolio, 0.66-0.69 → 5-7%, 0.70-0.74 → 7-10%, 0.75+ → 10-12%. References <<MAX_POSITION_PCT>> placeholder unchanged so the cap stays config-driven. Specifies that conviction and SL-tightness move together (deploy more at high conviction by tightening the SL, not widening it). Lists existing rules (cluster cap Rule 10, binary-event Rule 11, governance Rule 13, same-session admit limit) as REDUCERS that may push to the LOW end of a tier or to NO_ACTION but never as license to default everything to ~5%. Includes detailed prior-failure-mode block citing specific names from this week: LAURUSLABS (conf 0.72, sized 1.9%, target 7-10%), DABUR (conf 0.65, sized 1.9%, target 5-7%), HFCL (conf 0.65, sized 8.0%, target 5-7%), M&M (conf 0.70, sized 8.2% with loose -2.4% SL → -₹1,140), and LUPIN (conf 0.72, first-tranche 4.4% then averaged-down to ~5.8% → -₹2,163, the week's largest single loss). Contrasts these with HAL (conf 0.68, sized 5.0%, +₹1,953 — appropriately sized for tier) as the positive calibration example.",
+      "why": "Pattern 1 (conviction-uncalibrated sizing) flagged as unaddressed across SIX consecutive daily reviews (Days 10, 11, 12, 13, 14, plus this weekly aggregate). Across 30 BUYs in the past 2-week stretch, conviction grades 0.62-0.72 produced near-identical sizing (mean 4.7%, range 1.4-8.2%) — the conviction grade was decorative. With weekly expectancy at ~+₹32/trade (50% win rate × 1.06 W/L ratio), the highest-leverage edge improvement is letting higher-conviction reads compound their size advantage. Override-side fixes considered and rejected: there is no risk_config.yaml lever that can encode a per-conviction-tier sizing TARGET (only floors and caps), so the calibration must live in the prompt where the decision is generated.",
+      "expected_impact": "Forward-looking on next bot restart (system_prompt.py is built at boot from config.yaml + _TEMPLATE). Days 20-25 watch metrics: (i) correlation r between admit confidence and admit position-size % across 20+ admits — target ≥ +0.5 (currently near zero). (ii) Conf 0.70+ admits sized into 7-10% band (count: most). (iii) Conf 0.62-0.65 admits staying in 3-5% band (no creep upward). (iv) Any admit OUTSIDE its tier must cite explicit reason in `reasoning`. (v) Average win expectancy per name should rise as larger sizing on higher-conviction reads compounds wins; downside expansion is capped by the per-position risk-budget rule (0.5% portfolio per name). Net effect: wider distribution of P&L outcomes per trade with a positive shift in mean.",
+      "verification": "Verified the placeholder <<MAX_POSITION_PCT>> is preserved as a placeholder in the new rule body (not hardcoded). The build_system_prompt() function will substitute the value from config.yaml at boot time. Edited file line count: 1019 (up from 924). No edits to placeholders or to build_system_prompt() function."
+    }
+  ],
+  "non_changes": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "decision": "NO CHANGE — overrides block remains empty {}",
+      "rationale": "Override stack {} since 2026-05-05 16:00 EOD. Risk monitor in 35-tick HOLD as of Day-14 EOD. Position sizing 1.4-8.2% (cap 20%), deployment peak 65.2% (cap 80%), no min-confidence binds, no risk-budget binds — engine permitted everything that ran. Tightening would suppress legitimate Rule 18 admit activity; loosening is impossible (base config is the floor). The week's failures are LLM-decision-quality issues, not engine-permission issues."
+    },
+    {
+      "file": "config/config.yaml",
+      "decision": "NO CHANGE — base parameters unchanged",
+      "rationale": "min_confidence (0.50), min_risk_reward (1.5), max_position_pct (0.20), max_sector_pct (0.35), max_deployed_pct (0.80), min_cash_buffer_pct (0.20), default_sl_pct (0.02), max_sl_pct (0.05), daily_loss_limit_pct (0.075) all worked as intended. None bound this week's decisions. Hardcoding tier-based sizing in config.yaml would not help — there is no scalar parameter that captures 'conviction tier → size band'; the rule has to live in the prompt where the decision is generated."
+    }
+  ],
+  "cross_team_flags": [
+    {
+      "team": "orchestrator",
+      "issue": "Holdings-snapshot freshness lag",
+      "evidence": "23 of 41 weekly guardrail blocks were state-sync artifacts (14 'MODIFY for X but no open position/holding' + 9 'Cannot short-sell in CNC. Holdings: 0'). Pattern persisted across the week, not just one day. Suggested fix: pass the most-recent-cycle exit set into the next prompt explicitly so the LLM doesn't deduce holdings freshness from a possibly-lagging snapshot."
+    },
+    {
+      "team": "data feeds",
+      "issue": "Dhan ticker outage on 2026-05-07",
+      "evidence": "All 3 Day-18 SELL attempts REJECTED at paper_broker.py:64-69 with 'Cannot get LTP'. Strategy proposals themselves were defensible. Suggested fix: failover to cached LTP and/or surface 'data feed degraded' state into the prompt so the LLM knows."
+    }
+  ]
+}

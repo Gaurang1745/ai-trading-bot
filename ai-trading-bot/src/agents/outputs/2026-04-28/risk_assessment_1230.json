@@ -1,0 +1,94 @@
+{
+  "timestamp": "2026-04-28 12:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 995592.64,
+    "cash": 549175.24,
+    "deployed_pct": 0.4484,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "daily_pnl": -5964.24
+  },
+  "portfolio_detail": {
+    "snapshot_basis": "live DB read at 12:30 tick (paper_holdings + paper_cash + trades WHERE DATE(timestamp)=DATE('now') AND mode='PAPER')",
+    "holdings_value_at_cost": 446417.40,
+    "realized_pnl_today": -5964.24,
+    "deployed_pct_at_cost": 0.4484,
+    "holdings": [
+      {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+      {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.00, "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+      {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.00, "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+      {"symbol": "NTPC", "qty": 125, "avg_price": 404.50, "value": 50562.50, "pct_of_capital": 0.0508, "sector": "Power"},
+      {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.10, "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold-ETF"},
+      {"symbol": "POWERGRID", "qty": 150, "avg_price": 320.50, "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+      {"symbol": "COALINDIA", "qty": 100, "avg_price": 469.00, "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining/Coal"}
+    ],
+    "open_orders_value": 130105.00,
+    "open_orders_count": 3,
+    "open_orders": [
+      {"symbol": "TATAPOWER", "qty": 110, "price": 443.00, "value": 48730.00, "sector": "Power", "submitted": "2026-04-27 10:13:02", "age_at_tick": "26h17m", "day_stale": true},
+      {"symbol": "HINDZINC", "qty": 75, "price": 612.00, "value": 45900.00, "sector": "Metals", "submitted": "2026-04-27 10:42:57", "age_at_tick": "25h47m", "day_stale": true},
+      {"symbol": "PHARMABEES", "qty": 1500, "price": 23.65, "value": 35475.00, "sector": "Pharma-ETF", "submitted": "2026-04-27 12:14:55", "age_at_tick": "24h15m", "day_stale": true}
+    ],
+    "projected_deployed_pct_on_full_fill": 0.5791,
+    "sector_exposure_at_cost": {
+      "FMCG": {"pct": 0.1206, "names": ["NESTLEIND"], "buffer_to_cap_pp": 0.0994},
+      "Power": {"pct": 0.0991, "names": ["NTPC", "POWERGRID"], "buffer_to_cap_pp": 0.1209},
+      "BFSI": {"pct": 0.0791, "names": ["PNBHOUSING"], "buffer_to_cap_pp": 0.1409},
+      "Pharma": {"pct": 0.0522, "names": ["SUNPHARMA"], "buffer_to_cap_pp": 0.1678},
+      "Gold-ETF": {"pct": 0.0503, "names": ["GOLDBEES"], "buffer_to_cap_pp": 0.1697},
+      "Mining/Coal": {"pct": 0.0471, "names": ["COALINDIA"], "buffer_to_cap_pp": 0.1729}
+    },
+    "sector_exposure_on_full_fill": {
+      "Power": {"pct": 0.1481, "names": ["NTPC", "POWERGRID", "TATAPOWER"], "buffer_to_cap_pp": 0.0719},
+      "FMCG": {"pct": 0.1206, "names": ["NESTLEIND"], "buffer_to_cap_pp": 0.0994},
+      "Pharma": {"pct": 0.0879, "names": ["SUNPHARMA", "PHARMABEES"], "buffer_to_cap_pp": 0.1321},
+      "BFSI": {"pct": 0.0791, "names": ["PNBHOUSING"], "buffer_to_cap_pp": 0.1409},
+      "Gold-ETF": {"pct": 0.0503, "names": ["GOLDBEES"], "buffer_to_cap_pp": 0.1697},
+      "Mining/Coal": {"pct": 0.0471, "names": ["COALINDIA"], "buffer_to_cap_pp": 0.1729},
+      "Metals": {"pct": 0.0461, "names": ["HINDZINC"], "buffer_to_cap_pp": 0.1739}
+    },
+    "thematic_psu_energy_at_cost": {"pct": 0.1462, "names": ["NTPC", "POWERGRID", "COALINDIA"], "rationale": "Coal India supplies coal to NTPC; PSU thermal value chain — high operational correlation despite Mining vs Power sector classification"},
+    "thematic_psu_energy_on_full_fill": {"pct": 0.1952, "names": ["NTPC", "POWERGRID", "TATAPOWER", "COALINDIA"], "buffer_to_22pct_pp": 0.0248, "rationale": "If TATAPOWER fills, full PSU/utility-energy thematic reaches 19.52% of capital — 2.48 pp buffer to the 22% sector cap (and TATAPOWER is private not PSU, so this is a thematic-correlation read, not a strict-sector read)"},
+    "largest_position": {"symbol": "NESTLEIND", "pct_at_cost": 0.1206, "buffer_to_cap_pp": 0.0294},
+    "trades_today": [
+      {"time": "11:16:10", "symbol": "HINDUNILVR", "action": "CLOSE/SELL", "qty": 20, "fill_price": 2317.04, "pnl": -1099.20, "sector": "FMCG"},
+      {"time": "11:44:10", "symbol": "TORNTPOWER", "action": "CLOSE/SELL", "qty": 28, "fill_price": 1761.82, "pnl": -1349.04, "sector": "Power"},
+      {"time": "11:44:18", "symbol": "MAHABANK", "action": "CLOSE/SELL", "qty": 1200, "fill_price": 78.57, "pnl": -3516.00, "sector": "BFSI"},
+      {"time": "12:13:31", "symbol": "COALINDIA", "action": "BUY", "qty": 100, "fill_price": 469.00, "sector": "Mining/Coal"}
+    ],
+    "daily_pnl_pct_of_capital": -0.0060,
+    "buffer_to_3pct_loss_gate_inr": 23903.54,
+    "buffer_to_1pct_findings_threshold_inr": 3991.69
+  },
+  "active_overrides": {
+    "min_confidence": 0.65,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.65,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.22
+  },
+  "delta_since_1200": {
+    "holdings_changes": "ONE new BUY admitted: COALINDIA 100 @ ₹469 (₹46,900 = 4.71% of capital, sector Mining/Coal per config/sector_mapping.yaml). Holdings 6 → 7. First BUY of the session and the first BUY since the AUBANK exit at 09:31:56 — strategy has transitioned from de-risking mode into measured re-deployment.",
+    "cash_change_inr": -46900.00,
+    "deployed_pct_change": "0.4013 → 0.4484 (+4.71 pp). Still 20.16 pp inside the 0.65 max_deployed_pct cap.",
+    "realized_pnl_today_change": 0.00,
+    "open_orders_changes": "none — same 3 carryover orders (TATAPOWER, HINDZINC, PHARMABEES) all now day-stale (>24h). PHARMABEES crossed 24h at ~12:14:55 in the prior tick window.",
+    "sector_change": "NEW sector slot opened (Mining/Coal at 4.71%); no other sector change. Power sector at cost remains 9.91% (TORNTPOWER exit was already in the 12:00 snapshot)."
+  },
+  "findings": [
+    "STRATEGY HAS RE-ENGAGED ON THE BUY SIDE: COALINDIA BUY 100 @ ₹469.00 filled at 12:13:31 — first BUY of Day-5 (session) and first BUY since the AUBANK exit at 09:31:56. Three SELLs at 11:16-11:44 (HINDUNILVR/TORNTPOWER/MAHABANK) freed ₹143,615 of cash; 29 minutes after the last SELL, a single BUY of ₹46,900 is admitted — ratio 1:3 BUY:SELL by ticket count, ~33% redeployment of freed cash. This is the textbook 'measured re-engagement' pattern, the inverse of the Day-1/Day-4 stacking pattern that originally drove every override on the file.",
+    "OBSERVABILITY: SECTOR-CORRELATION ECHO. COALINDIA is classified Mining/Coal in config/sector_mapping.yaml, so the spec-hard trigger from 12:00 carry-forward (a) — 'NEW BUY in same Sector as one of the three just-exited names FMCG/Power/BFSI within 60 min' — DOES NOT FIRE on a strict sector reading. BUT: COALINDIA is operationally correlated with NTPC and POWERGRID (Coal India is the dominant coal supplier to PSU thermal), and the BUY landed 29 min after the TORNTPOWER (Power) exit. Combined Power + Mining/Coal at cost = 14.62% (NTPC + POWERGRID + COALINDIA); on full-fill including TATAPOWER OPEN, the PSU/utility-energy thematic reaches 19.52% of capital — 2.48 pp buffer to the 22% sector cap. This is a thematic-correlation observation, not a guardrail breach.",
+    "Realized P&L today: -₹5,964.24 (-0.60% of capital). Buffer to 3% daily loss gate is ~₹23,904 (4.0x); buffer to -1% findings-threshold is ~₹3,992 (1.67x). The COALINDIA BUY did not realize any P&L — losses are unchanged from 12:00 (the three 11:16-11:44 SELLs); no further deterioration.",
+    "Deployment at cost: 44.84% (₹446,417.40 / ₹995,592.64) — 20.16 pp inside the 0.65 max_deployed_pct cap. Projected on full fill of the 3 carryover OPEN orders: 57.91% — 7.09 pp inside cap. Admission window remains comfortably open.",
+    "Sector concentration at cost remains broad: FMCG 12.06%, Power 9.91%, BFSI 7.91%, Pharma 5.22%, Gold-ETF 5.03%, Mining/Coal 4.71%. Six distinct sectors, largest single sector (FMCG) sitting 9.94 pp inside cap. On full carryover fill: Power becomes the largest at 14.81% (NTPC + POWERGRID + TATAPOWER), still 7.19 pp inside cap. No sector approaches the 22% cap.",
+    "Position sizing: NESTLEIND remains largest at 12.06% of capital (2.94 pp buffer to 0.15 cap). Other 6 names range 4.71% (COALINDIA, the new add) to 7.91% (PNBHOUSING). No single name approaches per-name cap.",
+    "ALL 3 OPEN orders are now day-stale (>24h). TATAPOWER and HINDZINC have been OPEN since Day-4 morning (~26h17m and ~25h47m); PHARMABEES crossed 24h at ~12:14:55 in the prior tick. Order hygiene flag: the strategy has had multiple opportunities (4 trades today including 1 BUY) to either fill, cancel, or reprice these — none of those actions has been taken. This is a soft order-hygiene concern, not a risk-elevation trigger.",
+    "All 7 risk overrides remain materially tighter than base config (min_confidence 0.65 vs 0.50, max_position_pct 0.15 vs 0.20, max_deployed_pct 0.65 vs 0.80, default_sl_pct 0.015 vs 0.02, min_sl_pct 0.01 vs 0.005, max_sl_pct 0.04 vs 0.05, max_sector_pct 0.22 vs 0.35). Post-rotation state is comfortably inside every binding dimension.",
+    "Disciplined call: NO override change. The COALINDIA BUY does not fire any spec-hard trigger from the 12:00 carry-forward set: (a) different sector classification, (b) not a re-buy of MAHABANK or TORNTPOWER specifically, (c) realized loss is unchanged at -0.60%, (d) inverted (BUY arrived rather than 4th SELL). Tightening on a single in-spec admission while the strategy is demonstrably in capital-preservation mode would punish exactly the SELL-before-BUY behavior the framework was tuned to encourage. The thematic PSU-energy correlation is logged as observability with re-armed triggers below.",
+    "Risk level LOW (unchanged). Composite distress meta-trigger dormant: realized P&L well inside 3% gate, no single-name distress, strategy demonstrably not silent (4 trades in 57 min between 11:16 and 12:13). Carry-forward triggers for 13:00/13:30 ticks: (a) if strategy admits a 2ND new BUY in the PSU/utility-energy thematic (Power/Mining/Coal/Metals) by 13:30, OR if PSU/utility-energy thematic exposure crosses 22% on full fill — fire min_confidence 0.65 → 0.67 AND consider tightening max_sector_pct 0.22 → 0.20 (the latter would create a grandfathered breach on Power on full fill, so step carefully); (b) if strategy admits a NEW BUY in BFSI specifically (re-test of post-MAHABANK-exit recycle) — fire min_confidence 0.65 → 0.67; (c) if MAHABANK or TORNTPOWER are re-bought specifically (already-recycled names within 24h, the original buy-back-what-you-just-sold pattern) — fire min_confidence 0.65 → 0.67 AND log explicit cluster-recycle flag; (d) if realized loss extends past -1% (₹9,956 — additional ₹3,992 needed) — fire daily_loss_limit_pct 0.03 → 0.025; (e) if TATAPOWER fills AND a 2nd new BUY lands the same window — fire max_deployed_pct 0.65 → 0.62 to re-tighten admission cadence; (f) if the 3 day-stale OPEN orders are still OPEN at EOD with no cancel/replace activity — escalate order-hygiene observability into a system_prompt feedback note (not a numeric lever)."
+  ],
+  "actions_taken": []
+}

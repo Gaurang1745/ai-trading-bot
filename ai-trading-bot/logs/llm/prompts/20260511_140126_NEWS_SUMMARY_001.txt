@@ -1,0 +1,101 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [livemint 2026-05-11 08:15] NSE SME stock hits upper circuit despite stock market crash
+1. [livemint 2026-05-11 08:05] UPL Q4 Results: Profit jumps 18% YoY to ₹1,061 crore; company announces 300% dividend payout
+2. [et_markets 2026-05-11 08:01] Explained: What PM Modi’s comments on deferring gold purchases for 1 year mean for yellow metal investors?
+3. [et_markets 2026-05-11 07:59] Global Markets | Japan's Nikkei retreats from record high as Iran conflict concerns resurface
+4. [et_markets 2026-05-11 07:56] Global Markets | Australian shares slide as banks, CSL drag; US‑Iran tensions hit risk appetite
+5. [livemint 2026-05-11 07:48] Canara Bank Q4 results 2026: Profit declines 10% YoY to ₹4506 crore; recommends dividend of ₹4.20
+6. [livemint 2026-05-11 07:44] Explained: Why PM Modi asked Indians to avoid buying gold for a year and what it means for prices
+7. [livemint 2026-05-11 07:44] Investors return to FMCG stocks as early signs of demand recovery emerge
+8. [livemint 2026-05-11 07:41] Stock market crash: Nifty 50 slips below 24,000. Will it fall below 22,000 this time?
+9. [et_markets 2026-05-11 07:35] Vodafone Idea shares jump 8% to 4-month high. What’s driving the rally amid stock market crash?
+10. [et_markets 2026-05-11 07:28] Quick commerce turns the corner; Karan Taurani picks Eternal, Trent, and Nykaa as top consumption bets
+11. [et_markets 2026-05-11 07:28] Election impact! 6 West Bengal-linked stocks that can benefit from new BJP government
+12. [livemint 2026-05-11 07:03] SBI: The worst of margin pressure could be over after Q4’s sharp sequential drop
+13. [livemint 2026-05-11 07:03] Life insurance stocks gain after strong FY27 start; SBI Life, ICICI Prudential lead growth
+14. [et_markets 2026-05-11 06:54] Hyundai shares jump 5% despite 22% YoY fall in Q4 net profit to Rs 1,256 crore
+15. [et_markets 2026-05-11 06:32] With 50% rally in 2026, Adani Power now most valued power company in India: What's working in its favour
+16. [et_markets 2026-05-11 06:29] Nifty Bank crashes 900 points as SBI, IndusInd, Yes Bank, other lender stocks tumble up to 4%. What lies ahead?
+17. [et_markets 2026-05-11 06:25] Sameer Dalal warns Indian markets may lag as oil import costs rise
+18. [et_markets 2026-05-11 06:24] Morgan Stanley warns oil market in ‘race against time’ as Strait of Hormuz remains shut amid Iran war
+19. [livemint 2026-05-11 06:23] Vodafone Idea, YES Bank, Ola Electric, HFCL among the most traded stocks on NSE today, 11 May 2026
+20. [et_markets 2026-05-11 06:11] ​LIC bought shares worth $2 billion in these 10 companies in Q4. Do you own any?​
+21. [livemint 2026-05-11 06:11] Canara Bank Q4 Results 2026 LIVE: Net profit drops 9.9% to ₹4,506 crore, NII up 4% YoY; declares ₹4.20 dividend
+22. [livemint 2026-05-11 06:11] Vinay Rajani of HDFC Sec suggests NLC India, Apollo Hospitals shares to buy
+23. [et_markets 2026-05-11 06:07] Bank of Baroda shares gain over 2% after Q4 results. Should you buy, sell or hold?
+24. [et_markets 2026-05-11 05:56] RBI likely selling dollars to limit rupee's fall, traders say
+25. [et_markets 2026-05-11 05:53] Alphabet’s AI Surge: Why investors are re-rating Google as the ultimate AI stack play
+26. [et_markets 2026-05-11 05:51] MCX shares jump 4% despite overall market weakness. Here's why
+27. [et_markets 2026-05-11 05:46] Goldman Sachs delays Fed cut outlook to December 2026 as Iran war drives US inflation
+28. [et_markets 2026-05-11 05:41] AI-fuelled rally keeping global markets resilient despite oil shock, says Ed Yardeni
+29. [livemint 2026-05-11 05:38] PVR Inox Q4 Results 2026 LIVE: Will Dhurandhar 2's success power March quarter show? Here's what analysts say
+30. [livemint 2026-05-11 05:32] Copper Shrugs Off Middle East Uncertainty to Aim for Record High
+31. [et_markets 2026-05-11 05:30] Global Markets this week: Diplomacy, Oil Shock & Growth Fears
+32. [et_markets 2026-05-11 05:29] IndiGo, SpiceJet & other travel stocks plunge up to 7%. Two big reasons why
+33. [livemint 2026-05-11 05:26] Oil Market in ‘Race Against Time’ on Hormuz, Morgan Stanley Says
+34. [et_markets 2026-05-11 05:24] SBI shares plunge 10% in two days after Q4. Do Morgan Stanley, Citi & Bernstein see a rebound soon?
+35. [et_markets 2026-05-11 05:23] Tata Consumer shares soar 7% after better-than-expected Q4 earnings. Here’s what Morgan Stanley & other top brokerages say
+36. [livemint 2026-05-11 05:23] Nifty Bank crashes nearly 1,000 points, IT pack resilient amid stock market fall: What's behind this trend?
+37. [et_markets 2026-05-11 05:18] Not just US dollar, Indian rupee has tanked up to 25% across 9 major currencies in 1 year
+38. [et_markets 2026-05-11 05:15] SBI posts record ₹80,000 crore profit; chairman says NIM has bottomed out, eyes 13–15% loan growth in FY27
+39. [livemint 2026-05-11 05:14] Value 360 Communications share price hits 5% upper circuit after weak debut
+40. [livemint 2026-05-11 05:14] JBM Auto, Ola Electric Mobility, and Ather Energy: Why these auto stocks rising after PM Modi’s speech?
+41. [et_markets 2026-05-11 05:08] Gold Rate Today Live Updates: Gold slips marginally, silver rises as U.S.-Iran tensions and PM Modi’s appeal weigh on sentiment
+42. [et_markets 2026-05-11 05:08] Global Markets: Korea, Taiwan emerge as the biggest winners of AI equity boom
+43. [livemint 2026-05-11 05:02] SpiceJet to IndiGo: Why are aviation stocks down up to 5% today? Explained
+44. [et_markets 2026-05-11 05:00] Goldman Sachs picks 12 alpha stocks amid record $22 billion FII exodus
+45. [livemint 2026-05-11 04:47] Vodafone Idea share price zooms over 10% despite stock market crash
+46. [livemint 2026-05-11 04:42] Gold, silver prices today: Check retail rates of 24K, 22K gold, 999 silver on 11 May in Delhi, Mumbai and Kolkata
+47. [et_markets 2026-05-11 04:39] Who is your worst enemy in markets? Here’s what Buffett’s mentor Benjamin Graham says
+48. [et_markets 2026-05-11 04:33] Bajaj Auto's Rs 5,633 crore share buyback: Should you participate or avoid?
+49. [et_markets 2026-05-11 04:28] Swiggy shares plunge 7% after Q4 results. What are Nomura, Citi and others saying?
+50. [et_markets 2026-05-11 04:25] Global Market: Japan bets on BOJ hawkish turn, US backing to defend Yen
+51. [livemint 2026-05-11 04:25] Ambani's Jio Platforms IPO pivots to pure fundraise, no offer for sale: Report
+52. [livemint 2026-05-11 04:18] Crude oil prices continue to rise amid US-Iran uncertainty. What's the near-term outlook?
+53. [et_markets 2026-05-11 04:16] Beyond Nifty: The 10 smallcap stocks that doubled investor wealth in the first 25 sessions of FY27
+54. [et_markets 2026-05-11 04:10] US Stock Market: US market enters a critical week with inflation and Iran tensions in focus
+55. [et_markets 2026-05-11 04:07] Why is market falling today? Sensex crashes 1,100 points, Nifty below 23,900. 6 key factors
+56. [et_markets 2026-05-11 04:04] US Stock Market: Fed warns prolonged Iran conflict could fuel inflation, hurt global growth
+57. [et_markets 2026-05-11 04:04] Titan shares crash 6% after Q4 results. What are Goldman Sachs, Morgan Stanley, Bernstein, other brokerages saying?
+58. [et_markets 2026-05-11 04:02] Silver gains Rs 3,000, gold at Rs 1.52 lakh even as Iran war peace talks see no breakthrough. What should investors do?
+59. [livemint 2026-05-11 04:02] Chalet Hotels, Lemon Tree to IHCL: Hotel stocks drop up to 3% on PM Modi's appeal
+60. [livemint 2026-05-11 04:01] Sensex crashes almost 1,200 points; investors lose ₹4 lakh crore: Key factors behind stock market crash explained
+61. [livemint 2026-05-11 03:53] Titan, Kalyan, Senco, Sky Gold among other jewellery stocks crash up to 12% after PM Narendra Modi’s speech
+62. [livemint 2026-05-11 03:46] Stock market today: Gift Nifty signals big gap-down opening; US-Iran war, oil, gold to silver — 7 stocks to buy or sell
+63. [livemint 2026-05-11 03:37] Rupee opens 40 paise lower at 94.88 against the US dollar
+64. [livemint 2026-05-11 03:37] Gold price falls on MCX as higher crude oil prices, stalled US–Iran peace talks fuel inflation worries
+65. [et_markets 2026-05-11 03:30] Market outlook: Why the Nifty breakout failed and how to trade Vedanta & Bank Nifty this week
+66. [et_markets 2026-05-11 03:30] Kiran Mazumdar-Shaw names niece Claire as successor, targets semaglutide push from FY28; debt cut to $1.1 billion
+67. [et_markets 2026-05-11 03:27] Explained: Why Titan, Kalyan Jewellers, Senco Gold, other stocks tanked up to 9% on Monday
+68. [livemint 2026-05-11 03:24] Stocks to buy for short term: From CDSL to Patanjali Foods - Jigar Patel of Anand Rathi recommends 3 shares
+69. [et_markets 2026-05-11 03:02] Urban Company shares tank 9% after Q4 net loss swells to Rs 161 crore despite a sharp revenue uptick
+70. [livemint 2026-05-11 03:01] JPMorgan Hikes Kospi Bull Case Target to 10,000 on Memory Boom
+71. [livemint 2026-05-11 03:00] Q4 results 2026: Canara Bank to Indian Hotels among companies to declare Q4 results today; full list here
+72. [livemint 2026-05-11 02:53] Stocks to buy or sell: Dharmesh Shah of ICICI Sec suggests buying Godrej Properties, Schaffler shares on 11 May
+73. [et_markets 2026-05-11 02:49] Tech Mahindra Share Price Live Updates: Tech Mahindra's Price Movement Today
+74. [et_markets 2026-05-11 02:49] ITC Share Price Live Updates: Election impact! 6 West Bengal-linked stocks that can benefit from new BJP government
+75. [et_markets 2026-05-11 02:48] HCL Tech Share Price Live Updates: HCL Tech's Current Valuation Insights
+76. [et_markets 2026-05-11 02:48] Britannia Share Price Live Updates: Britannia's Price Movement Today
+77. [et_markets 2026-05-11 02:47] Cipla Share Price Live Updates: Cipla's Recent Price Trends
+78. [et_markets 2026-05-11 02:47] Sun Pharma Share Price Live Updates: Sun Pharma's Positive Trend in Stock Price
+79. [et_markets 2026-05-11 02:47] Bajaj Finserv Share Price Live Updates: Bajaj Finserv's Current Market Status
+80. [et_markets 2026-05-11 02:47] Tata Consumer Share Price Live Updates: Tata Consumer's Price Movement
+81. [livemint 2026-05-11 02:13] Raja Venkatraman, MarketSmith recommend five stocks for 11 May
+82. [livemint 2026-05-11 02:08] Buy or sell: Gift Nifty down, Vaishali Parekh recommends three stocks to buy today —11 May 2026

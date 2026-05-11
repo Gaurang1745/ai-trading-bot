@@ -1,0 +1,94 @@
+{
+  "timestamp": "2026-04-30 09:00:00",
+  "tick_kind": "premarket_open",
+  "session_day": 8,
+  "risk_level": "LOW",
+  "risk_level_internal_vs_external": {
+    "internal_portfolio_risk": "LOW",
+    "external_macro_risk": "ELEVATED",
+    "rationale": "Internal book is well-diversified across 6 sectors with no concentration breach, deployment 44.79% (15+ pp under cap), zero panic-pattern signals. External macro is risk-off (Brent +8% to ~$120 on Trump Iran-port blockade, FII -₹2,468 Cr on Apr 29, USD/INR record-low 94.85, Big Tech overnight tape pending). Composite tilt: LOW — internal cleanliness dominates a moderate macro headwind."
+  },
+  "portfolio_summary": {
+    "total_value": 995489.39,
+    "cash": 549634.49,
+    "deployed_pct": 0.4479,
+    "deployed_pct_full_fill_projection": 0.4961,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "open_orders_count": 1,
+    "daily_pnl": 0.0,
+    "cumulative_pnl": -4510.61,
+    "cumulative_pnl_pct": -0.0045
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "value": 120099.90, "pct_of_capital": 0.1206, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.0, "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.0, "value": 52020.00, "pct_of_capital": 0.0522, "sector": "Pharma"},
+    {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.1, "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "BANDHANBNK", "qty": 250, "avg_price": 200.0, "value": 50000.00, "pct_of_capital": 0.0502, "sector": "BFSI"},
+    {"symbol": "POWERGRID", "qty": 150, "avg_price": 320.5, "value": 48075.00, "pct_of_capital": 0.0483, "sector": "Power"},
+    {"symbol": "COALINDIA", "qty": 100, "avg_price": 469.0, "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"}
+  ],
+  "open_orders": [
+    {"symbol": "GLENMARK", "qty": 20, "limit_price": 2400.0, "value": 48000.0, "submitted": "2026-04-29 09:10:58", "age_min_at_open": 1370, "age_status": "STALE — approaching 24h", "sector": "Pharma", "sl_pct": 0.044}
+  ],
+  "sector_exposure_full_fill_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1206,
+    "Pharma": 0.1005,
+    "Gold": 0.0503,
+    "Power": 0.0483,
+    "Mining": 0.0471
+  },
+  "guardrail_buffers_pre_action": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1206 largest, buffer 2.94 pp — non-binding",
+    "max_sector_pct (0.22 prior)": "BFSI 0.1293 largest (full-fill), buffer 9.07 pp — non-binding",
+    "max_deployed_pct (0.65)": "full-fill 0.4961, buffer 15.39 pp — non-binding",
+    "daily_loss_limit_pct (base 0.075)": "no trades today; buffer ~₹74,662 to circuit breaker",
+    "min_confidence (0.65)": "yesterday blocked 4 attempts at 0.60-0.62 (none ≥0.70)",
+    "max_sl_pct (0.04)": "yesterday admitted GLENMARK at 4.4% with warning-not-block (engine permissiveness)"
+  },
+  "guardrail_buffers_post_action": {
+    "max_sector_pct (0.28 NEW)": "BFSI 0.1293 largest (full-fill), buffer 15.07 pp — non-binding, +6 pp of slack vs prior 0.22"
+  },
+  "trigger_status_carried_from_day7_eod": {
+    "max_sl_pct 0.04 → 0.035": "DORMANT — pre-armed for ceiling-hugging entry within Day-8 first hour. Re-arm at 09:30 tick.",
+    "daily_loss_limit_pct 0.04 → 0.03": "DORMANT — pre-armed if Day-8 mark-to-market loss > -₹15K within 30 min of open. No trades yet (premarket).",
+    "min_confidence 0.65 → 0.68": "DEFERRED to Day-10 (~2026-05-04) for n≥15 closed-trade sample inference.",
+    "max_sector_pct 0.22 → 0.20": "RESCINDED by today's loosening direction. Re-armed in opposite frame: any 2nd Pharma admission > 14% full-fill OR 4-name sector cluster will FIRE 0.28 → 0.22 (immediate revert of today's loosening).",
+    "GLENMARK_stale_24h_escalation": "FIRING NEXT TICK (09:30) — order ages 24h+ at 09:10:58. Strategy layer owes a cancel-or-carry decision."
+  },
+  "findings": [
+    "DEPLOYMENT IS CHRONICALLY LIGHT: 44.79% deployed (49.61% on full-fill of GLENMARK) sits 15.39 pp below the 0.65 cap, the lightest carrying cash position of the experiment so far. Per the prompt's explicit 'Idle capital is a real cost in an active-trader experiment, not a virtue' framing, this is a real cost. However, the under-deployment is SIGNAL-GATED (strategy not finding entries) not PARAMETER-GATED (no admission rejected on capacity in 7 sessions) — the deployment cap is not the binding constraint, so loosening it would not directly increase deployment.",
+    "SECTOR PROFILE IS MATERIALLY CLEANER THAN THE OVERRIDE STACK ASSUMES: largest sector BFSI 12.93% sits 9.07 pp under the prior 22% cap. Originating threats fully resolved — AUBANK exited Apr-27 (-₹866), MAHABANK exited Apr-28 (-₹3,516), TORNTPOWER+NTPC exited Apr-28→29. The 4-name Power cluster from Day-1 is gone (POWERGRID alone at 4.83%). The 22% cap was set on Day-6 12:00 to grandfather-bind against then-active 22.48% BFSI breach; that breach has been gone for 4 sessions.",
+    "POSITION-SIZING DISTRIBUTION IS HEALTHY: largest holding NESTLEIND 12.06% (3 pp under cap), smallest COALINDIA 4.71%. Mean position ~6.4%, no sub-3% sub-scale positions suggesting hedge-against-self behavior. The 15% cap is not biting; positions cluster in the 4-12% band naturally.",
+    "GLENMARK STALE-ORDER OBSERVATION: BUY 20 @ ₹2400 LIMIT submitted 2026-04-29 09:10:58 sat through Day-7 close without filling and rolls into Day-8 open. Will age past 24h at 09:10:58 (≈10 min after market open today). Order has SL set 4.4% wide — already a max_sl_pct cap breach (warning, not block). Strategy layer owes an explicit cancel-or-carry decision; risk_monitor logs ageing only.",
+    "PREMARKET MACRO IS RISK-OFF: Brent +8.13% to ~$120 on Trump Iran-port blockade overnight; USD/INR record-low 94.85; FII -₹2,468 Cr on Apr 29 (DII +₹2,262 Cr partial offset). Big Tech overnight tape (GOOGL/MSFT/AMZN/META post-bell) drives sentiment for IT services exposure (we have NONE — INFY/TCS/HCLTECH not in book). Heavy earnings calendar today (HINDUNILVR, ADANIPORTS, ADANIENT, BAJAJFINSV, ~47 reporters total) makes theme-trade admission likely if signal materializes.",
+    "DAY-7 BEHAVIORAL HEALTH: 2 disciplined CLOSEs (HINDZINC +₹172, NTPC -₹275, net -₹103.25), 1 disciplined add (BANDHANBNK 5% sizing 0.68 confidence), 4 correct guardrail blocks at 0.60-0.62 confidence floor. Asymmetric loss-aversion pattern that drove Day-6 panic exits did not recur. Override stack is functioning as a perimeter, not a binder.",
+    "MIN_CONFIDENCE OVERRIDE PERFORMING AS DESIGNED: 4 yesterday-blocked attempts at 0.60-0.62 — by the prompt's explicit criterion ('high-confidence (≥0.70) entries being blocked') the 0.65 floor is NOT eating top-tier signal. Closed-trade n=10 winners spread 0.65-0.75, losers spread 0.65-0.72 — no statistical gradient, no inference for floor adjustment yet. Hold per Day-10 milestone plan.",
+    "GLENMARK SL-BAND BREACH: 4.4% > 4% override admitted via engine warning-not-block on Apr-29. The strategy review (04-29 EOD) added system_prompt rule 5 hardening to plug the breach mechanism at the prompt layer. Loosening the SL-band overrides today would directly compound this risk vector — staying tight."
+  ],
+  "actions_taken": [
+    "LOOSENED max_sector_pct from 0.22 to 0.28 (one-step revert toward base 0.35). Originating BFSI grandfathered-breach trigger fully resolved (BFSI 12.93% sits 9.07 pp below the prior cap). Today's portfolio does NOT resemble the Day-6 12:00 portfolio that justified the 0.22 setting (which was BFSI 22.48% + 4-name Power cluster + 6-BUY/90-min cadence). Step calibrated +6 pp to 0.28 (not full revert to base): retains 7 pp of discipline below base, respects strategy agent's stated Day-10 holistic review milestone. Bite mechanics: cap remains non-binding (BFSI 9.07 pp → 15.07 pp buffer); creates room for theme-driven entries on today's heavy earnings calendar (HINDUNILVR FMCG bellwether, Adani-complex Infra/Power/Energy reporters) without forcing the prior cap to bite on legitimate diversification. Non-punitive: no current or in-flight position invalidated. REVOCABLE: re-armed tighten triggers will fire 0.28 → 0.22 immediately on (a) 2nd Pharma admission pushing Pharma > 14% full-fill or (b) any 4-name sector cluster emergence."
+  ],
+  "actions_considered_but_not_taken": [
+    "LOOSEN max_deployed_pct (0.65 → 0.70): NOT taken. Cap is non-binding (44.79% deployed / 49.61% full-fill) so loosening does not directly help deployment — under-deployment is signal-gated not parameter-gated. Premarket macro is risk-off; loosening volume-of-admission into a risk-off open has worse asymmetry than loosening sector diversification (the action chosen). Re-evaluate at 11:00 if intraday signal-frequency picks up and capacity-binding starts approaching.",
+    "LOOSEN min_confidence (0.65 → 0.60): NOT taken. By the prompt's criterion 'high-confidence (≥0.70) entries being blocked', the floor is NOT eating top-tier signal — yesterday's 4 blocks were all 0.60-0.62. Closed-trade n=10 lacks statistical gradient (winners 0.65-0.75, losers 0.65-0.72) so neither tightening nor loosening is data-supported. Hold per Day-10 milestone plan.",
+    "LOOSEN max_position_pct (0.15 → 0.18): NOT taken. NESTLEIND 12.06% largest holds 3 pp buffer; cap is not binding. Loosening with no firing trigger and no current position approaching the cap is theatrical and would slightly weaken the AUBANK/MAHABANK-blueprint defense that originally motivated the override. Hold.",
+    "LOOSEN SL-band overrides (default_sl_pct 0.015 → 0.02, min_sl_pct 0.01 → 0.005, max_sl_pct 0.04 → 0.05): NOT taken. The GLENMARK 4.4% admission on Apr-29 is a fresh blueprint of the exact breach pattern these caps defend against (engine emits warning-not-block, so the prose-layer constraint is the only enforcement). Loosening today would compound the GLENMARK precedent into a normalized pattern. Strategy review (04-29 EOD) recommended PROMOTING max_sl_pct to a hard BLOCK at engine level — that is the right direction; loosening would be the wrong direction.",
+    "TIGHTEN daily_loss_limit_pct (base 0.075 → override 0.04 or 0.03): NOT taken. No trades today (premarket); buffer to circuit breaker is 75x current P&L (₹74,662 vs ₹0). Pre-fire trigger (Day-8 mark-to-market loss > -₹15K within 30 min of open) is dormant until market opens. Will re-evaluate at 09:30 tick if overnight gap-down materializes.",
+    "TIGHTEN max_sl_pct (0.04 → 0.035): NOT taken. Pre-armed trigger requires Day-8 admission of a ≥4% SL entry within first hour. Dormant until 10:00 tick. GLENMARK is a carry-over not a fresh breach; do not double-count.",
+    "PROMOTE current overrides to base config.yaml: NOT taken (out of scope for risk_monitor — strategy agent's responsibility). Strategy review (04-29 EOD) explicitly defers to Day-10 milestone (~2026-05-04). Today's loosening of max_sector_pct sets a slightly less aggressive base for that promotion to act on — compatible with the milestone plan."
+  ],
+  "armed_triggers_for_next_tick": [
+    "REVOCATION TRIGGER: max_sector_pct 0.28 → 0.22 fires immediately on (a) any 2nd Pharma admission pushing Pharma full-fill > 14% (currently 10.05% with GLENMARK pending — adding any Pharma name of size ≥ 4% breaches threshold), (b) any 4-name sector cluster emergence in FMCG/Power/Adani-complex/BFSI, or (c) full-fill BFSI returning above 17%.",
+    "REVOCATION TRIGGER (deeper): max_sector_pct 0.28 → 0.20 fires on (a) any 5-name sector cluster, or (b) any sector full-fill > 22% (would imply a grandfathered breach situation echoing the Day-6 BFSI pattern that originally justified the 0.22 setting).",
+    "max_sl_pct 0.04 → 0.035: pre-armed for any new admission at sl_pct ≥ 0.04 within Day-8 first hour. GLENMARK 4.4% is excluded (carry-over); fresh ceiling-hugger fires.",
+    "daily_loss_limit_pct base 0.075 → override 0.05: pre-arm — fires if Day-8 cumulative-day mark-to-market loss > -₹20K (≈2% of capital) within first 60 min of open, indicating overnight gap-down on holdings is materializing.",
+    "max_deployed_pct 0.65 → 0.70 LOOSEN: pre-armed for the 11:00 tick if (a) at least 2 high-confidence (≥0.70) entries are admitted before 11:00 AND (b) capacity-binding is approaching (full-fill > 60%). Currently dormant — premarket signal not yet observable.",
+    "min_confidence 0.65 → 0.60 LOOSEN: deferred to Day-10 milestone for n≥15 closed-trade sample. Do not pre-arm earlier.",
+    "GLENMARK age-out escalation: at 09:30 tick, GLENMARK ages 24h+. Risk_monitor escalates to BEHAVIORAL FLAG if order is still OPEN (no fill, no cancel decision) at 10:00 tick — strategy layer owes an explicit disposition.",
+    "Composite distress meta-trigger D (HIGH risk_level): re-arms if (i) book P&L < -0.5% intraday AND (ii) any single-name in book < -3% AND (iii) strategy silent ≥ 60 min after market open. All three legs currently dormant."
+  ],
+  "rationale": "Day-8 09:00 premarket tick. Internal portfolio risk is LOW (well-diversified, no concentration breach, healthy position-management cadence Days 6-7). External macro is ELEVATED but well-bracketed by the existing override stack (deployment cap, SL-band caps, confidence floor all hold). The override stack was built Days 1-3 against a panicky stacking book; over Days 6-7 the strategy layer has cleanly resolved the originating concentration triggers (AUBANK / MAHABANK / TORNTPOWER / Power cluster all exited). Today's portfolio is structurally cleaner than the override stack assumes, and the prompt's explicit guidance — 'Treat overrides as time-bounded — if today's portfolio no longer resembles the one that justified the override, prefer to revert' — applies cleanly to max_sector_pct: the BFSI 22.48% grandfathered breach the 0.22 cap was set against has been gone for 4 sessions. One precise loosening of max_sector_pct from 0.22 to 0.28 (still firmly tighter than base 0.35) is the most defensible single action: it lifts the constraint that has no current source while retaining 7 pp of discipline below base, and is fully revocable by re-armed tighten triggers. All other overrides held: deployed cap is non-binding (loosening doesn't help under-deployment which is signal-gated), confidence floor is not eating top-tier signal (no ≥0.70 blocks), SL-band caps are defending against an active breach pattern (GLENMARK 4.4%), position cap is non-binding. Strategy agent's Day-10 milestone plan to holistically promote/refine the stack remains intact and is in fact better-served by today's loosening (sets a slightly less aggressive starting point for the holistic review)."
+}

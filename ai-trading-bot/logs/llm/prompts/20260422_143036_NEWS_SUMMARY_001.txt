@@ -1,0 +1,99 @@
+You are a news filter for an Indian equity paper trading bot. For each numbered headline, decide whether to KEEP it for the trading model to consider.
+
+KEEP if the headline is:
+- About Indian markets, Indian companies, NSE/BSE stocks, Indian sectors, Indian macro (RBI, GDP, inflation, FII/DII)
+- Global macro with direct India impact (Fed decisions, oil, USD/INR, global recession signals)
+
+DROP if it is:
+- US-only company news with no India angle (e.g. Adobe, Marvell, Delta Airlines) — unless macro-significant
+- Quote-of-the-day, Warren Buffett quotes, horoscopes, tarot, astrology, numerology
+- Clickbait 'trading guide of the day', 'top 10 tips', 'stock of the day' puff pieces
+- Cryptocurrency news (the bot does not trade crypto)
+- Sponsored or promotional content
+- Sports, entertainment, lifestyle, movie reviews
+
+Respond with ONLY a JSON object of the form:
+{"keep": [<zero-indexed integers to KEEP>]}
+
+Headlines:
+0. [livemint 2026-04-22 08:58] US-Iran war: Is the ‘safe haven’ narrative for gold and silver breaking down?
+1. [livemint 2026-04-22 08:49] Tech Mahindra Q4 Results 2026: Net profit rises 19% to ₹1,356 crore; ₹36 per share dividend announced
+2. [et_markets 2026-04-22 08:46] HCL Tech flags weak Q4, bets big on AI to drive next phase of growth
+3. [livemint 2026-04-22 08:46] PNC Infratech share price jumps 14% after receipt of two highway projects
+4. [et_markets 2026-04-22 08:45] Sticks to defensive and quality themes amid volatile global setup: Mayuresh Joshi
+5. [livemint 2026-04-22 08:37] Mehul Telecom IPO allotment to be finalised today. Latest GMP, step-by-step guide to check status
+6. [et_markets 2026-04-22 08:34] Tech Mahindra declares Rs 36/share final dividend; sets July 3 as record date
+7. [et_markets 2026-04-22 08:32] Tech Mahindra Q4 Results: Cons profit rises 16% YoY to Rs 1,354 crore, revenue up 13%; co declares Rs 36/share dividend
+8. [et_markets 2026-04-22 08:21] Infosys Q4 Preview: Can strong earnings offset concerns around AI?
+9. [livemint 2026-04-22 08:21] Gold vs Silver: Which precious metal can outperform amid uncertainty over US-Iran war?
+10. [et_markets 2026-04-22 07:41] Stock selection key as mid & smallcaps offer alpha opportunities: Pankaj Murarka
+11. [livemint 2026-04-22 07:41] Small-cap stock under ₹100 hits 10% upper circuit after Vijay Kedia buys 1% stake in Q4
+12. [livemint 2026-04-22 07:37] Ruchit Jain of Motilal Oswal suggests Balrampur Chini, Paras Defence, DMart shares to buy in the near-term
+13. [et_markets 2026-04-22 07:33] Pahalgam anniversary: How the 2025 terror attack triggered Rs 3 lakh crore defence boom and created 3 multibagger stocks
+14. [et_markets 2026-04-22 07:29] Q4 Results Today Live Updates: Tech Mahindra net profit jumps 21% QoQ; Trent, SBI Life, Tata Communications to announce Q4 results today
+15. [et_markets 2026-04-22 07:03] Global Markets | Australian shares close at two-week low, Cochlear crashes 41%
+16. [livemint 2026-04-22 07:02] Vodafone Idea, JP Power, Groww, Rolex Rings among the most traded stocks today, 22 April 2026
+17. [et_markets 2026-04-22 06:56] TARIL shares crash 11% after Q4 results, dividend announcement: What’s spooking investors?
+18. [et_markets 2026-04-22 06:35] Rs 92,000 crore ripple effect! HCL Tech’s weak Q4 drags IT pack; Infosys, Tech Mahindra slump up to 6%
+19. [livemint 2026-04-22 06:29] FPI Exodus: Financial sector sees over ₹19,000 crore outflows in April; IT, FMCG, Auto also hit
+20. [livemint 2026-04-22 06:28] Crude oil prices remain unchanged after 9% gains in last two sessions. What's the near-term outlook?
+21. [livemint 2026-04-22 06:26] Vedanta Demerger Explained: From listing timeline, price discovery to passive flows - all you need to know
+22. [et_markets 2026-04-22 06:17] Oil, AI, and Uncertainty: What’s really driving global markets right now
+23. [et_markets 2026-04-22 06:16] India bonds fall as oil stays elevated after US indefinite ceasefire
+24. [livemint 2026-04-22 06:11] Nestle India share price jumps 3% to hit record high post strong Q4 results FY26: What brokerages have to say
+25. [et_markets 2026-04-22 06:01] Morgan Stanley reiterates ‘Overweight’ rating on TCS, sees 10% upside potential
+26. [livemint 2026-04-22 05:38] Trent shares jump 7% this week: Should you buy this Tata group stock ahead of bonus, dividend and Q4 results?
+27. [livemint 2026-04-22 05:37] The ten commandments from a Wall Street legend every Indian investor needs to know
+28. [et_markets 2026-04-22 05:35] Rupee falls with oil-sensitive Asia FX, central bank likely steps in
+29. [et_markets 2026-04-22 05:32] HCL Tech shares wipe out Rs 38,000 crore as target price falls to Rs 1,165. Why every second broker is busy downgrading
+30. [et_markets 2026-04-22 05:15] Vijay Kedia buys 44 lakh shares of this smallcap company in March, stock rallies 9% today. Do you own?
+31. [et_markets 2026-04-22 05:13] How Ashish Kacholia, Mukul Agrawal, Madhu Kela, Dolly Khanna reshuffled portfolios amid Iran war?
+32. [et_markets 2026-04-22 05:09] Smallcap stock Rolex Rings share price rockets 26% in two days ahead of board meet to consider buyback
+33. [livemint 2026-04-22 05:09] Sensex plunges over 800 points, Nifty 50 nears 24,350: Key factors behind stock market crash explained
+34. [et_markets 2026-04-22 05:07] "We have to tighten our belts", Pashupati Advani warns of LPG crunch, IT job losses, and a 2-month earnings hole
+35. [et_markets 2026-04-22 05:05] HCL Tech's margins and constant currency growth to remain under pressure: Aditya Shah
+36. [et_markets 2026-04-22 05:03] Tata Power vs Adani Power: As temperatures soar, which stock will shine?
+37. [livemint 2026-04-22 04:59] Gold and silver price today, 22 April: Check live rates of 24K, 22K gold and 999 silver in Delhi, Mumbai, other cities
+38. [livemint 2026-04-22 04:57] TARIL share price tanks 12% after Q4 results 2026, announces dividend of ₹0.25 per share
+39. [livemint 2026-04-22 04:56] Warren Buffett on economists: ‘They don’t make money buying or selling stocks, but still traders listen to them’
+40. [et_markets 2026-04-22 04:37] BEML shares rally 8% after Rs 590 crore defence order win
+41. [livemint 2026-04-22 04:34] Persistent Systems shares crash 5% after Q4 results; should you buy, sell, or hold?
+42. [et_markets 2026-04-22 04:27] Persistent Systems shares shed over 4% after Q4 results: Here's what Nomura and other brokerages said
+43. [et_markets 2026-04-22 04:23] US Stock Market: Apple’s next chapter hinges on AI push under new leadership
+44. [livemint 2026-04-22 04:21] Bank of Maharashtra shares extend Q4 results rally to second straight session, rises 15% in two days
+45. [et_markets 2026-04-22 04:20] US Stock Market: US considers a currency swap with UAE as conflict risks rise
+46. [et_markets 2026-04-22 04:18] Nestle India shares jump 3% after strong Q4. What are Macquarie, Nomura, other brokerages saying?
+47. [livemint 2026-04-22 04:17] Sunteck Realty share price jumps over 12% after Q4 results
+48. [livemint 2026-04-22 04:10] Ola Electric Mobility share price rallies 65% this month. Is the worst behind?
+49. [livemint 2026-04-22 04:08] HCL Tech, Infosys to TCS: IT stocks crash up to 10% today — What's behind the massive selloff?
+50. [et_markets 2026-04-22 04:06] US Stock Market: Warsh walks tightrope as confirmation hangs on political standoff
+51. [et_markets 2026-04-22 04:02] Silver jumps Rs 5,000, gold rises Rs 2,000 as Trump extends Iran war ceasefire indefinitely. Time to buy?
+52. [et_markets 2026-04-22 03:59] Why is market falling today? Sensex slumps over 600 points, Nifty below 24,450 despite ceasefire extension. 7 key reasons
+53. [et_markets 2026-04-22 03:59] US Stock Market: Warsh signals push for smaller Fed balance sheet with Treasury coordination
+54. [et_markets 2026-04-22 03:58] HCL Tech shares tank over 9% after weak Q4. JPMorgan, HSBC & 3 others cut target price
+55. [et_markets 2026-04-22 03:55] The IPO afterlife for unicorns: How mutual funds are doubling down on next-gen leaders
+56. [livemint 2026-04-22 03:51] HCL Tech share price crashes 9% after Q4 results. Should you buy, sell or hold?
+57. [et_markets 2026-04-22 03:47] Tata Investment shares soar over 5% after Q4 results, dividend announcement: Check details
+58. [livemint 2026-04-22 03:38] Silver price in India jumps 2% after 2-day slide as crude oil cools and dollar slips as US extends Iran ceasefire
+59. [livemint 2026-04-22 03:37] Gold price today: Rate jumps 1% on MCX as dollar, crude oil prices decline after US extends ceasefire with Iran
+60. [livemint 2026-04-22 03:34] Rupee opens 21 paise lower at 93.71 against US dollar
+61. [et_markets 2026-04-22 03:33] India's favourite retail stock to announce Q4 results today with a bonus issue. What should investors expect?
+62. [et_markets 2026-04-22 03:30] UGRO Capital is ditching low-yield lending; founder on plan to triple returns by FY29
+63. [et_markets 2026-04-22 03:30] Why smallcap funds are still a buy: A long-term strategy from Aditya Khemani
+64. [et_markets 2026-04-22 03:25] Tata Elxsi shares fall over 4% after weak Q4. Motilal Oswal, HDFC Securities cut target price
+65. [livemint 2026-04-22 03:24] Stock market today: Gift Nifty hints gap-down start; US-Iran, India VIX to gold, silver rates — 8 stocks to buy or sell
+66. [et_markets 2026-04-22 03:13] LIC Housing Finance among 5 stocks flashing bullish signals, hinting at a possible uptrend
+67. [et_markets 2026-04-22 03:09] Karur Vysya Bank among 5 stocks showing bullish RSI upswing
+68. [livemint 2026-04-22 03:09] Q4 results 2026: Tech Mahindra, Trent, SBI Life among companies to declare earnings today; check full list here
+69. [livemint 2026-04-22 02:57] TCS to ITC- Jay Thakkar suggests 3 stocks to buy or sell for short-term in F&O segment
+70. [livemint 2026-04-22 02:56] China Property Tipping Point Will Drive Up Stocks, JPMorgan Says
+71. [livemint 2026-04-22 02:49] China’s ‘National Team’ Cut ETF Stakes Below 20% Disclosure Mark
+72. [et_markets 2026-04-22 02:38] Adani Ent Share Price Live Updates: Adani Enterprises Current Trading Status
+73. [et_markets 2026-04-22 02:38] Tata Motors PV Share Price Live Updates: Tata Motors PV Shows Strong Performance
+74. [et_markets 2026-04-22 02:38] Tata Consumer Share Price Live Updates: Tata Consumer's Current Price
+75. [et_markets 2026-04-22 02:37] Sun Pharma Share Price Live Updates: Sun Pharma's Financial Snapshot
+76. [et_markets 2026-04-22 02:37] TCS Share Price Live Updates: TCS Stock Sees Decline Amid Market Fluctuations
+77. [et_markets 2026-04-22 02:37] Tata Steel Share Price Live Updates: Tata Steel's Current Valuation
+78. [et_markets 2026-04-22 02:36] HCL Tech Share Price Live Updates: HCL Tech flags weak Q4, bets big on AI to drive next phase of growth
+79. [livemint 2026-04-22 02:24] Sensex, Nifty 50 | Stock Market LIVE: Sensex down 600 pts, Nifty below 24500; IT stocks crash
+80. [livemint 2026-04-22 02:16] Raja Venkatraman, MarketSmith recommend five stocks for 22 April

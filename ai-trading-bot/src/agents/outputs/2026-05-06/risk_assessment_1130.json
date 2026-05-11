@@ -1,0 +1,31 @@
+{
+  "timestamp": "2026-05-06 11:30:00",
+  "risk_level": "LOW",
+  "portfolio_summary": {
+    "total_value": 998783.87,
+    "cash": 400923.87,
+    "deployed_pct": 59.86,
+    "holdings_count": 11,
+    "positions_count": 0,
+    "daily_pnl": -3072.77
+  },
+  "findings": [
+    "Overrides block has been empty since 2026-05-05 16:00 EOD strategy_review reset — already at base on every lever (daily_loss_limit_pct 0.03, default_sl_pct 0.02, min_sl_pct 0.005, max_sl_pct 0.05, min_confidence 0.50, min_risk_reward 1.5, max_position_pct 0.20, max_deployed_pct 0.80). Loosening floor is reached.",
+    "State delta vs 11:00: SOBHA position CLOSED at 11:18:11 (35 SELL, realized -₹1,425.20 on the 5.17% Realty single-name slot). Holdings 12 → 11. Cash refilled ₹350,619.07 → ₹400,923.87 (+₹50,304.80 SOBHA proceeds). Cost basis ₹649,590 → ₹597,860. Total portfolio ₹1,000,209.07 → ₹998,783.87. The SOBHA exit pattern matches the morning's MARUTI / BHEL strategic pre-SL exits — booking modest losses on adverse setups before SL trigger, not a SL fire.",
+    "HFCL BUY 600@133.5 ₹80,100 still OPEN since 10:16:40 (~75 min unfilled, ~₹80,100 cash committed but unfilled). 11:00 watch item triggered (>60 min OPEN) — not a risk-config trigger but the order itself may need strategy-layer reassessment.",
+    "Deployment 59.86% filled (67.88% projection if HFCL fills) — well within 50-80% active-trader sweet spot, 20.14 pp headroom to base 80% cap. SOBHA close pulled deployment down 5.08 pp from 64.94% at 11:00.",
+    "BFSI/Lending cluster unchanged: PNBHOUSING 7.88% + BANDHANBNK 5.02% + ABCAPITAL 4.99% = 17.89% n=3. 17.11 pp buffer to base 35% cap. SOBHA exit was Realty single-name, not BFSI — cluster composition untouched.",
+    "Position sizing band 3.78%-8.24% (M&M 8.24% largest with 11.76 pp headroom to base 20%; COFORGE 3.78% smallest, above the sub-3% hedging-against-itself floor). No oversized or token-sized positions.",
+    "Sector spread 9 distinct buckets (was 10 at 11:00 — SOBHA Realty bucket removed): BFSI cluster (n=3) + 8 single-name (Auto OEM M&M, Ports/Infra ADANIPORTS, Defense/Aerospace HAL, Rail/Capgoods TITAGARH, Gold ETF GOLDBEES, FMCG MARICO, Specialty Chem NAVINFLUOR, IT Services COFORGE). 10 if HFCL Telecom fills.",
+    "Daily realized P&L -₹3,072.77 (-0.31%): MARUTI -₹1,007.12 + BHEL -₹713.70 + CHOLAHLDNG +₹73.25 + SOBHA -₹1,425.20. Buffer to base 3% gate ~₹26,891 (10.2% utilization, 89.8% of buffer remaining). The 4 realized exits = 3 strategic SL-discipline pre-exits + 1 winner rotation; net pattern is active risk management, not deteriorating performance.",
+    "Signal acceptance healthy: today's 3 'BLOCKED on confidence' guardrail entries (09:13:43, 09:43:34, 10:17:10) are all conf=0.0 malformed-payload sentinels, not real high-conf admits being filtered. The 3 CNC short-sell blocks (09:43:30, 10:46:40, 10:47:00) are correct rule enforcement post-close on BHEL/CHOLAHLDNG, not over-cautious gating. No legitimate signal is currently being declined by an override.",
+    "Composite distress legs 0/3 — no sector concentration breach (BFSI 17.89% vs 35%), no daily-loss escalation (89.8% buffer remaining), no oversized position (max 8.24% vs 20%)."
+  ],
+  "actions_taken": [
+    "HOLD — overrides block remains empty. Override count 0 unchanged. No tighten, no loosen.",
+    "Nothing to loosen: every lever is already at base (the floor); the 2026-05-05 16:00 EOD strategy_review explicitly emptied the overrides block on the thesis that the override stack had become rationalized inaction, and that thesis remains unrefuted in the ~19.5 hours since (every admit since EOD reset has cleared base-config gates cleanly, including today's 5-BUY burst, the CHOLAHLDNG→COFORGE rotation, and the 4 strategic exits).",
+    "Nothing to tighten on the SOBHA exit: daily P&L deteriorated from -₹1,647.57 to -₹3,072.77 but utilization is still only 10.2% of the 3% gate; the SOBHA close is a strategic pre-SL exit (not a SL fire), matching the MARUTI/BHEL pattern from earlier — strategy is exercising loss discipline, not breaking it. Tightening daily_loss_limit_pct on -0.31% utilization would be reactionary and would block legitimate signal.",
+    "Nothing to tighten on portfolio shape: every lever has comfortable buffer to base — BFSI 17.89% vs 35% (17.11 pp), max position 8.24% vs 20% (11.76 pp), filled deployment 59.86% vs 80% (20.14 pp), daily loss -0.31% vs 3% (89.8% of buffer remaining). Position sizing band 3.78%-8.24% is healthy (no sub-3% hedging-against-itself, no oversized). Composite distress 0/3.",
+    "Pre-armed watch items for 12:00: (a) HFCL fill (~75+ min OPEN) → deployment to ~68%, still under base 80%; HFCL non-fill extending past 90 min would more strongly suggest order needs strategy-layer reassessment but is not a risk-config trigger; (b) any 4th BFSI name admission OR new realized loss bringing daily P&L to -1.0% (~-₹10k) → reassess loss-gate posture; (c) any new admit at conf <0.55 — watch for whether the empirically non-binding conf floor needs re-arming."
+  ]
+}

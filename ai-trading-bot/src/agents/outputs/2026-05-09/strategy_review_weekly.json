@@ -1,0 +1,124 @@
+{
+  "date": "2026-05-09",
+  "review_type": "weekly",
+  "window": "2026-05-04 to 2026-05-08 (5 trading days, 1 broker-data outage)",
+  "trades_analyzed": 72,
+  "summary": {
+    "wins": 11,
+    "losses": 11,
+    "total_pnl": 707.0,
+    "win_rate": 0.5,
+    "avg_win": 1148.6,
+    "avg_loss": 1084.4,
+    "win_loss_amount_ratio": 1.06,
+    "weekly_realized_pnl": 707.0,
+    "weekly_unrealized_pnl_eod": 11439.59,
+    "portfolio_value_eod_friday": 1009580.59,
+    "portfolio_value_pct_change_since_inception": 0.96,
+    "cumulative_realized_pnl_since_inception": -1859.0,
+    "session_breakdown": [
+      {"date": "2026-05-04", "trades": 21, "wins": 4, "losses": 3, "realized_pnl": 3513.0, "deployment_avg_pct": 47.6, "deployment_peak_pct": 56.4},
+      {"date": "2026-05-05", "trades": 9, "wins": 2, "losses": 1, "realized_pnl": 909.0, "deployment_avg_pct": 45.3, "deployment_peak_pct": 48.6},
+      {"date": "2026-05-06", "trades": 20, "wins": 1, "losses": 5, "realized_pnl": -5029.0, "deployment_avg_pct": 54.2, "deployment_peak_pct": 65.2, "note": "worst session of the week — 5 pre-SL panic exits on intact theses"},
+      {"date": "2026-05-07", "trades": 0, "wins": 0, "losses": 0, "realized_pnl": 0.0, "deployment_avg_pct": 53.6, "deployment_peak_pct": 53.6, "note": "Dhan ticker-data outage; 3 SELL attempts REJECTED at paper_broker (ltp=0); zero-admit dormancy day"},
+      {"date": "2026-05-08", "trades": 22, "wins": 4, "losses": 2, "realized_pnl": 1315.0, "deployment_avg_pct": 59.5, "deployment_peak_pct": 63.2}
+    ],
+    "weekly_aggregate": {
+      "total_buys": 30,
+      "total_closes": 22,
+      "active_sessions": 4,
+      "dormant_sessions": 1,
+      "decision_cycles_estimated": 65,
+      "buys_per_active_cycle": 0.58,
+      "guardrail_decisions_total_week": 1700,
+      "guardrail_blocks_total_week": 41,
+      "guardrail_blocks_state_sync_modify": 14,
+      "guardrail_blocks_state_sync_cnc_short": 9,
+      "guardrail_blocks_confidence_below_floor": 18,
+      "guardrail_blocks_real_strategy_declines": 0,
+      "average_deployment_pct_active_sessions": 51.7,
+      "eod_friday_deployment_pct": 62.79,
+      "holdings_count_eod_friday": 14,
+      "override_count_eod_friday": 0,
+      "consecutive_risk_monitor_hold_ticks": 35
+    }
+  },
+  "patterns_found": [
+    "PATTERN 1 — CONVICTION-UNCALIBRATED SIZING (6th consecutive flag, never addressed until now): Across 30 BUYs in the 2026-04-29 → 2026-05-08 stretch, the conviction range 0.62-0.72 produced near-identical sizing (mean 4.7%, range 1.4-8.2%). Concrete week-window misses on Day-19 (2026-05-08): LAURUSLABS conf 0.72 → 1.9% (tier target 7-10%), DABUR conf 0.65 → 1.9% (tier target 5-7%), BAJAJ-AUTO conf 0.72 → 4.3% (tier target 7-10%), PIDILITIND conf 0.72 → 4.9% (tier target 7-10%); cross-week: HFCL conf 0.65 → 8.0% (tier target 5-7%, over-sized) and M&M conf 0.70 → 8.2% with SL -2.4% (tier target 7-10% but only with TIGHTER SL — the loose-SL/large-size combination ate -₹1,140). The largest realized loss of the week was LUPIN -₹2,163: a 0.72-conf entry first under-sized at 4.4%, then averaged-down to ~5.8% — wrong-direction sizing twice. The largest realized win was HAL +₹1,953 from a 0.68 conf 5.0% entry — appropriately sized for tier. Conviction grades exist to allocate capital differentially; in this stretch they were decorative. CLOSED THIS REVIEW via Rule 20.",
+    "PATTERN 2 — DAY-17 (2026-05-06) PRE-SL PANIC EXITS (largest single-day loss of the experiment, -₹5,029): Five of six daily exits were preemptive pre-SL closes on carry positions with theses explicitly intact — MARUTI -₹1,007, BHEL -₹713, SOBHA -₹1,425, BANDHANBNK -₹816, M&M -₹1,140. Each cited proximity-to-SL as the trigger; none cited new post-entry information. Already CLOSED at the Day-17 review via Rule 17 (PRE-SL EXIT DISCIPLINE) and the Rule 17 winner-side variant added at Day-19 review. Day-19 closes (ABCAPITAL, LUPIN) cited either post-entry new info or actual SL breach — Rule-17-compliant pattern emerging.",
+    "PATTERN 3 — SAME-SESSION AVERAGE-DOWN ON LOSER (LUPIN, Day-19, biggest single loss of the week): BUY 18 @ ₹2470 at 09:45 (conf 0.72, 'Q4 results May 7 already printed: PAT +87.5%') → BUY 6 @ ₹2433 at 11:31 (position already -1.5%, cited SAME catalyst) → SELL 24 @ ₹2370.61 at 12:48 (full SL stopout). Realized -₹2,163 vs estimated -₹1,800 if no average-down (~17% loss inflation). CLOSED at Day-19 review via NEW Rule 19 (NO SAME-SESSION AVERAGE-DOWN ON LOSING POSITIONS).",
+    "PATTERN 4 — SAME-SESSION ROUND-TRIP (ABCAPITAL, Day-19): SELL 135 @ ₹364.22 at 11:31 (margin-compression rationale) → BUY 130 @ ₹364.50 at 12:48 (Q4-record + asset-quality rationale) — both facts existed at both timestamps, 77-min round-trip, ₹645 surrendered for zero positional change. The original SL was 1% below CMP (Rule 17 territory — pre-SL panic geometry) and the right action was MODIFY-the-SL, not EXIT-and-rebuy. CLOSED at Day-19 review via Rule 14 same-session variant extension.",
+    "PATTERN 5 — WINNER-SIDE 'SL TOO TIGHT' PANIC (NAVINFLUOR, Day-19): EXIT at +1.9% citing 'CMP 7043 vs SL 6960 — only 1.2% above SL'. The 1.2% gap was AT the calibrated 1% trail-gap floor (Rule 14(d)) — i.e., SL was placed CORRECTLY, not 'too tight'. Outcome lucky positive (+₹888.86); the upside option to run to target 7300 (+5.8% / +₹2,800) was surrendered for guaranteed partial gain. CLOSED at Day-19 review via Rule 17 winner-side variant extension.",
+    "PATTERN 6 — DAY-18 (2026-05-07) ZERO-ADMIT DORMANCY + TICKER OUTAGE: 0 fills, 3 SELL attempts REJECTED at paper_broker.py:64-69 with 'Cannot get LTP' — Dhan ticker-data outage. Strategy was attempting prudent exits (TITAGARH +0.86% with extended momentum, COFORGE +1.6% with gap-fade risk, GOLDBEES -0.78% on bearish MACD); none filled. Concurrently NO new admits across 48 cycles despite watchlist research surfacing 17 BULLISH candidates with confidence_modifiers up to +0.13. CLOSED at Day-18 review via Rule 18 (ZERO-ADMIT DORMANCY DISCIPLINE). Day-19 (2026-05-08) data confirms Rule 18 took effect: 11 admits across the day, deployment 53.6% → 62.8%.",
+    "PATTERN 7 — STATE-SYNC GUARDRAIL BLOCKS DOMINATE (23 of 41 blocks across the week): 14 'MODIFY for X but no open position/holding' + 9 'Cannot short-sell in CNC. Holdings: 0' = 23 stale-state artifacts. The LLM emits MODIFY/SELL on a symbol whose recent EXIT/CLOSE has not yet propagated into the next decision cycle's holdings snapshot. Pure no-op for trading outcomes (decisions never executed) but consume LLM cycles. ZERO real strategy proposals were declined by guardrails this week. The guardrail layer is correctly blocking malformed proposals from a stale view; the underlying issue is orchestrator state-propagation latency, not a strategy gap. Rule 12 ('EXIT IS FINAL') already addresses the prompt side. Outside strategy_review scope but flagged for orchestrator team.",
+    "PATTERN 8 — DEPLOYMENT TRAJECTORY HEALTHY-BUT-LOW: Week-avg deployment 51.7% (active sessions only), peak intra-week 65.2%, EOD-Friday 62.79%. The active-trader experiment target band is 60-70%; the week sat at the bottom of that band. Cash idle EOD-Friday: ₹371,382 (37.2% of portfolio). With Rule 18 + Rule 20 in place, the next-week expectation is the deployment band lifting toward 60-65% sustained — driven by both more admits per cycle (Rule 18) and more capital per high-conviction admit (Rule 20).",
+    "PATTERN 9 — WEEKLY EXPECTANCY: 50% win rate × 1.06 W/L ratio = ~+₹32 per trade expectancy. Weekly realized +₹707 across 22 closes is essentially break-even noise. The strategy is generating data (which is the experiment goal) but the expectancy is razor-thin. The two highest-leverage edge improvements visible from this week's data are (a) conviction-scaled sizing (Rule 20 — closed in this review) so wins compound where edge is highest, and (b) winner-side SL-respect (Rule 17 winner variant — closed Day-19) so winners run nearer to target instead of being prematurely closed at +1-3%. Both are now in the prompt; Days 20-25 will tell whether the expectancy moves."
+  ],
+  "guardrail_effectiveness": {
+    "total_decisions_week": 1700,
+    "blocks_total": 41,
+    "real_strategy_blocks": 0,
+    "noise_blocks_state_sync": 23,
+    "noise_blocks_confidence_floor": 18,
+    "override_count_throughout_week": 0,
+    "risk_monitor_hold_streak_ticks": 35,
+    "comment": "Override stack remained {} throughout the week (35 consecutive HOLD ticks by risk_monitor). Position sizing 1.4-8.2% (cap 20%), max sector cap not approached, deployment peak 65.2% (cap 80%), no min-confidence binds. Today's discipline failures (LUPIN average-down, ABCAPITAL round-trip, NAVINFLUOR winner-panic, Day-17 pre-SL panic exits) all came through clean — they are LLM-decision-quality issues, not engine-permission issues. Tightening overrides would suppress legitimate Rule 18 admit activity that just started working WITHOUT addressing the actual gaps. Override stack stays empty."
+  },
+  "deployment_assessment": {
+    "weekly_avg_pct_active_sessions": 51.7,
+    "weekly_peak_pct": 65.2,
+    "weekly_trough_pct": 33.7,
+    "eod_friday_pct": 62.79,
+    "active_trader_target_band": "60-70%",
+    "in_band_pct_of_active_session_minutes_estimated": 35,
+    "comment": "Sat at the bottom of the active-trader target band. Below 50% on 2 of 4 active days (Day-15: 47.6%, Day-16: 45.3%). Day-17 lifted to 54%, Day-19 to 59.5%. EOD-Friday 62.79% is the highest EOD reading of the week and the experiment's first sustained 60%+ close. With Rule 20 in place, next week's expectation is week-avg deployment ~60% — driven by larger sizing on high-conviction reads, not by forced new-name admissions. NOT a target: deployment for its own sake. The objective is conviction-scaled deployment, not volume-of-deployment."
+  },
+  "activity_assessment": {
+    "active_sessions": 4,
+    "dormant_sessions": 1,
+    "decision_cycles_estimated_week": 65,
+    "buys_total": 30,
+    "buys_per_active_cycle": 0.58,
+    "buys_per_session_active": 7.5,
+    "comment": "4 of 5 sessions active (Day-18 dormant due to Dhan ticker outage, not strategy). Day-15: 7 admits, Day-16: 3 admits, Day-17: 9 admits (admit-heavy but exit-heavy too — net negative), Day-18: 0, Day-19: 11 admits. The admit cadence is in the active-trader band; the issue is not WHETHER trades fire, but at what SIZE relative to conviction (Pattern 1 / Rule 20). No further activity-side tuning warranted — Rules 17, 18, 19 all working as intended in their first session of operation (Day-19 evidence)."
+  },
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "section": "Rule 20 — CONVICTION-SCALED POSITION SIZING (NEW)",
+      "what": "Added new Rule 20 immediately after Rule 19 (within the _TEMPLATE string, before its closing triple-quote). Rule explicitly stratifies position-size targets by conviction tier: 0.60-0.65 → 3-5% portfolio, 0.66-0.69 → 5-7%, 0.70-0.74 → 7-10%, 0.75+ → 10-12%. All tiers remain subject to per-name <<MAX_POSITION_PCT>> cap (placeholder preserved — not hardcoded) and the per-position risk-budget rule size × SL_distance ≤ 0.5%. Spells out that conviction and SL-tightness move TOGETHER (the way to deploy more at high conviction is a tighter SL, not a wider one). Lists existing rules (cluster cap, binary event, governance, same-session admit limit) as REDUCERS that may push to the LOW end of a tier or to NO_ACTION — but never as license to default everything to 5%. Includes detailed prior-failure-mode block citing Days 10-14 sizing data: LAURUSLABS / BAJAJ-AUTO / PIDILITIND under-sized at conf 0.72; HFCL / M&M over-sized for their tier; LUPIN's wrong-direction-twice sizing producing the week's largest loss.",
+      "why": "Pattern 1 — conviction-uncalibrated sizing — has been flagged as an unaddressed issue across SIX consecutive daily reviews (Days 10, 11, 12, 13, 14, plus this weekly). Across 30 BUYs in the past 2-week stretch, conviction grades 0.62-0.72 produced near-identical sizing (mean 4.7%, range 1.4-8.2%). The conviction grade was decorative. Concrete evidence from this week's data: (a) LUPIN at conf 0.72 → -₹2,163 (largest loss, mis-sized); (b) HAL at conf 0.68 → +₹1,953 (largest win, appropriately sized for tier); (c) M&M at conf 0.70 + loose SL -2.4% + 8.2% size → -₹1,140 (the loose-SL/large-size combination called out in section 5). Override-side fixes considered and rejected: there is no risk_config lever that can encode a per-conviction-tier sizing TARGET (only floors and caps), so the calibration must come from the prompt. This is the highest-leverage unaddressed gap visible in the data. Holding it for one more review would have meant burning a 7th week of opportunity-cost before closing it.",
+      "expected_impact": "Forward-looking on next bot restart (system_prompt is built at boot from config.yaml + _TEMPLATE). Days 20-25 watch metrics: (i) correlation coefficient between admit confidence and admit position-size % across 20+ admits — target r ≥ +0.5 (currently near zero). (ii) largest admit position size: should rise into the 7-10% band on 0.70+ conf admits, not stay anchored at 5%. (iii) smallest admit position size: should stay in the 3-5% band on 0.62-0.65 conf admits, not drift up. (iv) number of high-conviction (0.70+) admits sized BELOW 6% — target zero unless explicitly cited as risk-budget-constrained in `reasoning`. (v) average win expectancy per name: expected to rise as larger sizing on higher-conviction reads compounds wins; some risk that larger sizing also amplifies losses, but the per-position risk-budget rule (0.5% portfolio per name) caps the downside expansion. Net effect should be a wider distribution of P&L outcomes per trade with a positive shift in mean."
+    }
+  ],
+  "non_changes_with_rationale": [
+    {
+      "file": "src/agents/risk_config.yaml",
+      "decision": "NO CHANGE — overrides block remains empty {}",
+      "rationale": "Override stack has been {} since 2026-05-05 16:00 EOD reset (35 consecutive HOLD ticks by risk_monitor through Day-14 EOD). Position sizing 1.4-8.2% (cap 20%), deployment peak 65.2% (cap 80%), no min-confidence binds, no risk-budget binds. Week's losses (-₹11,928 gross) were inside the engine-permitted lane — failures are LLM-decision-quality issues that no override lever can prevent. Adding overrides would either (a) tighten and suppress the legitimate Rule 18 admit activity that just started working, or (b) loosen, which is impossible since base config is already the floor. Override stack stays empty."
+    },
+    {
+      "file": "config/config.yaml",
+      "decision": "NO CHANGE — base parameters unchanged",
+      "rationale": "min_confidence (0.50), min_risk_reward (1.5), max_position_pct (0.20), max_sector_pct (0.35), max_deployed_pct (0.80), min_cash_buffer_pct (0.20), default_sl_pct (0.02), max_sl_pct (0.05), daily_loss_limit_pct (0.075) are all working as intended. None bound this week's decisions. The Rule 20 add is the right-shape fix because the failure mode is calibration-within-bounds, not a bounds problem. Hardcoding tier-based sizing in config.yaml would not help — there is no scalar parameter that captures 'conviction tier → size band'; the rule has to live in the prompt where the decision is generated."
+    },
+    {
+      "file": "Engine-side: orchestrator holdings-snapshot freshness",
+      "decision": "FLAGGED — outside strategy review scope",
+      "rationale": "23 of 41 guardrail blocks across the week were state-sync artifacts (14 'MODIFY for X but no open position/holding' + 9 'Cannot short-sell in CNC. Holdings: 0'). Pattern: LLM emits a MODIFY or SELL on a symbol whose recent EXIT/CLOSE has not been reflected in the holdings snapshot the next decision cycle reads. Rule 12 ('EXIT IS FINAL') addresses this from the prompt side, but the underlying issue is orchestrator state-propagation latency between the fill commit and the next prompt's holdings section. Suggested orchestrator-side fix: pass the most-recent-cycle exit set into the next prompt explicitly as 'symbols you exited THIS cycle, do not emit MODIFY/SELL on them next cycle' so the LLM doesn't have to deduce holdings freshness from a possibly-lagging snapshot. Outside strategy_review scope but flagged for orchestrator team. Same finding as Day-19 review — repeating because it persisted across the week."
+    },
+    {
+      "file": "Day-18 broker-data outage handling",
+      "decision": "FLAGGED — broker-side issue",
+      "rationale": "All 3 Day-18 SELL attempts were REJECTED at paper_broker.py:64-69 with 'Cannot get LTP'. The Dhan ticker data feed went stale; paper_broker correctly rejected orders that couldn't be priced. The strategy proposals themselves (TITAGARH small-profit lock, COFORGE small-profit lock, GOLDBEES small-loss exit) were defensible. This is data-feed resilience, not strategy. Suggested fix is on the data layer (failover to cached LTP, or surface 'data feed degraded' state into the prompt so the LLM knows). Outside strategy_review scope."
+    }
+  ],
+  "recommendations": [
+    "MONITOR DAYS 20-25 FOR RULE 20 EFFECT: Watch (a) correlation between admit confidence and admit position-size % across 20+ new admits — target r ≥ +0.5. (b) Conf 0.70+ admits sized into the 7-10% band (count target: most of them). (c) Conf 0.62-0.65 admits staying in the 3-5% band (no creep upward). (d) Any admit sized OUTSIDE its tier should have an explicit one-line justification in `reasoning` ('cluster-cap pressure', 'risk-budget-constrained', 'binary-event sizing cap', etc.). If after 5 sessions sizing is still anchored at 5%, the rule needs to be made more prescriptive — perhaps by specifying tier midpoints rather than bands.",
+    "MONITOR DAYS 20-25 FOR RULE 17 / 18 / 19 + RULE 14 EXTENSION CONTINUED EFFECT: This is the second week of operation for Rules 17/18 and the first day of operation for Rule 19 + Rule 14 same-session extension + Rule 17 winner variant. Watch frequency of (a) pre-SL panic exits citing proximity to SL, (b) zero-admit days with watchlist showing BULLISH candidates, (c) same-session adds to losers, (d) same-session sell-then-buy round-trips. Targets are zero, zero, zero, zero except where explicit prior-failure-mode-compliant exception language is cited in reasoning.",
+    "EXPECTANCY TARGET: Current weekly expectancy is +₹32/trade (50% × 1.06 W/L). Realistic target after Rule 20 stabilizes (Days 25-30): bring W/L ratio above 1.3× (winners running closer to target on appropriate sizing) to push expectancy to +₹150/trade and weekly realized P&L to a clearer positive signal that's not just noise. If expectancy remains stuck near zero after Rule 20 + Rule 17 winner variant have had a fair sample, the next leverage points are (a) entry quality (R:R floor lifted from 1.5 to 1.7, plus tighter sector-momentum confirmation), and (b) holding-period management (current MAX_CNC_HOLD_DAYS = 15 may be too short for some positions to reach target).",
+    "ORCHESTRATOR STATE-SYNC FOLLOWUP (cross-team): 23 of 41 weekly guardrail blocks are stale-state artifacts. Suggested fix is to surface exits-this-cycle into the next prompt explicitly. Worth confirming with orchestrator team that this is on their radar; if not, file a tracking item.",
+    "DHAN DATA-FEED RESILIENCE: Day-18 lost an entire trading day to a ticker-feed outage. Worth confirming whether the orchestrator surfaces 'data feed degraded' state into the LLM context; if not, the LLM is making decisions blind to whether its prices are fresh. Cross-team item.",
+    "WEEK-OVER-WEEK COMPARISON GROUNDWORK: Starting next weekly review, I should aggregate W/L ratio, expectancy, deployment band, and Rule-N violation counts as week-over-week trends rather than just the current snapshot. The Day-by-day data exists but a rolling weekly trend would surface whether the rule additions are compounding into measurable expectancy improvement, vs whether each rule plugs a leak only to surface another."
+  ]
+}

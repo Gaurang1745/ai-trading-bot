@@ -1,0 +1,71 @@
+{
+  "date": "2026-04-28",
+  "review_type": "daily",
+  "trades_analyzed": 7,
+  "summary": {
+    "wins": 0,
+    "losses": 3,
+    "total_pnl": -5964.24,
+    "win_rate": 0.0,
+    "avg_win": 0.0,
+    "avg_loss": -1988.08,
+    "closes_today": [
+      {"symbol": "HINDUNILVR", "entry": 2372.0, "exit": 2317.04, "sl": 2295.0, "qty": 20, "pnl": -1099.20, "pnl_pct": -2.32, "exit_pre_sl": true, "valid_trigger": "rule_11_binary_event_q4_apr30"},
+      {"symbol": "TORNTPOWER", "entry": 1810.0, "exit": 1761.82, "sl": 1775.0, "qty": 28, "pnl": -1349.04, "pnl_pct": -2.66, "exit_pre_sl": false, "valid_trigger": "none_exit_was_past_sl"},
+      {"symbol": "MAHABANK", "entry": 81.50, "exit": 78.57, "sl": 76.50, "qty": 1200, "pnl": -3516.00, "pnl_pct": -3.59, "exit_pre_sl": true, "valid_trigger": "none_panic_exit"}
+    ],
+    "new_entries_today": [
+      {"symbol": "COALINDIA", "entry": 469.0, "qty": 100, "sl": 463.0, "target": 488.0, "confidence": 0.65, "rr": 1.7}
+    ],
+    "guardrail_blocks": 3,
+    "guardrail_block_summary": "3 CNC SELL orders blocked at 11:44 attempting to short TORNTPOWER (28 qty x2) and MAHABANK (1200 qty) AFTER their SELL-to-zero exits — illegal CNC short-sells. All 3 also missing stop_loss/target.",
+    "lifetime_stats_through_today": {
+      "total_closes": 8,
+      "lifetime_wins": 3,
+      "lifetime_losses": 5,
+      "lifetime_win_rate": 0.375,
+      "lifetime_avg_win": 943.83,
+      "lifetime_avg_loss": -1447.91,
+      "lifetime_realized_pnl": -4408.06,
+      "portfolio_value": 1001956.49,
+      "portfolio_pct_change": 0.196
+    }
+  },
+  "patterns_found": [
+    "PANIC-EXIT CLUSTER: 3 discretionary CNC exits in a 28-min window (11:16-11:44), all on red positions. Only HINDUNILVR had a valid rule-11 binary trigger (Q4 in T+2 on Apr 30). TORNTPOWER and MAHABANK exits cited 'intraday rejection pattern' / 'PSU rotation stalled, equity-raise overhang' — neither qualifies as new information or binary event. Combined preventable loss: ₹4,865 = 82% of today's realized hit.",
+    "ASYMMETRIC LOSS-AVERSION: while losers were cut at -2.3% to -3.6%, the book's open green positions (PNBHOUSING +5.3%, NESTLEIND +0.5%, NTPC +0.9%, SUNPHARMA +0.8%, GOLDBEES, POWERGRID) were correctly held through the same dip. Cutting losers hard while letting winners drift through a market move is the textbook loss-aversion failure mode.",
+    "SL EXECUTION LAG: TORNTPOWER discretionary exit 1761.82 was BELOW its SL of 1775 — i.e. exit happened AT-OR-PAST the stop trigger price. This means broker-side SL should already have fired; the 'discretionary exit before SL' framing in the reasoning is incorrect. Net loss vs letting SL fire was -₹366.",
+    "ZOMBIE SELL-AFTER-EXIT: 3 CNC SELL orders blocked at 11:44 trying to re-sell TORNTPOWER (qty 28, twice) and MAHABANK (qty 1200) immediately after they had been exited. All 3 missing stop_loss / target — pattern indicates a stale-holdings read in the next decision cycle, NOT a deliberate bearish flip. Rule 12 only covered MODIFY-after-EXIT; the same structural error in fresh-SELL syntax was not explicitly forbidden.",
+    "TORNTPOWER ROUND-TRIP COST: original Day-3 single-leg trade banked +₹1,834. The Day-5 same-name re-entry at the same ₹1,810 entry price (under cooldown rule 14, exception (a) was claimed but the JERA / Nabha catalysts cited were already public on Day-3) closed today at -₹1,349. Net of the loop: +₹485 vs the +₹1,834 original — 73% of the gain was given back to a cooldown violation.",
+    "DAILY LOSS LIMIT BASE WAS ABSURDLY LOOSE: base config daily_loss_limit_pct = 0.075 (7.5% = -₹75K) versus the bot's worst session at -0.6% (-₹5,964). The circuit-breaker would never have fired today even though it was the worst session of the experiment. The base value was untested and disproportionate to actual session-loss distribution.",
+    "ENTRIES TODAY WERE WELL-DISCIPLINED: COALINDIA BUY at 12:13 was 5% size (₹46,900 / 1M), confidence 0.65, R:R 1:1.7, with explicit per-position-risk math in the reasoning (0.12% portfolio risk) — meets every numeric rule and shows the strategy layer can run a clean entry. The Day-6 failure was on the EXIT side, not the ENTRY side."
+  ],
+  "changes_made": [
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Added new Rule 15: PANIC-EXIT DISCIPLINE. Defines the 4 valid triggers for exiting a held position into red — (a) binary event in 3 sessions, (b) thesis broken by post-entry information, (c) market-wide risk-off (and even then, exit symmetrically across green AND red names), (d) approaching SL within 0.5%. Explicitly disqualifies the narratives Claude reached for today: 'sector down', 'rotation stalled', 'overhang', 'intraday rejection', 'capital preservation'. Adds the alternative tool — MODIFY tightening SL closer to LTP — instead of EXIT at LTP. Cites today's three exits with numeric detail.",
+      "why": "TORNTPOWER (-₹1,349) and MAHABANK (-₹3,516) — combined ₹4,865 = 82% of today's realized loss — were both panic exits with no valid trigger. Reasoning text cited price-action patterns and pre-existing overhangs, neither of which is new information. The pattern is selective loss-aversion: green positions were correctly held through the same intraday dip while red ones were cut.",
+      "expected_impact": "Future down-days where the index is weak should see HOLD-with-MODIFY (tighten SL) on losing names instead of EXIT-at-LTP. If panic-exits had been MODIFYs today (e.g., MAHABANK SL tightened to 78 instead of exiting at 78.57), recovery optionality would have been preserved at strictly equal worst-case downside. Should reduce avg loss per close (currently -₹1,988 today, lifetime -₹1,448) toward the SL-defined worst-case (typically 1.5-4% of position size given current SL band)."
+    },
+    {
+      "file": "src/ai/system_prompt.py",
+      "what": "Extended Rule 12 (EXIT IS FINAL) to cover NOT just MODIFY-after-EXIT but also fresh CNC SELL-after-SELL-to-zero. Renamed from 'NO MODIFY ON CLOSED POSITIONS' to 'NO SECOND ORDER ON A CLOSED CNC POSITION'. Added explicit language that CNC SELL with zero holdings = guardrail rejection per SEBI rule 3, and that bearish flips require an explicit MIS short with same-day square-off (not a stealth CNC SELL). Cites today's 3 blocked attempts.",
+      "why": "Three CNC SELLs at 11:44 on TORNTPOWER (×2) and MAHABANK were blocked by guardrails as illegal CNC short-sells immediately after the same symbols had been SELL-to-zero exited at 11:44. All three missing stop_loss/target — indicating the next decision cycle was operating on stale holdings state. The previous Rule 12 only forbade MODIFY-after-EXIT; the same structural error in different syntax wasn't covered.",
+      "expected_impact": "Should eliminate zombie SELL orders post-exit. Guardrail rejection log should show zero CNC short-sell rejections on subsequent down-days. Frees up decision-tick cycles for legitimate position management."
+    },
+    {
+      "file": "src/agents/risk_config.yaml",
+      "what": "Added daily_loss_limit_pct: 0.04 override (tightened from base 0.075). Effective immediately via hot-reload.",
+      "why": "Base 7.5% would tolerate -₹75,000 of session-day loss before circuit-breaking. Today's worst-ever session loss was -₹5,964 = -0.6% of capital. The base value is disproportionate to the actual session-loss distribution observed across 4 trading days (max single-day loss = -0.6%, mean ~ -0.1%). 0.04 = -₹40,000 still gives ~6.7x today's worst headroom but creates an actual circuit-breaker at a level worth pausing for, not a ceiling so high it functions as no ceiling at all.",
+      "expected_impact": "On a future bad day where realized + unrealized loss approaches 4%, the system will output NO_ACTION on all decisions, preventing further panic-exit cascades. Won't bind on today's pattern (-0.6% well below 4%) but creates a real backstop. Overrides only tighten — base config remains 0.075, can be promoted later after ≥10 days of evidence."
+    }
+  ],
+  "recommendations": [
+    "PROMOTE OVERRIDES TO BASE CONFIG once the experiment crosses ~10 trading days (currently 4 days). Specifically: max_sl_pct (0.04), max_position_pct (0.15), max_deployed_pct (0.65), max_sector_pct (0.22), min_sl_pct (0.01), default_sl_pct (0.015), daily_loss_limit_pct (0.04) have all been live for multiple days without incident or breach. The current pattern of stacking overrides on a stale base is technical debt.",
+    "INVESTIGATE STALE-HOLDINGS READ between exit and next decision tick. Today's 3 zombie SELLs at 11:44 were all generated within minutes of the SELL-to-zero exits. Either (a) the holdings snapshot in the prompt was not refreshed between the CLOSE confirmation and the next decision call, or (b) Claude was reading a cached holdings list. A tick-level state-freshness assertion would catch this.",
+    "ADD A POST-EXIT 'COOLDOWN MENTION' MECHANIC: when a position is closed, the next decision tick's prompt should include an explicit list of 'symbols closed in last 5 minutes — do not re-engage'. This is a stronger signal than relying on Claude to read the absence in EXISTING POSITIONS. Could be implemented in the data-builder layer, not the prompt.",
+    "TRACK WIN/LOSS BY EXIT-TYPE not just by symbol. Discretionary exits today were 3/3 losses. Exits triggered by valid rule-11 binary events (TORNTPOWER Day-3 +1834, GRANULES Day-3 +956) were 2/2 wins. Exits triggered by post-entry research (INDUSINDBK Day-3 +42) were 1/1 narrow win. Tagging closes with the trigger type (binary/thesis-broken/risk-off/discretionary) would let future reviews quantify the exit-discipline effect statistically.",
+    "CONSIDER A 'NO NEW BUYS AFTER N DISCRETIONARY EXITS IN ROLLING WINDOW' RULE if the panic-exit pattern recurs. Today's COALINDIA BUY at 12:13 was 30 min after the 11:44 panic-exit cluster — entering on the same day a panic-exit cascade just occurred is the same recency-bias failure mode in inverse, even though COALINDIA itself was well-reasoned.",
+    "RESEARCH 'WHEN TO TRAIL TIGHTER VS WHEN TO HOLD' on losing positions. The current trailing-SL mandate covers ONLY winners (>= +2% triggers breakeven move, >= +4% triggers 2% trail). There is no symmetric guidance for HOW to tighten SL on a losing position. New rule 15(d) and 15-MODIFY-instead-of-EXIT framing partially fill this gap, but a numeric playbook (e.g., 'on -2% with no thesis change, MODIFY SL to -3% rather than EXIT') would be more concrete than prose."
+  ]
+}

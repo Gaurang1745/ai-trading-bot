@@ -1,0 +1,72 @@
+{
+  "timestamp": "2026-04-27 09:00:00",
+  "risk_level": "HIGH",
+  "portfolio_summary": {
+    "total_value": 1001425.50,
+    "cash": 324460.30,
+    "deployed_pct": 0.6760,
+    "holdings_count": 8,
+    "positions_count": 0,
+    "daily_pnl": 0.0
+  },
+  "sector_breakdown_pct_of_capital": {
+    "BFSI": 0.3606,
+    "FMCG": 0.1673,
+    "Power_PSU": 0.0505,
+    "Gold_ETF": 0.0500,
+    "Pharma": 0.0476
+  },
+  "single_name_breakdown_pct_of_capital": {
+    "AUBANK": 0.1844,
+    "NESTLEIND": 0.1199,
+    "MAHABANK": 0.0977,
+    "PNBHOUSING": 0.0786,
+    "NTPC": 0.0505,
+    "GOLDBEES": 0.0500,
+    "GRANULES": 0.0476,
+    "HINDUNILVR": 0.0474
+  },
+  "active_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.70,
+    "default_sl_pct": 0.015,
+    "min_sl_pct": 0.01,
+    "max_sl_pct": 0.04,
+    "max_sector_pct": 0.30,
+    "daily_loss_limit_pct_base": 0.03
+  },
+  "findings": [
+    "BINARY EVENT TODAY (TIER-1): AU Small Finance Bank Q4 FY26 results scheduled Apr 27 (premarket_brief earnings_calendar). AUBANK is the largest single-name in the book at 18.44% of capital (₹184,632.80) — grandfathered above the 0.15 per-name override cap that has been in force since Apr 22 12:30. Binary outcome on the single largest position carries asymmetric mark-to-market exposure; a -5% post-event move on AUBANK alone is ~₹9,232 (~92 bps of book), a -10% move is ~₹18,463 (~184 bps).",
+    "BINARY EVENT TODAY (TIER-2 — sector co-mover): SBI Cards & Payment Services Q4 results also Apr 27. Book holds two additional BFSI names (MAHABANK 9.77%, PNBHOUSING 7.86%) that are vulnerable to sympathetic sector-volatility moves on a heavy BFSI-results day. Combined BFSI-correlated mark surface: 36.06% of capital.",
+    "BFSI sector concentration: 36.06% (₹361,152.80) of capital — 6.06 pp above the 0.30 max_sector_pct override (set Apr 25 09:05 by strategy weekly review). This breach is GRANDFATHERED — guardrails will reject any NEW BFSI BUY admission until BFSI drifts below 30%, but cannot retract existing exposure. The Apr 25 weekly-review thesis ('rule 11 binary-event discipline + 0.30 sector cap should mechanically force a BFSI trim within 1-2 sessions') has NOT executed: Day-3 SELLs were Power-cluster (TORNTPOWER, ADANIPOWER), zero BFSI trim. Book carries the full 36.06% BFSI exposure into the binary event window.",
+    "AUBANK concentration is GRANDFATHERED drift, not new admission: position 18.44% > 0.15 override cap. Numeric tightening of max_position_pct cannot retract this — only a strategy SELL can. Risk monitor's lever set is exhausted on this single-name vector.",
+    "Macro overlay is risk-off into a gap-up: GIFT Nifty +0.75% but heavy FII selling Friday (-₹8,828 cr cash), rupee 94.2 (4-week low, 5th straight session of weakness), Brent >$105. Premarket brief flags 'positive open faded into selling unless FII flows turn'. A bid-at-open for AUBANK pre-results is plausible, providing a strategy exit window if rule 11 (binary-event discipline) fires.",
+    "Deployment: 67.60% (₹676,965.20 / ₹1,001,425.50) — below the 0.70 max_deployed_pct cap with 2.40 pp of slack. Admission surface is OPEN for non-BFSI / non-AUBANK adds. The 0.70 cap stopped binding on Day-3 (Apr 24 11:18 was 78.52%, now 67.60% via the two Power-cluster SELLs). Healthy regime: SELL → freed cash → quality-gated reuptake works as designed.",
+    "Cash buffer: ₹324,460.30 (32.40%) — robust reserve. Provides opportunistic-add capacity post-event, AND absorbs ~3% of book mark-to-market drawdown without forcing liquidation.",
+    "No daily P&L: 0 trades today, premarket snapshot. Buffer to base 3% loss gate: ₹30,043 (3.00% of capital). Buffer to internal -1% findings trigger: ₹10,014.",
+    "FMCG concentration: 16.73% (NESTLEIND 11.99% + HINDUNILVR 4.74%). HINDUNILVR also reports 'week of Apr 28' per premarket_brief — secondary binary event in book within 5 sessions but exposure is bounded (4.74% of capital). NESTLEIND (11.99%) carries general consumption/results sympathy risk but no direct event today.",
+    "Strategy layer behavior signal is positive on the SELL side: Day-3 closed TORNTPOWER (+₹1,834) and ADANIPOWER (-₹409) for net realized +₹1,425. Holdings count 10 → 8. This is the first session of validated SELL discipline — but pre-event BFSI trim plan from Apr 25 weekly review did NOT execute, suggesting rule 11 internalization is incomplete."
+  ],
+  "actions_taken": [
+    "NO numeric override changes this tick. Disciplined hold consistent with established pattern (cf. Apr 23 11:30, Apr 23 15:00, Apr 24 11:00 — daily_loss_limit_pct repeatedly evaluated and held at 0.03 absent a P&L-based firing trigger). Book is at 0 daily P&L; loss-gate pre-emption ahead of a binary event is forecast-based rather than trigger-based and breaks the surgical-fire discipline.",
+    "All seven existing overrides held: min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.70, default_sl_pct=0.015, min_sl_pct=0.01, max_sl_pct=0.04, max_sector_pct=0.30. Each remains binding against the structural profile: 0.30 sector cap blocks new BFSI admission, 0.15 per-name cap blocks new oversized adds, 0.70 deployment cap leaves a thin 2.40 pp admission window, the SL-band [1.0%, 4.0%] gates new-entry per-name risk to ≤0.60% of book.",
+    "Binary-event discipline is the STRATEGY layer's responsibility (system_prompt rule 11, added Apr 25 09:05 weekly review). Risk monitor's role is to backstop the strategy's decisions, not to substitute for them. Pre-armed intraday triggers (below) will fire surgically if mark-to-market validates the elevated risk thesis."
+  ],
+  "pre_armed_triggers_intraday": [
+    "TRIGGER A (PnL-based, primary): If book daily P&L ≤ -1.00% (₹-10,014) at any tick → FIRE daily_loss_limit_pct 0.03 → 0.025 (tightens loss gate from ₹30,043 to ₹25,036). Rationale: at -1% the book is half-way to the loss gate, time to compress remaining loss budget.",
+    "TRIGGER B (AUBANK adverse): If AUBANK marks below ₹996.60 (-5.00% from entry ₹1,049.05) post-event AND strategy has not initiated a SELL within 30 min of breach → FIRE max_sl_pct 0.04 → 0.035 + min_sl_pct 0.01 → 0.015 (tightens SL band to [1.5%, 3.5%] for new admissions; protects re-entry quality after the binary outcome).",
+    "TRIGGER C (BFSI extension): If BFSI drifts above 38.00% of capital via mark-to-market → FIRE max_sector_pct 0.30 → 0.25 (deepens sector back-pressure). Note: drift to 38% would require BFSI mark gain ~5% absolute or capital base shrink — both unlikely in a single tick, but pre-armed for completeness.",
+    "TRIGGER D (composite HIGH→CRITICAL meta): If (i) book daily P&L ≤ -1.5% AND (ii) AUBANK ≤ -7% AND (iii) strategy silent for ≥60 min post-results → ELEVATE risk_level to CRITICAL + FIRE daily_loss_limit_pct 0.03 → 0.020 (hard circuit-breaker). Also fire max_position_pct 0.15 → 0.12 to deepen new-admission size cap during distress regime.",
+    "TRIGGER E (deployment refill): If a SELL frees cash and deployment drops below 60% AND strategy then re-admits a BFSI name within 60 min of trim → CONFIRM 0.30 sector cap rejection fires correctly (no override change needed; this is a guardrail-validation trigger, not a tightening trigger)."
+  ],
+  "did_not_fire_with_reasons": [
+    "daily_loss_limit_pct (0.03 → 0.025): book at 0% daily P&L; ₹30,043 buffer to base loss gate, ₹10,014 buffer to internal -1% trigger. Pre-event firing is forecast-based, breaks the established 'fire only on PnL-hard trigger' discipline (consistent with prior 3-session non-fire rationale). Pre-armed as Trigger A above.",
+    "min_confidence (0.60 → 0.65): closed-trade sample is still 2 (TORNTPOWER win 0.68, ADANIPOWER loss 0.66). Confidence has no signal yet; tightening on a 2-sample base is noise. Same rationale as Apr 25 09:05 strategy weekly-review hold.",
+    "max_position_pct (0.15 → 0.12): AUBANK 18.44% breach is grandfathered drift; tighter cap cannot retract existing position. No new admission has approached the 0.15 cap since Apr 22 14:00 (two-AUBANK-lot stacking pattern). Decorative tightening absent firing trigger. Pre-armed within Trigger D (composite) as a distress-regime stack.",
+    "max_deployed_pct (0.70 → 0.65): cap just stopped binding (67.60% < 70.00%) after Day-3 trims; tightening now would re-close the admission window and friction the SELL→BUY recycle that the Day-3 SELLs validated. Punishes the strategy for the right behavior.",
+    "max_sector_pct (0.30 → 0.25): 0.30 cap is binding and rejecting new BFSI admissions correctly. Further tightening absent a BFSI extension trigger is theatrical. Pre-armed as Trigger C above.",
+    "default_sl_pct (0.015 → 0.012) / max_sl_pct (0.04 → 0.035) / min_sl_pct (0.01 → 0.015): SL-band already tight at [1.0%, 4.0%] — the worst-case new-entry per-name risk is 0.60% of book at max sizing. No firing trigger on SL discipline; new-admission queue has been thin (0 new BUYs since Apr 22 evening). Pre-armed as Trigger B above for AUBANK adverse-event response."
+  ],
+  "next_check": "2026-04-27 09:30 (market open snapshot — observe AUBANK opening print, gap direction, FII flow, and whether strategy fires pre-results SELL on AUBANK or correlated BFSI names)"
+}

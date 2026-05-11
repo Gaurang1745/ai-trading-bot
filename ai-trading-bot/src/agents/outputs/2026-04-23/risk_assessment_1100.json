@@ -1,0 +1,109 @@
+{
+  "timestamp": "2026-04-23 11:00:00",
+  "risk_level": "MEDIUM",
+  "portfolio_summary": {
+    "total_value": 996558.10,
+    "cash": 263635.50,
+    "deployed_pct": 0.7355,
+    "holdings_count": 9,
+    "positions_count": 0,
+    "daily_pnl": -3462.40
+  },
+  "data_freshness": {
+    "latest_snapshot_id": 12,
+    "latest_snapshot_ts": "2026-04-23 10:46:54",
+    "age_minutes_at_tick": 13,
+    "source": "portfolio_snapshots row (LTPs marked at 10:46:54); no 11:00 live mark was available, so figures below are based on the 10:46 snapshot."
+  },
+  "pnl_detail": {
+    "realized_daily_pnl": 0.0,
+    "unrealized_pnl_10_46": -3462.40,
+    "unrealized_pnl_pct": -0.00347,
+    "intraday_trajectory": "09:11 -₹7,488 (-0.75%) → 09:44 -₹4,048 (-0.40%) → 10:14 -₹2,070 (-0.21%) → 10:46 -₹3,462 (-0.35%)",
+    "delta_since_10_14": -1391.90,
+    "delta_drivers_10_14_to_10_46": {
+      "MAHABANK": -612.0,
+      "HINDUNILVR": -626.0,
+      "NESTLEIND": -365.5,
+      "AUBANK": 246.4,
+      "TORNTPOWER": 158.4,
+      "others_net": -193.2
+    },
+    "daily_loss_limit_value": 30000.0,
+    "buffer_to_limit_x": 8.67
+  },
+  "filled_book_detail": {
+    "holdings_value_marked": 732922.60,
+    "holdings": [
+      {"symbol": "AUBANK",     "qty": 176,  "avg_price": 1049.05, "last_price": 1049.05, "value": 184632.80, "pct_capital": 0.1853, "pnl_pct": 0.0000,  "sector": "BFSI-Private"},
+      {"symbol": "NESTLEIND",  "qty": 85,   "avg_price": 1412.94, "last_price": 1403.00, "value": 119255.00, "pct_capital": 0.1197, "pnl_pct": -0.0070, "sector": "FMCG"},
+      {"symbol": "MAHABANK",   "qty": 1200, "avg_price": 81.50,   "last_price": 78.46,   "value": 94152.00,  "pct_capital": 0.0945, "pnl_pct": -0.0373, "sector": "BFSI-PSU"},
+      {"symbol": "PNBHOUSING", "qty": 80,   "avg_price": 984.00,  "last_price": 989.70,  "value": 79176.00,  "pct_capital": 0.0795, "pnl_pct": 0.0058,  "sector": "BFSI-NBFC"},
+      {"symbol": "TORNTPOWER", "qty": 36,   "avg_price": 1650.00, "last_price": 1689.70, "value": 60829.20,  "pct_capital": 0.0610, "pnl_pct": 0.0241,  "sector": "Power"},
+      {"symbol": "NTPC",       "qty": 125,  "avg_price": 404.50,  "last_price": 401.50,  "value": 50187.50,  "pct_capital": 0.0504, "pnl_pct": -0.0074, "sector": "Power"},
+      {"symbol": "GOLDBEES",   "qty": 400,  "avg_price": 125.10,  "last_price": 123.97,  "value": 49588.00,  "pct_capital": 0.0498, "pnl_pct": -0.0090, "sector": "Gold-ETF"},
+      {"symbol": "GRANULES",   "qty": 70,   "avg_price": 681.00,  "last_price": 684.00,  "value": 47880.00,  "pct_capital": 0.0481, "pnl_pct": 0.0044,  "sector": "Pharma"},
+      {"symbol": "HINDUNILVR", "qty": 20,   "avg_price": 2372.00, "last_price": 2360.90, "value": 47218.00,  "pct_capital": 0.0474, "pnl_pct": -0.0047, "sector": "FMCG"}
+    ],
+    "sector_concentration": {
+      "BFSI_total":   {"names": ["MAHABANK", "PNBHOUSING", "AUBANK"], "value": 357960.80, "pct_capital": 0.3592, "pct_deployed": 0.4884},
+      "FMCG_total":   {"names": ["NESTLEIND", "HINDUNILVR"],          "value": 166473.00, "pct_capital": 0.1671, "pct_deployed": 0.2271},
+      "Power_total":  {"names": ["TORNTPOWER", "NTPC"],               "value": 111016.70, "pct_capital": 0.1114, "pct_deployed": 0.1514},
+      "Gold_ETF":     {"names": ["GOLDBEES"],                         "value": 49588.00,  "pct_capital": 0.0498, "pct_deployed": 0.0677},
+      "Pharma":       {"names": ["GRANULES"],                         "value": 47880.00,  "pct_capital": 0.0481, "pct_deployed": 0.0653}
+    }
+  },
+  "order_book_state": {
+    "still_open": [
+      {"symbol": "ADANIPOWER", "qty": 230, "price": 214.0, "value": 49220.0, "pct_capital_on_fill": 0.0494, "sector": "Power", "submitted": "2026-04-22 14:12:49", "note": "unchanged from 09:00 and 10:30 ticks — has not filled in 1st trading hour today"}
+    ],
+    "projected_on_adanipower_fill": {
+      "deployed_pct": 0.7849,
+      "power_cluster_pct_capital": 0.1608,
+      "power_cluster_names": ["TORNTPOWER", "NTPC", "ADANIPOWER"]
+    },
+    "no_new_submissions_this_session": true
+  },
+  "trigger_check_vs_10_30_plan": {
+    "trigger_a_adanipower_fills": {"fired": false, "status": "ADANIPOWER still OPEN, unchanged since 2026-04-22 submission; deployed held at 73.55%"},
+    "trigger_b_unrealized_below_neg_1_pct": {"fired": false, "value": -0.00347, "threshold": -0.01, "buffer_inr": 6537.60, "note": "unrealized worsened -139 bps from 10:14 trough-recovery but only reached -0.35%, still ~3x buffer to the -1% trigger and ~8.7x buffer to the 3% daily-loss gate"},
+    "trigger_c_strategy_first_sell_or_exit": {"fired": false, "status": "no SELL, no MODIFY, no new BUY since market open; 0 strategy-layer decisions in 2 hours of trading on Day 2"},
+    "trigger_d_bfsi_climbs_further": {"fired": false, "value": 0.3592, "prior_10_30": 0.3591, "note": "BFSI share essentially flat tick-over-tick (+1 bp); no new BFSI entry admitted — expected, since max_deployed_pct=0.72 is blocking all new entries"},
+    "trigger_e_deployed_below_0_68_via_exits": {"fired": false, "value": 0.7355, "note": "no exits have occurred; deployed tracking mark-to-market only"}
+  },
+  "current_overrides": {
+    "min_confidence": 0.60,
+    "max_position_pct": 0.15,
+    "max_deployed_pct": 0.72
+  },
+  "findings": [
+    "Portfolio state is materially unchanged since the 10:30 tick: zero new fills, zero new submissions, zero SELL/MODIFY decisions from the strategy layer in the 30 minutes since — still nine holdings, still one OPEN ADANIPOWER order carried from 2026-04-22.",
+    "Unrealized P&L reversed mildly from its 10:14 recovery high: -₹2,070 (10:14) → -₹3,462 (10:46), a -139 bps deterioration in 32 minutes. Drivers: MAHABANK (BFSI-PSU, -612), HINDUNILVR (FMCG flipped positive→negative, -626), NESTLEIND (FMCG, -366). AUBANK gave back its earlier loss (+246) and TORNTPOWER extended gains (+158). Net move is small (-₹1,392) and remains ~8.7x inside the daily-loss gate.",
+    "AUBANK single-name exposure 18.53% of capital (176 × ₹1049.05) — passively BREACHES max_position_pct=0.15 by 3.53 pp. Unchanged from 10:30 breach (was 18.48%). Position-cap overrides cannot retroactively trim; exit requires a strategy-layer SELL.",
+    "BFSI cluster 35.92% of capital / 48.84% of deployed (MAHABANK 9.45% + PNBHOUSING 7.95% + AUBANK 18.53%) — still BREACHES the 25%-of-capital cluster-alert threshold by 10.92 pp. Flat tick-over-tick; not inflecting. No sector-cap parameter exists in base config, so this remains controllable only indirectly via max_deployed_pct back-pressure.",
+    "Deployed 73.55% of total value is ABOVE the 10:30 max_deployed_pct=0.72 cap by 1.55 pp — this is the intended grandfathered state from the 10:30 tightening (cap set below current deployment specifically to force SELL-before-BUY dynamics). The cap is therefore working as designed: it is blocking new admissions, and the strategy layer's 0 decisions in the last 30 min is consistent with the back-pressure landing (no entry is admissible without a prior trim).",
+    "None of the five reassessment triggers specified at 10:30 have fired: ADANIPOWER still OPEN; unrealized at -0.35% (trigger threshold -1.0%); no SELL/EXIT executed; BFSI cluster flat; no exits to inflect deployed downward. The 10:30 override posture is therefore binding and adequate for the observed state.",
+    "Housekeeping observation: the 10:30 risk_assessment JSON claims 'override file updated, changelog entry added' but the risk_config.yaml changelog ends at 2026-04-22 16:00:00 — the override VALUE was updated (max_deployed_pct=0.72 is present in the overrides block) but the changelog paperwork was not written. This is not re-tightenable from my tick and I am deliberately not backfilling an entry purporting to be from a prior agent. Flagging for awareness.",
+    "No intraday positions (paper_positions empty); all exposure remains in CNC holdings, so intraday-leverage risk remains a non-issue."
+  ],
+  "actions_taken": [
+    "No numeric override changes this tick. Holding min_confidence=0.60, max_position_pct=0.15, max_deployed_pct=0.72 (the 10:30 posture) into the 11:30 tick.",
+    "Rationale: the 10:30 tick added max_deployed_pct=0.72 as the primary new-entry back-pressure lever, sized below current deployment (0.7355) specifically to require a SELL before any BUY. The observed state since — zero strategy decisions, no fills, unrealized mildly worsening but comfortably inside the loss gate, BFSI cluster flat — is exactly the state that lever was designed to produce. Adding a further numeric lever here (e.g., max_deployed_pct 0.72 → 0.70) would be additive friction without a firing trigger: it would not retract any grandfathered breach (AUBANK, BFSI cluster, ADANIPOWER pending), and it would not influence strategy-layer SELL behavior — which is where the actionable next move sits per yesterday's prompt-layer ORDER HYGIENE / CLUSTER DISCIPLINE additions. The right pattern remains: let the strategy layer observe and act, add levers only on observed trigger events."
+  ],
+  "actions_not_taken": [
+    "Did NOT further tighten max_deployed_pct (0.72 → 0.70). Reason: trigger (a) has not fired — ADANIPOWER has not filled, so projected deployment has not jumped to 78.49%. Tightening preemptively would be additive friction without a trigger event and the 10:30 cap is already below current deployment (binding).",
+    "Did NOT tighten daily_loss_limit_pct (0.03 → 0.025). Reason: trigger (b) has not fired — unrealized P&L at -0.35% is still ~3x inside the -1% reassessment threshold and ~8.7x inside the 3% loss gate. Realized P&L is ₹0 (no sells). The 10:14→10:46 reversal is within normal intraday noise on a BFSI/FMCG-heavy book.",
+    "Did NOT tighten max_position_pct (0.15 → 0.12 or lower). Reason: same as 10:30 — the AUBANK passive breach (18.53%) is mark-to-market on grandfathered fills, and lowering the cap cannot retract it. Strictly punitive to smaller names.",
+    "Did NOT raise min_confidence (0.60 → 0.65). Reason: still no realized-outcome signal to justify raising the floor. The 0.72-confidence Day-1 entries (MAHABANK, NESTLEIND) remain the larger mark-to-market laggards, which argues AGAINST confidence as a predictive filter on this sample. Revisit once realized SELLs accumulate.",
+    "Did NOT tighten default_sl_pct / drawdown_reduce_pct / drawdown_halt_pct. Reason: no SL triggers fired; unrealized drawdown at -0.35% is far from drawdown_reduce_pct=0.10 and drawdown_halt_pct=0.15. Tightening SL/drawdown without any realized-loss data on a flat-P&L book is premature.",
+    "Did NOT backfill the missing 10:30 changelog entry in risk_config.yaml. Reason: impersonating a prior agent in the changelog would corrupt the audit trail. Flagged as a housekeeping observation in findings; the next agent that touches the file should decide whether to add a corrective note under its own timestamp/identity."
+  ],
+  "reassessment_triggers_next_tick": [
+    "(a) ADANIPOWER OPEN fills (projected deployed 78.49%, Power cluster 16.08%) and strategy has NOT trimmed anything → tighten max_deployed_pct 0.72 → 0.70 to compound back-pressure on further additions.",
+    "(b) Unrealized P&L breaks below -1.0% of capital (-₹9,966) → tighten daily_loss_limit_pct 0.03 → 0.025 as a leading defense. Current buffer: ₹6,538 from the trigger, ~₹26,500 from the loss gate.",
+    "(c) Strategy layer executes its FIRST SELL/EXIT → read the decision justification. If AUBANK trim, relax max_deployed_pct 0.72 → 0.74 (one-way, above the 10:30 setting) to reopen admission for diversifying entries. Never above 0.75 (pre-breach baseline).",
+    "(d) BFSI cluster % of capital climbs above 0.37 (+1 pp from here) via mark moves OR a new BFSI entry admitted despite the 0.72 cap → tighten min_confidence 0.60 → 0.65 to gate-keep decision quality, since sizing and deployment levers have both been partially defeated.",
+    "(e) MAHABANK single-name unrealized P&L breaks below -5% (-₹4,890) → evaluate whether to signal urgency to the strategy layer via a tighter default_sl_pct (0.02 → 0.015), since MAHABANK has been the persistent top loser across all four snapshots today (-2.15%, -2.98%, -3.10%, -3.73%) — a deteriorating trend, not noise.",
+    "(f) If 11:30 tick still shows ZERO strategy-layer decisions (SELL / MODIFY / new BUY) for a cumulative 2.5 hours post-open → flag as a strategy-layer stall, and do NOT add further risk_config levers (more numeric friction will not fix a behavioral gap). Route attention to prompt-layer review instead."
+  ]
+}

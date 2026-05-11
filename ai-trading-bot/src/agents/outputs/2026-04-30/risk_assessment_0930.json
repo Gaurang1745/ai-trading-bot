@@ -1,0 +1,105 @@
+{
+  "timestamp": "2026-04-30 09:30:00",
+  "tick_kind": "intraday_30min",
+  "session_day": 8,
+  "risk_level": "LOW",
+  "risk_level_internal_vs_external": {
+    "internal_portfolio_risk": "LOW",
+    "external_macro_risk": "ELEVATED",
+    "rationale": "Internal book remains well-diversified across 5 sectors (Power exposure exited via POWERGRID 09:09:47 -₹159 disciplined cut; lone Power name removed). Deployment 44.79% sits 20.21 pp under the 0.65 cap. No concentration breach, no single-name distress, no panic-pattern signals. External macro unchanged from 09:00: risk-off (Brent ~$120 on Trump Iran-port blockade, FII -₹2,468 Cr Apr 29, USD/INR 94.85 record low, Big Tech overnight prints in flux). Composite tilt: LOW — internal cleanliness dominates a moderate macro headwind, and the disciplined POWERGRID exit at the open is a positive behavioral signal."
+  },
+  "portfolio_summary": {
+    "total_value": 995330.39,
+    "cash": 549550.49,
+    "deployed_pct": 0.4479,
+    "deployed_pct_full_fill_projection": 0.4479,
+    "holdings_count": 7,
+    "positions_count": 0,
+    "open_orders_count": 0,
+    "daily_pnl": -159.0,
+    "daily_pnl_pct": -0.00016,
+    "cumulative_pnl": -4669.61,
+    "cumulative_pnl_pct": -0.00467
+  },
+  "holdings_breakdown": [
+    {"symbol": "NESTLEIND", "qty": 85, "avg_price": 1412.94, "value": 120099.90, "pct_of_capital": 0.1207, "sector": "FMCG"},
+    {"symbol": "PNBHOUSING", "qty": 80, "avg_price": 984.0, "value": 78720.00, "pct_of_capital": 0.0791, "sector": "BFSI"},
+    {"symbol": "SUNPHARMA", "qty": 30, "avg_price": 1734.0, "value": 52020.00, "pct_of_capital": 0.0523, "sector": "Pharma"},
+    {"symbol": "GOLDBEES", "qty": 400, "avg_price": 125.1, "value": 50040.00, "pct_of_capital": 0.0503, "sector": "Gold"},
+    {"symbol": "BANDHANBNK", "qty": 250, "avg_price": 200.0, "value": 50000.00, "pct_of_capital": 0.0502, "sector": "BFSI"},
+    {"symbol": "GLENMARK", "qty": 20, "avg_price": 2400.0, "value": 48000.00, "pct_of_capital": 0.0482, "sector": "Pharma"},
+    {"symbol": "COALINDIA", "qty": 100, "avg_price": 469.0, "value": 46900.00, "pct_of_capital": 0.0471, "sector": "Mining"}
+  ],
+  "open_orders": [],
+  "todays_trades": [
+    {"symbol": "POWERGRID", "side": "SELL", "qty": 150, "pnl": -159.0, "ts": "2026-04-30 09:09:47", "note": "Disciplined small-loss exit at the open; removes lone Power name (was 4.83% of capital at 09:00). Loss = -1.05% per share at 320.5 avg."}
+  ],
+  "sector_exposure_pct": {
+    "BFSI": 0.1293,
+    "FMCG": 0.1207,
+    "Pharma": 0.1005,
+    "Gold": 0.0503,
+    "Mining": 0.0471
+  },
+  "guardrail_buffers": {
+    "max_position_pct (0.15)": "NESTLEIND 0.1207 largest, buffer 2.93 pp — non-binding",
+    "max_sector_pct (0.28)": "BFSI 0.1293 largest, buffer 15.07 pp — non-binding",
+    "max_deployed_pct (0.65)": "deployed 0.4479, buffer 20.21 pp — non-binding (deepened by POWERGRID exit)",
+    "daily_loss_limit_pct (base 0.075)": "today P&L -₹159, buffer ~₹74,503 to circuit breaker — 469x current loss",
+    "min_confidence (0.65)": "no admissions today; yesterday blocked 4 attempts at 0.60-0.62 (none ≥0.70)",
+    "max_sl_pct (0.04)": "no fresh admissions today; GLENMARK 4.4% is grandfathered carry-over fill",
+    "default_sl_pct (0.015)": "no fresh admissions today",
+    "min_sl_pct (0.01)": "no fresh admissions today"
+  },
+  "delta_from_0900_tick": {
+    "POWERGRID_exit": "Sold 150 @ ~₹319.44 = -₹159 (-1.05%/share). Power-sector exposure 4.83% → 0%. Disciplined cut on a risk-off open before any drawdown could compound; matches Day-7 behavioral pattern of small-loss exits.",
+    "GLENMARK_fill": "20 @ ₹2400 LIMIT (submitted Apr-29 09:10:58) FILLED, exiting the OPEN-orders book. Pharma sector 5.22% → 10.05% (still 3.95 pp below 14% revocation trigger).",
+    "deployment_change": "Full-fill projection 49.61% → realized deployment 44.79% (-4.82 pp). Idle cash absolute: ₹549,550 (55.21%).",
+    "open_orders_count": "1 → 0. Order book is empty for the first time today.",
+    "sector_count": "6 → 5 (Power dropped out). All remaining sectors hold 9+ pp of buffer to the 0.28 cap.",
+    "behavioral_health": "Strategy executed 1 disciplined SELL within 10 min of open. No new BUY admissions yet — under risk-off macro this is appropriate restraint, not concerning silence."
+  },
+  "trigger_status_carried_from_0900_tick": {
+    "REVOCATION max_sector_pct 0.28 → 0.22 (any 2nd Pharma > 14% full-fill OR 4-name cluster OR BFSI > 17%)": "DORMANT — Pharma 10.05% (3.95 pp under threshold), no clusters, BFSI 12.93%. GLENMARK fill is carry-over not a fresh admission.",
+    "REVOCATION max_sector_pct 0.28 → 0.20 (5-name cluster OR sector > 22%)": "DORMANT — largest cluster is 2 names; largest sector 12.93%.",
+    "max_sl_pct 0.04 → 0.035 (fresh ≥4% SL admission within first hour)": "DORMANT — no fresh admissions today. Carries to 10:00 then disarms.",
+    "daily_loss_limit_pct base 0.075 → override 0.05 (intraday loss > -₹20K within 60 min)": "DORMANT — today P&L -₹159 (0.8% of trigger threshold).",
+    "LOOSEN max_deployed_pct 0.65 → 0.70 at 11:00 tick (≥2 high-conf entries + capacity-binding approaching)": "DORMANT — 0/2 high-conf entries, capacity 20.21 pp from binding.",
+    "min_confidence 0.65 → 0.60 LOOSEN": "DEFERRED to Day-10 (~2026-05-04) for n≥15 closed-trade sample.",
+    "GLENMARK_stale_24h_escalation": "RESOLVED — GLENMARK filled at 09:10:58 today before aging past 24h cutoff. Cancel-or-carry decision moot.",
+    "Composite distress meta-trigger D (HIGH risk_level)": "DORMANT — 0/3 legs fire (book P&L -0.016% > -0.5%; no single name < -3%; strategy demonstrably active with 1 SELL)."
+  },
+  "findings": [
+    "DISCIPLINED OPENING-BAR EXIT: POWERGRID sold at -₹159 (-1.05%/share, 0.016% of capital) at 09:09:47, within 10 minutes of market open. The lone Power-sector name was cut before any oil-shock-related drawdown could compound on a 4.83%-of-capital position. This matches the Day-7 behavioral pattern of small-loss tactical exits — strategy is reading the risk-off macro tape correctly. No re-entry pattern yet.",
+    "SECTOR PROFILE FURTHER CLEANED: 6 sectors → 5 (Power gone). Largest BFSI 12.93% retains 15.07 pp buffer to the loosened 0.28 cap; largest single name NESTLEIND 12.07% retains 2.93 pp buffer to 0.15 cap. The 09:00 max_sector_pct loosening (0.22 → 0.28) remains correctly calibrated — no breach risk emerged from the GLENMARK fill (Pharma 10.05% sits 3.95 pp under the revocation trigger).",
+    "DEPLOYMENT IS NOW EVEN LIGHTER: 44.79% deployed (4.82 pp lower than 09:00 full-fill projection of 49.61%) after POWERGRID exit and GLENMARK fill net out. Cash 55.21% (₹549,550). The 0.65 cap is non-binding by 20.21 pp. This is the lightest carrying cash position of the experiment — under-deployment cost is real, but it remains SIGNAL-GATED (strategy not finding entries on risk-off open) not PARAMETER-GATED. Loosening max_deployed_pct to 0.70 would not directly increase deployment.",
+    "ORDER BOOK FULLY CLEAR: open_orders count 1 → 0 after GLENMARK fill. First time today the order book is empty. Strategy now has full discretion on next entry timing without any in-flight commitments.",
+    "DAILY P&L IS TRIVIAL: -₹159 (-0.016% of capital) — 469x buffer to base 0.075 daily-loss circuit breaker, 125x buffer to override 0.05 (if armed). Loss-gate tightening is not actionable with current realized P&L.",
+    "MIN_CONFIDENCE FLOOR STILL NOT EATING TOP-TIER SIGNAL: zero admissions today so no live observations; yesterday's 4 blocks at 0.60-0.62 confirm none of the gated attempts cleared 0.70. By the prompt's explicit criterion ('high-confidence (≥0.70) entries being blocked'), the floor remains correctly calibrated. Hold per Day-10 milestone plan.",
+    "GLENMARK CARRY-OVER FILL DOES NOT ESCALATE THE SL-BAND BREACH PRECEDENT: GLENMARK was admitted Apr-29 with 4.4% SL (warning-not-block on engine permissiveness). Today's fill is a passive broker match on a Day-7-submitted order — not a fresh admission, so it does not represent a new instance of the breach pattern. The system_prompt rule 5 hardening (added Apr-29 EOD) governs future admissions; today's fill is grandfathered. SL-band overrides remain correctly calibrated (default 0.015, min 0.01, max 0.04).",
+    "MACRO BACKDROP UNCHANGED FROM 09:00: Brent ~$120, FII -₹2,468 Cr (Apr 29), USD/INR 94.85, Big Tech overnight prints driving sentiment, ~47 NSE companies reporting today (HINDUNILVR FMCG bellwether, ADANIPORTS Infra, ADANIENT, BAJAJFINSV, ADANIPOWER all on tape). Sector-theme entries are LIKELY through the day if signals materialize — the loosened 0.28 max_sector_pct gives strategy room to express a theme on conviction without forcing the prior cap to bite. Loosening direction is appropriate; tightening volume-of-admission (max_deployed_pct) into the risk-off open would still be wrong asymmetry."
+  ],
+  "actions_taken": [],
+  "actions_considered_but_not_taken": [
+    "FURTHER LOOSEN max_sector_pct (0.28 → 0.32 or full revert to base 0.35): NOT taken. The 09:00 loosening from 0.22 to 0.28 is only 30 minutes old; cap is now 15.07 pp non-binding. A second loosening on the next tick would (a) violate the 'one precise loosening per tick' discipline established in prior assessments, (b) over-rotate against the strategy agent's stated Day-10 holistic review milestone, and (c) eliminate the 7 pp of below-base discipline the 0.28 step deliberately preserved. Hold pending Day-10 review or new evidence.",
+    "LOOSEN max_deployed_pct (0.65 → 0.70): NOT taken. Cap is non-binding by 20.21 pp (deepened from 15.39 pp at 09:00 by POWERGRID exit). Under-deployment is signal-gated — strategy is correctly restrained on a risk-off open with Brent +8% and Big Tech overnight reaction pending. Loosening volume-of-admission into this regime has worse asymmetry than holding. Pre-armed for 11:00 re-evaluation if (a) ≥2 high-conf entries admitted by then and (b) full-fill deployment > 60%.",
+    "LOOSEN min_confidence (0.65 → 0.60): NOT taken. By the prompt's criterion 'high-confidence (≥0.70) entries being blocked', the floor is NOT eating top-tier signal — yesterday's 4 blocks were all 0.60-0.62; none ≥0.70. Closed-trade n=10 lacks statistical gradient (winners 0.65-0.75, losers 0.65-0.72). Hold per Day-10 milestone plan.",
+    "LOOSEN max_position_pct (0.15 → 0.18): NOT taken. NESTLEIND 12.07% largest holds 2.93 pp buffer; cap is not binding. Loosening with no firing trigger is theatrical and would slightly weaken the AUBANK/MAHABANK-blueprint defense.",
+    "LOOSEN SL-band overrides (default 0.015, min 0.01, max 0.04): NOT taken. The Apr-29 GLENMARK 4.4% admission remains a fresh blueprint of the breach pattern these caps defend against. Loosening today would compound the precedent. Strategy review (Apr-29 EOD) recommended PROMOTING max_sl_pct to a hard BLOCK at engine level — that is the right direction.",
+    "TIGHTEN any override on the POWERGRID exit: NOT taken. POWERGRID -₹159 is a disciplined small-loss cut, not a distress signal. -0.016% of capital, -1.05% per share. Tightening on this datapoint would punish exactly the behavior the system_prompt is designed to encourage. Behavioral health is positive.",
+    "TIGHTEN daily_loss_limit_pct (base 0.075 → override 0.05): NOT taken. Pre-armed trigger required intraday loss > -₹20K within 60 min of open; current -₹159 is 0.8% of that threshold. 469x buffer to base circuit breaker. Loss-gate tightening on a near-flat book is theatrical.",
+    "TIGHTEN max_sl_pct (0.04 → 0.035): NOT taken. Pre-armed trigger required a fresh ≥4% SL admission within Day-8 first hour; zero fresh admissions so far. GLENMARK fill is carry-over, excluded by spec. Trigger remains armed until 10:00 then disarms.",
+    "ELEVATE risk_level to MEDIUM: NOT taken. Composite distress meta-trigger D fires 0/3 legs: book P&L -0.016% (well above -0.5% threshold), no single name < -3%, strategy demonstrably active (1 SELL within first 10 min). Internal portfolio risk is unambiguously LOW; external macro risk is bracketed by existing perimeter."
+  ],
+  "armed_triggers_for_next_tick": [
+    "REVOCATION TRIGGER (sector cap snap-back): max_sector_pct 0.28 → 0.22 fires immediately on (a) any 3rd Pharma admission OR Pharma full-fill > 14% (currently 10.05% — would require a Pharma add of ≥4% capital), (b) any 4-name sector cluster emergence in BFSI/FMCG/Power/Adani-complex, or (c) BFSI returning above 17% (currently 12.93%, requires ≥4.07% capital BFSI add).",
+    "REVOCATION TRIGGER (deeper): max_sector_pct 0.28 → 0.20 fires on any 5-name sector cluster OR any sector full-fill > 22%.",
+    "max_sl_pct 0.04 → 0.035: pre-armed for any new admission at sl_pct ≥ 0.04 within Day-8 first hour (until 10:00). GLENMARK 4.4% is excluded (carry-over fill).",
+    "daily_loss_limit_pct base 0.075 → override 0.05: pre-armed if Day-8 cumulative-day mark-to-market loss > -₹20K (≈2% of capital) within first 60 min of open.",
+    "max_deployed_pct 0.65 → 0.70 LOOSEN: pre-armed for 11:00 tick if (a) at least 2 high-confidence (≥0.70) entries admitted before 11:00 AND (b) full-fill deployment crosses 60%. Currently dormant (0 entries today).",
+    "min_confidence 0.65 → 0.60 LOOSEN: deferred to Day-10 (~2026-05-04) milestone for n≥15 closed-trade sample.",
+    "POWERGRID re-entry watch: if strategy re-buys POWERGRID within 24h at ≥ avg-price-of-exit, log as buy-back-what-you-just-sold pattern (echoes Day-6 TORNTPOWER behavior). Not an action trigger but a behavioral flag.",
+    "Composite distress meta-trigger D (HIGH risk_level): re-arms if (i) book P&L < -0.5% intraday AND (ii) any single-name in book < -3% AND (iii) strategy silent ≥ 60 min after market open. All three legs currently dormant — strategy is active and book is essentially flat."
+  ],
+  "rationale": "Day-8 09:30 intraday tick. The 09:30 portfolio is a strict improvement over the 09:00 projection: POWERGRID was exited disciplinedly at the open (-₹159, -1.05%/share, 0.016% of capital), removing the lone Power-sector name; GLENMARK carry-over filled as projected (no escalation of the SL-band breach precedent because it's not a fresh admission). All overrides hold their 09:00 calibration: the loosened max_sector_pct=0.28 remains correctly aligned (BFSI 12.93% retains 15.07 pp buffer; Pharma 10.05% sits 3.95 pp below the revocation trigger); max_deployed_pct=0.65 is non-binding by 20.21 pp (under-deployment is signal-gated, not parameter-gated); min_confidence=0.65 is not eating top-tier signal; SL-band overrides are defending against the active GLENMARK precedent; max_position_pct=0.15 is non-binding. No trigger fired this tick (revocations dormant, tighten triggers dormant). The disciplined POWERGRID exit is positive behavioral evidence — strategy is correctly reading the risk-off macro tape and trimming early rather than holding into a deepening drawdown — which validates the existing perimeter rather than calling for adjustment. One precise loosening at 09:00, one disciplined exit at 09:09, zero adjustments at 09:30 — the cleanest possible posture into a heavy earnings day. Risk level remains LOW; HIGH composite meta-trigger fires 0/3 legs."
+}
