@@ -1,23 +1,56 @@
 import Database from "better-sqlite3";
 import path from "path";
+import fs from "fs";
+import os from "os";
 
-// Path resolution: env override → cwd-based default (Vercel deploy)
-// → relative-from-source default (local dev against the bot's data dir).
-const DB_PATH =
-  process.env.TRADING_DB_PATH ||
-  (process.env.VERCEL
-    ? path.resolve(process.cwd(), "data/trading_bot.db")
-    : path.resolve(__dirname, "../../../../ai-trading-bot/data/trading_bot.db"));
+// Resolve the DB by probing the candidate paths in priority order and
+// picking the first one that exists. Vercel's outputFileTracingIncludes
+// lands the data/ directory at the project root (cwd = /var/task) for
+// some routes, while local-dev keeps the live bot's path. Probing avoids
+// guessing wrong.
+function resolveDbPath(): string {
+  if (process.env.TRADING_DB_PATH) return process.env.TRADING_DB_PATH;
+  const candidates = [
+    path.resolve(process.cwd(), "data/trading_bot.db"),
+    path.resolve(process.cwd(), "dashboard/data/trading_bot.db"),
+    path.resolve(__dirname, "../../data/trading_bot.db"),
+    path.resolve(__dirname, "../../../data/trading_bot.db"),
+    path.resolve(__dirname, "../../../../data/trading_bot.db"),
+    path.resolve(__dirname, "../../../../../data/trading_bot.db"),
+    path.resolve(__dirname, "../../../../ai-trading-bot/data/trading_bot.db"),
+  ];
+  for (const p of candidates) {
+    try {
+      if (fs.existsSync(p)) return p;
+    } catch {
+      // ignore
+    }
+  }
+  return candidates[0]; // fall through; better-sqlite3 will throw with a useful message
+}
+
+// Vercel's serverless filesystem is read-only outside /tmp. better-sqlite3
+// returns SQLITE_CANTOPEN even with readonly:true because SQLite still
+// needs to create -shm / -wal sidecars (or check for their presence) in
+// the DB's directory. Copy the DB to /tmp once per cold-start so SQLite
+// has a writable directory to work in. /tmp persists for the lifetime of
+// the warm function instance, so the copy is paid at most once per
+// container.
+function ensureWritableDb(srcPath: string): string {
+  if (!process.env.VERCEL) return srcPath;
+  const dst = path.join(os.tmpdir(), "trading_bot.db");
+  if (!fs.existsSync(dst)) {
+    fs.copyFileSync(srcPath, dst);
+  }
+  return dst;
+}
 
 let db: Database.Database | null = null;
 
 export function getDb(): Database.Database {
   if (!db) {
-    // Open read-only without WAL. Vercel's serverless filesystem is
-    // read-only outside /tmp; WAL would try to create -wal/-shm files
-    // alongside the DB and fail. For an archive deployment the bot is
-    // not writing, so WAL is not needed.
-    db = new Database(DB_PATH, { readonly: true, fileMustExist: true });
+    const dbPath = ensureWritableDb(resolveDbPath());
+    db = new Database(dbPath, { readonly: true, fileMustExist: true });
   }
   return db;
 }
